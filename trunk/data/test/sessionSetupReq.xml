@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns3:V2G_Message xmlns:ns1="urn:iso:15118:2:2010:MsgBody"
+ xmlns:ns2="urn:iso:15118:2:2010:MsgDataTypes"
+ xmlns:ns3="urn:iso:15118:2:2010:MsgDef"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="urn:iso:15118:2:2010:MsgDef V2G_CI_MsgDef.xsd">
+    <ns3:Header>
+        <ns3:SessionInformation>
+            <ns2:SessionID>3031323334353637</ns2:SessionID>
+            <ns2:ProtocolVersion>1</ns2:ProtocolVersion>
+        </ns3:SessionInformation>
+    </ns3:Header>
+    <ns3:Body>
+        <ns1:SessionSetupReq>
+            <ns1:PEVStatus>
+                <ns2:ConnectorLocked>0</ns2:ConnectorLocked>
+                <ns2:ChargerStandby>1</ns2:ChargerStandby>
+            </ns1:PEVStatus>
+        </ns1:SessionSetupReq>
+    </ns3:Body>
+</ns3:V2G_Message>
