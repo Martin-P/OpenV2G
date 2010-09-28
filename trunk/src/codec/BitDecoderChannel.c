@@ -110,6 +110,7 @@ int decodeUnsignedInteger64(bitstream_t* stream, uint64_t* uint64) {
  */
 int decodeInteger32(bitstream_t* stream, int32_t* int32) {
 	int b;
+	uint32_t uint32;
 	int errn = decodeBoolean(stream, &b);
 
 	if (errn < 0) {
@@ -119,13 +120,15 @@ int decodeInteger32(bitstream_t* stream, int32_t* int32) {
 	if (b) {
 		/* For negative values, the Unsigned Integer holds the
 		 * magnitude of the value minus 1 */
-		errn = decodeUnsignedInteger32(stream, int32);
-		*int32 = -(*int32 + 1);
-		return errn;
+		errn = decodeUnsignedInteger32(stream, &uint32);
+		*int32 = -(uint32 + 1);
 	} else {
 		/* positive */
-		return decodeUnsignedInteger32(stream, int32);
+		errn = decodeUnsignedInteger32(stream, &uint32);
+		*int32 = (int32_t)(uint32);
 	}
+
+	return errn;
 }
 
 /**
@@ -136,6 +139,7 @@ int decodeInteger32(bitstream_t* stream, int32_t* int32) {
  */
 int decodeInteger64(bitstream_t* stream, int64_t* int64) {
 	int b;
+	uint64_t uint64;
 	int errn = decodeBoolean(stream, &b);
 
 	if (errn < 0) {
@@ -145,13 +149,15 @@ int decodeInteger64(bitstream_t* stream, int64_t* int64) {
 	if (b) {
 		/* For negative values, the Unsigned Integer holds the
 		 * magnitude of the value minus 1 */
-		errn = decodeUnsignedInteger64(stream, int64);
-		*int64 = -(*int64 + 1);
-		return errn;
+		errn = decodeUnsignedInteger64(stream, &uint64);
+		*int64 = -(uint64 + 1);
 	} else {
 		/* positive */
-		return decodeUnsignedInteger64(stream, int64);
+		errn = decodeUnsignedInteger64(stream, &uint64);
+		*int64 = (int64_t)(uint64);
 	}
+
+	return errn;
 }
 
 /**

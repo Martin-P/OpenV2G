@@ -49,7 +49,7 @@
 int exiPushStack(exi_state_t* state, size_t newState, eqname_t* eqn) {
 	if ((state->stackIndex + 1) < EXI_ELEMENT_STACK_SIZE) {
 		state->grammarStack[++state->stackIndex] = newState;
-		// copy qname
+		/* copy qname */
 		state->elementStack[state->stackIndex].localPart = eqn->localPart;
 		state->elementStack[state->stackIndex].namespaceURI = eqn->namespaceURI;
 		return 0;

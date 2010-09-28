@@ -74,15 +74,6 @@ typedef struct {
 	size_t len;
 } string_ucs_t;
 
-/* ASCII strings */
-typedef struct {
-	size_t size;
-	char* ascii;
-	/* current length == number of characters, (len <= size) */
-	size_t len;
-} string_ascii_t;
-
-
 typedef struct {
 	/* range of the mantissa is -(2^63) to 2^63-1 */
 	int64_t mantissa;
@@ -161,23 +152,22 @@ typedef struct  {
 
 
 typedef struct  {
-	/* union of base types */
-	union {
-		int boolean;
-		int8_t int8;
-		uint8_t uint8;
-		uint32_t uint32;
-		int32_t int32;
-		int64_t int64;
-		uint8_t enumeration;
-	};
-	/* Bytes, Strings and Lists are not base types */
+	/* type of value */
+	exi_datatype_t type;
+
+	/* base types */
+	int boolean;
+	int8_t int8;
+	uint8_t uint8;
+	uint32_t uint32;
+	int32_t int32;
+	int64_t int64;
+	uint8_t enumeration;
+
+	/* Bytes, Strings and Lists are not native types anymore */
 	bytes_t binary;
 	string_ucs_t string;
 	list_t list;
-
-	/* value datatype */
-	exi_datatype_t type;
 } exi_value_t;
 
 

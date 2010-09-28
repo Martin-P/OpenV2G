@@ -29,7 +29,7 @@ extern "C" {
 
 #include "EXITypes.h"
 
-// TODO utf8/cstring//wchar_t/char16_t/char32_t methods
+/* TODO utf8/cstring//wchar_t/char16_t/char32_t methods */
 
 
 #ifndef UCS_STRING_H
@@ -37,7 +37,7 @@ extern "C" {
 
 int toUCSString(char* chars, string_ucs_t* s);
 
-// Note: fails if string contains non ASCII characters
+/* Note: fails if string contains non ASCII characters */
 int toASCIIString(string_ucs_t* string, char* outASCII);
 
 #endif
