@@ -59,20 +59,19 @@ const char * localNames3[] = {
 };
 /* localName entries for URI id = 4 */
 const char * localNames4[] = {
-  "ChargingProfile",  "ContractID",  "EAmount",  "EVSEID",  "EVSEIMax",
-  "EVSEMaxPhases",  "EVSEMaxPower",  "EVSEStatus",  "EVSEVoltage",  "EnergyProvider",
-  "EoC",  "LineLockReq",  "LineLockReqType",  "LineLockRes",  "LineLockResType",
-  "MeterInfo",  "MeteringAuthPubKey",  "MeteringReceiptReq",  "MeteringReceiptReqType",  "MeteringReceiptRes",
-  "MeteringReceiptResType",  "MeteringStatusReq",  "MeteringStatusReqType",  "MeteringStatusRes",  "MeteringStatusResType",
-  "PCurrent",  "PEVID",  "PEVMaxPhases",  "PEVMaxPower",  "PEVMaxVoltage",
-  "PEVMinVoltage",  "PEVPubKey",  "PEVStatus",  "PaymentDetailsReq",  "PaymentDetailsReqType",
-  "PaymentDetailsRes",  "PaymentDetailsResType",  "PowerDeliveryReq",  "PowerDeliveryReqType",  "PowerDeliveryRes",
-  "PowerDeliveryResType",  "PowerDiscoveryReq",  "PowerDiscoveryReqType",  "PowerDiscoveryRes",  "PowerDiscoveryResType",
-  "ReqLockStatus",  "ReqSwitchStatus",  "ResponseCode",  "ServiceDiscoveryReq",  "ServiceDiscoveryReqType",
-  "ServiceDiscoveryRes",  "ServiceDiscoveryResType",  "ServiceList",  "ServicePaymentSelectionReq",  "ServicePaymentSelectionReqType",
-  "ServicePaymentSelectionRes",  "ServicePaymentSelectionResType",  "ServiceScope",  "ServiceType",  "SessionSetupReq",
-  "SessionSetupReqType",  "SessionSetupRes",  "SessionSetupResType",  "TCurrent",  "Tariff",
-  "TariffTable"
+  "ContractID",  "EAmount",  "EVSEID",  "EVSEIMax",  "EVSEMaxPhases",
+  "EVSEMaxPower",  "EVSEStatus",  "EVSEVoltage",  "EnergyProvider",  "EoC",
+  "LineLockReq",  "LineLockReqType",  "LineLockRes",  "LineLockResType",  "MeterInfo",
+  "MeteringAuthPubKey",  "MeteringReceiptReq",  "MeteringReceiptReqType",  "MeteringReceiptRes",  "MeteringReceiptResType",
+  "MeteringStatusReq",  "MeteringStatusReqType",  "MeteringStatusRes",  "MeteringStatusResType",  "PCurrent",
+  "PEVID",  "PEVMaxPhases",  "PEVMaxPower",  "PEVMaxVoltage",  "PEVMinVoltage",
+  "PEVPubKey",  "PEVStatus",  "PaymentDetailsReq",  "PaymentDetailsReqType",  "PaymentDetailsRes",
+  "PaymentDetailsResType",  "PowerDeliveryReq",  "PowerDeliveryReqType",  "PowerDeliveryRes",  "PowerDeliveryResType",
+  "PowerDiscoveryReq",  "PowerDiscoveryReqType",  "PowerDiscoveryRes",  "PowerDiscoveryResType",  "ReqLockStatus",
+  "ReqSwitchStatus",  "ResponseCode",  "ServiceDiscoveryReq",  "ServiceDiscoveryReqType",  "ServiceDiscoveryRes",
+  "ServiceDiscoveryResType",  "ServiceList",  "ServicePaymentSelectionReq",  "ServicePaymentSelectionReqType",  "ServicePaymentSelectionRes",
+  "ServicePaymentSelectionResType",  "ServiceScope",  "ServiceType",  "SessionSetupReq",  "SessionSetupReqType",
+  "SessionSetupRes",  "SessionSetupResType",  "TCurrent",  "Tariff"
 };
 /* localName entries for URI id = 5 */
 const char * localNames5[] = {
@@ -80,37 +79,35 @@ const char * localNames5[] = {
   "Currency",  "EPrice",  "EVSEStandby",  "EVSEStatusType",  "Event",
   "EventList",  "EventListType",  "FatalError",  "FaultCode",  "FaultMsg",
   "FloatingValueType",  "MeterID",  "MeterInfoType",  "MeterPubKey",  "MeterReading",
-  "MeterStatus",  "Multiplier",  "NotificationType",  "PEVStatusType",  "PaymentOption",
-  "PowerSwitchClosed",  "ProtocolVersion",  "RCD",  "Service",  "ServiceDescriptionType",
-  "ServiceDetails",  "ServiceID",  "ServiceListType",  "ServiceName",  "ServiceScope",
-  "ServiceSessionID",  "ServiceType",  "SessionID",  "SessionInformationType",  "ShutDownTime",
-  "SigMeterReading",  "TMeter",  "Tariff",  "TariffDescrType",  "TariffDescription",
-  "TariffEntries",  "TariffEntriesType",  "TariffEntry",  "TariffEntryType",  "TariffID",
-  "TariffPMax",  "TariffStart",  "TariffTableType",  "Unit",  "Value",
-  "contractIDType",  "currencyType",  "energyProviderType",  "eventEntryType",  "evseIDType",
-  "fatalErrorType",  "faultCodeType",  "lockStatusType",  "maxPhasesType",  "meterIDType",
-  "meterStatusType",  "paymentOptionListType",  "paymentOptionType",  "pevIDType",  "protocolVersionType",
-  "pubKeyType",  "rcdType",  "responseCode_LineLockType",  "responseCode_MeteringReceiptType",  "responseCode_MeteringStatusType",
-  "responseCode_PaymentDetailsType",  "responseCode_PowerDeliveryType",  "responseCode_PowerDiscoveryType",  "responseCode_ServiceDiscoveryType",  "responseCode_ServicePaymentSelectionType",
-  "responseCode_SessionSetupType",  "serviceDetailsType",  "serviceIDType",  "serviceNameType",  "serviceScopeType",
-  "serviceTypeType",  "sessionIDType",  "standbyType",  "switchStatusType",  "tariffDescriptionType",
-  "tariffIDType",  "tariffStartType",  "timeType",  "unitMultiplierType",  "unitSymbolType"
-
+  "MeterStatus",  "Multiplier",  "NotificationType",  "PEVStatusType",  "PowerSwitchClosed",
+  "ProtocolVersion",  "RCD",  "Service",  "ServiceDescriptionType",  "ServiceDetails",
+  "ServiceID",  "ServiceListType",  "ServiceName",  "ServiceScope",  "ServiceSessionID",
+  "ServiceType",  "SessionID",  "SessionInformationType",  "ShutDownTime",  "TMeter",
+  "Tariff",  "TariffDescrType",  "TariffDescription",  "TariffEntries",  "TariffEntriesType",
+  "TariffEntry",  "TariffEntryType",  "TariffID",  "TariffPMax",  "TariffStart",
+  "TariffTableType",  "Unit",  "Value",  "contractIDType",  "currencyType",
+  "energyProviderType",  "eventEntryType",  "evseIDType",  "fatalErrorType",  "faultCodeType",
+  "lockStatusType",  "maxPhasesType",  "meterIDType",  "meterStatusType",  "paymentOptionListType",
+  "paymentOptionType",  "pevIDType",  "protocolVersionType",  "pubKeyType",  "rcdType",
+  "responseCode_LineLockType",  "responseCode_MeteringReceiptType",  "responseCode_MeteringStatusType",  "responseCode_PaymentDetailsType",  "responseCode_PowerDeliveryType",
+  "responseCode_PowerDiscoveryType",  "responseCode_ServiceDiscoveryType",  "responseCode_ServicePaymentSelectionType",  "responseCode_SessionSetupType",  "serviceDetailsType",
+  "serviceIDType",  "serviceNameType",  "serviceScopeType",  "serviceTypeType",  "sessionIDType",
+  "standbyType",  "switchStatusType",  "tariffDescriptionType",  "tariffIDType",  "tariffStartType",
+  "timeType",  "unitMultiplierType",  "unitSymbolType"
 };
 /* localName entries for URI id = 6 */
 const char * localNames6[] = {
   "Body",  "BodyBaseType",  "BodyElement",  "BodyType",  "Header",
-  "HeaderType",  "Notification",  "Security",  "SessionInformation",  "V2G_Message"
-
+  "HeaderType",  "Notification",  "SessionInformation",  "V2G_Message"
 };
 struct exiPartition localNamePartitions[7] = {
  { 0, localNames0 },
  { 4, localNames1 },
  { 2, localNames2 },
  { 46, localNames3 },
- { 66, localNames4 },
- { 95, localNames5 },
- { 10, localNames6 }
+ { 64, localNames4 },
+ { 93, localNames5 },
+ { 9, localNames6 }
 };
 const char * uris[] = {
   "",  "http://www.w3.org/XML/1998/namespace",  "http://www.w3.org/2001/XMLSchema-instance",  "http://www.w3.org/2001/XMLSchema",  "urn:iso:15118:2:2010:MsgBody",  "urn:iso:15118:2:2010:MsgDataTypes",  "urn:iso:15118:2:2010:MsgDef"

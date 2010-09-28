@@ -72,7 +72,6 @@ int exiGetLocalName(size_t uriID, size_t localNameID, const char** localName) {
 	if ( uriID < stringTable.len ) {
 		if ( localNameID < stringTable.localNames[uriID].len ) {
 			*localName = stringTable.localNames[uriID].entries[localNameID];
-			// strcpy(stringTable.localNames[uriID].entries[localNameID], localName);
 		} else {
 			return EXI_ERROR_OUT_OF_BOUNDS;
 		}
