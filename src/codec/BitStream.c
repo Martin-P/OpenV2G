@@ -38,13 +38,10 @@
 
 int toBitstream(const char * filename, bitstream_t* bitstream) {
 	FILE* f;
-	// bitstream_t* bitstream;
 	int character;
 	size_t len = 0, pos = 0, i;
 
 	f = fopen(filename, "rb");
-
-	// bitstream = malloc(sizeof(bitstream_t));
 
 	if (f == NULL) {
 		printf("\n[Error] no valid file handle !\n");

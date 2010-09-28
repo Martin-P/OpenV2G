@@ -36,6 +36,12 @@
 #include "EXITypes.h"
 #include "Bitstream.h"
 
+#define ARRAY_SIZE_BYTES 50
+#define ARRAY_SIZE_STRINGS 50
+
+/* avoids warning: initializer element is not computable at load time */
+uint8_t data[ARRAY_SIZE_BYTES];
+uint32_t codepoints[ARRAY_SIZE_STRINGS];
 
 int main(int argc, char *argv[]) {
 
@@ -45,20 +51,18 @@ int main(int argc, char *argv[]) {
 	bitstream_t iStream, oStream;
 	size_t posDecode, posEncode;
 
-	// EXI set-up
+	/* EXI set-up */
 	exi_state_t stateDecode;
 	exi_state_t stateEncode;
 	exi_event_t event;
 	eqname_t eqn;
 	exi_value_t val;
 
-	// BINARY memory allocation
-	uint8_t data[10];
-	bytes_t bytes = { 10, data };
+	/* BINARY memory setup */
+	bytes_t bytes = { ARRAY_SIZE_BYTES, data, 0 };
 
-	// STRING memory allocation
-	uint32_t codepoints[50];
-	string_ucs_t string = { 50, codepoints };
+	/* STRING memory setuo */
+	string_ucs_t string = { ARRAY_SIZE_STRINGS, codepoints, 0 };
 
 	const char * localName;
 	const char * namespaceURI;
@@ -73,13 +77,13 @@ int main(int argc, char *argv[]) {
 	/* parse EXI stream to internal byte structures  */
 	toBitstream(argv[1], &iStream);
 
-	// input
+	/* input */
 	posDecode = 0;
 	iStream.pos = &posDecode;
 	iStream.buffer = 0;
 	iStream.capacity = 0;
 
-	// output
+	/* output */
 	posEncode = 0;
 	oStream.data = malloc(sizeof(uint8_t)*iStream.size);
 	oStream.size = iStream.size;
@@ -112,31 +116,31 @@ int main(int argc, char *argv[]) {
 
 		switch (event) {
 		case START_DOCUMENT:
-			// decode
+			/* decode */
 			errn = exiDecodeStartDocument(&iStream, &stateDecode);
 			if (errn < 0) {
 				printf("[Decode-ERROR] %d \n", errno);
 				return errn;
 			}
 			printf(">> START_DOCUMENT \n");
-			// encode
+			/* encode */
 			errn = exiEncodeStartDocument(&oStream, &stateEncode);
 			break;
 		case END_DOCUMENT:
-			// decode
+			/* decode */
 			errn = exiDecodeEndDocument(&iStream, &stateDecode);
 			if (errn < 0) {
 				printf("[Decode-ERROR] %d \n", errno);
 				return errn;
 			}
 			printf(">> END_DOCUMENT \n");
-			// encode
+			/* encode */
 			errn = exiEncodeEndDocument(&oStream, &stateEncode);
 			/* signalize end of document */
 			noEndOfDocument = 0; /* false */
 			break;
 		case START_ELEMENT:
-			// decode
+			/* decode */
 			errn = exiDecodeStartElement(&iStream, &stateDecode, &eqn);
 			if (errn < 0) {
 				printf("[Decode-ERROR] %d \n", errno);
@@ -145,11 +149,11 @@ int main(int argc, char *argv[]) {
 			exiGetLocalName(eqn.namespaceURI, eqn.localPart, &localName);
 			exiGetUri(eqn.namespaceURI, &namespaceURI);
 			printf(">> SE {%s}%s \n", namespaceURI, localName);
-			// encode
+			/* encode */
 			errn = exiEncodeStartElement(&oStream, &stateEncode, &eqn);
 			break;
 		case END_ELEMENT:
-			// decode
+			/* decode */
 			errn = exiDecodeEndElement(&iStream, &stateDecode, &eqn);
 			if (errn < 0) {
 				printf("[Decode-ERROR] %d \n", errno);
@@ -158,11 +162,11 @@ int main(int argc, char *argv[]) {
 			exiGetLocalName(eqn.namespaceURI, eqn.localPart, &localName);
 			exiGetUri(eqn.namespaceURI, &namespaceURI);
 			printf("<< EE {%s}%s \n", namespaceURI, localName);
-			// encode
+			/* encode */
 			errn = exiEncodeEndElement(&oStream, &stateEncode, &eqn);
 			break;
 		case CHARACTERS:
-			// decode
+			/* decode */
 			errn = exiDecodeCharacters(&iStream, &stateDecode, &val);
 			if (errn < 0) {
 				printf("[Decode-ERROR] %d \n", errno);
@@ -187,11 +191,11 @@ int main(int argc, char *argv[]) {
 			} else {
 				printf(" CH ?? \n");
 			}
-			// encode
+			/* encode */
 			errn = exiEncodeCharacters(&oStream, &stateEncode, &val);
 			break;
 		case ATTRIBUTE:
-			// decode
+			/* decode */
 			errn = exiDecodeAttribute(&iStream, &stateDecode, &eqn, &val);
 			if (errn < 0) {
 				printf("[Decode-ERROR] %d \n", errno);
@@ -200,11 +204,11 @@ int main(int argc, char *argv[]) {
 			exiGetLocalName(eqn.namespaceURI, eqn.localPart, &localName);
 			exiGetUri(eqn.namespaceURI, &namespaceURI);
 			printf(" AT {%s}%s \n", namespaceURI, localName);
-			// encode
+			/* encode */
 			errn = exiEncodeAttribute(&oStream, &stateEncode, &eqn, &val);
 			break;
 		default:
-			// ERROR
+			/* ERROR */
 			return -1;
 		}
 

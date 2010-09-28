@@ -37,7 +37,7 @@ extern "C" {
 #include "EXITypes.h"
 
 
-// size_t exiGetCurrentState(struct exiState* state);
+/* size_t exiGetCurrentState(struct exiState* state); */
 
 int exiPushStack(exi_state_t* state, size_t newState, eqname_t* eqn);
 
