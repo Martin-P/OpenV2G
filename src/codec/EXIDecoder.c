@@ -37,7 +37,7 @@
 #include "BitDecoderChannel.h"
 
 #include "EXICoder.h"
-#include "EXIHeader.h"
+#include "EXIHeaderDecoder.h"
 #include "StringTable.h"
 
 
