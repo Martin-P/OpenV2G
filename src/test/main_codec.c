@@ -24,7 +24,7 @@
  * <p>Sample program to illustrate how to read an EXI stream and
  *  directly write it again to an output</p>
  *
- *  <p>e.g., data/test/sessionSetupReq.xml_SCHEMA.exi out/test/sessionSetupReq.xml_SCHEMA.exi</p>
+ *  <p>e.g., data/test/sessionSetupReq.xml.exi out/test/sessionSetupReq.xml.exi</p>
  ********************************************************************/
 
 #include <stdio.h>
@@ -104,13 +104,13 @@ int main(int argc, char *argv[]) {
 
 	do {
 		if (errn < 0) {
-			printf("[Encode-ERROR] %d \n", errno);
+			printf("[Encode-ERROR] %d \n", errn);
 			return errn;
 		}
 
 		errn = exiDecodeNextEvent(&iStream, &stateDecode, &event);
 		if (errn < 0) {
-			printf("[Decode-ERROR] %d \n", errno);
+			printf("[Decode-ERROR] %d \n", errn);
 			return errn;
 		}
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[]) {
 			/* decode */
 			errn = exiDecodeStartDocument(&iStream, &stateDecode);
 			if (errn < 0) {
-				printf("[Decode-ERROR] %d \n", errno);
+				printf("[Decode-ERROR] %d \n", errn);
 				return errn;
 			}
 			printf(">> START_DOCUMENT \n");
@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
 			/* decode */
 			errn = exiDecodeEndDocument(&iStream, &stateDecode);
 			if (errn < 0) {
-				printf("[Decode-ERROR] %d \n", errno);
+				printf("[Decode-ERROR] %d \n", errn);
 				return errn;
 			}
 			printf(">> END_DOCUMENT \n");
@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
 			/* decode */
 			errn = exiDecodeStartElement(&iStream, &stateDecode, &eqn);
 			if (errn < 0) {
-				printf("[Decode-ERROR] %d \n", errno);
+				printf("[Decode-ERROR] %d \n", errn);
 				return errn;
 			}
 			exiGetLocalName(eqn.namespaceURI, eqn.localPart, &localName);
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
 			/* decode */
 			errn = exiDecodeEndElement(&iStream, &stateDecode, &eqn);
 			if (errn < 0) {
-				printf("[Decode-ERROR] %d \n", errno);
+				printf("[Decode-ERROR] %d \n", errn);
 				return errn;
 			}
 			exiGetLocalName(eqn.namespaceURI, eqn.localPart, &localName);
@@ -169,7 +169,7 @@ int main(int argc, char *argv[]) {
 			/* decode */
 			errn = exiDecodeCharacters(&iStream, &stateDecode, &val);
 			if (errn < 0) {
-				printf("[Decode-ERROR] %d \n", errno);
+				printf("[Decode-ERROR] %d \n", errn);
 				return errn;
 			}
 			if (val.type == INTEGER_BIG) {
@@ -198,7 +198,7 @@ int main(int argc, char *argv[]) {
 			/* decode */
 			errn = exiDecodeAttribute(&iStream, &stateDecode, &eqn, &val);
 			if (errn < 0) {
-				printf("[Decode-ERROR] %d \n", errno);
+				printf("[Decode-ERROR] %d \n", errn);
 				return errn;
 			}
 			exiGetLocalName(eqn.namespaceURI, eqn.localPart, &localName);

@@ -49,12 +49,12 @@ int decodeBoolean(bitstream_t* stream, int* b) {
 	return errn;
 }
 
-int decodeNBitUnsignedInteger(bitstream_t* stream, size_t nbits, uint8_t* b) {
+int decodeNBitUnsignedInteger(bitstream_t* stream, size_t nbits, uint8_t* uint8) {
 	if (nbits == 0) {
-		*b = 0;
+		*uint8 = 0;
 		return 0;
 	} else {
-		return readBits(stream, nbits, b);
+		return readBits(stream, nbits, uint8);
 	}
 }
 
@@ -67,7 +67,7 @@ int decodeUnsignedInteger32(bitstream_t* stream, uint32_t* uint32) {
 
 	do {
 		/* 1. Read the next octet */
-		errno = decode(stream, &b);
+		errn = decode(stream, &b);
 		/* 2. Multiply the value of the unsigned number represented by the 7
 		 * least significant
 		 * bits of the octet by the current multiplier and add the result to
@@ -78,7 +78,7 @@ int decodeUnsignedInteger32(bitstream_t* stream, uint32_t* uint32) {
 		/* 4. If the most significant bit of the octet was 1, go back to step 1 */
 	} while (errn >= 0 && (b >> 7) == 1);
 
-	return errno;
+	return errn;
 }
 
 /**
@@ -94,7 +94,7 @@ int decodeUnsignedInteger64(bitstream_t* stream, uint64_t* uint64) {
 	*uint64 = 0L;
 
 	do {
-		errno = decode(stream, &b);
+		errn = decode(stream, &b);
 		*uint64 += ((uint64_t) (b & 127)) << mShift;
 		mShift += 7;
 	} while (errn >= 0 && (b >> 7) == 1);

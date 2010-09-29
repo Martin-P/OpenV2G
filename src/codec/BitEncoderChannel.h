@@ -45,7 +45,7 @@ int encodeBoolean(bitstream_t* stream, int b);
  * Encode n-bit unsigned integer. The n least significant bits of parameter
  * b starting with the most significant, i.e. from left to right.
  */
-int encodeNBitUnsignedInteger(bitstream_t* stream, uint8_t val, size_t nbits);
+int encodeNBitUnsignedInteger(bitstream_t* stream, size_t nbits, uint8_t val);
 
 
 /**

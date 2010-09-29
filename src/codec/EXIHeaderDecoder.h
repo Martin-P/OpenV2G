@@ -23,42 +23,22 @@
  *
  ********************************************************************/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
-#include <stdlib.h>
 
-#include "EXIHeader.h"
-#include "BitInputStream.h"
-#include "BitOutputStream.h"
-#include "BitDecoderChannel.h"
-#include "BitEncoderChannel.h"
+#include "EXITypes.h"
 
-#ifndef EXI_HEADER_C
-#define EXI_HEADER_C
+#ifndef EXI_HEADER_DECODER_H
+#define EXI_HEADER_DECODER_H
 
-int readEXIHeader(bitstream_t* stream) {
-	uint8_t header;
-	int errn = readBits(stream, 8, &header);
-	if (errn < 0) {
-		return errn;
-	}
-	if(header == '$') {
-		/*	we do not support "EXI Cookie" */
-		errn = -1;
-	} else if ( header & 0x20 ) {
-		/* we do not support "Presence Bit for EXI Options" */
-		errn = -2;
-	} else {
-		/* Yes, a *simple* header */
-		errn = 0;
-	}
-	return errn;
-}
-
-int writeEXIHeader(bitstream_t* stream) {
-	return writeBits(stream, 144, 8);
-}
-
+int readEXIHeader(bitstream_t* stream);
 
 #endif
 
 
+#ifdef __cplusplus
+}
+#endif

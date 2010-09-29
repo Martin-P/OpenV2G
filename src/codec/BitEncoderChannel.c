@@ -69,7 +69,7 @@ uint8_t numberOf7BitBlocksToRepresent(int n) {
 
 
 int encode(bitstream_t* stream, uint8_t b) {
-	return writeBits(stream, b, 8);
+	return writeBits(stream, 8, b);
 }
 
 /**
@@ -78,7 +78,7 @@ int encode(bitstream_t* stream, uint8_t b) {
  */
 int encodeBoolean(bitstream_t* stream, int b) {
 	uint8_t val = b ? 1 : 0;
-	return writeBits(stream, val, 1);
+	return writeBits(stream, 1, val);
 }
 
 
@@ -86,8 +86,8 @@ int encodeBoolean(bitstream_t* stream, int b) {
  * Encode n-bit unsigned integer. The n least significant bits of parameter
  * b starting with the most significant, i.e. from left to right.
  */
-int encodeNBitUnsignedInteger(bitstream_t* stream, uint8_t val, size_t nbits)  {
-	return writeBits(stream, val, nbits);
+int encodeNBitUnsignedInteger(bitstream_t* stream, size_t nbits, uint8_t val)  {
+	return writeBits(stream, nbits, val);
 }
 
 

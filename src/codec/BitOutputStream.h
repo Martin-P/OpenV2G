@@ -34,7 +34,7 @@ extern "C" {
 #ifndef BIT_OUTPUT_STREAM_H
 #define BIT_OUTPUT_STREAM_H
 
-int writeBits(bitstream_t* stream, uint8_t bits, size_t nbits);
+int writeBits(bitstream_t* stream, size_t nbits, uint8_t bits);
 
 /* flush output */
 int flush(bitstream_t* stream);

@@ -41,7 +41,7 @@ int decodeBoolean(bitstream_t* stream, int* b);
 /**
  * Decodes and returns an n-bit unsigned integer.
  */
-int decodeNBitUnsignedInteger(bitstream_t* stream, size_t nbits, uint8_t* uint8 );
+int decodeNBitUnsignedInteger(bitstream_t* stream, size_t nbits, uint8_t* uint8);
 
 /**
  * Decode an arbitrary precision non negative integer using a sequence of

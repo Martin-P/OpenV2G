@@ -32,7 +32,7 @@
 #define BIT_OUTPUT_STREAM_C
 
 /*	NOTE: nbits <= 8 */
-int writeBits(bitstream_t* stream, uint8_t val, size_t nbits) {
+int writeBits(bitstream_t* stream, size_t nbits, uint8_t val) {
 	/*  is there enough space in the buffer */
 	if (nbits <= stream->capacity) {
 		/* all bits fit into the current buffer */
@@ -87,7 +87,7 @@ int flush(bitstream_t* stream) {
 		/* nothing to do, no bits in buffer */
 		return 0;
 	} else {
-		return writeBits(stream, 0, stream->capacity);
+		return writeBits(stream, stream->capacity, 0);
 	}
 }
 
