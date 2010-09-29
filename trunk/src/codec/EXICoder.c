@@ -37,7 +37,6 @@
 
 #include "assert.h"
 #include "EXICoder.h"
-#include "EXIHeader.h"
 
 /*
  size_t exiGetCurrentState(struct exiState* state) {
