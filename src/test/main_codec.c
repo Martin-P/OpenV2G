@@ -43,7 +43,7 @@
 uint8_t data[ARRAY_SIZE_BYTES];
 uint32_t codepoints[ARRAY_SIZE_STRINGS];
 
-int main(int argc, char *argv[]) {
+int mainX(int argc, char *argv[]) {
 
 	int errn = 0;
 	unsigned int i;
