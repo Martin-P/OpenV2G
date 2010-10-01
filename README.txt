@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------
 OpenV2G - an open source project implementing the basic functionality of the ISO IEC 15118 vehicle to grid (V2G) communication interface 
-Version 0.1, released September 17, 2010
+Version 0.2, released October 1, 2010
 http://openv2g.sourceforge.net/
 
 Please report bugs via the SourceForge bug tracking system at http://sourceforge.net/tracker/?group_id=350113.
