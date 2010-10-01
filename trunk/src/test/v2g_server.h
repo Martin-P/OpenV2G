@@ -25,7 +25,7 @@
 #ifndef V2G_SERVER_H_
 #define V2G_SERVER_H_
 
-#include "codec/EXITypes.h"
+#include "EXITypes.h"
 
 int testV2GService(uint8_t* inStream, size_t inStreamLength, uint8_t* outStream);
 

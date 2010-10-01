@@ -24,8 +24,8 @@
  ********************************************************************/
 
 #include "v2g_server.h"
-#include "service/v2g_service.h"
-#include "service/v2g_serviceDispatcher.h"
+#include "v2g_service.h"
+#include "v2g_serviceDispatcher.h"
 
 #define MAX_BYTE_SIZE 128
 #define MAX_STRING_SIZE 256
