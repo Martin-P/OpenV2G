@@ -24,3 +24,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 -------------------------------------------------------------------------
+CHANGES from version 0.1:
+-------------------------------------------------------------------------
+* Bug-fixes
+* Service and Client added
