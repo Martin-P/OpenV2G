@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.1
+ * @version 0.2
  * @contact Joerg.Heuer@siemens.com
  *
  * <p>Sample program to illustrate how to read an EXI stream and
@@ -43,7 +43,7 @@
 uint8_t data[ARRAY_SIZE_BYTES];
 uint32_t codepoints[ARRAY_SIZE_STRINGS];
 
-int mainX(int argc, char *argv[]) {
+int main_codec(int argc, char *argv[]) {
 
 	int errn = 0;
 	unsigned int i;

@@ -23,8 +23,8 @@
  *
  ********************************************************************/
 
-#include "service/v2g_serviceMethods.h"
-#include "service/v2g_serviceDataTypes.h"
+#include "v2g_serviceMethods.h"
+#include "v2g_serviceDataTypes.h"
 #include <stdio.h>
 
 int	sessionSetup(struct SessionSetupReqType* param, struct SessionSetupResType* result)

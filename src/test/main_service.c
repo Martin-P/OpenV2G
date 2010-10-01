@@ -25,11 +25,11 @@
 
 
 
-#include "service/v2g_service.h"
-#include "service/v2g_serviceDataTypes.h"
-#include "service/v2g_serviceClientStubs.h"
-#include "codec/EXITypes.h"
-#include "codec/BitStream.h"
+#include "v2g_service.h"
+#include "v2g_serviceDataTypes.h"
+#include "v2g_serviceClientStubs.h"
+#include "EXITypes.h"
+#include "BitStream.h"
 
 #include <stdlib.h>
 
