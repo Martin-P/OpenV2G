@@ -1,3 +1,7 @@
+
+
+
+
 /*
  * Copyright (C) 2007-2010 Siemens AG
  *
@@ -31,7 +35,7 @@ extern "C" {
 #define SERVICEMETHODS_H
 
 #include "v2g_serviceDataTypes.h"
-#include "../codec/EXITypes.h"
+#include "EXITypes.h"
 
 /* service methods */
 int	sessionSetup(struct SessionSetupReqType* param, struct SessionSetupResType* result);

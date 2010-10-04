@@ -30,9 +30,9 @@
  #include "v2g_serviceClientStubs.h"
  #include "v2g_serviceDataSerializiation.h"
  #include "v2g_serviceClientDataTransmitter.h"
- #include "../codec/EXITypes.h"
- #include "../codec/EXIDecoder.h"
- #include "../codec/EXIEncoder.h"
+ #include "EXITypes.h"
+ #include "EXIDecoder.h"
+ #include "EXIEncoder.h"
  
 
 static int deserializeMessage(struct v2gService* service);
@@ -1903,10 +1903,7 @@ static int deserializeMessage(struct v2gService* service)
 {
 	int noEndOfDocument = 1; /* true */
 	int errno;
-	#ifdef DEBUG
-		const char * localName;
-		const char * namespaceURI;
-	#endif
+	
 
 	do {
 			exiDecodeNextEvent(&(service->inStream), &(service->stateDecode), &(service->event));
@@ -1933,7 +1930,9 @@ static int deserializeMessage(struct v2gService* service)
 			case END_ELEMENT:
 
 				errno = exiDecodeEndElement(&(service->inStream), &(service->stateDecode), &(service->eqn));
+				
 				 
+				errno = deserializeElement(service);
 				break;
 			case CHARACTERS:
 				/* decode */
