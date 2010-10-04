@@ -33,7 +33,7 @@ extern "C" {
 #ifndef SERVICEDATATYPES_H
 #define SERVICEDATATYPES_H
 
-#include "../codec/EXITypes.h"
+#include "EXITypes.h"
 
 
 	
@@ -181,14 +181,12 @@ struct arraylen_SessionInformationType_SessionID
 
 };
 
-
 struct SessionInformationType_SessionID
 {
 	uint8_t data[8];
 	struct arraylen_SessionInformationType_SessionID arraylen;
 
 };
-
 
 struct arraylen_SessionInformationType_ServiceSessionID
 {
@@ -197,14 +195,12 @@ struct arraylen_SessionInformationType_ServiceSessionID
 
 };
 
-
 struct SessionInformationType_ServiceSessionID
 {
 	uint8_t data[8];
 	struct arraylen_SessionInformationType_ServiceSessionID arraylen;
 
 };
-
 
 struct selection_SessionInformationType
 {
@@ -214,7 +210,6 @@ struct selection_SessionInformationType
 
 };
 
-
 struct arraylen_SessionInformationType_ProtocolVersion
 {
 	size_t data;
@@ -222,14 +217,12 @@ struct arraylen_SessionInformationType_ProtocolVersion
 
 };
 
-
 struct SessionInformationType_ProtocolVersion
 {
 	uint32_t data[256];
 	struct arraylen_SessionInformationType_ProtocolVersion arraylen;
 
 };
-
 
 struct SessionInformationType
 {
@@ -240,7 +233,6 @@ struct SessionInformationType
 
 };
 
-
 struct selection_NotificationType
 {
 	int FaultCode:1;
@@ -250,14 +242,12 @@ struct selection_NotificationType
 
 };
 
-
 struct arraylen_NotificationType_FaultMsg
 {
 	size_t data;
 
 
 };
-
 
 struct NotificationType_FaultMsg
 {
@@ -266,14 +256,12 @@ struct NotificationType_FaultMsg
 
 };
 
-
 struct EventListType
 {
 	enum eventEntryType Event;
 
 
 };
-
 
 struct NotificationType
 {
@@ -284,14 +272,12 @@ struct NotificationType
 
 };
 
-
 struct selection_HeaderType
 {
 	int Notification:1;
 
 
 };
-
 
 struct HeaderType
 {
@@ -301,14 +287,12 @@ struct HeaderType
 
 };
 
-
 struct arraylen_SessionSetupReqType_PEVID
 {
 	size_t data;
 
 
 };
-
 
 struct SessionSetupReqType_PEVID
 {
@@ -317,14 +301,12 @@ struct SessionSetupReqType_PEVID
 
 };
 
-
 struct selection_SessionSetupReqType
 {
 	int PEVID:1;
 
 
 };
-
 
 struct PEVStatusType
 {
@@ -334,7 +316,6 @@ struct PEVStatusType
 
 };
 
-
 struct SessionSetupReqType
 {
 	struct SessionSetupReqType_PEVID PEVID;
@@ -342,7 +323,6 @@ struct SessionSetupReqType
 	struct selection_SessionSetupReqType isused;
 
 };
-
 
 struct selection_BodyType
 {
@@ -368,7 +348,6 @@ struct selection_BodyType
 
 };
 
-
 struct arraylen_SessionSetupResType_EVSEID
 {
 	size_t data;
@@ -376,14 +355,12 @@ struct arraylen_SessionSetupResType_EVSEID
 
 };
 
-
 struct SessionSetupResType_EVSEID
 {
 	uint8_t data[32];
 	struct arraylen_SessionSetupResType_EVSEID arraylen;
 
 };
-
 
 struct EVSEStatusType
 {
@@ -397,7 +374,6 @@ struct EVSEStatusType
 
 };
 
-
 struct SessionSetupResType
 {
 	enum responseCode_SessionSetupType ResponseCode;
@@ -408,7 +384,6 @@ struct SessionSetupResType
 
 };
 
-
 struct selection_ServiceDiscoveryReqType
 {
 	int ServiceType:1;
@@ -417,7 +392,6 @@ struct selection_ServiceDiscoveryReqType
 
 };
 
-
 struct arraylen_ServiceDiscoveryReqType_ServiceScope
 {
 	size_t data;
@@ -425,14 +399,12 @@ struct arraylen_ServiceDiscoveryReqType_ServiceScope
 
 };
 
-
 struct ServiceDiscoveryReqType_ServiceScope
 {
 	uint32_t data[255];
 	struct arraylen_ServiceDiscoveryReqType_ServiceScope arraylen;
 
 };
-
 
 struct ServiceDiscoveryReqType
 {
@@ -442,14 +414,12 @@ struct ServiceDiscoveryReqType
 
 };
 
-
 struct arraylen_ServiceDescriptionType_ServiceID
 {
 	size_t data;
 
 
 };
-
 
 struct ServiceDescriptionType_ServiceID
 {
@@ -458,7 +428,6 @@ struct ServiceDescriptionType_ServiceID
 
 };
 
-
 struct arraylen_ServiceDescriptionType_ServiceName
 {
 	size_t data;
@@ -466,14 +435,12 @@ struct arraylen_ServiceDescriptionType_ServiceName
 
 };
 
-
 struct ServiceDescriptionType_ServiceName
 {
 	uint32_t data[64];
 	struct arraylen_ServiceDescriptionType_ServiceName arraylen;
 
 };
-
 
 struct selection_ServiceDescriptionType
 {
@@ -484,7 +451,6 @@ struct selection_ServiceDescriptionType
 
 };
 
-
 struct arraylen_ServiceDescriptionType_ServiceScope
 {
 	size_t data;
@@ -492,14 +458,12 @@ struct arraylen_ServiceDescriptionType_ServiceScope
 
 };
 
-
 struct ServiceDescriptionType_ServiceScope
 {
 	uint32_t data[255];
 	struct arraylen_ServiceDescriptionType_ServiceScope arraylen;
 
 };
-
 
 struct ServiceDescriptionType
 {
@@ -511,14 +475,12 @@ struct ServiceDescriptionType
 
 };
 
-
 struct arraylen_ServiceListType
 {
 	size_t Service;
 
 
 };
-
 
 struct ServiceListType
 {
@@ -527,14 +489,12 @@ struct ServiceListType
 
 };
 
-
 struct selection_ServiceDiscoveryResType
 {
 	int ServiceList:1;
 
 
 };
-
 
 struct ServiceDiscoveryResType
 {
@@ -544,7 +504,6 @@ struct ServiceDiscoveryResType
 
 };
 
-
 struct arraylen_ServicePaymentSelectionReqType_PEVPubKey
 {
 	size_t data;
@@ -552,14 +511,12 @@ struct arraylen_ServicePaymentSelectionReqType_PEVPubKey
 
 };
 
-
 struct ServicePaymentSelectionReqType_PEVPubKey
 {
 	uint8_t data[64];
 	struct arraylen_ServicePaymentSelectionReqType_PEVPubKey arraylen;
 
 };
-
 
 struct ServicePaymentSelectionReqType
 {
@@ -569,14 +526,12 @@ struct ServicePaymentSelectionReqType
 
 };
 
-
 struct arraylen_ServicePaymentSelectionResType_MeteringAuthPubKey
 {
 	size_t data;
 
 
 };
-
 
 struct ServicePaymentSelectionResType_MeteringAuthPubKey
 {
@@ -585,14 +540,12 @@ struct ServicePaymentSelectionResType_MeteringAuthPubKey
 
 };
 
-
 struct selection_ServicePaymentSelectionResType
 {
 	int MeteringAuthPubKey:1;
 
 
 };
-
 
 struct ServicePaymentSelectionResType
 {
@@ -602,14 +555,12 @@ struct ServicePaymentSelectionResType
 
 };
 
-
 struct arraylen_PaymentDetailsReqType_ContractID
 {
 	size_t data;
 
 
 };
-
 
 struct PaymentDetailsReqType_ContractID
 {
@@ -618,7 +569,6 @@ struct PaymentDetailsReqType_ContractID
 
 };
 
-
 struct PaymentDetailsReqType
 {
 	struct PaymentDetailsReqType_ContractID ContractID;
@@ -626,14 +576,12 @@ struct PaymentDetailsReqType
 
 };
 
-
 struct PaymentDetailsResType
 {
 	enum responseCode_PaymentDetailsType ResponseCode;
 
 
 };
-
 
 struct FloatingValueType
 {
@@ -643,7 +591,6 @@ struct FloatingValueType
 
 
 };
-
 
 struct PowerDiscoveryReqType
 {
@@ -658,7 +605,6 @@ struct PowerDiscoveryReqType
 
 };
 
-
 struct arraylen_PowerDiscoveryResType_EnergyProvider
 {
 	size_t data;
@@ -666,14 +612,12 @@ struct arraylen_PowerDiscoveryResType_EnergyProvider
 
 };
 
-
 struct PowerDiscoveryResType_EnergyProvider
 {
 	uint32_t data[256];
 	struct arraylen_PowerDiscoveryResType_EnergyProvider arraylen;
 
 };
-
 
 struct selection_PowerDiscoveryResType
 {
@@ -683,14 +627,12 @@ struct selection_PowerDiscoveryResType
 
 };
 
-
 struct arraylen_TariffTableType_Currency
 {
 	size_t data;
 
 
 };
-
 
 struct TariffTableType_Currency
 {
@@ -699,14 +641,12 @@ struct TariffTableType_Currency
 
 };
 
-
 struct arraylen_TariffDescrType_TariffDescription
 {
 	size_t data;
 
 
 };
-
 
 struct TariffDescrType_TariffDescription
 {
@@ -715,7 +655,6 @@ struct TariffDescrType_TariffDescription
 
 };
 
-
 struct selection_TariffDescrType
 {
 	int TariffDescription:1;
@@ -723,14 +662,12 @@ struct selection_TariffDescrType
 
 };
 
-
 struct selection_TariffEntryType
 {
 	int EPrice:1;
 
 
 };
-
 
 struct TariffEntryType
 {
@@ -741,7 +678,6 @@ struct TariffEntryType
 
 };
 
-
 struct arraylen_TariffEntriesType
 {
 	size_t TariffEntry;
@@ -749,14 +685,12 @@ struct arraylen_TariffEntriesType
 
 };
 
-
 struct TariffEntriesType
 {
 	struct TariffEntryType TariffEntry[8];
 	struct arraylen_TariffEntriesType arraylen;
 
 };
-
 
 struct TariffDescrType
 {
@@ -767,14 +701,12 @@ struct TariffDescrType
 
 };
 
-
 struct arraylen_TariffTableType
 {
 	size_t Tariff;
 
 
 };
-
 
 struct TariffTableType
 {
@@ -783,7 +715,6 @@ struct TariffTableType
 	struct arraylen_TariffTableType arraylen;
 
 };
-
 
 struct PowerDiscoveryResType
 {
@@ -798,7 +729,6 @@ struct PowerDiscoveryResType
 
 };
 
-
 struct LineLockReqType
 {
 	struct PEVStatusType PEVStatus;
@@ -806,7 +736,6 @@ struct LineLockReqType
 
 
 };
-
 
 struct LineLockResType
 {
@@ -816,7 +745,6 @@ struct LineLockResType
 
 };
 
-
 struct selection_PowerDeliveryReqType
 {
 	int Tariff:1;
@@ -825,7 +753,6 @@ struct selection_PowerDeliveryReqType
 
 };
 
-
 struct ChargingProfileType
 {
 	int64_t ChargingProfileEntryStart;
@@ -833,7 +760,6 @@ struct ChargingProfileType
 
 
 };
-
 
 struct PowerDeliveryReqType
 {
@@ -845,7 +771,6 @@ struct PowerDeliveryReqType
 
 };
 
-
 struct PowerDeliveryResType
 {
 	enum responseCode_PowerDeliveryType ResponseCode;
@@ -853,13 +778,13 @@ struct PowerDeliveryResType
 
 };
 
-
 struct MeteringStatusReqType
 {
 
-
+ 
+	int NO_MEMBER:1;
+	
 };
-
 
 struct arraylen_MeteringStatusResType_EVSEID
 {
@@ -868,14 +793,12 @@ struct arraylen_MeteringStatusResType_EVSEID
 
 };
 
-
 struct MeteringStatusResType_EVSEID
 {
 	uint8_t data[32];
 	struct arraylen_MeteringStatusResType_EVSEID arraylen;
 
 };
-
 
 struct selection_MeteringStatusResType
 {
@@ -885,7 +808,6 @@ struct selection_MeteringStatusResType
 
 };
 
-
 struct arraylen_MeterInfoType_MeterID
 {
 	size_t data;
@@ -893,14 +815,12 @@ struct arraylen_MeterInfoType_MeterID
 
 };
 
-
 struct MeterInfoType_MeterID
 {
 	uint32_t data[32];
 	struct arraylen_MeterInfoType_MeterID arraylen;
 
 };
-
 
 struct selection_MeterInfoType
 {
@@ -913,7 +833,6 @@ struct selection_MeterInfoType
 
 };
 
-
 struct arraylen_MeterInfoType_MeterPubKey
 {
 	size_t data;
@@ -921,14 +840,12 @@ struct arraylen_MeterInfoType_MeterPubKey
 
 };
 
-
 struct MeterInfoType_MeterPubKey
 {
 	uint8_t data[64];
 	struct arraylen_MeterInfoType_MeterPubKey arraylen;
 
 };
-
 
 struct MeterInfoType
 {
@@ -940,7 +857,6 @@ struct MeterInfoType
 	struct selection_MeterInfoType isused;
 
 };
-
 
 struct MeteringStatusResType
 {
@@ -955,14 +871,12 @@ struct MeteringStatusResType
 
 };
 
-
 struct arraylen_MeteringReceiptReqType_PEVID
 {
 	size_t data;
 
 
 };
-
 
 struct MeteringReceiptReqType_PEVID
 {
@@ -971,7 +885,6 @@ struct MeteringReceiptReqType_PEVID
 
 };
 
-
 struct selection_MeteringReceiptReqType
 {
 	int PEVID:1;
@@ -979,7 +892,6 @@ struct selection_MeteringReceiptReqType
 
 
 };
-
 
 struct MeteringReceiptReqType
 {
@@ -992,14 +904,12 @@ struct MeteringReceiptReqType
 
 };
 
-
 struct MeteringReceiptResType
 {
 	enum responseCode_MeteringReceiptType ResponseCode;
 
 
 };
-
 
 struct BodyType
 {
@@ -1025,7 +935,6 @@ struct BodyType
 
 };
 
-
 struct AnonType_V2G_Message
 {
 	struct HeaderType Header;
@@ -1033,7 +942,6 @@ struct AnonType_V2G_Message
 
 
 };
-
 	
 /* init method of the V2G message */	
 void init_AnonType_V2G_Message(struct AnonType_V2G_Message* v2gMsg);

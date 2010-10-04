@@ -31,7 +31,7 @@ extern "C" {
 #define V2G_SERVICE_H_
 
 #include "v2g_serviceDataTypes.h"
-#include "../codec/EXITypes.h"
+#include "EXITypes.h"
 
 struct v2gService
 {

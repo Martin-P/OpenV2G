@@ -31,7 +31,7 @@ extern "C" {
 #ifndef V2G_SERVICECLIENTDATATRANSMITTER_H_
 #define V2G_SERVICECLIENTDATATRANSMITTER_H_
 
-#include "../codec/EXITypes.h"
+#include "EXITypes.h"
 
 /* This method has to be implemented!
  * This method sends EXI stream (outStream) to the EVSE and receives response stream (inStream)*/
