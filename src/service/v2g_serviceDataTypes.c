@@ -25,34 +25,30 @@
  ********************************************************************/
 
 
-#include "../codec/EXITypes.h"
+#include "EXITypes.h"
 #include "v2g_serviceDataTypes.h"
 
 
 static  void init_SessionInformationType_SessionID(struct SessionInformationType_SessionID* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_SessionInformationType_ServiceSessionID(struct SessionInformationType_ServiceSessionID* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_SessionInformationType_ProtocolVersion(struct SessionInformationType_ProtocolVersion* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_SessionInformationType(struct SessionInformationType* type)
-{
-	
+{	
 	init_SessionInformationType_SessionID(&(type->SessionID));	
 	init_SessionInformationType_ServiceSessionID(&(type->ServiceSessionID));	
 	type->isused.ServiceSessionID=0;	
@@ -62,15 +58,13 @@ static  void init_SessionInformationType(struct SessionInformationType* type)
 }
 
 static  void init_NotificationType_FaultMsg(struct NotificationType_FaultMsg* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_NotificationType(struct NotificationType* type)
-{
-		
+{		
 	type->isused.FaultCode=0;	
 	init_NotificationType_FaultMsg(&(type->FaultMsg));	
 	type->isused.FaultMsg=0;		
@@ -79,8 +73,7 @@ static  void init_NotificationType(struct NotificationType* type)
 }
 
 static  void init_HeaderType(struct HeaderType* type)
-{
-	
+{	
 	init_SessionInformationType(&(type->SessionInformation));	
 	init_NotificationType(&(type->Notification));	
 	type->isused.Notification=0;
@@ -88,44 +81,38 @@ static  void init_HeaderType(struct HeaderType* type)
 }
 
 static  void init_SessionSetupReqType_PEVID(struct SessionSetupReqType_PEVID* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_SessionSetupReqType(struct SessionSetupReqType* type)
-{
-	
+{	
 	init_SessionSetupReqType_PEVID(&(type->PEVID));	
 	type->isused.PEVID=0;	
 
 }
 
 static  void init_SessionSetupResType_EVSEID(struct SessionSetupResType_EVSEID* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_SessionSetupResType(struct SessionSetupResType* type)
-{
-		
+{		
 	init_SessionSetupResType_EVSEID(&(type->EVSEID));		
 
 }
 
 static  void init_ServiceDiscoveryReqType_ServiceScope(struct ServiceDiscoveryReqType_ServiceScope* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* type)
-{
-		
+{		
 	type->isused.ServiceType=0;	
 	init_ServiceDiscoveryReqType_ServiceScope(&(type->ServiceScope));	
 	type->isused.ServiceScope=0;
@@ -133,29 +120,25 @@ static  void init_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* type)
 }
 
 static  void init_ServiceDescriptionType_ServiceID(struct ServiceDescriptionType_ServiceID* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_ServiceDescriptionType_ServiceName(struct ServiceDescriptionType_ServiceName* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_ServiceDescriptionType_ServiceScope(struct ServiceDescriptionType_ServiceScope* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_ServiceDescriptionType(struct ServiceDescriptionType* type)
-{
-	
+{	
 	init_ServiceDescriptionType_ServiceID(&(type->ServiceID));	
 	init_ServiceDescriptionType_ServiceName(&(type->ServiceName));	
 	type->isused.ServiceName=0;		
@@ -167,109 +150,106 @@ static  void init_ServiceDescriptionType(struct ServiceDescriptionType* type)
 
 static  void init_ServiceListType(struct ServiceListType* type)
 {
+	int i_loop;
+		
+	for(i_loop=0; i_loop<8;i_loop++)
+	{
+		init_ServiceDescriptionType(&(type->Service[i_loop]));
+	}
 	
-	init_ServiceDescriptionType((type->Service));
 	type->arraylen.Service=0;
 
 }
 
 static  void init_ServiceDiscoveryResType(struct ServiceDiscoveryResType* type)
-{
-		
+{		
 	init_ServiceListType(&(type->ServiceList));	
 	type->isused.ServiceList=0;
 
 }
 
 static  void init_ServicePaymentSelectionReqType_PEVPubKey(struct ServicePaymentSelectionReqType_PEVPubKey* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_ServicePaymentSelectionReqType(struct ServicePaymentSelectionReqType* type)
-{
-	
+{	
 	init_ServiceListType(&(type->ServiceList));	
 	init_ServicePaymentSelectionReqType_PEVPubKey(&(type->PEVPubKey));
 
 }
 
 static  void init_ServicePaymentSelectionResType_MeteringAuthPubKey(struct ServicePaymentSelectionResType_MeteringAuthPubKey* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_ServicePaymentSelectionResType(struct ServicePaymentSelectionResType* type)
-{
-		
+{		
 	init_ServicePaymentSelectionResType_MeteringAuthPubKey(&(type->MeteringAuthPubKey));	
 	type->isused.MeteringAuthPubKey=0;
 
 }
 
 static  void init_PaymentDetailsReqType_ContractID(struct PaymentDetailsReqType_ContractID* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_PaymentDetailsReqType(struct PaymentDetailsReqType* type)
-{
-	
+{	
 	init_PaymentDetailsReqType_ContractID(&(type->ContractID));
 
 }
 
 static  void init_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type)
-{
-							
+{							
 
 }
 
 static  void init_PowerDiscoveryResType_EnergyProvider(struct PowerDiscoveryResType_EnergyProvider* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_TariffTableType_Currency(struct TariffTableType_Currency* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_TariffDescrType_TariffDescription(struct TariffDescrType_TariffDescription* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_TariffEntryType(struct TariffEntryType* type)
-{
-				
+{				
 	type->isused.EPrice=0;
 
 }
 
 static  void init_TariffEntriesType(struct TariffEntriesType* type)
 {
+	int i_loop;
+		
+	for(i_loop=0; i_loop<8;i_loop++)
+	{
+		init_TariffEntryType(&(type->TariffEntry[i_loop]));
+	}
 	
-	init_TariffEntryType((type->TariffEntry));
 	type->arraylen.TariffEntry=0;
 
 }
 
 static  void init_TariffDescrType(struct TariffDescrType* type)
-{
-		
+{		
 	init_TariffDescrType_TariffDescription(&(type->TariffDescription));	
 	type->isused.TariffDescription=0;	
 	init_TariffEntriesType(&(type->TariffEntries));
@@ -278,16 +258,20 @@ static  void init_TariffDescrType(struct TariffDescrType* type)
 
 static  void init_TariffTableType(struct TariffTableType* type)
 {
-	
+	int i_loop;
+		
 	init_TariffTableType_Currency(&(type->Currency));	
-	init_TariffDescrType((type->Tariff));
+	for(i_loop=0; i_loop<6;i_loop++)
+	{
+		init_TariffDescrType(&(type->Tariff[i_loop]));
+	}
+	
 	type->arraylen.Tariff=0;
 
 }
 
 static  void init_PowerDiscoveryResType(struct PowerDiscoveryResType* type)
-{
-						
+{						
 	init_PowerDiscoveryResType_EnergyProvider(&(type->EnergyProvider));	
 	type->isused.EnergyProvider=0;	
 	init_TariffTableType(&(type->TariffTable));	
@@ -296,26 +280,22 @@ static  void init_PowerDiscoveryResType(struct PowerDiscoveryResType* type)
 }
 
 static  void init_LineLockReqType(struct LineLockReqType* type)
-{
-		
+{		
 
 }
 
 static  void init_LineLockResType(struct LineLockResType* type)
-{
-		
+{		
 
 }
 
 static  void init_ChargingProfileType(struct ChargingProfileType* type)
-{
-		
+{		
 
 }
 
 static  void init_PowerDeliveryReqType(struct PowerDeliveryReqType* type)
-{
-				
+{				
 	type->isused.Tariff=0;	
 	init_ChargingProfileType(&(type->ChargingProfile));	
 	type->isused.ChargingProfile=0;
@@ -323,29 +303,25 @@ static  void init_PowerDeliveryReqType(struct PowerDeliveryReqType* type)
 }
 
 static  void init_MeteringStatusResType_EVSEID(struct MeteringStatusResType_EVSEID* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_MeterInfoType_MeterID(struct MeterInfoType_MeterID* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_MeterInfoType_MeterPubKey(struct MeterInfoType_MeterPubKey* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_MeterInfoType(struct MeterInfoType* type)
-{
-	
+{	
 	init_MeterInfoType_MeterID(&(type->MeterID));	
 	type->isused.MeterID=0;	
 	init_MeterInfoType_MeterPubKey(&(type->MeterPubKey));	
@@ -357,8 +333,7 @@ static  void init_MeterInfoType(struct MeterInfoType* type)
 }
 
 static  void init_MeteringStatusResType(struct MeteringStatusResType* type)
-{
-		
+{		
 	init_MeteringStatusResType_EVSEID(&(type->EVSEID));					
 	type->isused.PCurrent=0;	
 	init_MeterInfoType(&(type->MeterInfo));	
@@ -367,15 +342,13 @@ static  void init_MeteringStatusResType(struct MeteringStatusResType* type)
 }
 
 static  void init_MeteringReceiptReqType_PEVID(struct MeteringReceiptReqType_PEVID* type)
-{
-	
+{	
 	type->arraylen.data=0;
 
 }
 
 static  void init_MeteringReceiptReqType(struct MeteringReceiptReqType* type)
-{
-	
+{	
 	init_MeteringReceiptReqType_PEVID(&(type->PEVID));	
 	type->isused.PEVID=0;			
 	type->isused.TCurrent=0;		
@@ -384,8 +357,7 @@ static  void init_MeteringReceiptReqType(struct MeteringReceiptReqType* type)
 }
 
 static  void init_BodyType(struct BodyType* type)
-{
-	
+{	
 	init_SessionSetupReqType(&(type->SessionSetupReq));	
 	type->isused.SessionSetupReq=0;	
 	init_SessionSetupResType(&(type->SessionSetupRes));	
@@ -421,8 +393,7 @@ static  void init_BodyType(struct BodyType* type)
 
 }
  void init_AnonType_V2G_Message(struct AnonType_V2G_Message* type)
-{
-	
+{	
 	init_HeaderType(&(type->Header));	
 	init_BodyType(&(type->Body));
 

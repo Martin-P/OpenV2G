@@ -32,8 +32,6 @@
 <option id="gnu.c.compiler.mingw.exe.debug.option.debugging.level.294845555" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 <option id="gnu.c.compiler.option.include.paths.773068816" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/codec}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/service}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/service}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/test}&quot;"/>
 </option>

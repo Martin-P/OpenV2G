@@ -28,8 +28,8 @@
 #include "v2g_service.h"
 #include "v2g_serviceDataTypes.h"
 #include "v2g_serviceDataSerializiation.h"
-#include "../codec/EXITypes.h"
-#include "../codec/EXIEncoder.h"
+#include "EXITypes.h"
+#include "EXIEncoder.h"
  
  
  
@@ -62,9 +62,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 			
 			
 			
-						/* element ID assignment of SessionID*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=35;
+
 			 
 			
 			/* encode end element of SessionID */
@@ -99,9 +97,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 			
 			
 			
-						/* element ID assignment of ServiceSessionID*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=33;
+
 			 
 			
 			/* encode end element of ServiceSessionID */
@@ -137,9 +133,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 			
 			
 			
-						/* element ID assignment of ProtocolVersion*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=25;
+
 			 
 			
 			/* encode end element of ProtocolVersion */
@@ -178,9 +172,7 @@ static int serialize_EventListType(struct EventListType* type, struct v2gService
 			}
 				
 			
-						/* element ID assignment of Event*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=9;
+
 			 
 			
 			/* encode end element of Event */
@@ -220,9 +212,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 			}
 				
 			
-						/* element ID assignment of FaultCode*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=13;
+
 			 
 			
 			/* encode end element of FaultCode */
@@ -258,9 +248,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 			
 			
 			
-						/* element ID assignment of FaultMsg*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=14;
+
 			 
 			
 			/* encode end element of FaultMsg */
@@ -291,9 +279,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 
 			
 			
-						/* element ID assignment of EventList*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=10;
+
 			 
 			
 			/* encode end element of EventList */
@@ -329,9 +315,7 @@ static int serialize_HeaderType(struct HeaderType* type, struct v2gService* serv
 
 			
 			
-						/* element ID assignment of SessionInformation*/
-			service->eqn.namespaceURI=6;			
-			service->eqn.localPart=7;
+
 			 
 			
 			/* encode end element of SessionInformation */
@@ -361,9 +345,7 @@ static int serialize_HeaderType(struct HeaderType* type, struct v2gService* serv
 
 			
 			
-						/* element ID assignment of Notification*/
-			service->eqn.namespaceURI=6;			
-			service->eqn.localPart=6;
+
 			 
 			
 			/* encode end element of Notification */
@@ -402,9 +384,7 @@ static int serialize_PEVStatusType(struct PEVStatusType* type, struct v2gService
 			}
 				
 			
-						/* element ID assignment of ConnectorLocked*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=4;
+
 			 
 			
 			/* encode end element of ConnectorLocked */
@@ -435,9 +415,7 @@ static int serialize_PEVStatusType(struct PEVStatusType* type, struct v2gService
 			}
 				
 			
-						/* element ID assignment of ChargerStandby*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=0;
+
 			 
 			
 			/* encode end element of ChargerStandby */
@@ -479,9 +457,7 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 			
 			
 			
-						/* element ID assignment of PEVID*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=26;
+
 			 
 			
 			/* encode end element of PEVID */
@@ -510,9 +486,7 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 
 			
 			
-						/* element ID assignment of PEVStatus*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=32;
+
 			 
 			
 			/* encode end element of PEVStatus */
@@ -550,9 +524,7 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct v2gServi
 			}
 				
 			
-						/* element ID assignment of FatalError*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=12;
+
 			 
 			
 			/* encode end element of FatalError */
@@ -583,9 +555,7 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct v2gServi
 			}
 				
 			
-						/* element ID assignment of EVSEStandby*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=7;
+
 			 
 			
 			/* encode end element of EVSEStandby */
@@ -616,9 +586,7 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct v2gServi
 			}
 				
 			
-						/* element ID assignment of ConnectorLocked*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=4;
+
 			 
 			
 			/* encode end element of ConnectorLocked */
@@ -649,9 +617,7 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct v2gServi
 			}
 				
 			
-						/* element ID assignment of PowerSwitchClosed*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=24;
+
 			 
 			
 			/* encode end element of PowerSwitchClosed */
@@ -682,9 +648,7 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct v2gServi
 			}
 				
 			
-						/* element ID assignment of RCD*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=26;
+
 			 
 			
 			/* encode end element of RCD */
@@ -715,9 +679,7 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct v2gServi
 			}
 				
 			
-						/* element ID assignment of ShutDownTime*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=37;
+
 			 
 			
 			/* encode end element of ShutDownTime */
@@ -755,9 +717,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			}
 				
 			
-						/* element ID assignment of ResponseCode*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=47;
+
 			 
 			
 			/* encode end element of ResponseCode */
@@ -790,9 +750,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			
 			
 			
-						/* element ID assignment of EVSEID*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=3;
+
 			 
 			
 			/* encode end element of EVSEID */
@@ -820,9 +778,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 
 			
 			
-						/* element ID assignment of EVSEStatus*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=7;
+
 			 
 			
 			/* encode end element of EVSEStatus */
@@ -853,9 +809,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			}
 				
 			
-						/* element ID assignment of TCurrent*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=63;
+
 			 
 			
 			/* encode end element of TCurrent */
@@ -895,9 +849,7 @@ static int serialize_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* typ
 			}
 				
 			
-						/* element ID assignment of ServiceType*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=58;
+
 			 
 			
 			/* encode end element of ServiceType */
@@ -933,9 +885,7 @@ static int serialize_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* typ
 			
 			
 			
-						/* element ID assignment of ServiceScope*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=57;
+
 			 
 			
 			/* encode end element of ServiceScope */
@@ -976,9 +926,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			
 			
 			
-						/* element ID assignment of ServiceID*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=29;
+
 			 
 			
 			/* encode end element of ServiceID */
@@ -1013,9 +961,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			
 			
 			
-						/* element ID assignment of ServiceName*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=31;
+
 			 
 			
 			/* encode end element of ServiceName */
@@ -1049,9 +995,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			}
 				
 			
-						/* element ID assignment of ServiceType*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=34;
+
 			 
 			
 			/* encode end element of ServiceType */
@@ -1087,9 +1031,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			
 			
 			
-						/* element ID assignment of ServiceScope*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=32;
+
 			 
 			
 			/* encode end element of ServiceScope */
@@ -1106,6 +1048,8 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 
 static int serialize_ServiceListType(struct ServiceListType* type, struct v2gService* service)
 {
+			int i_loop;
+	
 			
 			/* element ID assignment of Service*/
 			service->eqn.namespaceURI=5;			
@@ -1116,18 +1060,20 @@ static int serialize_ServiceListType(struct ServiceListType* type, struct v2gSer
 				 
 					return -1;
 			}
-						
-			/* encode children of Service */
-			if(serialize_ServiceDescriptionType(&(type->Service),service)<0)
+			
+			for(i_loop=0;i_loop < type->arraylen.Service;i_loop++)
 			{
-				return -1;
+				/* encode children of Service */
+				if(serialize_ServiceDescriptionType(&(type->Service[i_loop]),service)<0)
+				{
+					return -1;
+				}
+			
 			}
+			
+			
+			
 
-			
-			
-						/* element ID assignment of Service*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=27;
 			 
 			
 			/* encode end element of Service */
@@ -1165,9 +1111,7 @@ static int serialize_ServiceDiscoveryResType(struct ServiceDiscoveryResType* typ
 			}
 				
 			
-						/* element ID assignment of ResponseCode*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=47;
+
 			 
 			
 			/* encode end element of ResponseCode */
@@ -1197,9 +1141,7 @@ static int serialize_ServiceDiscoveryResType(struct ServiceDiscoveryResType* typ
 
 			
 			
-						/* element ID assignment of ServiceList*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=52;
+
 			 
 			
 			/* encode end element of ServiceList */
@@ -1235,9 +1177,7 @@ static int serialize_ServicePaymentSelectionReqType(struct ServicePaymentSelecti
 
 			
 			
-						/* element ID assignment of ServiceList*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=52;
+
 			 
 			
 			/* encode end element of ServiceList */
@@ -1270,9 +1210,7 @@ static int serialize_ServicePaymentSelectionReqType(struct ServicePaymentSelecti
 			
 			
 			
-						/* element ID assignment of PEVPubKey*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=31;
+
 			 
 			
 			/* encode end element of PEVPubKey */
@@ -1310,9 +1248,7 @@ static int serialize_ServicePaymentSelectionResType(struct ServicePaymentSelecti
 			}
 				
 			
-						/* element ID assignment of ResponseCode*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=47;
+
 			 
 			
 			/* encode end element of ResponseCode */
@@ -1347,9 +1283,7 @@ static int serialize_ServicePaymentSelectionResType(struct ServicePaymentSelecti
 			
 			
 			
-						/* element ID assignment of MeteringAuthPubKey*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=16;
+
 			 
 			
 			/* encode end element of MeteringAuthPubKey */
@@ -1390,9 +1324,7 @@ static int serialize_PaymentDetailsReqType(struct PaymentDetailsReqType* type, s
 			
 			
 			
-						/* element ID assignment of ContractID*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=1;
+
 			 
 			
 			/* encode end element of ContractID */
@@ -1430,9 +1362,7 @@ static int serialize_PaymentDetailsResType(struct PaymentDetailsResType* type, s
 			}
 				
 			
-						/* element ID assignment of ResponseCode*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=47;
+
 			 
 			
 			/* encode end element of ResponseCode */
@@ -1470,9 +1400,7 @@ static int serialize_FloatingValueType(struct FloatingValueType* type, struct v2
 			}
 				
 			
-						/* element ID assignment of Multiplier*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=21;
+
 			 
 			
 			/* encode end element of Multiplier */
@@ -1503,9 +1431,7 @@ static int serialize_FloatingValueType(struct FloatingValueType* type, struct v2
 			}
 				
 			
-						/* element ID assignment of Unit*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=50;
+
 			 
 			
 			/* encode end element of Unit */
@@ -1536,9 +1462,7 @@ static int serialize_FloatingValueType(struct FloatingValueType* type, struct v2
 			}
 				
 			
-						/* element ID assignment of Value*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=51;
+
 			 
 			
 			/* encode end element of Value */
@@ -1573,9 +1497,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 
 			
 			
-						/* element ID assignment of PEVStatus*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=32;
+
 			 
 			
 			/* encode end element of PEVStatus */
@@ -1606,9 +1528,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			}
 				
 			
-						/* element ID assignment of EoC*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=10;
+
 			 
 			
 			/* encode end element of EoC */
@@ -1636,9 +1556,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 
 			
 			
-						/* element ID assignment of EAmount*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=2;
+
 			 
 			
 			/* encode end element of EAmount */
@@ -1666,9 +1584,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 
 			
 			
-						/* element ID assignment of PEVMaxPower*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=28;
+
 			 
 			
 			/* encode end element of PEVMaxPower */
@@ -1699,9 +1615,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			}
 				
 			
-						/* element ID assignment of PEVMaxPhases*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=27;
+
 			 
 			
 			/* encode end element of PEVMaxPhases */
@@ -1729,9 +1643,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 
 			
 			
-						/* element ID assignment of PEVMaxVoltage*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=29;
+
 			 
 			
 			/* encode end element of PEVMaxVoltage */
@@ -1759,9 +1671,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 
 			
 			
-						/* element ID assignment of PEVMinVoltage*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=30;
+
 			 
 			
 			/* encode end element of PEVMinVoltage */
@@ -1799,9 +1709,7 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 			}
 				
 			
-						/* element ID assignment of TariffStart*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=48;
+
 			 
 			
 			/* encode end element of TariffStart */
@@ -1829,9 +1737,7 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 
 			
 			
-						/* element ID assignment of TariffPMax*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=47;
+
 			 
 			
 			/* encode end element of TariffPMax */
@@ -1861,9 +1767,7 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 
 			
 			
-						/* element ID assignment of EPrice*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=6;
+
 			 
 			
 			/* encode end element of EPrice */
@@ -1880,6 +1784,8 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 
 static int serialize_TariffEntriesType(struct TariffEntriesType* type, struct v2gService* service)
 {
+			int i_loop;
+	
 			
 			/* element ID assignment of TariffEntry*/
 			service->eqn.namespaceURI=5;			
@@ -1890,18 +1796,20 @@ static int serialize_TariffEntriesType(struct TariffEntriesType* type, struct v2
 				 
 					return -1;
 			}
-						
-			/* encode children of TariffEntry */
-			if(serialize_TariffEntryType(&(type->TariffEntry),service)<0)
+			
+			for(i_loop=0;i_loop < type->arraylen.TariffEntry;i_loop++)
 			{
-				return -1;
+				/* encode children of TariffEntry */
+				if(serialize_TariffEntryType(&(type->TariffEntry[i_loop]),service)<0)
+				{
+					return -1;
+				}
+			
 			}
+			
+			
+			
 
-			
-			
-						/* element ID assignment of TariffEntry*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=44;
 			 
 			
 			/* encode end element of TariffEntry */
@@ -1939,9 +1847,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 			}
 				
 			
-						/* element ID assignment of TariffID*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=46;
+
 			 
 			
 			/* encode end element of TariffID */
@@ -1976,9 +1882,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 			
 			
 			
-						/* element ID assignment of TariffDescription*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=41;
+
 			 
 			
 			/* encode end element of TariffDescription */
@@ -2007,9 +1911,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 
 			
 			
-						/* element ID assignment of TariffEntries*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=42;
+
 			 
 			
 			/* encode end element of TariffEntries */
@@ -2025,6 +1927,8 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 
 static int serialize_TariffTableType(struct TariffTableType* type, struct v2gService* service)
 {
+			int i_loop;
+	
 			
 			/* element ID assignment of Currency*/
 			service->eqn.namespaceURI=5;			
@@ -2049,9 +1953,7 @@ static int serialize_TariffTableType(struct TariffTableType* type, struct v2gSer
 			
 			
 			
-						/* element ID assignment of Currency*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=5;
+
 			 
 			
 			/* encode end element of Currency */
@@ -2070,18 +1972,20 @@ static int serialize_TariffTableType(struct TariffTableType* type, struct v2gSer
 				 
 					return -1;
 			}
-						
-			/* encode children of Tariff */
-			if(serialize_TariffDescrType(&(type->Tariff),service)<0)
+			
+			for(i_loop=0;i_loop < type->arraylen.Tariff;i_loop++)
 			{
-				return -1;
+				/* encode children of Tariff */
+				if(serialize_TariffDescrType(&(type->Tariff[i_loop]),service)<0)
+				{
+					return -1;
+				}
+			
 			}
+			
+			
+			
 
-			
-			
-						/* element ID assignment of Tariff*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=39;
 			 
 			
 			/* encode end element of Tariff */
@@ -2119,9 +2023,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			}
 				
 			
-						/* element ID assignment of ResponseCode*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=47;
+
 			 
 			
 			/* encode end element of ResponseCode */
@@ -2149,9 +2051,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 
 			
 			
-						/* element ID assignment of EVSEStatus*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=7;
+
 			 
 			
 			/* encode end element of EVSEStatus */
@@ -2179,9 +2079,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 
 			
 			
-						/* element ID assignment of EVSEVoltage*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=8;
+
 			 
 			
 			/* encode end element of EVSEVoltage */
@@ -2209,9 +2107,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 
 			
 			
-						/* element ID assignment of EVSEIMax*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=4;
+
 			 
 			
 			/* encode end element of EVSEIMax */
@@ -2242,9 +2138,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			}
 				
 			
-						/* element ID assignment of EVSEMaxPhases*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=5;
+
 			 
 			
 			/* encode end element of EVSEMaxPhases */
@@ -2279,9 +2173,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			
 			
 			
-						/* element ID assignment of EnergyProvider*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=9;
+
 			 
 			
 			/* encode end element of EnergyProvider */
@@ -2312,9 +2204,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 
 			
 			
-						/* element ID assignment of TariffTable*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=65;
+
 			 
 			
 			/* encode end element of TariffTable */
@@ -2350,9 +2240,7 @@ static int serialize_LineLockReqType(struct LineLockReqType* type, struct v2gSer
 
 			
 			
-						/* element ID assignment of PEVStatus*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=32;
+
 			 
 			
 			/* encode end element of PEVStatus */
@@ -2383,9 +2271,7 @@ static int serialize_LineLockReqType(struct LineLockReqType* type, struct v2gSer
 			}
 				
 			
-						/* element ID assignment of ReqLockStatus*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=45;
+
 			 
 			
 			/* encode end element of ReqLockStatus */
@@ -2423,9 +2309,7 @@ static int serialize_LineLockResType(struct LineLockResType* type, struct v2gSer
 			}
 				
 			
-						/* element ID assignment of ResponseCode*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=47;
+
 			 
 			
 			/* encode end element of ResponseCode */
@@ -2453,9 +2337,7 @@ static int serialize_LineLockResType(struct LineLockResType* type, struct v2gSer
 
 			
 			
-						/* element ID assignment of EVSEStatus*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=7;
+
 			 
 			
 			/* encode end element of EVSEStatus */
@@ -2493,9 +2375,7 @@ static int serialize_ChargingProfileType(struct ChargingProfileType* type, struc
 			}
 				
 			
-						/* element ID assignment of ChargingProfileEntryStart*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=2;
+
 			 
 			
 			/* encode end element of ChargingProfileEntryStart */
@@ -2523,9 +2403,7 @@ static int serialize_ChargingProfileType(struct ChargingProfileType* type, struc
 
 			
 			
-						/* element ID assignment of ChargingProfileEntryMaxPower*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=1;
+
 			 
 			
 			/* encode end element of ChargingProfileEntryMaxPower */
@@ -2560,9 +2438,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 
 			
 			
-						/* element ID assignment of PEVStatus*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=32;
+
 			 
 			
 			/* encode end element of PEVStatus */
@@ -2593,9 +2469,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			}
 				
 			
-						/* element ID assignment of ReqSwitchStatus*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=46;
+
 			 
 			
 			/* encode end element of ReqSwitchStatus */
@@ -2628,9 +2502,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			}
 				
 			
-						/* element ID assignment of Tariff*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=64;
+
 			 
 			
 			/* encode end element of Tariff */
@@ -2661,9 +2533,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 
 			
 			
-						/* element ID assignment of ChargingProfile*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=0;
+
 			 
 			
 			/* encode end element of ChargingProfile */
@@ -2702,9 +2572,7 @@ static int serialize_PowerDeliveryResType(struct PowerDeliveryResType* type, str
 			}
 				
 			
-						/* element ID assignment of ResponseCode*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=47;
+
 			 
 			
 			/* encode end element of ResponseCode */
@@ -2753,9 +2621,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			
 			
 			
-						/* element ID assignment of MeterID*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=16;
+
 			 
 			
 			/* encode end element of MeterID */
@@ -2791,9 +2657,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			
 			
 			
-						/* element ID assignment of MeterPubKey*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=18;
+
 			 
 			
 			/* encode end element of MeterPubKey */
@@ -2824,9 +2688,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 
 			
 			
-						/* element ID assignment of MeterReading*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=19;
+
 			 
 			
 			/* encode end element of MeterReading */
@@ -2860,9 +2722,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			}
 				
 			
-						/* element ID assignment of MeterStatus*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=20;
+
 			 
 			
 			/* encode end element of MeterStatus */
@@ -2896,9 +2756,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			}
 				
 			
-						/* element ID assignment of TMeter*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=38;
+
 			 
 			
 			/* encode end element of TMeter */
@@ -2937,9 +2795,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			}
 				
 			
-						/* element ID assignment of ResponseCode*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=47;
+
 			 
 			
 			/* encode end element of ResponseCode */
@@ -2972,9 +2828,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			
 			
 			
-						/* element ID assignment of EVSEID*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=3;
+
 			 
 			
 			/* encode end element of EVSEID */
@@ -3002,9 +2856,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 
 			
 			
-						/* element ID assignment of EVSEStatus*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=7;
+
 			 
 			
 			/* encode end element of EVSEStatus */
@@ -3035,9 +2887,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			}
 				
 			
-						/* element ID assignment of TCurrent*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=63;
+
 			 
 			
 			/* encode end element of TCurrent */
@@ -3065,9 +2915,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 
 			
 			
-						/* element ID assignment of EVSEMaxPower*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=6;
+
 			 
 			
 			/* encode end element of EVSEMaxPower */
@@ -3097,9 +2945,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 
 			
 			
-						/* element ID assignment of PCurrent*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=25;
+
 			 
 			
 			/* encode end element of PCurrent */
@@ -3130,9 +2976,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 
 			
 			
-						/* element ID assignment of MeterInfo*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=15;
+
 			 
 			
 			/* encode end element of MeterInfo */
@@ -3175,9 +3019,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			
 			
 			
-						/* element ID assignment of PEVID*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=26;
+
 			 
 			
 			/* encode end element of PEVID */
@@ -3206,9 +3048,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 
 			
 			
-						/* element ID assignment of PEVStatus*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=32;
+
 			 
 			
 			/* encode end element of PEVStatus */
@@ -3241,9 +3081,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			}
 				
 			
-						/* element ID assignment of TCurrent*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=63;
+
 			 
 			
 			/* encode end element of TCurrent */
@@ -3275,9 +3113,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			}
 				
 			
-						/* element ID assignment of Tariff*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=64;
+
 			 
 			
 			/* encode end element of Tariff */
@@ -3305,9 +3141,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 
 			
 			
-						/* element ID assignment of MeterInfo*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=15;
+
 			 
 			
 			/* encode end element of MeterInfo */
@@ -3345,9 +3179,7 @@ static int serialize_MeteringReceiptResType(struct MeteringReceiptResType* type,
 			}
 				
 			
-						/* element ID assignment of ResponseCode*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=47;
+
 			 
 			
 			/* encode end element of ResponseCode */
@@ -3384,9 +3216,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of SessionSetupReq*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=59;
+
 			 
 			
 			/* encode end element of SessionSetupReq */
@@ -3417,9 +3247,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of SessionSetupRes*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=61;
+
 			 
 			
 			/* encode end element of SessionSetupRes */
@@ -3450,9 +3278,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of ServiceDiscoveryReq*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=48;
+
 			 
 			
 			/* encode end element of ServiceDiscoveryReq */
@@ -3483,9 +3309,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of ServiceDiscoveryRes*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=50;
+
 			 
 			
 			/* encode end element of ServiceDiscoveryRes */
@@ -3516,9 +3340,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of ServicePaymentSelectionReq*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=53;
+
 			 
 			
 			/* encode end element of ServicePaymentSelectionReq */
@@ -3549,9 +3371,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of ServicePaymentSelectionRes*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=55;
+
 			 
 			
 			/* encode end element of ServicePaymentSelectionRes */
@@ -3582,9 +3402,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of PaymentDetailsReq*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=33;
+
 			 
 			
 			/* encode end element of PaymentDetailsReq */
@@ -3615,9 +3433,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of PaymentDetailsRes*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=35;
+
 			 
 			
 			/* encode end element of PaymentDetailsRes */
@@ -3648,9 +3464,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of PowerDiscoveryReq*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=41;
+
 			 
 			
 			/* encode end element of PowerDiscoveryReq */
@@ -3681,9 +3495,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of PowerDiscoveryRes*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=43;
+
 			 
 			
 			/* encode end element of PowerDiscoveryRes */
@@ -3714,9 +3526,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of LineLockReq*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=11;
+
 			 
 			
 			/* encode end element of LineLockReq */
@@ -3747,9 +3557,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of LineLockRes*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=13;
+
 			 
 			
 			/* encode end element of LineLockRes */
@@ -3780,9 +3588,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of PowerDeliveryReq*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=37;
+
 			 
 			
 			/* encode end element of PowerDeliveryReq */
@@ -3813,9 +3619,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of PowerDeliveryRes*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=39;
+
 			 
 			
 			/* encode end element of PowerDeliveryRes */
@@ -3846,9 +3650,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of MeteringStatusReq*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=21;
+
 			 
 			
 			/* encode end element of MeteringStatusReq */
@@ -3879,9 +3681,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of MeteringStatusRes*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=23;
+
 			 
 			
 			/* encode end element of MeteringStatusRes */
@@ -3912,9 +3712,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of MeteringReceiptReq*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=17;
+
 			 
 			
 			/* encode end element of MeteringReceiptReq */
@@ -3945,9 +3743,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 			
 			
-						/* element ID assignment of MeteringReceiptRes*/
-			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=19;
+
 			 
 			
 			/* encode end element of MeteringReceiptRes */
@@ -3983,9 +3779,7 @@ static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, str
 
 			
 			
-						/* element ID assignment of Header*/
-			service->eqn.namespaceURI=6;			
-			service->eqn.localPart=4;
+
 			 
 			
 			/* encode end element of Header */
@@ -4013,9 +3807,7 @@ static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, str
 
 			
 			
-						/* element ID assignment of Body*/
-			service->eqn.namespaceURI=6;			
-			service->eqn.localPart=0;
+
 			 
 			
 			/* encode end element of Body */
@@ -4077,4 +3869,3 @@ static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, str
  	return 0;
  	
  }
- 
