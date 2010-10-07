@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2
+ * @version 0.2.1
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -104,8 +104,8 @@ int main(int argc, char *argv[])
 	printf("\t\tFatalError=%d\n",resultSessionSetup.EVSEStatus.FatalError);
 	printf("\t\tPowerSwitchClosed=%d\n",resultSessionSetup.EVSEStatus.PowerSwitchClosed);
 	printf("\t\tRCD=%d\n",resultSessionSetup.EVSEStatus.RCD);
-	printf("\t\tShutDownTime=%ld\n",resultSessionSetup.EVSEStatus.ShutDownTime);
-	printf("\tTCurrent=%ld\n",resultSessionSetup.TCurrent);
+	printf("\t\tShutDownTime=%lld\n",resultSessionSetup.EVSEStatus.ShutDownTime);
+	printf("\tTCurrent=%lld\n",resultSessionSetup.TCurrent);
 
 	printf("\n+++Terminate V2G Client / Service Example+++");
 

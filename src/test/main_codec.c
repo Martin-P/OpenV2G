@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.2
+ * @version 0.2.1
  * @contact Joerg.Heuer@siemens.com
  *
  * <p>Sample program to illustrate how to read an EXI stream and

@@ -21,7 +21,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2
+ * @version 0.2.1
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -1229,7 +1229,7 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 static int deserializeMessage(struct v2gService* service)
 {
 	int noEndOfDocument = 1; /* true */
-	int errno;
+	int errno=0;
 
 
 	do {
