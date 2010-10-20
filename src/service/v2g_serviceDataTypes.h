@@ -19,7 +19,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.1
+ * @version 0.2.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -118,6 +118,42 @@ enum unitMultiplierType
 	G, 
 	T, 
 	none
+
+}; 
+
+enum unitSymbolType
+{
+	A, 
+	deg, 
+	F, 
+	g, 
+	h, 
+	H, 
+	Hz, 
+	Hz_1, 
+	J, 
+	J_s, 
+	kg_J, 
+	min, 
+	N, 
+	C, 
+	ohm, 
+	Pa, 
+	rad, 
+	s, 
+	S, 
+	s_1, 
+	V, 
+	V_VAr, 
+	VA, 
+	VAh, 
+	VAr, 
+	VArh, 
+	W, 
+	W_Hz, 
+	W_s, 
+	Wh, 
+	Ah
 
 }; 
 
@@ -586,8 +622,8 @@ struct PaymentDetailsResType
 struct FloatingValueType
 {
 	enum unitMultiplierType Multiplier;
-	enum unitMultiplierType Unit;
-	int32_t Value;
+	enum unitSymbolType Unit;
+	int64_t Value;
 
 
 };

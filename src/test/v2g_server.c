@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.1
+ * @version 0.2.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -31,6 +31,7 @@
 #define MAX_STRING_SIZE 256
 #define MAX_STREAM_SIZE 60
 
+/* Simple EVSE server implementation */
 int testV2GService(uint8_t* inStream, size_t inStreamLength, uint8_t* outStream)
 {
 	static uint8_t byte_array[MAX_BYTE_SIZE]; /* define MAX_BYTE_SIZE before*/

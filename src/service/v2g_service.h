@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.1
+ * @version 0.2.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -32,6 +32,13 @@ extern "C" {
 
 #include "v2g_serviceDataTypes.h"
 #include "EXITypes.h"
+
+struct uniqueIDPath
+{
+	int id[10];
+	size_t pos;
+};
+
 
 struct v2gService
 {
@@ -49,7 +56,11 @@ struct v2gService
 	/* v2g message data structure */
 	struct AnonType_V2G_Message v2gMsg;
 
+	/* unique id for ambiguous elements */
+	struct uniqueIDPath idPath;
 };
+
+
 
 #endif /* V2G_SERVICE_H_ */
 
