@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.1
+ * @version 0.2.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -77,13 +77,13 @@ int main_service(int argc, char *argv[])
 	 *******************************/
 
 	/* setup header information */
-	v2gHeader.SessionInformation.ServiceSessionID.arraylen.data = 0; /* no session id in the initial message -> array length = 0*/
+	v2gHeader.SessionInformation.SessionID.arraylen.data = 0; /* no session id in the initial message -> array length = 0*/
 	v2gHeader.SessionInformation.ProtocolVersion.data[0]='1'; /* assign protocol version number*/
 	v2gHeader.SessionInformation.ProtocolVersion.arraylen.data=1; /* array string length =1 of protocol version */
 	v2gHeader.SessionInformation.isused.ProtocolVersion = 1; /* important: signalize, protocol version is used */
 	v2gHeader.isused.Notification=0; /* no notification */
 
-	/* setup sessionSetup parameter */
+	/* setup sessionSetup parameters */
 	sessionSetup.isused.PEVID=1; /* no PEVID is transported */
 	sessionSetup.PEVStatus.ChargerStandby=1; /* charger standby = true */
 	sessionSetup.PEVStatus.ConnectorLocked=0; /* connector locked = false */
@@ -95,7 +95,7 @@ int main_service(int argc, char *argv[])
 	 *********************/
 	call_sessionSetup(&service,&v2gHeader,&sessionSetup,&resultSessionSetup);
 
-	/* show result of the answer message of EVSE sessionSetup*/
+	/* show results of the answer message of EVSE sessionSetup*/
 	printf("PEV: received response message from EVSE\n");
 	printf("\tResponseCode=%d\n",resultSessionSetup.ResponseCode);
 	printf("\tEVSEID=%d\n",	resultSessionSetup.EVSEID.data[0]);
