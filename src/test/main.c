@@ -18,31 +18,24 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
+ * @author Sebastian.Kaebisch.EXT@siemens.com
  * @version 0.2.2
  * @contact Joerg.Heuer@siemens.com
  *
+ * <p>Switch for sample programs: EXI codec only or for entire service</p>
+ *
  ********************************************************************/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <stdio.h>
+#include <stdlib.h>
 
-#include "EXITypes.h"
+#include "main.h"
 
-/* TODO utf8/cstring//wchar_t/char16_t/char32_t methods */
+int main(int argc, char *argv[]) {
+	/* EXI codec only */
+	/* return main_codec(argc, argv);*/
 
-
-#ifndef UCS_STRING_H
-#define UCS_STRING_H
-
-int toUCSString(char* chars, string_ucs_t* s);
-
-/* Note: fails if string contains non ASCII characters */
-int toASCIIString(string_ucs_t* string, char* outASCII);
-
-#endif
-
-
-#ifdef __cplusplus
+	/* Entire V2G service */
+	return main_service(argc, argv);
 }
-#endif
+
