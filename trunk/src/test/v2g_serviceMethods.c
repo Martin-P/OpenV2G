@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.1
+ * @version 0.2.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -26,6 +26,8 @@
 #include "v2g_serviceMethods.h"
 #include "v2g_serviceDataTypes.h"
 #include <stdio.h>
+
+/* This service methods has to be implemented by the EVSE server */
 
 int	sessionSetup(struct SessionSetupReqType* param, struct SessionSetupResType* result)
 {

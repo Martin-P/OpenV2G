@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 	/* EXI codec only */
 	/* return main_codec(argc, argv);*/
 
-	/* Entire V2G service */
+	/* V2G client / service example scenario */
 	return main_service(argc, argv);
 }
 

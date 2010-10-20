@@ -15,6 +15,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*******************************************************************
+ *
+ * @author Daniel.Peintner.EXT@siemens.com
+ * @author Sebastian.Kaebisch.EXT@siemens.com
+ * @version 0.2.2
+ * @contact Joerg.Heuer@siemens.com
+ *
+ *
+ ********************************************************************/
+
 #ifndef MAIN_H_
 #define MAIN_H_
 

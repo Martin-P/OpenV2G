@@ -22,7 +22,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.1
+ * @version 0.2.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -37,7 +37,8 @@ extern "C" {
 #include "v2g_serviceDataTypes.h"
 #include "EXITypes.h"
 
-/* service methods */
+/* This service methods has to be implemented by the EVSE server */
+
 int	sessionSetup(struct SessionSetupReqType* param, struct SessionSetupResType* result);
 					
 int	serviceDiscovery(struct ServiceDiscoveryReqType* param, struct ServiceDiscoveryResType* result);

@@ -19,7 +19,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.1
+ * @version 0.2.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -1451,8 +1451,8 @@ static int serialize_FloatingValueType(struct FloatingValueType* type, struct v2
 					return -1;
 			}
 			
-			service->val.type = INTEGER_16;
-			service->val.int32=service->v2gMsg.Body.PowerDiscoveryReq.EAmount.Value;
+			service->val.type = INTEGER_64;
+			service->val.int64=service->v2gMsg.Body.PowerDiscoveryReq.EAmount.Value;
 			
 			/* encode character  Value */	
 			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
