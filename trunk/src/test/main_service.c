@@ -37,7 +37,7 @@
 #define MAX_STRING_SIZE 256
 #define MAX_STREAM_SIZE 60
 
-int main(int argc, char *argv[])
+int main_service(int argc, char *argv[])
 {
 
 	static uint8_t byte_array[MAX_BYTE_SIZE]; /* define MAX_BYTE_SIZE before*/

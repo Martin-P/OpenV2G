@@ -15,34 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*******************************************************************
- *
- * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.2.2
- * @contact Joerg.Heuer@siemens.com
- *
- ********************************************************************/
+#ifndef MAIN_H_
+#define MAIN_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+int main_codec(int argc, char *argv[]);
+int main_service(int argc, char *argv[]);
 
-#include "EXITypes.h"
-
-/* TODO utf8/cstring//wchar_t/char16_t/char32_t methods */
-
-
-#ifndef UCS_STRING_H
-#define UCS_STRING_H
-
-int toUCSString(char* chars, string_ucs_t* s);
-
-/* Note: fails if string contains non ASCII characters */
-int toASCIIString(string_ucs_t* string, char* outASCII);
-
-#endif
-
-
-#ifdef __cplusplus
-}
 #endif
