@@ -29,9 +29,8 @@
 #include "v2g_serviceDataTypes.h"
 #include "v2g_serviceClientStubs.h"
 #include "EXITypes.h"
-#include "BitStream.h"
 
-#include <stdlib.h>
+#include <stdio.h>
 
 #define MAX_BYTE_SIZE 128
 #define MAX_STRING_SIZE 256

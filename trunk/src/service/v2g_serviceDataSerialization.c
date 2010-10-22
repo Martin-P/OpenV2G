@@ -19,7 +19,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.2
+ * @version 0.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -148,7 +148,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 }
 
 
-static int serialize_EventListType(struct EventListType* type, struct v2gService* service)
+static int serialize_EventListType(struct v2gService* service)
 {
 			
 			/* element ID assignment of Event*/
@@ -272,7 +272,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 			}
 						
 			/* encode children of EventList */
-			if(serialize_EventListType(&(type->EventList),service)<0)
+			if(serialize_EventListType(service)<0)
 			{
 				return -1;
 			}
@@ -308,7 +308,7 @@ static int serialize_HeaderType(struct HeaderType* type, struct v2gService* serv
 			}
 						
 			/* encode children of SessionInformation */
-			if(serialize_SessionInformationType(&(type->SessionInformation),service)<0)
+			if(serialize_SessionInformationType( &(type->SessionInformation),service)<0)
 			{
 				return -1;
 			}
@@ -338,7 +338,7 @@ static int serialize_HeaderType(struct HeaderType* type, struct v2gService* serv
 			}
 						
 			/* encode children of Notification */
-			if(serialize_NotificationType(&(type->Notification),service)<0)
+			if(serialize_NotificationType( &(type->Notification),service)<0)
 			{
 				return -1;
 			}
@@ -360,7 +360,7 @@ static int serialize_HeaderType(struct HeaderType* type, struct v2gService* serv
 }
 
 
-static int serialize_PEVStatusType(struct PEVStatusType* type, struct v2gService* service)
+static int serialize_PEVStatusType(struct v2gService* service)
 {
 			
 			/* element ID assignment of ConnectorLocked*/
@@ -479,7 +479,7 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 			}
 						
 			/* encode children of PEVStatus */
-			if(serialize_PEVStatusType(&(type->PEVStatus),service)<0)
+			if(serialize_PEVStatusType(service)<0)
 			{
 				return -1;
 			}
@@ -500,7 +500,7 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 }
 
 
-static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct v2gService* service)
+static int serialize_EVSEStatusType(struct v2gService* service)
 {
 			
 			/* element ID assignment of FatalError*/
@@ -771,7 +771,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			}
 						
 			/* encode children of EVSEStatus */
-			if(serialize_EVSEStatusType(&(type->EVSEStatus),service)<0)
+			if(serialize_EVSEStatusType(service)<0)
 			{
 				return -1;
 			}
@@ -1048,7 +1048,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 
 static int serialize_ServiceListType(struct ServiceListType* type, struct v2gService* service)
 {
-			int i_loop;
+			size_t i_loop;
 	
 			
 			/* element ID assignment of Service*/
@@ -1134,7 +1134,7 @@ static int serialize_ServiceDiscoveryResType(struct ServiceDiscoveryResType* typ
 			}
 						
 			/* encode children of ServiceList */
-			if(serialize_ServiceListType(&(type->ServiceList),service)<0)
+			if(serialize_ServiceListType( &(type->ServiceList),service)<0)
 			{
 				return -1;
 			}
@@ -1170,7 +1170,7 @@ static int serialize_ServicePaymentSelectionReqType(struct ServicePaymentSelecti
 			}
 						
 			/* encode children of ServiceList */
-			if(serialize_ServiceListType(&(type->ServiceList),service)<0)
+			if(serialize_ServiceListType( &(type->ServiceList),service)<0)
 			{
 				return -1;
 			}
@@ -1338,7 +1338,7 @@ static int serialize_PaymentDetailsReqType(struct PaymentDetailsReqType* type, s
 }
 
 
-static int serialize_PaymentDetailsResType(struct PaymentDetailsResType* type, struct v2gService* service)
+static int serialize_PaymentDetailsResType(struct v2gService* service)
 {
 			
 			/* element ID assignment of ResponseCode*/
@@ -1376,7 +1376,7 @@ static int serialize_PaymentDetailsResType(struct PaymentDetailsResType* type, s
 }
 
 
-static int serialize_FloatingValueType(struct FloatingValueType* type, struct v2gService* service)
+static int serialize_FloatingValueType(struct v2gService* service)
 {
 			
 			/* element ID assignment of Multiplier*/
@@ -1490,7 +1490,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			}
 						
 			/* encode children of PEVStatus */
-			if(serialize_PEVStatusType(&(type->PEVStatus),service)<0)
+			if(serialize_PEVStatusType(service)<0)
 			{
 				return -1;
 			}
@@ -1549,7 +1549,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			}
 						
 			/* encode children of EAmount */
-			if(serialize_FloatingValueType(&(type->EAmount),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -1577,7 +1577,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			}
 						
 			/* encode children of PEVMaxPower */
-			if(serialize_FloatingValueType(&(type->PEVMaxPower),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -1636,7 +1636,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			}
 						
 			/* encode children of PEVMaxVoltage */
-			if(serialize_FloatingValueType(&(type->PEVMaxVoltage),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -1664,7 +1664,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			}
 						
 			/* encode children of PEVMinVoltage */
-			if(serialize_FloatingValueType(&(type->PEVMinVoltage),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -1730,7 +1730,7 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 			}
 						
 			/* encode children of TariffPMax */
-			if(serialize_FloatingValueType(&(type->TariffPMax),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -1760,7 +1760,7 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 			}
 						
 			/* encode children of EPrice */
-			if(serialize_FloatingValueType(&(type->EPrice),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -1784,7 +1784,7 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 
 static int serialize_TariffEntriesType(struct TariffEntriesType* type, struct v2gService* service)
 {
-			int i_loop;
+			size_t i_loop;
 	
 			
 			/* element ID assignment of TariffEntry*/
@@ -1904,7 +1904,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 			}
 						
 			/* encode children of TariffEntries */
-			if(serialize_TariffEntriesType(&(type->TariffEntries),service)<0)
+			if(serialize_TariffEntriesType( &(type->TariffEntries),service)<0)
 			{
 				return -1;
 			}
@@ -1927,7 +1927,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 
 static int serialize_TariffTableType(struct TariffTableType* type, struct v2gService* service)
 {
-			int i_loop;
+			size_t i_loop;
 	
 			
 			/* element ID assignment of Currency*/
@@ -2044,7 +2044,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			}
 						
 			/* encode children of EVSEStatus */
-			if(serialize_EVSEStatusType(&(type->EVSEStatus),service)<0)
+			if(serialize_EVSEStatusType(service)<0)
 			{
 				return -1;
 			}
@@ -2072,7 +2072,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			}
 						
 			/* encode children of EVSEVoltage */
-			if(serialize_FloatingValueType(&(type->EVSEVoltage),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -2100,7 +2100,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			}
 						
 			/* encode children of EVSEIMax */
-			if(serialize_FloatingValueType(&(type->EVSEIMax),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -2197,7 +2197,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			}
 						
 			/* encode children of TariffTable */
-			if(serialize_TariffTableType(&(type->TariffTable),service)<0)
+			if(serialize_TariffTableType( &(type->TariffTable),service)<0)
 			{
 				return -1;
 			}
@@ -2233,7 +2233,7 @@ static int serialize_LineLockReqType(struct LineLockReqType* type, struct v2gSer
 			}
 						
 			/* encode children of PEVStatus */
-			if(serialize_PEVStatusType(&(type->PEVStatus),service)<0)
+			if(serialize_PEVStatusType(service)<0)
 			{
 				return -1;
 			}
@@ -2330,7 +2330,7 @@ static int serialize_LineLockResType(struct LineLockResType* type, struct v2gSer
 			}
 						
 			/* encode children of EVSEStatus */
-			if(serialize_EVSEStatusType(&(type->EVSEStatus),service)<0)
+			if(serialize_EVSEStatusType(service)<0)
 			{
 				return -1;
 			}
@@ -2396,7 +2396,7 @@ static int serialize_ChargingProfileType(struct ChargingProfileType* type, struc
 			}
 						
 			/* encode children of ChargingProfileEntryMaxPower */
-			if(serialize_FloatingValueType(&(type->ChargingProfileEntryMaxPower),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -2431,7 +2431,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			}
 						
 			/* encode children of PEVStatus */
-			if(serialize_PEVStatusType(&(type->PEVStatus),service)<0)
+			if(serialize_PEVStatusType(service)<0)
 			{
 				return -1;
 			}
@@ -2526,7 +2526,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			}
 						
 			/* encode children of ChargingProfile */
-			if(serialize_ChargingProfileType(&(type->ChargingProfile),service)<0)
+			if(serialize_ChargingProfileType( &(type->ChargingProfile),service)<0)
 			{
 				return -1;
 			}
@@ -2548,7 +2548,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 }
 
 
-static int serialize_PowerDeliveryResType(struct PowerDeliveryResType* type, struct v2gService* service)
+static int serialize_PowerDeliveryResType(struct v2gService* service)
 {
 			
 			/* element ID assignment of ResponseCode*/
@@ -2586,7 +2586,7 @@ static int serialize_PowerDeliveryResType(struct PowerDeliveryResType* type, str
 }
 
 
-static int serialize_MeteringStatusReqType(struct MeteringStatusReqType* type, struct v2gService* service)
+static int serialize_MeteringStatusReqType(struct v2gService* service)
 {
 
 	return 0;			
@@ -2681,7 +2681,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			}
 						
 			/* encode children of MeterReading */
-			if(serialize_FloatingValueType(&(type->MeterReading),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -2849,7 +2849,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			}
 						
 			/* encode children of EVSEStatus */
-			if(serialize_EVSEStatusType(&(type->EVSEStatus),service)<0)
+			if(serialize_EVSEStatusType(service)<0)
 			{
 				return -1;
 			}
@@ -2908,7 +2908,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			}
 						
 			/* encode children of EVSEMaxPower */
-			if(serialize_FloatingValueType(&(type->EVSEMaxPower),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -2938,7 +2938,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			}
 						
 			/* encode children of PCurrent */
-			if(serialize_FloatingValueType(&(type->PCurrent),service)<0)
+			if(serialize_FloatingValueType(service)<0)
 			{
 				return -1;
 			}
@@ -2969,7 +2969,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			}
 						
 			/* encode children of MeterInfo */
-			if(serialize_MeterInfoType(&(type->MeterInfo),service)<0)
+			if(serialize_MeterInfoType( &(type->MeterInfo),service)<0)
 			{
 				return -1;
 			}
@@ -3041,7 +3041,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			}
 						
 			/* encode children of PEVStatus */
-			if(serialize_PEVStatusType(&(type->PEVStatus),service)<0)
+			if(serialize_PEVStatusType(service)<0)
 			{
 				return -1;
 			}
@@ -3134,7 +3134,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			}
 						
 			/* encode children of MeterInfo */
-			if(serialize_MeterInfoType(&(type->MeterInfo),service)<0)
+			if(serialize_MeterInfoType( &(type->MeterInfo),service)<0)
 			{
 				return -1;
 			}
@@ -3155,7 +3155,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 }
 
 
-static int serialize_MeteringReceiptResType(struct MeteringReceiptResType* type, struct v2gService* service)
+static int serialize_MeteringReceiptResType(struct v2gService* service)
 {
 			
 			/* element ID assignment of ResponseCode*/
@@ -3209,7 +3209,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of SessionSetupReq */
-			if(serialize_SessionSetupReqType(&(type->SessionSetupReq),service)<0)
+			if(serialize_SessionSetupReqType( &(type->SessionSetupReq),service)<0)
 			{
 				return -1;
 			}
@@ -3240,7 +3240,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of SessionSetupRes */
-			if(serialize_SessionSetupResType(&(type->SessionSetupRes),service)<0)
+			if(serialize_SessionSetupResType( &(type->SessionSetupRes),service)<0)
 			{
 				return -1;
 			}
@@ -3271,7 +3271,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of ServiceDiscoveryReq */
-			if(serialize_ServiceDiscoveryReqType(&(type->ServiceDiscoveryReq),service)<0)
+			if(serialize_ServiceDiscoveryReqType( &(type->ServiceDiscoveryReq),service)<0)
 			{
 				return -1;
 			}
@@ -3302,7 +3302,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of ServiceDiscoveryRes */
-			if(serialize_ServiceDiscoveryResType(&(type->ServiceDiscoveryRes),service)<0)
+			if(serialize_ServiceDiscoveryResType( &(type->ServiceDiscoveryRes),service)<0)
 			{
 				return -1;
 			}
@@ -3333,7 +3333,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of ServicePaymentSelectionReq */
-			if(serialize_ServicePaymentSelectionReqType(&(type->ServicePaymentSelectionReq),service)<0)
+			if(serialize_ServicePaymentSelectionReqType( &(type->ServicePaymentSelectionReq),service)<0)
 			{
 				return -1;
 			}
@@ -3364,7 +3364,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of ServicePaymentSelectionRes */
-			if(serialize_ServicePaymentSelectionResType(&(type->ServicePaymentSelectionRes),service)<0)
+			if(serialize_ServicePaymentSelectionResType( &(type->ServicePaymentSelectionRes),service)<0)
 			{
 				return -1;
 			}
@@ -3395,7 +3395,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of PaymentDetailsReq */
-			if(serialize_PaymentDetailsReqType(&(type->PaymentDetailsReq),service)<0)
+			if(serialize_PaymentDetailsReqType( &(type->PaymentDetailsReq),service)<0)
 			{
 				return -1;
 			}
@@ -3426,7 +3426,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of PaymentDetailsRes */
-			if(serialize_PaymentDetailsResType(&(type->PaymentDetailsRes),service)<0)
+			if(serialize_PaymentDetailsResType(service)<0)
 			{
 				return -1;
 			}
@@ -3457,7 +3457,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of PowerDiscoveryReq */
-			if(serialize_PowerDiscoveryReqType(&(type->PowerDiscoveryReq),service)<0)
+			if(serialize_PowerDiscoveryReqType( &(type->PowerDiscoveryReq),service)<0)
 			{
 				return -1;
 			}
@@ -3488,7 +3488,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of PowerDiscoveryRes */
-			if(serialize_PowerDiscoveryResType(&(type->PowerDiscoveryRes),service)<0)
+			if(serialize_PowerDiscoveryResType( &(type->PowerDiscoveryRes),service)<0)
 			{
 				return -1;
 			}
@@ -3519,7 +3519,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of LineLockReq */
-			if(serialize_LineLockReqType(&(type->LineLockReq),service)<0)
+			if(serialize_LineLockReqType( &(type->LineLockReq),service)<0)
 			{
 				return -1;
 			}
@@ -3550,7 +3550,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of LineLockRes */
-			if(serialize_LineLockResType(&(type->LineLockRes),service)<0)
+			if(serialize_LineLockResType( &(type->LineLockRes),service)<0)
 			{
 				return -1;
 			}
@@ -3581,7 +3581,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of PowerDeliveryReq */
-			if(serialize_PowerDeliveryReqType(&(type->PowerDeliveryReq),service)<0)
+			if(serialize_PowerDeliveryReqType( &(type->PowerDeliveryReq),service)<0)
 			{
 				return -1;
 			}
@@ -3612,7 +3612,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of PowerDeliveryRes */
-			if(serialize_PowerDeliveryResType(&(type->PowerDeliveryRes),service)<0)
+			if(serialize_PowerDeliveryResType(service)<0)
 			{
 				return -1;
 			}
@@ -3643,7 +3643,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of MeteringStatusReq */
-			if(serialize_MeteringStatusReqType(&(type->MeteringStatusReq),service)<0)
+			if(serialize_MeteringStatusReqType(service)<0)
 			{
 				return -1;
 			}
@@ -3674,7 +3674,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of MeteringStatusRes */
-			if(serialize_MeteringStatusResType(&(type->MeteringStatusRes),service)<0)
+			if(serialize_MeteringStatusResType( &(type->MeteringStatusRes),service)<0)
 			{
 				return -1;
 			}
@@ -3705,7 +3705,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of MeteringReceiptReq */
-			if(serialize_MeteringReceiptReqType(&(type->MeteringReceiptReq),service)<0)
+			if(serialize_MeteringReceiptReqType( &(type->MeteringReceiptReq),service)<0)
 			{
 				return -1;
 			}
@@ -3736,7 +3736,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			}
 						
 			/* encode children of MeteringReceiptRes */
-			if(serialize_MeteringReceiptResType(&(type->MeteringReceiptRes),service)<0)
+			if(serialize_MeteringReceiptResType(service)<0)
 			{
 				return -1;
 			}
@@ -3772,7 +3772,7 @@ static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, str
 			}
 						
 			/* encode children of Header */
-			if(serialize_HeaderType(&(type->Header),service)<0)
+			if(serialize_HeaderType( &(type->Header),service)<0)
 			{
 				return -1;
 			}
@@ -3800,7 +3800,7 @@ static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, str
 			}
 						
 			/* encode children of Body */
-			if(serialize_BodyType(&(type->Body),service)<0)
+			if(serialize_BodyType( &(type->Body),service)<0)
 			{
 				return -1;
 			}

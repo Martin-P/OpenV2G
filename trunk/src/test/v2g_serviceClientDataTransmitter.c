@@ -18,14 +18,14 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.2
+ * @version 0.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
 
 #include "v2g_serviceClientDataTransmitter.h"
 #include "v2g_server.h"
-#include "Bitstream.h"
+
 
 /* This method has to be implemented!
  * Send EXI stream (outStream) to EVSE and receive response stream (inStream)*/
