@@ -22,10 +22,11 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.2
+ * @version 0.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
+
  
  #ifdef __cplusplus
 extern "C" {
@@ -38,7 +39,6 @@ extern "C" {
 #include "EXITypes.h"
 
 /* This service methods has to be implemented by the EVSE server */
-
 int	sessionSetup(struct SessionSetupReqType* param, struct SessionSetupResType* result);
 					
 int	serviceDiscovery(struct ServiceDiscoveryReqType* param, struct ServiceDiscoveryResType* result);

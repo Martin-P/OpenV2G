@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.2
+ * @version 0.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
