@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.2.2
+ * @version 0.1
  * @contact Joerg.Heuer@siemens.com
  *
  * <p>Sample program to illustrate how to read an EXI stream and
@@ -34,22 +34,27 @@
 #include "StringTable.h"
 #include "EXIEncoder.h"
 #include "EXITypes.h"
-#include "Bitstream.h"
+#include "ByteStream.h"
+
+#define BUFFER_SIZE 100
 
 #define ARRAY_SIZE_BYTES 50
 #define ARRAY_SIZE_STRINGS 50
 
 /* avoids warning: initializer element is not computable at load time */
+uint8_t bufferIn[BUFFER_SIZE];
+uint8_t bufferOut[BUFFER_SIZE];
 uint8_t data[ARRAY_SIZE_BYTES];
 uint32_t codepoints[ARRAY_SIZE_STRINGS];
 
-int main_codec(int argc, char *argv[]) {
+int mainX(int argc, char *argv[]) {
 
 	int errn = 0;
 	unsigned int i;
 
 	bitstream_t iStream, oStream;
-	size_t posDecode, posEncode;
+	size_t posDecode;
+	size_t posEncode;
 
 	/* EXI set-up */
 	exi_state_t stateDecode;
@@ -74,19 +79,23 @@ int main_codec(int argc, char *argv[]) {
 		return -1;
 	}
 
-	/* parse EXI stream to internal byte structures  */
-	toBitstream(argv[1], &iStream);
-
-	/* input */
+	/* input pos */
 	posDecode = 0;
+
+	/* parse EXI stream to internal byte structures  */
+	readBytesFromFile(argv[1], bufferIn, BUFFER_SIZE, posDecode);
+
+	/* setup input stream */
+	iStream.size = BUFFER_SIZE;
+	iStream.data = bufferIn;
 	iStream.pos = &posDecode;
 	iStream.buffer = 0;
 	iStream.capacity = 0;
 
-	/* output */
+	/* setup output stream */
 	posEncode = 0;
-	oStream.data = malloc(sizeof(uint8_t)*iStream.size);
-	oStream.size = iStream.size;
+	oStream.size = BUFFER_SIZE;
+	oStream.data = bufferOut;
 	oStream.pos = &posEncode;
 	oStream.buffer = 0;
 	oStream.capacity = 8;

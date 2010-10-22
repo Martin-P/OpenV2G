@@ -38,7 +38,6 @@
 
 #include "EXICoder.h"
 #include "EXIHeaderEncoder.h"
-#include "StringTable.h"
 
 /* ==================================== */
 
@@ -69,6 +68,15 @@ int exiEncodeEndDocument(bitstream_t* stream, exi_state_t* state) {
 	return -1;
 }
 
+static int _exiEncodeStartElement(bitstream_t* stream, size_t nbits, uint8_t val,
+		exi_state_t* state, eqname_t* se, size_t stackId, size_t newState) {
+	encodeNBitUnsignedInteger(stream, nbits, val);
+	/* move on */
+	state->grammarStack[state->stackIndex] = stackId;
+	/* push element on stack */
+	return exiPushStack(state, newState, se);
+}
+
 int exiEncodeStartElement(bitstream_t* stream, exi_state_t* state,
 		eqname_t* se) {
 	switch (state->grammarStack[state->stackIndex]) {
@@ -76,1530 +84,948 @@ int exiEncodeStartElement(bitstream_t* stream, exi_state_t* state,
 		/* DocContent[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}BodyElement), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupRes), START_ELEMENT({urn:iso:15118:2:2010:MsgDef}V2G_Message), START_ELEMENT_GENERIC] */ 
 		if ( se->localPart == 2 && se->namespaceURI == 6  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDef}BodyElement) */
-			encodeNBitUnsignedInteger(stream, 5, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 3, se);
+			return _exiEncodeStartElement(stream, 5, 0, state, se, 2, 3);
 		}
 		else if ( se->localPart == 11 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockReq) */
-			encodeNBitUnsignedInteger(stream, 5, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 5, se);
+			return _exiEncodeStartElement(stream, 5, 1, state, se, 2, 5);
 		}
 		else if ( se->localPart == 13 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockRes) */
-			encodeNBitUnsignedInteger(stream, 5, 2);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 6, se);
+			return _exiEncodeStartElement(stream, 5, 2, state, se, 2, 6);
 		}
 		else if ( se->localPart == 17 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptReq) */
-			encodeNBitUnsignedInteger(stream, 5, 3);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 7, se);
+			return _exiEncodeStartElement(stream, 5, 3, state, se, 2, 7);
 		}
 		else if ( se->localPart == 19 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptRes) */
-			encodeNBitUnsignedInteger(stream, 5, 4);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 8, se);
+			return _exiEncodeStartElement(stream, 5, 4, state, se, 2, 8);
 		}
 		else if ( se->localPart == 21 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusReq) */
-			encodeNBitUnsignedInteger(stream, 5, 5);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 9, se);
+			return _exiEncodeStartElement(stream, 5, 5, state, se, 2, 9);
 		}
 		else if ( se->localPart == 23 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusRes) */
-			encodeNBitUnsignedInteger(stream, 5, 6);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 10, se);
+			return _exiEncodeStartElement(stream, 5, 6, state, se, 2, 10);
 		}
 		else if ( se->localPart == 33 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsReq) */
-			encodeNBitUnsignedInteger(stream, 5, 7);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 11, se);
+			return _exiEncodeStartElement(stream, 5, 7, state, se, 2, 11);
 		}
 		else if ( se->localPart == 35 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsRes) */
-			encodeNBitUnsignedInteger(stream, 5, 8);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 12, se);
+			return _exiEncodeStartElement(stream, 5, 8, state, se, 2, 12);
 		}
 		else if ( se->localPart == 37 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryReq) */
-			encodeNBitUnsignedInteger(stream, 5, 9);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 13, se);
+			return _exiEncodeStartElement(stream, 5, 9, state, se, 2, 13);
 		}
 		else if ( se->localPart == 39 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryRes) */
-			encodeNBitUnsignedInteger(stream, 5, 10);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 14, se);
+			return _exiEncodeStartElement(stream, 5, 10, state, se, 2, 14);
 		}
 		else if ( se->localPart == 41 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryReq) */
-			encodeNBitUnsignedInteger(stream, 5, 11);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 15, se);
+			return _exiEncodeStartElement(stream, 5, 11, state, se, 2, 15);
 		}
 		else if ( se->localPart == 43 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryRes) */
-			encodeNBitUnsignedInteger(stream, 5, 12);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 16, se);
+			return _exiEncodeStartElement(stream, 5, 12, state, se, 2, 16);
 		}
 		else if ( se->localPart == 48 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryReq) */
-			encodeNBitUnsignedInteger(stream, 5, 13);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 17, se);
+			return _exiEncodeStartElement(stream, 5, 13, state, se, 2, 17);
 		}
 		else if ( se->localPart == 50 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryRes) */
-			encodeNBitUnsignedInteger(stream, 5, 14);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 18, se);
+			return _exiEncodeStartElement(stream, 5, 14, state, se, 2, 18);
 		}
 		else if ( se->localPart == 53 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionReq) */
-			encodeNBitUnsignedInteger(stream, 5, 15);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 19, se);
+			return _exiEncodeStartElement(stream, 5, 15, state, se, 2, 19);
 		}
 		else if ( se->localPart == 55 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionRes) */
-			encodeNBitUnsignedInteger(stream, 5, 16);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 20, se);
+			return _exiEncodeStartElement(stream, 5, 16, state, se, 2, 20);
 		}
 		else if ( se->localPart == 59 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupReq) */
-			encodeNBitUnsignedInteger(stream, 5, 17);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 21, se);
+			return _exiEncodeStartElement(stream, 5, 17, state, se, 2, 21);
 		}
 		else if ( se->localPart == 61 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupRes) */
-			encodeNBitUnsignedInteger(stream, 5, 18);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 22, se);
+			return _exiEncodeStartElement(stream, 5, 18, state, se, 2, 22);
 		}
 		else if ( se->localPart == 8 && se->namespaceURI == 6 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDef}V2G_Message) */
-			encodeNBitUnsignedInteger(stream, 5, 19);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 23, se);
+			return _exiEncodeStartElement(stream, 5, 19, state, se, 2, 23);
 		}
 		break;
 	case 5:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */ 
 		if ( se->localPart == 32 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 24;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 24, 25);
 		}
 		break;
 	case 6:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */ 
 		if ( se->localPart == 47 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 33;
-			/* push element on stack */
-			return exiPushStack(state, 34, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 32, 33);
 		}
 		break;
 	case 7:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVID), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */ 
 		if ( se->localPart == 26 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVID) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 52;
-			/* push element on stack */
-			return exiPushStack(state, 53, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 46, 47);
 		}
 		else if ( se->localPart == 32 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus) */
-			encodeNBitUnsignedInteger(stream, 1, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 54;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+			return _exiEncodeStartElement(stream, 1, 1, state, se, 48, 25);
 		}
 		break;
 	case 8:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */ 
 		if ( se->localPart == 47 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 83;
-			/* push element on stack */
-			return exiPushStack(state, 84, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 69, 70);
 		}
 		break;
 	case 10:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */ 
 		if ( se->localPart == 47 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 86;
-			/* push element on stack */
-			return exiPushStack(state, 87, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 71, 72);
 		}
 		break;
 	case 11:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ContractID)] */ 
 		if ( se->localPart == 1 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ContractID) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 97;
-			/* push element on stack */
-			return exiPushStack(state, 98, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 80, 81);
 		}
 		break;
 	case 12:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */ 
 		if ( se->localPart == 47 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 100;
-			/* push element on stack */
-			return exiPushStack(state, 101, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 82, 83);
 		}
 		break;
 	case 13:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */ 
 		if ( se->localPart == 32 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 103;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 84, 25);
 		}
 		break;
 	case 14:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */ 
 		if ( se->localPart == 47 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 110;
-			/* push element on stack */
-			return exiPushStack(state, 111, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 91, 92);
 		}
 		break;
 	case 15:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */ 
 		if ( se->localPart == 32 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 113;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 93, 25);
 		}
 		break;
 	case 16:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */ 
 		if ( se->localPart == 47 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 122;
-			/* push element on stack */
-			return exiPushStack(state, 123, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 101, 102);
 		}
 		break;
 	case 17:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceScope), END_ELEMENT] */ 
 		if ( se->localPart == 58 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceType) */
-			encodeNBitUnsignedInteger(stream, 2, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 152;
-			/* push element on stack */
-			return exiPushStack(state, 153, se);
+			return _exiEncodeStartElement(stream, 2, 0, state, se, 126, 127);
 		}
 		else if ( se->localPart == 57 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceScope) */
-			encodeNBitUnsignedInteger(stream, 2, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 154;
-			/* push element on stack */
-			return exiPushStack(state, 155, se);
+			return _exiEncodeStartElement(stream, 2, 1, state, se, 128, 129);
 		}
 		break;
 	case 18:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */ 
 		if ( se->localPart == 47 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 158;
-			/* push element on stack */
-			return exiPushStack(state, 159, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 130, 131);
 		}
 		break;
 	case 19:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceList)] */ 
 		if ( se->localPart == 52 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceList) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 173;
-			/* push element on stack */
-			return exiPushStack(state, 161, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 142, 133);
 		}
 		break;
 	case 20:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */ 
 		if ( se->localPart == 47 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 175;
-			/* push element on stack */
-			return exiPushStack(state, 176, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 144, 145);
 		}
 		break;
 	case 21:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVID), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */ 
 		if ( se->localPart == 26 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVID) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 179;
-			/* push element on stack */
-			return exiPushStack(state, 53, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 147, 47);
 		}
 		else if ( se->localPart == 32 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus) */
-			encodeNBitUnsignedInteger(stream, 1, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 180;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+			return _exiEncodeStartElement(stream, 1, 1, state, se, 148, 25);
 		}
 		break;
 	case 22:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */ 
 		if ( se->localPart == 47 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 181;
-			/* push element on stack */
-			return exiPushStack(state, 182, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 149, 150);
 		}
 		break;
 	case 23:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Header)] */ 
 		if ( se->localPart == 4 && se->namespaceURI == 6  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Header) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 187;
-			/* push element on stack */
-			return exiPushStack(state, 188, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 154, 155);
 		}
 		break;
 	case 24:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ReqLockStatus)] */ 
 		if ( se->localPart == 45 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ReqLockStatus) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 26;
-			/* push element on stack */
-			return exiPushStack(state, 27, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 26, 27);
 		}
 		break;
 	case 25:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ConnectorLocked)] */ 
 		if ( se->localPart == 4 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ConnectorLocked) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 28;
-			/* push element on stack */
-			return exiPushStack(state, 27, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 28, 27);
 		}
 		break;
 	case 28:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargerStandby)] */ 
 		if ( se->localPart == 0 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargerStandby) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 29;
-			/* push element on stack */
-			return exiPushStack(state, 30, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 29, 30);
 		}
 		break;
-	case 33:
+	case 32:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */ 
 		if ( se->localPart == 7 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 35;
-			/* push element on stack */
-			return exiPushStack(state, 36, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 34, 35);
 		}
 		break;
-	case 36:
+	case 35:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FatalError)] */ 
 		if ( se->localPart == 12 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FatalError) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 38;
-			/* push element on stack */
-			return exiPushStack(state, 39, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 36, 37);
 		}
 		break;
-	case 38:
+	case 36:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EVSEStandby)] */ 
 		if ( se->localPart == 7 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EVSEStandby) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 40;
-			/* push element on stack */
-			return exiPushStack(state, 30, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 38, 30);
 		}
 		break;
-	case 40:
+	case 38:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ConnectorLocked)] */ 
 		if ( se->localPart == 4 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ConnectorLocked) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 41;
-			/* push element on stack */
-			return exiPushStack(state, 27, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 39, 27);
 		}
 		break;
-	case 41:
+	case 39:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}PowerSwitchClosed)] */ 
 		if ( se->localPart == 24 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}PowerSwitchClosed) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 42;
-			/* push element on stack */
-			return exiPushStack(state, 43, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 40, 41);
 		}
 		break;
-	case 42:
+	case 40:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}RCD)] */ 
 		if ( se->localPart == 26 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}RCD) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 44;
-			/* push element on stack */
-			return exiPushStack(state, 45, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 42, 43);
 		}
 		break;
-	case 44:
+	case 42:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ShutDownTime)] */ 
 		if ( se->localPart == 37 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ShutDownTime) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 46;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 44, 45);
 		}
 		break;
-	case 52:
+	case 46:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */ 
 		if ( se->localPart == 32 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 54;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 48, 25);
 		}
 		break;
-	case 54:
+	case 48:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff)] */ 
 		if ( se->localPart == 63 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 55;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 49, 45);
 		}
 		else if ( se->localPart == 64 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff) */
-			encodeNBitUnsignedInteger(stream, 1, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 56;
-			/* push element on stack */
-			return exiPushStack(state, 57, se);
+			return _exiEncodeStartElement(stream, 1, 1, state, se, 50, 51);
 		}
 		break;
-	case 55:
+	case 49:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff)] */ 
 		if ( se->localPart == 64 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 56;
-			/* push element on stack */
-			return exiPushStack(state, 57, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 50, 51);
 		}
 		break;
-	case 56:
+	case 50:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo)] */ 
 		if ( se->localPart == 15 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 58;
-			/* push element on stack */
-			return exiPushStack(state, 59, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 52, 53);
 		}
 		break;
-	case 59:
+	case 53:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterID), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterPubKey), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */ 
 		if ( se->localPart == 16 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterID) */
-			encodeNBitUnsignedInteger(stream, 3, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 62;
-			/* push element on stack */
-			return exiPushStack(state, 63, se);
+			return _exiEncodeStartElement(stream, 3, 0, state, se, 54, 55);
 		}
 		else if ( se->localPart == 18 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterPubKey) */
-			encodeNBitUnsignedInteger(stream, 3, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 64;
-			/* push element on stack */
-			return exiPushStack(state, 65, se);
+			return _exiEncodeStartElement(stream, 3, 1, state, se, 56, 57);
 		}
 		else if ( se->localPart == 19 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading) */
-			encodeNBitUnsignedInteger(stream, 3, 2);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 66;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 3, 2, state, se, 58, 59);
 		}
 		else if ( se->localPart == 20 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus) */
-			encodeNBitUnsignedInteger(stream, 3, 3);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 68;
-			/* push element on stack */
-			return exiPushStack(state, 69, se);
+			return _exiEncodeStartElement(stream, 3, 3, state, se, 60, 61);
 		}
 		else if ( se->localPart == 38 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter) */
-			encodeNBitUnsignedInteger(stream, 3, 4);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 70;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiEncodeStartElement(stream, 3, 4, state, se, 62, 45);
 		}
 		break;
-	case 62:
+	case 54:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterPubKey), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */ 
 		if ( se->localPart == 18 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterPubKey) */
-			encodeNBitUnsignedInteger(stream, 3, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 64;
-			/* push element on stack */
-			return exiPushStack(state, 65, se);
+			return _exiEncodeStartElement(stream, 3, 0, state, se, 56, 57);
 		}
 		else if ( se->localPart == 19 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading) */
-			encodeNBitUnsignedInteger(stream, 3, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 66;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 3, 1, state, se, 58, 59);
 		}
 		else if ( se->localPart == 20 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus) */
-			encodeNBitUnsignedInteger(stream, 3, 2);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 68;
-			/* push element on stack */
-			return exiPushStack(state, 69, se);
+			return _exiEncodeStartElement(stream, 3, 2, state, se, 60, 61);
 		}
 		else if ( se->localPart == 38 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter) */
-			encodeNBitUnsignedInteger(stream, 3, 3);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 70;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiEncodeStartElement(stream, 3, 3, state, se, 62, 45);
 		}
 		break;
-	case 64:
+	case 56:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */ 
 		if ( se->localPart == 19 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading) */
-			encodeNBitUnsignedInteger(stream, 2, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 66;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 2, 0, state, se, 58, 59);
 		}
 		else if ( se->localPart == 20 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus) */
-			encodeNBitUnsignedInteger(stream, 2, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 68;
-			/* push element on stack */
-			return exiPushStack(state, 69, se);
+			return _exiEncodeStartElement(stream, 2, 1, state, se, 60, 61);
 		}
 		else if ( se->localPart == 38 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter) */
-			encodeNBitUnsignedInteger(stream, 2, 2);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 70;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiEncodeStartElement(stream, 2, 2, state, se, 62, 45);
 		}
 		break;
-	case 66:
+	case 58:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */ 
 		if ( se->localPart == 20 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus) */
-			encodeNBitUnsignedInteger(stream, 2, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 68;
-			/* push element on stack */
-			return exiPushStack(state, 69, se);
+			return _exiEncodeStartElement(stream, 2, 0, state, se, 60, 61);
 		}
 		else if ( se->localPart == 38 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter) */
-			encodeNBitUnsignedInteger(stream, 2, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 70;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiEncodeStartElement(stream, 2, 1, state, se, 62, 45);
 		}
 		break;
-	case 67:
+	case 59:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Multiplier)] */ 
 		if ( se->localPart == 21 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Multiplier) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 73;
-			/* push element on stack */
-			return exiPushStack(state, 74, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 63, 64);
 		}
 		break;
-	case 68:
+	case 60:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */ 
 		if ( se->localPart == 38 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 70;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 62, 45);
 		}
 		break;
-	case 73:
+	case 63:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Unit)] */ 
 		if ( se->localPart == 50 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Unit) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 75;
-			/* push element on stack */
-			return exiPushStack(state, 76, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 65, 66);
 		}
 		break;
-	case 75:
+	case 65:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Value)] */ 
 		if ( se->localPart == 51 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Value) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 77;
-			/* push element on stack */
-			return exiPushStack(state, 78, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 67, 68);
 		}
 		break;
-	case 86:
+	case 71:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEID)] */ 
 		if ( se->localPart == 3 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEID) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 88;
-			/* push element on stack */
-			return exiPushStack(state, 89, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 73, 74);
 		}
 		break;
-	case 88:
+	case 73:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */ 
 		if ( se->localPart == 7 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 90;
-			/* push element on stack */
-			return exiPushStack(state, 36, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 75, 35);
 		}
 		break;
-	case 90:
+	case 75:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent)] */ 
 		if ( se->localPart == 63 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 91;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 76, 45);
 		}
 		break;
-	case 91:
+	case 76:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEMaxPower)] */ 
 		if ( se->localPart == 6 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEMaxPower) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 92;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 77, 59);
 		}
 		break;
-	case 92:
+	case 77:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PCurrent), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo), END_ELEMENT] */ 
 		if ( se->localPart == 25 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PCurrent) */
-			encodeNBitUnsignedInteger(stream, 2, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 93;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 2, 0, state, se, 78, 59);
 		}
 		else if ( se->localPart == 15 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo) */
-			encodeNBitUnsignedInteger(stream, 2, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 94;
-			/* push element on stack */
-			return exiPushStack(state, 59, se);
+			return _exiEncodeStartElement(stream, 2, 1, state, se, 79, 53);
 		}
 		break;
-	case 93:
+	case 78:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo), END_ELEMENT] */ 
 		if ( se->localPart == 15 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 94;
-			/* push element on stack */
-			return exiPushStack(state, 59, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 79, 53);
 		}
 		break;
-	case 103:
+	case 84:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ReqSwitchStatus)] */ 
 		if ( se->localPart == 46 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ReqSwitchStatus) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 104;
-			/* push element on stack */
-			return exiPushStack(state, 43, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 85, 41);
 		}
 		break;
-	case 104:
+	case 85:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ChargingProfile), END_ELEMENT] */ 
 		if ( se->localPart == 64 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff) */
-			encodeNBitUnsignedInteger(stream, 2, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 105;
-			/* push element on stack */
-			return exiPushStack(state, 57, se);
+			return _exiEncodeStartElement(stream, 2, 0, state, se, 86, 51);
 		}
 		else if ( se->localPart == 0 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ChargingProfile) */
-			encodeNBitUnsignedInteger(stream, 2, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 106;
-			/* push element on stack */
-			return exiPushStack(state, 107, se);
+			return _exiEncodeStartElement(stream, 2, 1, state, se, 87, 88);
 		}
 		break;
-	case 105:
+	case 86:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ChargingProfile), END_ELEMENT] */ 
 		if ( se->localPart == 0 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ChargingProfile) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 106;
-			/* push element on stack */
-			return exiPushStack(state, 107, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 87, 88);
 		}
 		break;
-	case 107:
+	case 88:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargingProfileEntryStart)] */ 
 		if ( se->localPart == 2 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargingProfileEntryStart) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 108;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 89, 45);
 		}
 		break;
-	case 108:
+	case 89:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargingProfileEntryMaxPower)] */ 
 		if ( se->localPart == 1 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargingProfileEntryMaxPower) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 109;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 90, 59);
 		}
 		break;
-	case 113:
+	case 93:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EoC)] */ 
 		if ( se->localPart == 10 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EoC) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 114;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 94, 45);
 		}
 		break;
-	case 114:
+	case 94:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EAmount)] */ 
 		if ( se->localPart == 2 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EAmount) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 115;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 95, 59);
 		}
 		break;
-	case 115:
+	case 95:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxPower)] */ 
 		if ( se->localPart == 28 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxPower) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 116;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 96, 59);
 		}
 		break;
-	case 116:
+	case 96:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxPhases)] */ 
 		if ( se->localPart == 27 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxPhases) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 117;
-			/* push element on stack */
-			return exiPushStack(state, 118, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 97, 98);
 		}
 		break;
-	case 117:
+	case 97:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxVoltage)] */ 
 		if ( se->localPart == 29 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxVoltage) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 119;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 99, 59);
 		}
 		break;
-	case 119:
+	case 99:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMinVoltage)] */ 
 		if ( se->localPart == 30 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMinVoltage) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 120;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 100, 59);
 		}
 		break;
-	case 122:
+	case 101:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */ 
 		if ( se->localPart == 7 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 124;
-			/* push element on stack */
-			return exiPushStack(state, 36, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 103, 35);
 		}
 		break;
-	case 124:
+	case 103:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEVoltage)] */ 
 		if ( se->localPart == 8 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEVoltage) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 125;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 104, 59);
 		}
 		break;
-	case 125:
+	case 104:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEIMax)] */ 
 		if ( se->localPart == 4 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEIMax) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 126;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 105, 59);
 		}
 		break;
-	case 126:
+	case 105:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEMaxPhases)] */ 
 		if ( se->localPart == 5 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEMaxPhases) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 127;
-			/* push element on stack */
-			return exiPushStack(state, 118, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 106, 98);
 		}
 		break;
-	case 127:
+	case 106:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EnergyProvider), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TariffTable), END_ELEMENT] */ 
 		if ( se->localPart == 9 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EnergyProvider) */
-			encodeNBitUnsignedInteger(stream, 2, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 128;
-			/* push element on stack */
-			return exiPushStack(state, 129, se);
+			return _exiEncodeStartElement(stream, 2, 0, state, se, 107, 108);
 		}
 		else if ( se->localPart == 65 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TariffTable) */
-			encodeNBitUnsignedInteger(stream, 2, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 130;
-			/* push element on stack */
-			return exiPushStack(state, 131, se);
+			return _exiEncodeStartElement(stream, 2, 1, state, se, 109, 110);
 		}
 		break;
-	case 128:
+	case 107:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TariffTable), END_ELEMENT] */ 
 		if ( se->localPart == 65 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TariffTable) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 130;
-			/* push element on stack */
-			return exiPushStack(state, 131, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 109, 110);
 		}
 		break;
-	case 131:
+	case 110:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Currency)] */ 
 		if ( se->localPart == 5 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Currency) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 134;
-			/* push element on stack */
-			return exiPushStack(state, 135, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 111, 112);
 		}
 		break;
-	case 134:
+	case 111:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Tariff)] */ 
 		if ( se->localPart == 39 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Tariff) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 136;
-			/* push element on stack */
-			return exiPushStack(state, 137, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 113, 114);
 		}
 		break;
-	case 136:
+	case 113:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Tariff), END_ELEMENT] */ 
 		if ( se->localPart == 39 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Tariff) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 136;
-			/* push element on stack */
-			return exiPushStack(state, 137, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 113, 114);
 		}
 		break;
-	case 137:
+	case 114:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffID)] */ 
 		if ( se->localPart == 46 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffID) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 139;
-			/* push element on stack */
-			return exiPushStack(state, 57, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 115, 51);
 		}
 		break;
-	case 139:
+	case 115:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffDescription), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntries)] */ 
 		if ( se->localPart == 41 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffDescription) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 140;
-			/* push element on stack */
-			return exiPushStack(state, 141, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 116, 117);
 		}
 		else if ( se->localPart == 42 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntries) */
-			encodeNBitUnsignedInteger(stream, 1, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 142;
-			/* push element on stack */
-			return exiPushStack(state, 143, se);
+			return _exiEncodeStartElement(stream, 1, 1, state, se, 118, 119);
 		}
 		break;
-	case 140:
+	case 116:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntries)] */ 
 		if ( se->localPart == 42 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntries) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 142;
-			/* push element on stack */
-			return exiPushStack(state, 143, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 118, 119);
 		}
 		break;
-	case 143:
+	case 119:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntry)] */ 
 		if ( se->localPart == 44 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntry) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 145;
-			/* push element on stack */
-			return exiPushStack(state, 146, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 120, 121);
 		}
 		break;
-	case 145:
+	case 120:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntry), END_ELEMENT] */ 
 		if ( se->localPart == 44 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntry) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 145;
-			/* push element on stack */
-			return exiPushStack(state, 146, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 120, 121);
 		}
 		break;
-	case 146:
+	case 121:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffStart)] */ 
 		if ( se->localPart == 48 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffStart) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 147;
-			/* push element on stack */
-			return exiPushStack(state, 148, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 122, 123);
 		}
 		break;
-	case 147:
+	case 122:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffPMax)] */ 
 		if ( se->localPart == 47 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffPMax) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 149;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 124, 59);
 		}
 		break;
-	case 149:
+	case 124:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EPrice), END_ELEMENT] */ 
 		if ( se->localPart == 6 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EPrice) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 150;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 125, 59);
 		}
 		break;
-	case 152:
+	case 126:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceScope), END_ELEMENT] */ 
 		if ( se->localPart == 57 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceScope) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 154;
-			/* push element on stack */
-			return exiPushStack(state, 155, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 128, 129);
 		}
 		break;
-	case 158:
+	case 130:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceList), END_ELEMENT] */ 
 		if ( se->localPart == 52 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceList) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 160;
-			/* push element on stack */
-			return exiPushStack(state, 161, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 132, 133);
 		}
 		break;
-	case 161:
+	case 133:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Service)] */ 
 		if ( se->localPart == 27 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Service) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 163;
-			/* push element on stack */
-			return exiPushStack(state, 164, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 134, 135);
 		}
 		break;
-	case 163:
+	case 134:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Service), END_ELEMENT] */ 
 		if ( se->localPart == 27 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Service) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 163;
-			/* push element on stack */
-			return exiPushStack(state, 164, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 134, 135);
 		}
 		break;
-	case 164:
+	case 135:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceID)] */ 
 		if ( se->localPart == 29 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceID) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 165;
-			/* push element on stack */
-			return exiPushStack(state, 166, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 136, 137);
 		}
 		break;
-	case 165:
+	case 136:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceName), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */ 
 		if ( se->localPart == 31 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceName) */
-			encodeNBitUnsignedInteger(stream, 2, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 167;
-			/* push element on stack */
-			return exiPushStack(state, 168, se);
+			return _exiEncodeStartElement(stream, 2, 0, state, se, 138, 139);
 		}
 		else if ( se->localPart == 34 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType) */
-			encodeNBitUnsignedInteger(stream, 2, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 169;
-			/* push element on stack */
-			return exiPushStack(state, 153, se);
+			return _exiEncodeStartElement(stream, 2, 1, state, se, 140, 127);
 		}
 		else if ( se->localPart == 32 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope) */
-			encodeNBitUnsignedInteger(stream, 2, 2);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 170;
-			/* push element on stack */
-			return exiPushStack(state, 155, se);
+			return _exiEncodeStartElement(stream, 2, 2, state, se, 141, 129);
 		}
 		break;
-	case 167:
+	case 138:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */ 
 		if ( se->localPart == 34 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType) */
-			encodeNBitUnsignedInteger(stream, 2, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 169;
-			/* push element on stack */
-			return exiPushStack(state, 153, se);
+			return _exiEncodeStartElement(stream, 2, 0, state, se, 140, 127);
 		}
 		else if ( se->localPart == 32 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope) */
-			encodeNBitUnsignedInteger(stream, 2, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 170;
-			/* push element on stack */
-			return exiPushStack(state, 155, se);
+			return _exiEncodeStartElement(stream, 2, 1, state, se, 141, 129);
 		}
 		break;
-	case 169:
+	case 140:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */ 
 		if ( se->localPart == 32 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 170;
-			/* push element on stack */
-			return exiPushStack(state, 155, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 141, 129);
 		}
 		break;
-	case 173:
+	case 142:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVPubKey)] */ 
 		if ( se->localPart == 31 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVPubKey) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 174;
-			/* push element on stack */
-			return exiPushStack(state, 65, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 143, 57);
 		}
 		break;
-	case 175:
+	case 144:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringAuthPubKey), END_ELEMENT] */ 
 		if ( se->localPart == 16 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringAuthPubKey) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 177;
-			/* push element on stack */
-			return exiPushStack(state, 65, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 146, 57);
 		}
 		break;
-	case 179:
+	case 147:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */ 
 		if ( se->localPart == 32 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 180;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 148, 25);
 		}
 		break;
-	case 181:
+	case 149:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEID)] */ 
 		if ( se->localPart == 3 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEID) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 183;
-			/* push element on stack */
-			return exiPushStack(state, 89, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 151, 74);
 		}
 		break;
-	case 183:
+	case 151:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */ 
 		if ( se->localPart == 7 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 184;
-			/* push element on stack */
-			return exiPushStack(state, 36, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 152, 35);
 		}
 		break;
-	case 184:
+	case 152:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent)] */ 
 		if ( se->localPart == 63 && se->namespaceURI == 4  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 185;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 153, 45);
 		}
 		break;
-	case 187:
+	case 154:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Body)] */ 
 		if ( se->localPart == 0 && se->namespaceURI == 6  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Body) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 189;
-			/* push element on stack */
-			return exiPushStack(state, 190, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 156, 157);
 		}
 		break;
-	case 188:
+	case 155:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}SessionInformation)] */ 
 		if ( se->localPart == 7 && se->namespaceURI == 6  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDef}SessionInformation) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 191;
-			/* push element on stack */
-			return exiPushStack(state, 192, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 158, 159);
 		}
 		break;
-	case 190:
+	case 157:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}BodyElement), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupRes), END_ELEMENT] */ 
 		if ( se->localPart == 2 && se->namespaceURI == 6  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDef}BodyElement) */
-			encodeNBitUnsignedInteger(stream, 5, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 3, se);
+			return _exiEncodeStartElement(stream, 5, 0, state, se, 175, 3);
 		}
 		else if ( se->localPart == 11 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockReq) */
-			encodeNBitUnsignedInteger(stream, 5, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 5, se);
+			return _exiEncodeStartElement(stream, 5, 1, state, se, 175, 5);
 		}
 		else if ( se->localPart == 13 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockRes) */
-			encodeNBitUnsignedInteger(stream, 5, 2);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 6, se);
+			return _exiEncodeStartElement(stream, 5, 2, state, se, 175, 6);
 		}
 		else if ( se->localPart == 17 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptReq) */
-			encodeNBitUnsignedInteger(stream, 5, 3);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 7, se);
+			return _exiEncodeStartElement(stream, 5, 3, state, se, 175, 7);
 		}
 		else if ( se->localPart == 19 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptRes) */
-			encodeNBitUnsignedInteger(stream, 5, 4);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 8, se);
+			return _exiEncodeStartElement(stream, 5, 4, state, se, 175, 8);
 		}
 		else if ( se->localPart == 21 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusReq) */
-			encodeNBitUnsignedInteger(stream, 5, 5);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 9, se);
+			return _exiEncodeStartElement(stream, 5, 5, state, se, 175, 9);
 		}
 		else if ( se->localPart == 23 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusRes) */
-			encodeNBitUnsignedInteger(stream, 5, 6);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 10, se);
+			return _exiEncodeStartElement(stream, 5, 6, state, se, 175, 10);
 		}
 		else if ( se->localPart == 33 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsReq) */
-			encodeNBitUnsignedInteger(stream, 5, 7);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 11, se);
+			return _exiEncodeStartElement(stream, 5, 7, state, se, 175, 11);
 		}
 		else if ( se->localPart == 35 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsRes) */
-			encodeNBitUnsignedInteger(stream, 5, 8);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 12, se);
+			return _exiEncodeStartElement(stream, 5, 8, state, se, 175, 12);
 		}
 		else if ( se->localPart == 37 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryReq) */
-			encodeNBitUnsignedInteger(stream, 5, 9);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 13, se);
+			return _exiEncodeStartElement(stream, 5, 9, state, se, 175, 13);
 		}
 		else if ( se->localPart == 39 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryRes) */
-			encodeNBitUnsignedInteger(stream, 5, 10);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 14, se);
+			return _exiEncodeStartElement(stream, 5, 10, state, se, 175, 14);
 		}
 		else if ( se->localPart == 41 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryReq) */
-			encodeNBitUnsignedInteger(stream, 5, 11);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 15, se);
+			return _exiEncodeStartElement(stream, 5, 11, state, se, 175, 15);
 		}
 		else if ( se->localPart == 43 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryRes) */
-			encodeNBitUnsignedInteger(stream, 5, 12);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 16, se);
+			return _exiEncodeStartElement(stream, 5, 12, state, se, 175, 16);
 		}
 		else if ( se->localPart == 48 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryReq) */
-			encodeNBitUnsignedInteger(stream, 5, 13);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 17, se);
+			return _exiEncodeStartElement(stream, 5, 13, state, se, 175, 17);
 		}
 		else if ( se->localPart == 50 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryRes) */
-			encodeNBitUnsignedInteger(stream, 5, 14);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 18, se);
+			return _exiEncodeStartElement(stream, 5, 14, state, se, 175, 18);
 		}
 		else if ( se->localPart == 53 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionReq) */
-			encodeNBitUnsignedInteger(stream, 5, 15);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 19, se);
+			return _exiEncodeStartElement(stream, 5, 15, state, se, 175, 19);
 		}
 		else if ( se->localPart == 55 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionRes) */
-			encodeNBitUnsignedInteger(stream, 5, 16);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 20, se);
+			return _exiEncodeStartElement(stream, 5, 16, state, se, 175, 20);
 		}
 		else if ( se->localPart == 59 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupReq) */
-			encodeNBitUnsignedInteger(stream, 5, 17);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 21, se);
+			return _exiEncodeStartElement(stream, 5, 17, state, se, 175, 21);
 		}
 		else if ( se->localPart == 61 && se->namespaceURI == 4 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupRes) */
-			encodeNBitUnsignedInteger(stream, 5, 18);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 22, se);
+			return _exiEncodeStartElement(stream, 5, 18, state, se, 175, 22);
 		}
 		break;
-	case 191:
+	case 158:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Notification), END_ELEMENT] */ 
 		if ( se->localPart == 6 && se->namespaceURI == 6  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Notification) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 193;
-			/* push element on stack */
-			return exiPushStack(state, 194, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 160, 161);
 		}
 		break;
-	case 192:
+	case 159:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}SessionID)] */ 
 		if ( se->localPart == 35 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}SessionID) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 195;
-			/* push element on stack */
-			return exiPushStack(state, 196, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 162, 163);
 		}
 		break;
-	case 194:
+	case 161:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultCode), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */ 
 		if ( se->localPart == 13 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultCode) */
-			encodeNBitUnsignedInteger(stream, 2, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 202;
-			/* push element on stack */
-			return exiPushStack(state, 203, se);
+			return _exiEncodeStartElement(stream, 2, 0, state, se, 167, 168);
 		}
 		else if ( se->localPart == 14 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg) */
-			encodeNBitUnsignedInteger(stream, 2, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 204;
-			/* push element on stack */
-			return exiPushStack(state, 205, se);
+			return _exiEncodeStartElement(stream, 2, 1, state, se, 169, 170);
 		}
 		else if ( se->localPart == 10 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList) */
-			encodeNBitUnsignedInteger(stream, 2, 2);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 206;
-			/* push element on stack */
-			return exiPushStack(state, 207, se);
+			return _exiEncodeStartElement(stream, 2, 2, state, se, 171, 172);
 		}
 		break;
-	case 195:
+	case 162:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceSessionID), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion), END_ELEMENT] */ 
 		if ( se->localPart == 33 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceSessionID) */
-			encodeNBitUnsignedInteger(stream, 2, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 197;
-			/* push element on stack */
-			return exiPushStack(state, 196, se);
+			return _exiEncodeStartElement(stream, 2, 0, state, se, 164, 163);
 		}
 		else if ( se->localPart == 25 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion) */
-			encodeNBitUnsignedInteger(stream, 2, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 198;
-			/* push element on stack */
-			return exiPushStack(state, 199, se);
+			return _exiEncodeStartElement(stream, 2, 1, state, se, 165, 166);
 		}
 		break;
-	case 197:
+	case 164:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion), END_ELEMENT] */ 
 		if ( se->localPart == 25 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 198;
-			/* push element on stack */
-			return exiPushStack(state, 199, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 165, 166);
 		}
 		break;
-	case 202:
+	case 167:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */ 
 		if ( se->localPart == 14 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg) */
-			encodeNBitUnsignedInteger(stream, 2, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 204;
-			/* push element on stack */
-			return exiPushStack(state, 205, se);
+			return _exiEncodeStartElement(stream, 2, 0, state, se, 169, 170);
 		}
 		else if ( se->localPart == 10 && se->namespaceURI == 5 ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList) */
-			encodeNBitUnsignedInteger(stream, 2, 1);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 206;
-			/* push element on stack */
-			return exiPushStack(state, 207, se);
+			return _exiEncodeStartElement(stream, 2, 1, state, se, 171, 172);
 		}
 		break;
-	case 204:
+	case 169:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */ 
 		if ( se->localPart == 10 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList) */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 206;
-			/* push element on stack */
-			return exiPushStack(state, 207, se);
+			return _exiEncodeStartElement(stream, 1, 0, state, se, 171, 172);
 		}
 		break;
-	case 207:
+	case 172:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Event)] */ 
 		if ( se->localPart == 9 && se->namespaceURI == 5  ) {
 			/* START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Event) */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 210;
-			/* push element on stack */
-			return exiPushStack(state, 211, se);
+			return _exiEncodeStartElement(stream, 0, 0, state, se, 173, 174);
 		}
 		break;
 
@@ -1613,69 +1039,69 @@ int exiEncodeStartElement(bitstream_t* stream, exi_state_t* state,
 int exiEncodeEndElement(bitstream_t* stream, exi_state_t* state,
 		eqname_t* ee) {
 	switch (state->grammarStack[state->stackIndex]) {
-	case 62:
+	case 54:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterPubKey), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
 		encodeNBitUnsignedInteger(stream, 3, 4);
 		break;
-	case 64:
+	case 56:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
-	case 165:
+	case 136:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceName), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
-	case 194:
+	case 161:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultCode), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */
 		encodeNBitUnsignedInteger(stream, 2, 3);
 		break;
-	case 190:
+	case 157:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}BodyElement), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupRes), END_ELEMENT] */
 		encodeNBitUnsignedInteger(stream, 5, 19);
 		break;
-	case 68:
+	case 60:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
-	case 93:
+	case 78:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo), END_ELEMENT] */
-	case 105:
+	case 86:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ChargingProfile), END_ELEMENT] */
-	case 128:
+	case 107:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TariffTable), END_ELEMENT] */
-	case 136:
+	case 113:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Tariff), END_ELEMENT] */
-	case 145:
+	case 120:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntry), END_ELEMENT] */
-	case 149:
+	case 124:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EPrice), END_ELEMENT] */
-	case 152:
+	case 126:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceScope), END_ELEMENT] */
-	case 158:
+	case 130:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceList), END_ELEMENT] */
-	case 163:
+	case 134:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Service), END_ELEMENT] */
-	case 169:
+	case 140:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
-	case 175:
+	case 144:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringAuthPubKey), END_ELEMENT] */
-	case 191:
+	case 158:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Notification), END_ELEMENT] */
-	case 197:
+	case 164:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion), END_ELEMENT] */
-	case 204:
+	case 169:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */
 		encodeNBitUnsignedInteger(stream, 1, 1);
 		break;
-	case 66:
+	case 58:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
-	case 92:
+	case 77:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PCurrent), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo), END_ELEMENT] */
-	case 104:
+	case 85:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ChargingProfile), END_ELEMENT] */
-	case 127:
+	case 106:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EnergyProvider), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TariffTable), END_ELEMENT] */
 	case 17:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceScope), END_ELEMENT] */
-	case 167:
+	case 138:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
-	case 195:
+	case 162:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceSessionID), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion), END_ELEMENT] */
-	case 202:
+	case 167:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */
 		encodeNBitUnsignedInteger(stream, 2, 2);
 		break;
@@ -1687,145 +1113,69 @@ int exiEncodeEndElement(bitstream_t* stream, exi_state_t* state,
 		/* Element[END_ELEMENT] */
 	case 31:
 		/* Element[END_ELEMENT] */
-	case 32:
+	case 34:
 		/* Element[END_ELEMENT] */
-	case 35:
+	case 44:
 		/* Element[END_ELEMENT] */
-	case 37:
+	case 52:
 		/* Element[END_ELEMENT] */
-	case 46:
+	case 62:
 		/* Element[END_ELEMENT] */
-	case 48:
+	case 67:
 		/* Element[END_ELEMENT] */
-	case 49:
+	case 69:
 		/* Element[END_ELEMENT] */
-	case 50:
-		/* Element[END_ELEMENT] */
-	case 51:
-		/* Element[END_ELEMENT] */
-	case 58:
-		/* Element[END_ELEMENT] */
-	case 60:
-		/* Element[END_ELEMENT] */
-	case 61:
-		/* Element[END_ELEMENT] */
-	case 70:
-		/* Element[END_ELEMENT] */
-	case 71:
-		/* Element[END_ELEMENT] */
-	case 72:
-		/* Element[END_ELEMENT] */
-	case 77:
-		/* Element[END_ELEMENT] */
+	case 9:
+		/* FirstStartTagStartTag[END_ELEMENT] */
 	case 79:
 		/* Element[END_ELEMENT] */
 	case 80:
 		/* Element[END_ELEMENT] */
-	case 81:
-		/* Element[END_ELEMENT] */
 	case 82:
 		/* Element[END_ELEMENT] */
-	case 83:
+	case 87:
 		/* Element[END_ELEMENT] */
-	case 85:
+	case 90:
 		/* Element[END_ELEMENT] */
-	case 9:
-		/* FirstStartTagStartTag[END_ELEMENT] */
-	case 94:
-		/* Element[END_ELEMENT] */
-	case 95:
-		/* Element[END_ELEMENT] */
-	case 96:
-		/* Element[END_ELEMENT] */
-	case 97:
-		/* Element[END_ELEMENT] */
-	case 99:
+	case 91:
 		/* Element[END_ELEMENT] */
 	case 100:
 		/* Element[END_ELEMENT] */
-	case 102:
-		/* Element[END_ELEMENT] */
-	case 106:
-		/* Element[END_ELEMENT] */
 	case 109:
 		/* Element[END_ELEMENT] */
-	case 110:
+	case 118:
 		/* Element[END_ELEMENT] */
-	case 112:
+	case 125:
 		/* Element[END_ELEMENT] */
-	case 120:
-		/* Element[END_ELEMENT] */
-	case 121:
-		/* Element[END_ELEMENT] */
-	case 130:
+	case 128:
 		/* Element[END_ELEMENT] */
 	case 132:
 		/* Element[END_ELEMENT] */
-	case 133:
+	case 141:
 		/* Element[END_ELEMENT] */
-	case 138:
+	case 143:
 		/* Element[END_ELEMENT] */
-	case 142:
+	case 146:
 		/* Element[END_ELEMENT] */
-	case 144:
+	case 148:
 		/* Element[END_ELEMENT] */
-	case 150:
-		/* Element[END_ELEMENT] */
-	case 151:
-		/* Element[END_ELEMENT] */
-	case 154:
+	case 153:
 		/* Element[END_ELEMENT] */
 	case 156:
 		/* Element[END_ELEMENT] */
-	case 157:
-		/* Element[END_ELEMENT] */
 	case 160:
 		/* Element[END_ELEMENT] */
-	case 162:
-		/* Element[END_ELEMENT] */
-	case 170:
+	case 165:
 		/* Element[END_ELEMENT] */
 	case 171:
 		/* Element[END_ELEMENT] */
-	case 172:
+	case 173:
 		/* Element[END_ELEMENT] */
-	case 174:
-		/* Element[END_ELEMENT] */
-	case 177:
-		/* Element[END_ELEMENT] */
-	case 178:
-		/* Element[END_ELEMENT] */
-	case 180:
-		/* Element[END_ELEMENT] */
-	case 185:
-		/* Element[END_ELEMENT] */
-	case 186:
-		/* Element[END_ELEMENT] */
-	case 189:
-		/* Element[END_ELEMENT] */
-	case 193:
-		/* Element[END_ELEMENT] */
-	case 198:
-		/* Element[END_ELEMENT] */
-	case 200:
-		/* Element[END_ELEMENT] */
-	case 201:
-		/* Element[END_ELEMENT] */
-	case 206:
-		/* Element[END_ELEMENT] */
-	case 208:
-		/* Element[END_ELEMENT] */
-	case 209:
-		/* Element[END_ELEMENT] */
-	case 210:
-		/* Element[END_ELEMENT] */
-	case 212:
-		/* Element[END_ELEMENT] */
-	case 213:
+	case 175:
 		/* Element[END_ELEMENT] */
 		/* no event code to write */
 		break;
-	case 59:
+	case 53:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterID), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterPubKey), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
 		encodeNBitUnsignedInteger(stream, 3, 5);
 		break;
@@ -1842,6 +1192,10 @@ int exiEncodeCharacters(bitstream_t* stream, exi_state_t* state,
 		exi_value_t* val) {
 	switch (state->grammarStack[state->stackIndex]) {
 	case 27:
+	case 30:
+	case 37:
+	case 41:
+	case 43:
 		if (val->type == BOOLEAN) {
 			/* CHARACTERS[BOOLEAN] */
 			encodeBoolean(stream, val->boolean);
@@ -1850,349 +1204,137 @@ int exiEncodeCharacters(bitstream_t* stream, exi_state_t* state,
 			return 0;
 		}
 		break;
-	case 30:
-		if (val->type == BOOLEAN) {
-			/* CHARACTERS[BOOLEAN] */
-			encodeBoolean(stream, val->boolean);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 32;
-			return 0;
-		}
-		break;
-	case 34:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 2, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 37;
-			return 0;
-		}
-		break;
-	case 39:
-		if (val->type == BOOLEAN) {
-			/* CHARACTERS[BOOLEAN] */
-			encodeBoolean(stream, val->boolean);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 48;
-			return 0;
-		}
-		break;
-	case 43:
-		if (val->type == BOOLEAN) {
-			/* CHARACTERS[BOOLEAN] */
-			encodeBoolean(stream, val->boolean);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 49;
-			return 0;
-		}
-		break;
-	case 45:
-		if (val->type == BOOLEAN) {
-			/* CHARACTERS[BOOLEAN] */
-			encodeBoolean(stream, val->boolean);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 50;
-			return 0;
-		}
-		break;
-	case 47:
-		if (val->type == INTEGER_64) {
-			/* CHARACTERS[INTEGER_64] */
-			encodeInteger64(stream, val->int64);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 51;
-			return 0;
-		}
-		break;
-	case 53:
-		if (val->type == STRING) {
-			/* CHARACTERS[STRING] */
-			encodeStringValue(stream, &val->string);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 60;
-			return 0;
-		}
-		break;
-	case 57:
+	case 51:
+	case 92:
+	case 131:
+	case 150:
+	case 174:
 		if (val->type == ENUMERATION) {
 			/* CHARACTERS[ENUMERATION] */
 			encodeNBitUnsignedInteger(stream, 3, val->enumeration);
 			/* move on */
-			state->grammarStack[state->stackIndex] = 61;
+			state->grammarStack[state->stackIndex] = 31;
 			return 0;
 		}
 		break;
-	case 63:
+	case 70:
+	case 72:
+	case 102:
+		if (val->type == ENUMERATION) {
+			/* CHARACTERS[ENUMERATION] */
+			encodeNBitUnsignedInteger(stream, 1, val->enumeration);
+			/* move on */
+			state->grammarStack[state->stackIndex] = 31;
+			return 0;
+		}
+		break;
+	case 33:
+	case 83:
+	case 127:
+	case 145:
+	case 168:
+		if (val->type == ENUMERATION) {
+			/* CHARACTERS[ENUMERATION] */
+			encodeNBitUnsignedInteger(stream, 2, val->enumeration);
+			/* move on */
+			state->grammarStack[state->stackIndex] = 31;
+			return 0;
+		}
+		break;
+	case 170:
 		if (val->type == STRING) {
 			/* CHARACTERS[STRING] */
+			/* xsi:type OR xsi:nil */
+			encodeNBitUnsignedInteger(stream, 1, 0);
 			encodeStringValue(stream, &val->string);
 			/* move on */
-			state->grammarStack[state->stackIndex] = 71;
+			state->grammarStack[state->stackIndex] = 31;
 			return 0;
 		}
 		break;
-	case 65:
-		if (val->type == BINARY_HEX) {
-			/* CHARACTERS[BINARY_HEX] */
-			encodeBinary(stream, &val->binary);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 72;
-			return 0;
-		}
-		break;
-	case 74:
+	case 64:
 		if (val->type == ENUMERATION) {
 			/* CHARACTERS[ENUMERATION] */
 			encodeNBitUnsignedInteger(stream, 4, val->enumeration);
 			/* move on */
-			state->grammarStack[state->stackIndex] = 79;
+			state->grammarStack[state->stackIndex] = 31;
 			return 0;
 		}
 		break;
-	case 76:
+	case 123:
+		if (val->type == UNSIGNED_INTEGER_32) {
+			/* CHARACTERS[UNSIGNED_INTEGER_32] */
+			encodeUnsignedInteger32(stream, val->uint32);
+			/* move on */
+			state->grammarStack[state->stackIndex] = 31;
+			return 0;
+		}
+		break;
+	case 47:
+	case 55:
+	case 81:
+	case 108:
+	case 112:
+	case 117:
+	case 129:
+	case 139:
+	case 166:
+		if (val->type == STRING) {
+			/* CHARACTERS[STRING] */
+			encodeStringValue(stream, &val->string);
+			/* move on */
+			state->grammarStack[state->stackIndex] = 31;
+			return 0;
+		}
+		break;
+	case 45:
+		if (val->type == INTEGER_64) {
+			/* CHARACTERS[INTEGER_64] */
+			encodeInteger64(stream, val->int64);
+			/* move on */
+			state->grammarStack[state->stackIndex] = 31;
+			return 0;
+		}
+		break;
+	case 66:
 		if (val->type == ENUMERATION) {
 			/* CHARACTERS[ENUMERATION] */
 			encodeNBitUnsignedInteger(stream, 5, val->enumeration);
 			/* move on */
-			state->grammarStack[state->stackIndex] = 80;
+			state->grammarStack[state->stackIndex] = 31;
 			return 0;
 		}
 		break;
-	case 78:
+	case 57:
+	case 74:
+	case 137:
+	case 163:
+		if (val->type == BINARY_HEX) {
+			/* CHARACTERS[BINARY_HEX] */
+			encodeBinary(stream, &val->binary);
+			/* move on */
+			state->grammarStack[state->stackIndex] = 31;
+			return 0;
+		}
+		break;
+	case 68:
 		if (val->type == INTEGER_64) {
 			/* CHARACTERS[INTEGER_64] */
 			/* xsi:type OR xsi:nil */
 			encodeNBitUnsignedInteger(stream, 1, 0);
 			encodeInteger64(stream, val->int64);
 			/* move on */
-			state->grammarStack[state->stackIndex] = 81;
+			state->grammarStack[state->stackIndex] = 31;
 			return 0;
 		}
 		break;
-	case 69:
-		if (val->type == INTEGER_16) {
-			/* CHARACTERS[INTEGER_16] */
-			encodeInteger32(stream, val->int32);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 82;
-			return 0;
-		}
-		break;
-	case 84:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 1, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 85;
-			return 0;
-		}
-		break;
-	case 87:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 1, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 95;
-			return 0;
-		}
-		break;
-	case 89:
-		if (val->type == BINARY_HEX) {
-			/* CHARACTERS[BINARY_HEX] */
-			encodeBinary(stream, &val->binary);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 96;
-			return 0;
-		}
-		break;
+	case 61:
 	case 98:
-		if (val->type == STRING) {
-			/* CHARACTERS[STRING] */
-			encodeStringValue(stream, &val->string);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 99;
-			return 0;
-		}
-		break;
-	case 101:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 2, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 102;
-			return 0;
-		}
-		break;
-	case 111:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 3, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 112;
-			return 0;
-		}
-		break;
-	case 118:
 		if (val->type == INTEGER_16) {
 			/* CHARACTERS[INTEGER_16] */
 			encodeInteger32(stream, val->int32);
 			/* move on */
-			state->grammarStack[state->stackIndex] = 121;
-			return 0;
-		}
-		break;
-	case 123:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 1, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 132;
-			return 0;
-		}
-		break;
-	case 129:
-		if (val->type == STRING) {
-			/* CHARACTERS[STRING] */
-			encodeStringValue(stream, &val->string);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 133;
-			return 0;
-		}
-		break;
-	case 135:
-		if (val->type == STRING) {
-			/* CHARACTERS[STRING] */
-			encodeStringValue(stream, &val->string);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 138;
-			return 0;
-		}
-		break;
-	case 141:
-		if (val->type == STRING) {
-			/* CHARACTERS[STRING] */
-			encodeStringValue(stream, &val->string);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 144;
-			return 0;
-		}
-		break;
-	case 148:
-		if (val->type == UNSIGNED_INTEGER_32) {
-			/* CHARACTERS[UNSIGNED_INTEGER_32] */
-			encodeUnsignedInteger32(stream, val->uint32);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 151;
-			return 0;
-		}
-		break;
-	case 153:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 2, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 156;
-			return 0;
-		}
-		break;
-	case 155:
-		if (val->type == STRING) {
-			/* CHARACTERS[STRING] */
-			encodeStringValue(stream, &val->string);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 157;
-			return 0;
-		}
-		break;
-	case 159:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 3, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 162;
-			return 0;
-		}
-		break;
-	case 166:
-		if (val->type == BINARY_HEX) {
-			/* CHARACTERS[BINARY_HEX] */
-			encodeBinary(stream, &val->binary);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 171;
-			return 0;
-		}
-		break;
-	case 168:
-		if (val->type == STRING) {
-			/* CHARACTERS[STRING] */
-			encodeStringValue(stream, &val->string);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 172;
-			return 0;
-		}
-		break;
-	case 176:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 2, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 178;
-			return 0;
-		}
-		break;
-	case 182:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 3, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 186;
-			return 0;
-		}
-		break;
-	case 196:
-		if (val->type == BINARY_HEX) {
-			/* CHARACTERS[BINARY_HEX] */
-			encodeBinary(stream, &val->binary);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 200;
-			return 0;
-		}
-		break;
-	case 199:
-		if (val->type == STRING) {
-			/* CHARACTERS[STRING] */
-			encodeStringValue(stream, &val->string);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 201;
-			return 0;
-		}
-		break;
-	case 203:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 2, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 208;
-			return 0;
-		}
-		break;
-	case 205:
-		if (val->type == STRING) {
-			/* CHARACTERS[STRING] */
-			/* xsi:type OR xsi:nil */
-			encodeNBitUnsignedInteger(stream, 1, 0);
-			encodeStringValue(stream, &val->string);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 209;
-			return 0;
-		}
-		break;
-	case 211:
-		if (val->type == ENUMERATION) {
-			/* CHARACTERS[ENUMERATION] */
-			encodeNBitUnsignedInteger(stream, 3, val->enumeration);
-			/* move on */
-			state->grammarStack[state->stackIndex] = 212;
+			state->grammarStack[state->stackIndex] = 31;
 			return 0;
 		}
 		break;

@@ -38,7 +38,6 @@
 
 #include "EXICoder.h"
 #include "EXIHeaderDecoder.h"
-#include "StringTable.h"
 
 
 int exiInitDecoder(bitstream_t* stream, exi_state_t* state) {
@@ -53,7 +52,7 @@ int exiDecodeNextEvent(bitstream_t* stream, exi_state_t* state,
 		exi_event_t* nextEvent) {
 
 	switch (state->grammarStack[state->stackIndex]) {
-	case 190:
+	case 157:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}BodyElement), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupRes), END_ELEMENT] */
 		decodeNBitUnsignedInteger(stream, 5, &state->eventCode);
 		if (state->eventCode == 0) {
@@ -146,43 +145,43 @@ int exiDecodeNextEvent(bitstream_t* stream, exi_state_t* state,
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargerStandby)] */
 	case 6:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-	case 33:
+	case 32:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */
-	case 36:
+	case 35:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FatalError)] */
-	case 38:
+	case 36:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EVSEStandby)] */
-	case 40:
+	case 38:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ConnectorLocked)] */
-	case 41:
+	case 39:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}PowerSwitchClosed)] */
-	case 42:
+	case 40:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}RCD)] */
-	case 44:
+	case 42:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ShutDownTime)] */
-	case 52:
+	case 46:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
-	case 55:
+	case 49:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff)] */
-	case 56:
+	case 50:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo)] */
-	case 67:
+	case 59:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Multiplier)] */
-	case 73:
+	case 63:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Unit)] */
-	case 75:
+	case 65:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Value)] */
 	case 8:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
 	case 10:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-	case 86:
+	case 71:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEID)] */
-	case 88:
+	case 73:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */
-	case 90:
+	case 75:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent)] */
-	case 91:
+	case 76:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEMaxPower)] */
 	case 11:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ContractID)] */
@@ -190,91 +189,91 @@ int exiDecodeNextEvent(bitstream_t* stream, exi_state_t* state,
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
 	case 13:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
-	case 103:
+	case 84:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ReqSwitchStatus)] */
-	case 107:
+	case 88:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargingProfileEntryStart)] */
-	case 108:
+	case 89:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargingProfileEntryMaxPower)] */
 	case 14:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
 	case 15:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
-	case 113:
+	case 93:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EoC)] */
-	case 114:
+	case 94:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EAmount)] */
-	case 115:
+	case 95:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxPower)] */
-	case 116:
+	case 96:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxPhases)] */
-	case 117:
+	case 97:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxVoltage)] */
-	case 119:
+	case 99:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMinVoltage)] */
 	case 16:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-	case 122:
+	case 101:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */
-	case 124:
+	case 103:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEVoltage)] */
-	case 125:
+	case 104:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEIMax)] */
-	case 126:
+	case 105:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEMaxPhases)] */
-	case 131:
+	case 110:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Currency)] */
-	case 134:
+	case 111:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Tariff)] */
-	case 137:
+	case 114:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffID)] */
-	case 140:
+	case 116:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntries)] */
-	case 143:
+	case 119:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntry)] */
-	case 146:
+	case 121:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffStart)] */
-	case 147:
+	case 122:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffPMax)] */
 	case 18:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-	case 161:
+	case 133:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Service)] */
-	case 164:
+	case 135:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceID)] */
 	case 19:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceList)] */
-	case 173:
+	case 142:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVPubKey)] */
 	case 20:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-	case 179:
+	case 147:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
 	case 22:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-	case 181:
+	case 149:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEID)] */
-	case 183:
+	case 151:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */
-	case 184:
+	case 152:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent)] */
 	case 23:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Header)] */
-	case 187:
+	case 154:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Body)] */
-	case 188:
+	case 155:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}SessionInformation)] */
-	case 192:
+	case 159:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}SessionID)] */
-	case 207:
+	case 172:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Event)] */
 		*nextEvent = START_ELEMENT;
 		return 0;
 	case 7:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVID), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
-	case 54:
+	case 48:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff)] */
-	case 139:
+	case 115:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffDescription), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntries)] */
 	case 21:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVID), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
@@ -287,11 +286,11 @@ int exiDecodeNextEvent(bitstream_t* stream, exi_state_t* state,
 			*nextEvent = START_ELEMENT;
 			return 0;
 		}
-	case 64:
+	case 56:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
-	case 165:
+	case 136:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceName), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
-	case 194:
+	case 161:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultCode), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */
 		decodeNBitUnsignedInteger(stream, 2, &state->eventCode);
 		if (state->eventCode == 0) {
@@ -318,141 +317,65 @@ int exiDecodeNextEvent(bitstream_t* stream, exi_state_t* state,
 		/* Element[END_ELEMENT] */
 	case 31:
 		/* Element[END_ELEMENT] */
-	case 32:
+	case 34:
 		/* Element[END_ELEMENT] */
-	case 35:
+	case 44:
 		/* Element[END_ELEMENT] */
-	case 37:
+	case 52:
 		/* Element[END_ELEMENT] */
-	case 46:
+	case 62:
 		/* Element[END_ELEMENT] */
-	case 48:
+	case 67:
 		/* Element[END_ELEMENT] */
-	case 49:
+	case 69:
 		/* Element[END_ELEMENT] */
-	case 50:
-		/* Element[END_ELEMENT] */
-	case 51:
-		/* Element[END_ELEMENT] */
-	case 58:
-		/* Element[END_ELEMENT] */
-	case 60:
-		/* Element[END_ELEMENT] */
-	case 61:
-		/* Element[END_ELEMENT] */
-	case 70:
-		/* Element[END_ELEMENT] */
-	case 71:
-		/* Element[END_ELEMENT] */
-	case 72:
-		/* Element[END_ELEMENT] */
-	case 77:
-		/* Element[END_ELEMENT] */
+	case 9:
+		/* FirstStartTagStartTag[END_ELEMENT] */
 	case 79:
 		/* Element[END_ELEMENT] */
 	case 80:
 		/* Element[END_ELEMENT] */
-	case 81:
-		/* Element[END_ELEMENT] */
 	case 82:
 		/* Element[END_ELEMENT] */
-	case 83:
+	case 87:
 		/* Element[END_ELEMENT] */
-	case 85:
+	case 90:
 		/* Element[END_ELEMENT] */
-	case 9:
-		/* FirstStartTagStartTag[END_ELEMENT] */
-	case 94:
-		/* Element[END_ELEMENT] */
-	case 95:
-		/* Element[END_ELEMENT] */
-	case 96:
-		/* Element[END_ELEMENT] */
-	case 97:
-		/* Element[END_ELEMENT] */
-	case 99:
+	case 91:
 		/* Element[END_ELEMENT] */
 	case 100:
 		/* Element[END_ELEMENT] */
-	case 102:
-		/* Element[END_ELEMENT] */
-	case 106:
-		/* Element[END_ELEMENT] */
 	case 109:
 		/* Element[END_ELEMENT] */
-	case 110:
+	case 118:
 		/* Element[END_ELEMENT] */
-	case 112:
+	case 125:
 		/* Element[END_ELEMENT] */
-	case 120:
-		/* Element[END_ELEMENT] */
-	case 121:
-		/* Element[END_ELEMENT] */
-	case 130:
+	case 128:
 		/* Element[END_ELEMENT] */
 	case 132:
 		/* Element[END_ELEMENT] */
-	case 133:
+	case 141:
 		/* Element[END_ELEMENT] */
-	case 138:
+	case 143:
 		/* Element[END_ELEMENT] */
-	case 142:
+	case 146:
 		/* Element[END_ELEMENT] */
-	case 144:
+	case 148:
 		/* Element[END_ELEMENT] */
-	case 150:
-		/* Element[END_ELEMENT] */
-	case 151:
-		/* Element[END_ELEMENT] */
-	case 154:
+	case 153:
 		/* Element[END_ELEMENT] */
 	case 156:
 		/* Element[END_ELEMENT] */
-	case 157:
-		/* Element[END_ELEMENT] */
 	case 160:
 		/* Element[END_ELEMENT] */
-	case 162:
-		/* Element[END_ELEMENT] */
-	case 170:
+	case 165:
 		/* Element[END_ELEMENT] */
 	case 171:
 		/* Element[END_ELEMENT] */
-	case 172:
+	case 173:
 		/* Element[END_ELEMENT] */
-	case 174:
-		/* Element[END_ELEMENT] */
-	case 177:
-		/* Element[END_ELEMENT] */
-	case 178:
-		/* Element[END_ELEMENT] */
-	case 180:
-		/* Element[END_ELEMENT] */
-	case 185:
-		/* Element[END_ELEMENT] */
-	case 186:
-		/* Element[END_ELEMENT] */
-	case 189:
-		/* Element[END_ELEMENT] */
-	case 193:
-		/* Element[END_ELEMENT] */
-	case 198:
-		/* Element[END_ELEMENT] */
-	case 200:
-		/* Element[END_ELEMENT] */
-	case 201:
-		/* Element[END_ELEMENT] */
-	case 206:
-		/* Element[END_ELEMENT] */
-	case 208:
-		/* Element[END_ELEMENT] */
-	case 209:
-		/* Element[END_ELEMENT] */
-	case 210:
-		/* Element[END_ELEMENT] */
-	case 212:
-		/* Element[END_ELEMENT] */
-	case 213:
+	case 175:
 		/* Element[END_ELEMENT] */
 		*nextEvent = END_ELEMENT;
 		return 0;
@@ -547,21 +470,21 @@ int exiDecodeNextEvent(bitstream_t* stream, exi_state_t* state,
 		/* DocEnd[END_DOCUMENT] */
 		*nextEvent = END_DOCUMENT;
 		return 0;
-	case 66:
+	case 58:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
-	case 92:
+	case 77:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PCurrent), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo), END_ELEMENT] */
-	case 104:
+	case 85:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ChargingProfile), END_ELEMENT] */
-	case 127:
+	case 106:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EnergyProvider), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TariffTable), END_ELEMENT] */
 	case 17:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceScope), END_ELEMENT] */
-	case 167:
+	case 138:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
-	case 195:
+	case 162:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceSessionID), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion), END_ELEMENT] */
-	case 202:
+	case 167:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */
 		decodeNBitUnsignedInteger(stream, 2, &state->eventCode);
 		if (state->eventCode == 0) {
@@ -576,7 +499,7 @@ int exiDecodeNextEvent(bitstream_t* stream, exi_state_t* state,
 			*nextEvent = END_ELEMENT;
 			return 0;
 		}
-	case 59:
+	case 53:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterID), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterPubKey), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
 		decodeNBitUnsignedInteger(stream, 3, &state->eventCode);
 		if (state->eventCode == 0) {
@@ -607,83 +530,83 @@ int exiDecodeNextEvent(bitstream_t* stream, exi_state_t* state,
 		/* FirstStartTagStartTag[CHARACTERS[BOOLEAN]] */
 	case 30:
 		/* FirstStartTagStartTag[CHARACTERS[BOOLEAN]] */
-	case 34:
+	case 33:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 39:
+	case 37:
+		/* FirstStartTagStartTag[CHARACTERS[BOOLEAN]] */
+	case 41:
 		/* FirstStartTagStartTag[CHARACTERS[BOOLEAN]] */
 	case 43:
 		/* FirstStartTagStartTag[CHARACTERS[BOOLEAN]] */
 	case 45:
-		/* FirstStartTagStartTag[CHARACTERS[BOOLEAN]] */
-	case 47:
 		/* FirstStartTagStartTag[CHARACTERS[INTEGER_64]] */
-	case 53:
+	case 47:
+		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
+	case 51:
+		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
+	case 55:
 		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
 	case 57:
-		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 63:
-		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
-	case 65:
 		/* FirstStartTagStartTag[CHARACTERS[BINARY_HEX]] */
-	case 74:
+	case 64:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 76:
+	case 66:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 78:
+	case 68:
 		/* FirstStartTag(xsi:type)StartTag[CHARACTERS[INTEGER_64]] */
-	case 69:
+	case 61:
 		/* FirstStartTagStartTag[CHARACTERS[INTEGER_16]] */
-	case 84:
+	case 70:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 87:
+	case 72:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 89:
+	case 74:
 		/* FirstStartTagStartTag[CHARACTERS[BINARY_HEX]] */
-	case 98:
+	case 81:
 		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
-	case 101:
+	case 83:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 111:
+	case 92:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 118:
+	case 98:
 		/* FirstStartTagStartTag[CHARACTERS[INTEGER_16]] */
+	case 102:
+		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
+	case 108:
+		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
+	case 112:
+		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
+	case 117:
+		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
 	case 123:
+		/* FirstStartTagStartTag[CHARACTERS[UNSIGNED_INTEGER_32]] */
+	case 127:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
 	case 129:
 		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
-	case 135:
-		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
-	case 141:
-		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
-	case 148:
-		/* FirstStartTagStartTag[CHARACTERS[UNSIGNED_INTEGER_32]] */
-	case 153:
+	case 131:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 155:
+	case 137:
+		/* FirstStartTagStartTag[CHARACTERS[BINARY_HEX]] */
+	case 139:
 		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
-	case 159:
+	case 145:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
+	case 150:
+		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
+	case 163:
+		/* FirstStartTagStartTag[CHARACTERS[BINARY_HEX]] */
 	case 166:
-		/* FirstStartTagStartTag[CHARACTERS[BINARY_HEX]] */
+		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
 	case 168:
-		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
-	case 176:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 182:
-		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 196:
-		/* FirstStartTagStartTag[CHARACTERS[BINARY_HEX]] */
-	case 199:
-		/* FirstStartTagStartTag[CHARACTERS[STRING]] */
-	case 203:
-		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
-	case 205:
+	case 170:
 		/* FirstStartTag(xsi:type)StartTag[CHARACTERS[STRING]] */
-	case 211:
+	case 174:
 		/* FirstStartTagStartTag[CHARACTERS[ENUMERATION]] */
 		*nextEvent = CHARACTERS;
 		return 0;
-	case 62:
+	case 54:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterPubKey), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
 		decodeNBitUnsignedInteger(stream, 3, &state->eventCode);
 		if (state->eventCode == 0) {
@@ -706,35 +629,35 @@ int exiDecodeNextEvent(bitstream_t* stream, exi_state_t* state,
 			*nextEvent = END_ELEMENT;
 			return 0;
 		}
-	case 68:
+	case 60:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
-	case 93:
+	case 78:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo), END_ELEMENT] */
-	case 105:
+	case 86:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ChargingProfile), END_ELEMENT] */
-	case 128:
+	case 107:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TariffTable), END_ELEMENT] */
-	case 136:
+	case 113:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Tariff), END_ELEMENT] */
-	case 145:
+	case 120:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntry), END_ELEMENT] */
-	case 149:
+	case 124:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EPrice), END_ELEMENT] */
-	case 152:
+	case 126:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceScope), END_ELEMENT] */
-	case 158:
+	case 130:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceList), END_ELEMENT] */
-	case 163:
+	case 134:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Service), END_ELEMENT] */
-	case 169:
+	case 140:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
-	case 175:
+	case 144:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringAuthPubKey), END_ELEMENT] */
-	case 191:
+	case 158:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Notification), END_ELEMENT] */
-	case 197:
+	case 164:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion), END_ELEMENT] */
-	case 204:
+	case 169:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */
 		decodeNBitUnsignedInteger(stream, 1, &state->eventCode);
 		if (state->eventCode == 0) {
@@ -776,1472 +699,672 @@ int exiDecodeEndDocument(bitstream_t* stream, exi_state_t* state) {
 	return -1;
 }
 
+static int _exiDecodeStartElement(exi_state_t* state, eqname_t* se,
+		unsigned int ns, unsigned int ln, size_t stackId, size_t newState) {
+	se->namespaceURI = ns;
+	se->localPart = ln;
+	/* move on */
+	state->grammarStack[state->stackIndex] = stackId;
+	/* push element on stack */
+	return exiPushStack(state, newState, se);
+}
+
 int exiDecodeStartElement(bitstream_t* stream, exi_state_t* state,
 		eqname_t* se) {
 	switch (state->grammarStack[state->stackIndex]) {
 	case 1:
 		/* DocContent[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}BodyElement), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupRes), START_ELEMENT({urn:iso:15118:2:2010:MsgDef}V2G_Message), START_ELEMENT_GENERIC] */
 		if (state->eventCode == 0) {
-			se->localPart = 2; /* "BodyElement" */
-			se->namespaceURI = 6; /* "urn:iso:15118:2:2010:MsgDef" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 3, se);
+			return _exiDecodeStartElement(state, se, 6, 2, 2, 3);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 11; /* "LineLockReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 5, se);
+			return _exiDecodeStartElement(state, se, 4, 11, 2, 5);
 		}
 		else if (state->eventCode == 2) {
-			se->localPart = 13; /* "LineLockRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 6, se);
+			return _exiDecodeStartElement(state, se, 4, 13, 2, 6);
 		}
 		else if (state->eventCode == 3) {
-			se->localPart = 17; /* "MeteringReceiptReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 7, se);
+			return _exiDecodeStartElement(state, se, 4, 17, 2, 7);
 		}
 		else if (state->eventCode == 4) {
-			se->localPart = 19; /* "MeteringReceiptRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 8, se);
+			return _exiDecodeStartElement(state, se, 4, 19, 2, 8);
 		}
 		else if (state->eventCode == 5) {
-			se->localPart = 21; /* "MeteringStatusReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 9, se);
+			return _exiDecodeStartElement(state, se, 4, 21, 2, 9);
 		}
 		else if (state->eventCode == 6) {
-			se->localPart = 23; /* "MeteringStatusRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 10, se);
+			return _exiDecodeStartElement(state, se, 4, 23, 2, 10);
 		}
 		else if (state->eventCode == 7) {
-			se->localPart = 33; /* "PaymentDetailsReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 11, se);
+			return _exiDecodeStartElement(state, se, 4, 33, 2, 11);
 		}
 		else if (state->eventCode == 8) {
-			se->localPart = 35; /* "PaymentDetailsRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 12, se);
+			return _exiDecodeStartElement(state, se, 4, 35, 2, 12);
 		}
 		else if (state->eventCode == 9) {
-			se->localPart = 37; /* "PowerDeliveryReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 13, se);
+			return _exiDecodeStartElement(state, se, 4, 37, 2, 13);
 		}
 		else if (state->eventCode == 10) {
-			se->localPart = 39; /* "PowerDeliveryRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 14, se);
+			return _exiDecodeStartElement(state, se, 4, 39, 2, 14);
 		}
 		else if (state->eventCode == 11) {
-			se->localPart = 41; /* "PowerDiscoveryReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 15, se);
+			return _exiDecodeStartElement(state, se, 4, 41, 2, 15);
 		}
 		else if (state->eventCode == 12) {
-			se->localPart = 43; /* "PowerDiscoveryRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 16, se);
+			return _exiDecodeStartElement(state, se, 4, 43, 2, 16);
 		}
 		else if (state->eventCode == 13) {
-			se->localPart = 48; /* "ServiceDiscoveryReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 17, se);
+			return _exiDecodeStartElement(state, se, 4, 48, 2, 17);
 		}
 		else if (state->eventCode == 14) {
-			se->localPart = 50; /* "ServiceDiscoveryRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 18, se);
+			return _exiDecodeStartElement(state, se, 4, 50, 2, 18);
 		}
 		else if (state->eventCode == 15) {
-			se->localPart = 53; /* "ServicePaymentSelectionReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 19, se);
+			return _exiDecodeStartElement(state, se, 4, 53, 2, 19);
 		}
 		else if (state->eventCode == 16) {
-			se->localPart = 55; /* "ServicePaymentSelectionRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 20, se);
+			return _exiDecodeStartElement(state, se, 4, 55, 2, 20);
 		}
 		else if (state->eventCode == 17) {
-			se->localPart = 59; /* "SessionSetupReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 21, se);
+			return _exiDecodeStartElement(state, se, 4, 59, 2, 21);
 		}
 		else if (state->eventCode == 18) {
-			se->localPart = 61; /* "SessionSetupRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 22, se);
+			return _exiDecodeStartElement(state, se, 4, 61, 2, 22);
 		}
 		else if (state->eventCode == 19) {
-			se->localPart = 8; /* "V2G_Message" */
-			se->namespaceURI = 6; /* "urn:iso:15118:2:2010:MsgDef" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 2;
-			/* push element on stack */
-			return exiPushStack(state, 23, se);
+			return _exiDecodeStartElement(state, se, 6, 8, 2, 23);
 		}
 		break;
 	case 5:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
-			se->localPart = 32; /* "PEVStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 24;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+		return _exiDecodeStartElement(state, se, 4, 32, 24, 25);
 		break;
 	case 6:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-			se->localPart = 47; /* "ResponseCode" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 33;
-			/* push element on stack */
-			return exiPushStack(state, 34, se);
+		return _exiDecodeStartElement(state, se, 4, 47, 32, 33);
 		break;
 	case 7:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVID), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
 		if (state->eventCode == 0) {
-			se->localPart = 26; /* "PEVID" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 52;
-			/* push element on stack */
-			return exiPushStack(state, 53, se);
+			return _exiDecodeStartElement(state, se, 4, 26, 46, 47);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 32; /* "PEVStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 54;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+			return _exiDecodeStartElement(state, se, 4, 32, 48, 25);
 		}
 		break;
 	case 8:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-			se->localPart = 47; /* "ResponseCode" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 83;
-			/* push element on stack */
-			return exiPushStack(state, 84, se);
+		return _exiDecodeStartElement(state, se, 4, 47, 69, 70);
 		break;
 	case 10:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-			se->localPart = 47; /* "ResponseCode" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 86;
-			/* push element on stack */
-			return exiPushStack(state, 87, se);
+		return _exiDecodeStartElement(state, se, 4, 47, 71, 72);
 		break;
 	case 11:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ContractID)] */
-			se->localPart = 1; /* "ContractID" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 97;
-			/* push element on stack */
-			return exiPushStack(state, 98, se);
+		return _exiDecodeStartElement(state, se, 4, 1, 80, 81);
 		break;
 	case 12:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-			se->localPart = 47; /* "ResponseCode" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 100;
-			/* push element on stack */
-			return exiPushStack(state, 101, se);
+		return _exiDecodeStartElement(state, se, 4, 47, 82, 83);
 		break;
 	case 13:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
-			se->localPart = 32; /* "PEVStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 103;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+		return _exiDecodeStartElement(state, se, 4, 32, 84, 25);
 		break;
 	case 14:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-			se->localPart = 47; /* "ResponseCode" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 110;
-			/* push element on stack */
-			return exiPushStack(state, 111, se);
+		return _exiDecodeStartElement(state, se, 4, 47, 91, 92);
 		break;
 	case 15:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
-			se->localPart = 32; /* "PEVStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 113;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+		return _exiDecodeStartElement(state, se, 4, 32, 93, 25);
 		break;
 	case 16:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-			se->localPart = 47; /* "ResponseCode" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 122;
-			/* push element on stack */
-			return exiPushStack(state, 123, se);
+		return _exiDecodeStartElement(state, se, 4, 47, 101, 102);
 		break;
 	case 17:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceScope), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 58; /* "ServiceType" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 152;
-			/* push element on stack */
-			return exiPushStack(state, 153, se);
+			return _exiDecodeStartElement(state, se, 4, 58, 126, 127);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 57; /* "ServiceScope" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 154;
-			/* push element on stack */
-			return exiPushStack(state, 155, se);
+			return _exiDecodeStartElement(state, se, 4, 57, 128, 129);
 		}
 		break;
 	case 18:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-			se->localPart = 47; /* "ResponseCode" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 158;
-			/* push element on stack */
-			return exiPushStack(state, 159, se);
+		return _exiDecodeStartElement(state, se, 4, 47, 130, 131);
 		break;
 	case 19:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceList)] */
-			se->localPart = 52; /* "ServiceList" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 173;
-			/* push element on stack */
-			return exiPushStack(state, 161, se);
+		return _exiDecodeStartElement(state, se, 4, 52, 142, 133);
 		break;
 	case 20:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-			se->localPart = 47; /* "ResponseCode" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 175;
-			/* push element on stack */
-			return exiPushStack(state, 176, se);
+		return _exiDecodeStartElement(state, se, 4, 47, 144, 145);
 		break;
 	case 21:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVID), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
 		if (state->eventCode == 0) {
-			se->localPart = 26; /* "PEVID" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 179;
-			/* push element on stack */
-			return exiPushStack(state, 53, se);
+			return _exiDecodeStartElement(state, se, 4, 26, 147, 47);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 32; /* "PEVStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 180;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+			return _exiDecodeStartElement(state, se, 4, 32, 148, 25);
 		}
 		break;
 	case 22:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ResponseCode)] */
-			se->localPart = 47; /* "ResponseCode" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 181;
-			/* push element on stack */
-			return exiPushStack(state, 182, se);
+		return _exiDecodeStartElement(state, se, 4, 47, 149, 150);
 		break;
 	case 23:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Header)] */
-			se->localPart = 4; /* "Header" */
-			se->namespaceURI = 6; /* "urn:iso:15118:2:2010:MsgDef" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 187;
-			/* push element on stack */
-			return exiPushStack(state, 188, se);
+		return _exiDecodeStartElement(state, se, 6, 4, 154, 155);
 		break;
 	case 24:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ReqLockStatus)] */
-			se->localPart = 45; /* "ReqLockStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 26;
-			/* push element on stack */
-			return exiPushStack(state, 27, se);
+		return _exiDecodeStartElement(state, se, 4, 45, 26, 27);
 		break;
 	case 25:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ConnectorLocked)] */
-			se->localPart = 4; /* "ConnectorLocked" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 28;
-			/* push element on stack */
-			return exiPushStack(state, 27, se);
+		return _exiDecodeStartElement(state, se, 5, 4, 28, 27);
 		break;
 	case 28:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargerStandby)] */
-			se->localPart = 0; /* "ChargerStandby" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 29;
-			/* push element on stack */
-			return exiPushStack(state, 30, se);
+		return _exiDecodeStartElement(state, se, 5, 0, 29, 30);
 		break;
-	case 33:
+	case 32:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */
-			se->localPart = 7; /* "EVSEStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 35;
-			/* push element on stack */
-			return exiPushStack(state, 36, se);
+		return _exiDecodeStartElement(state, se, 4, 7, 34, 35);
+		break;
+	case 35:
+		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FatalError)] */
+		return _exiDecodeStartElement(state, se, 5, 12, 36, 37);
 		break;
 	case 36:
-		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FatalError)] */
-			se->localPart = 12; /* "FatalError" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 38;
-			/* push element on stack */
-			return exiPushStack(state, 39, se);
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EVSEStandby)] */
+		return _exiDecodeStartElement(state, se, 5, 7, 38, 30);
 		break;
 	case 38:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EVSEStandby)] */
-			se->localPart = 7; /* "EVSEStandby" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 40;
-			/* push element on stack */
-			return exiPushStack(state, 30, se);
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ConnectorLocked)] */
+		return _exiDecodeStartElement(state, se, 5, 4, 39, 27);
+		break;
+	case 39:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}PowerSwitchClosed)] */
+		return _exiDecodeStartElement(state, se, 5, 24, 40, 41);
 		break;
 	case 40:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ConnectorLocked)] */
-			se->localPart = 4; /* "ConnectorLocked" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 41;
-			/* push element on stack */
-			return exiPushStack(state, 27, se);
-		break;
-	case 41:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}PowerSwitchClosed)] */
-			se->localPart = 24; /* "PowerSwitchClosed" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 42;
-			/* push element on stack */
-			return exiPushStack(state, 43, se);
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}RCD)] */
+		return _exiDecodeStartElement(state, se, 5, 26, 42, 43);
 		break;
 	case 42:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}RCD)] */
-			se->localPart = 26; /* "RCD" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 44;
-			/* push element on stack */
-			return exiPushStack(state, 45, se);
-		break;
-	case 44:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ShutDownTime)] */
-			se->localPart = 37; /* "ShutDownTime" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 46;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+		return _exiDecodeStartElement(state, se, 5, 37, 44, 45);
 		break;
-	case 52:
+	case 46:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
-			se->localPart = 32; /* "PEVStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 54;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
+		return _exiDecodeStartElement(state, se, 4, 32, 48, 25);
 		break;
-	case 54:
+	case 48:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff)] */
 		if (state->eventCode == 0) {
-			se->localPart = 63; /* "TCurrent" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 55;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiDecodeStartElement(state, se, 4, 63, 49, 45);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 64; /* "Tariff" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 56;
-			/* push element on stack */
-			return exiPushStack(state, 57, se);
+			return _exiDecodeStartElement(state, se, 4, 64, 50, 51);
 		}
 		break;
-	case 55:
+	case 49:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff)] */
-			se->localPart = 64; /* "Tariff" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 56;
-			/* push element on stack */
-			return exiPushStack(state, 57, se);
+		return _exiDecodeStartElement(state, se, 4, 64, 50, 51);
 		break;
-	case 56:
+	case 50:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo)] */
-			se->localPart = 15; /* "MeterInfo" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 58;
-			/* push element on stack */
-			return exiPushStack(state, 59, se);
+		return _exiDecodeStartElement(state, se, 4, 15, 52, 53);
 		break;
-	case 59:
+	case 53:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterID), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterPubKey), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 16; /* "MeterID" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 62;
-			/* push element on stack */
-			return exiPushStack(state, 63, se);
+			return _exiDecodeStartElement(state, se, 5, 16, 54, 55);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 18; /* "MeterPubKey" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 64;
-			/* push element on stack */
-			return exiPushStack(state, 65, se);
+			return _exiDecodeStartElement(state, se, 5, 18, 56, 57);
 		}
 		else if (state->eventCode == 2) {
-			se->localPart = 19; /* "MeterReading" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 66;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiDecodeStartElement(state, se, 5, 19, 58, 59);
 		}
 		else if (state->eventCode == 3) {
-			se->localPart = 20; /* "MeterStatus" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 68;
-			/* push element on stack */
-			return exiPushStack(state, 69, se);
+			return _exiDecodeStartElement(state, se, 5, 20, 60, 61);
 		}
 		else if (state->eventCode == 4) {
-			se->localPart = 38; /* "TMeter" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 70;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiDecodeStartElement(state, se, 5, 38, 62, 45);
 		}
 		break;
-	case 62:
+	case 54:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterPubKey), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 18; /* "MeterPubKey" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 64;
-			/* push element on stack */
-			return exiPushStack(state, 65, se);
+			return _exiDecodeStartElement(state, se, 5, 18, 56, 57);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 19; /* "MeterReading" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 66;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiDecodeStartElement(state, se, 5, 19, 58, 59);
 		}
 		else if (state->eventCode == 2) {
-			se->localPart = 20; /* "MeterStatus" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 68;
-			/* push element on stack */
-			return exiPushStack(state, 69, se);
+			return _exiDecodeStartElement(state, se, 5, 20, 60, 61);
 		}
 		else if (state->eventCode == 3) {
-			se->localPart = 38; /* "TMeter" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 70;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiDecodeStartElement(state, se, 5, 38, 62, 45);
 		}
 		break;
-	case 64:
+	case 56:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterReading), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 19; /* "MeterReading" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 66;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiDecodeStartElement(state, se, 5, 19, 58, 59);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 20; /* "MeterStatus" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 68;
-			/* push element on stack */
-			return exiPushStack(state, 69, se);
+			return _exiDecodeStartElement(state, se, 5, 20, 60, 61);
 		}
 		else if (state->eventCode == 2) {
-			se->localPart = 38; /* "TMeter" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 70;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiDecodeStartElement(state, se, 5, 38, 62, 45);
 		}
 		break;
-	case 66:
+	case 58:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}MeterStatus), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 20; /* "MeterStatus" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 68;
-			/* push element on stack */
-			return exiPushStack(state, 69, se);
+			return _exiDecodeStartElement(state, se, 5, 20, 60, 61);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 38; /* "TMeter" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 70;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiDecodeStartElement(state, se, 5, 38, 62, 45);
 		}
 		break;
-	case 67:
+	case 59:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Multiplier)] */
-			se->localPart = 21; /* "Multiplier" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 73;
-			/* push element on stack */
-			return exiPushStack(state, 74, se);
+		return _exiDecodeStartElement(state, se, 5, 21, 63, 64);
 		break;
-	case 68:
+	case 60:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TMeter), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 38; /* "TMeter" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 70;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+			return _exiDecodeStartElement(state, se, 5, 38, 62, 45);
 		}
+		break;
+	case 63:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Unit)] */
+		return _exiDecodeStartElement(state, se, 5, 50, 65, 66);
+		break;
+	case 65:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Value)] */
+		return _exiDecodeStartElement(state, se, 5, 51, 67, 68);
+		break;
+	case 71:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEID)] */
+		return _exiDecodeStartElement(state, se, 4, 3, 73, 74);
 		break;
 	case 73:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Unit)] */
-			se->localPart = 50; /* "Unit" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 75;
-			/* push element on stack */
-			return exiPushStack(state, 76, se);
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */
+		return _exiDecodeStartElement(state, se, 4, 7, 75, 35);
 		break;
 	case 75:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Value)] */
-			se->localPart = 51; /* "Value" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 77;
-			/* push element on stack */
-			return exiPushStack(state, 78, se);
-		break;
-	case 86:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEID)] */
-			se->localPart = 3; /* "EVSEID" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 88;
-			/* push element on stack */
-			return exiPushStack(state, 89, se);
-		break;
-	case 88:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */
-			se->localPart = 7; /* "EVSEStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 90;
-			/* push element on stack */
-			return exiPushStack(state, 36, se);
-		break;
-	case 90:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent)] */
-			se->localPart = 63; /* "TCurrent" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 91;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
+		return _exiDecodeStartElement(state, se, 4, 63, 76, 45);
 		break;
-	case 91:
+	case 76:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEMaxPower)] */
-			se->localPart = 6; /* "EVSEMaxPower" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 92;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+		return _exiDecodeStartElement(state, se, 4, 6, 77, 59);
 		break;
-	case 92:
+	case 77:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PCurrent), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 25; /* "PCurrent" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 93;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+			return _exiDecodeStartElement(state, se, 4, 25, 78, 59);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 15; /* "MeterInfo" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 94;
-			/* push element on stack */
-			return exiPushStack(state, 59, se);
+			return _exiDecodeStartElement(state, se, 4, 15, 79, 53);
 		}
 		break;
-	case 93:
+	case 78:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeterInfo), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 15; /* "MeterInfo" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 94;
-			/* push element on stack */
-			return exiPushStack(state, 59, se);
+			return _exiDecodeStartElement(state, se, 4, 15, 79, 53);
 		}
 		break;
-	case 103:
+	case 84:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ReqSwitchStatus)] */
-			se->localPart = 46; /* "ReqSwitchStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 104;
-			/* push element on stack */
-			return exiPushStack(state, 43, se);
+		return _exiDecodeStartElement(state, se, 4, 46, 85, 41);
 		break;
-	case 104:
+	case 85:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}Tariff), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ChargingProfile), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 64; /* "Tariff" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 105;
-			/* push element on stack */
-			return exiPushStack(state, 57, se);
+			return _exiDecodeStartElement(state, se, 4, 64, 86, 51);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 0; /* "ChargingProfile" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 106;
-			/* push element on stack */
-			return exiPushStack(state, 107, se);
+			return _exiDecodeStartElement(state, se, 4, 0, 87, 88);
 		}
 		break;
-	case 105:
+	case 86:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ChargingProfile), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 0; /* "ChargingProfile" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 106;
-			/* push element on stack */
-			return exiPushStack(state, 107, se);
+			return _exiDecodeStartElement(state, se, 4, 0, 87, 88);
+		}
+		break;
+	case 88:
+		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargingProfileEntryStart)] */
+		return _exiDecodeStartElement(state, se, 5, 2, 89, 45);
+		break;
+	case 89:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargingProfileEntryMaxPower)] */
+		return _exiDecodeStartElement(state, se, 5, 1, 90, 59);
+		break;
+	case 93:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EoC)] */
+		return _exiDecodeStartElement(state, se, 4, 10, 94, 45);
+		break;
+	case 94:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EAmount)] */
+		return _exiDecodeStartElement(state, se, 4, 2, 95, 59);
+		break;
+	case 95:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxPower)] */
+		return _exiDecodeStartElement(state, se, 4, 28, 96, 59);
+		break;
+	case 96:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxPhases)] */
+		return _exiDecodeStartElement(state, se, 4, 27, 97, 98);
+		break;
+	case 97:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxVoltage)] */
+		return _exiDecodeStartElement(state, se, 4, 29, 99, 59);
+		break;
+	case 99:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMinVoltage)] */
+		return _exiDecodeStartElement(state, se, 4, 30, 100, 59);
+		break;
+	case 101:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */
+		return _exiDecodeStartElement(state, se, 4, 7, 103, 35);
+		break;
+	case 103:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEVoltage)] */
+		return _exiDecodeStartElement(state, se, 4, 8, 104, 59);
+		break;
+	case 104:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEIMax)] */
+		return _exiDecodeStartElement(state, se, 4, 4, 105, 59);
+		break;
+	case 105:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEMaxPhases)] */
+		return _exiDecodeStartElement(state, se, 4, 5, 106, 98);
+		break;
+	case 106:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EnergyProvider), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TariffTable), END_ELEMENT] */
+		if (state->eventCode == 0) {
+			return _exiDecodeStartElement(state, se, 4, 9, 107, 108);
+		}
+		else if (state->eventCode == 1) {
+			return _exiDecodeStartElement(state, se, 4, 65, 109, 110);
 		}
 		break;
 	case 107:
-		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargingProfileEntryStart)] */
-			se->localPart = 2; /* "ChargingProfileEntryStart" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 108;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
-		break;
-	case 108:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ChargingProfileEntryMaxPower)] */
-			se->localPart = 1; /* "ChargingProfileEntryMaxPower" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 109;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
-		break;
-	case 113:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EoC)] */
-			se->localPart = 10; /* "EoC" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 114;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
-		break;
-	case 114:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EAmount)] */
-			se->localPart = 2; /* "EAmount" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 115;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
-		break;
-	case 115:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxPower)] */
-			se->localPart = 28; /* "PEVMaxPower" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 116;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
-		break;
-	case 116:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxPhases)] */
-			se->localPart = 27; /* "PEVMaxPhases" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 117;
-			/* push element on stack */
-			return exiPushStack(state, 118, se);
-		break;
-	case 117:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMaxVoltage)] */
-			se->localPart = 29; /* "PEVMaxVoltage" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 119;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
-		break;
-	case 119:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVMinVoltage)] */
-			se->localPart = 30; /* "PEVMinVoltage" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 120;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
-		break;
-	case 122:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */
-			se->localPart = 7; /* "EVSEStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 124;
-			/* push element on stack */
-			return exiPushStack(state, 36, se);
-		break;
-	case 124:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEVoltage)] */
-			se->localPart = 8; /* "EVSEVoltage" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 125;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
-		break;
-	case 125:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEIMax)] */
-			se->localPart = 4; /* "EVSEIMax" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 126;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
-		break;
-	case 126:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEMaxPhases)] */
-			se->localPart = 5; /* "EVSEMaxPhases" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 127;
-			/* push element on stack */
-			return exiPushStack(state, 118, se);
-		break;
-	case 127:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EnergyProvider), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TariffTable), END_ELEMENT] */
-		if (state->eventCode == 0) {
-			se->localPart = 9; /* "EnergyProvider" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 128;
-			/* push element on stack */
-			return exiPushStack(state, 129, se);
-		}
-		else if (state->eventCode == 1) {
-			se->localPart = 65; /* "TariffTable" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 130;
-			/* push element on stack */
-			return exiPushStack(state, 131, se);
-		}
-		break;
-	case 128:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TariffTable), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 65; /* "TariffTable" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 130;
-			/* push element on stack */
-			return exiPushStack(state, 131, se);
+			return _exiDecodeStartElement(state, se, 4, 65, 109, 110);
 		}
 		break;
-	case 131:
+	case 110:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Currency)] */
-			se->localPart = 5; /* "Currency" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 134;
-			/* push element on stack */
-			return exiPushStack(state, 135, se);
+		return _exiDecodeStartElement(state, se, 5, 5, 111, 112);
 		break;
-	case 134:
+	case 111:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Tariff)] */
-			se->localPart = 39; /* "Tariff" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 136;
-			/* push element on stack */
-			return exiPushStack(state, 137, se);
+		return _exiDecodeStartElement(state, se, 5, 39, 113, 114);
 		break;
-	case 136:
+	case 113:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Tariff), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 39; /* "Tariff" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 136;
-			/* push element on stack */
-			return exiPushStack(state, 137, se);
+			return _exiDecodeStartElement(state, se, 5, 39, 113, 114);
 		}
 		break;
-	case 137:
+	case 114:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffID)] */
-			se->localPart = 46; /* "TariffID" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 139;
-			/* push element on stack */
-			return exiPushStack(state, 57, se);
+		return _exiDecodeStartElement(state, se, 5, 46, 115, 51);
 		break;
-	case 139:
+	case 115:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffDescription), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntries)] */
 		if (state->eventCode == 0) {
-			se->localPart = 41; /* "TariffDescription" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 140;
-			/* push element on stack */
-			return exiPushStack(state, 141, se);
+			return _exiDecodeStartElement(state, se, 5, 41, 116, 117);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 42; /* "TariffEntries" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 142;
-			/* push element on stack */
-			return exiPushStack(state, 143, se);
+			return _exiDecodeStartElement(state, se, 5, 42, 118, 119);
+		}
+		break;
+	case 116:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntries)] */
+		return _exiDecodeStartElement(state, se, 5, 42, 118, 119);
+		break;
+	case 119:
+		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntry)] */
+		return _exiDecodeStartElement(state, se, 5, 44, 120, 121);
+		break;
+	case 120:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntry), END_ELEMENT] */
+		if (state->eventCode == 0) {
+			return _exiDecodeStartElement(state, se, 5, 44, 120, 121);
+		}
+		break;
+	case 121:
+		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffStart)] */
+		return _exiDecodeStartElement(state, se, 5, 48, 122, 123);
+		break;
+	case 122:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffPMax)] */
+		return _exiDecodeStartElement(state, se, 5, 47, 124, 59);
+		break;
+	case 124:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EPrice), END_ELEMENT] */
+		if (state->eventCode == 0) {
+			return _exiDecodeStartElement(state, se, 5, 6, 125, 59);
+		}
+		break;
+	case 126:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceScope), END_ELEMENT] */
+		if (state->eventCode == 0) {
+			return _exiDecodeStartElement(state, se, 4, 57, 128, 129);
+		}
+		break;
+	case 130:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceList), END_ELEMENT] */
+		if (state->eventCode == 0) {
+			return _exiDecodeStartElement(state, se, 4, 52, 132, 133);
+		}
+		break;
+	case 133:
+		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Service)] */
+		return _exiDecodeStartElement(state, se, 5, 27, 134, 135);
+		break;
+	case 134:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Service), END_ELEMENT] */
+		if (state->eventCode == 0) {
+			return _exiDecodeStartElement(state, se, 5, 27, 134, 135);
+		}
+		break;
+	case 135:
+		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceID)] */
+		return _exiDecodeStartElement(state, se, 5, 29, 136, 137);
+		break;
+	case 136:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceName), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
+		if (state->eventCode == 0) {
+			return _exiDecodeStartElement(state, se, 5, 31, 138, 139);
+		}
+		else if (state->eventCode == 1) {
+			return _exiDecodeStartElement(state, se, 5, 34, 140, 127);
+		}
+		else if (state->eventCode == 2) {
+			return _exiDecodeStartElement(state, se, 5, 32, 141, 129);
+		}
+		break;
+	case 138:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
+		if (state->eventCode == 0) {
+			return _exiDecodeStartElement(state, se, 5, 34, 140, 127);
+		}
+		else if (state->eventCode == 1) {
+			return _exiDecodeStartElement(state, se, 5, 32, 141, 129);
 		}
 		break;
 	case 140:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntries)] */
-			se->localPart = 42; /* "TariffEntries" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 142;
-			/* push element on stack */
-			return exiPushStack(state, 143, se);
-		break;
-	case 143:
-		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntry)] */
-			se->localPart = 44; /* "TariffEntry" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 145;
-			/* push element on stack */
-			return exiPushStack(state, 146, se);
-		break;
-	case 145:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffEntry), END_ELEMENT] */
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 44; /* "TariffEntry" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 145;
-			/* push element on stack */
-			return exiPushStack(state, 146, se);
+			return _exiDecodeStartElement(state, se, 5, 32, 141, 129);
 		}
 		break;
-	case 146:
-		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffStart)] */
-			se->localPart = 48; /* "TariffStart" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 147;
-			/* push element on stack */
-			return exiPushStack(state, 148, se);
+	case 142:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVPubKey)] */
+		return _exiDecodeStartElement(state, se, 4, 31, 143, 57);
+		break;
+	case 144:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringAuthPubKey), END_ELEMENT] */
+		if (state->eventCode == 0) {
+			return _exiDecodeStartElement(state, se, 4, 16, 146, 57);
+		}
 		break;
 	case 147:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}TariffPMax)] */
-			se->localPart = 47; /* "TariffPMax" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 149;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
+		return _exiDecodeStartElement(state, se, 4, 32, 148, 25);
 		break;
 	case 149:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EPrice), END_ELEMENT] */
-		if (state->eventCode == 0) {
-			se->localPart = 6; /* "EPrice" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 150;
-			/* push element on stack */
-			return exiPushStack(state, 67, se);
-		}
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEID)] */
+		return _exiDecodeStartElement(state, se, 4, 3, 151, 74);
+		break;
+	case 151:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */
+		return _exiDecodeStartElement(state, se, 4, 7, 152, 35);
 		break;
 	case 152:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceScope), END_ELEMENT] */
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent)] */
+		return _exiDecodeStartElement(state, se, 4, 63, 153, 45);
+		break;
+	case 154:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Body)] */
+		return _exiDecodeStartElement(state, se, 6, 0, 156, 157);
+		break;
+	case 155:
+		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}SessionInformation)] */
+		return _exiDecodeStartElement(state, se, 6, 7, 158, 159);
+		break;
+	case 157:
+		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}BodyElement), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupRes), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 57; /* "ServiceScope" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 154;
-			/* push element on stack */
-			return exiPushStack(state, 155, se);
+			return _exiDecodeStartElement(state, se, 6, 2, 175, 3);
+		}
+		else if (state->eventCode == 1) {
+			return _exiDecodeStartElement(state, se, 4, 11, 175, 5);
+		}
+		else if (state->eventCode == 2) {
+			return _exiDecodeStartElement(state, se, 4, 13, 175, 6);
+		}
+		else if (state->eventCode == 3) {
+			return _exiDecodeStartElement(state, se, 4, 17, 175, 7);
+		}
+		else if (state->eventCode == 4) {
+			return _exiDecodeStartElement(state, se, 4, 19, 175, 8);
+		}
+		else if (state->eventCode == 5) {
+			return _exiDecodeStartElement(state, se, 4, 21, 175, 9);
+		}
+		else if (state->eventCode == 6) {
+			return _exiDecodeStartElement(state, se, 4, 23, 175, 10);
+		}
+		else if (state->eventCode == 7) {
+			return _exiDecodeStartElement(state, se, 4, 33, 175, 11);
+		}
+		else if (state->eventCode == 8) {
+			return _exiDecodeStartElement(state, se, 4, 35, 175, 12);
+		}
+		else if (state->eventCode == 9) {
+			return _exiDecodeStartElement(state, se, 4, 37, 175, 13);
+		}
+		else if (state->eventCode == 10) {
+			return _exiDecodeStartElement(state, se, 4, 39, 175, 14);
+		}
+		else if (state->eventCode == 11) {
+			return _exiDecodeStartElement(state, se, 4, 41, 175, 15);
+		}
+		else if (state->eventCode == 12) {
+			return _exiDecodeStartElement(state, se, 4, 43, 175, 16);
+		}
+		else if (state->eventCode == 13) {
+			return _exiDecodeStartElement(state, se, 4, 48, 175, 17);
+		}
+		else if (state->eventCode == 14) {
+			return _exiDecodeStartElement(state, se, 4, 50, 175, 18);
+		}
+		else if (state->eventCode == 15) {
+			return _exiDecodeStartElement(state, se, 4, 53, 175, 19);
+		}
+		else if (state->eventCode == 16) {
+			return _exiDecodeStartElement(state, se, 4, 55, 175, 20);
+		}
+		else if (state->eventCode == 17) {
+			return _exiDecodeStartElement(state, se, 4, 59, 175, 21);
+		}
+		else if (state->eventCode == 18) {
+			return _exiDecodeStartElement(state, se, 4, 61, 175, 22);
 		}
 		break;
 	case 158:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceList), END_ELEMENT] */
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Notification), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 52; /* "ServiceList" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 160;
-			/* push element on stack */
-			return exiPushStack(state, 161, se);
+			return _exiDecodeStartElement(state, se, 6, 6, 160, 161);
 		}
 		break;
-	case 161:
-		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Service)] */
-			se->localPart = 27; /* "Service" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 163;
-			/* push element on stack */
-			return exiPushStack(state, 164, se);
+	case 159:
+		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}SessionID)] */
+		return _exiDecodeStartElement(state, se, 5, 35, 162, 163);
 		break;
-	case 163:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Service), END_ELEMENT] */
+	case 161:
+		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultCode), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 27; /* "Service" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 163;
-			/* push element on stack */
-			return exiPushStack(state, 164, se);
+			return _exiDecodeStartElement(state, se, 5, 13, 167, 168);
+		}
+		else if (state->eventCode == 1) {
+			return _exiDecodeStartElement(state, se, 5, 14, 169, 170);
+		}
+		else if (state->eventCode == 2) {
+			return _exiDecodeStartElement(state, se, 5, 10, 171, 172);
+		}
+		break;
+	case 162:
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceSessionID), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion), END_ELEMENT] */
+		if (state->eventCode == 0) {
+			return _exiDecodeStartElement(state, se, 5, 33, 164, 163);
+		}
+		else if (state->eventCode == 1) {
+			return _exiDecodeStartElement(state, se, 5, 25, 165, 166);
 		}
 		break;
 	case 164:
-		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceID)] */
-			se->localPart = 29; /* "ServiceID" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 165;
-			/* push element on stack */
-			return exiPushStack(state, 166, se);
-		break;
-	case 165:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceName), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 31; /* "ServiceName" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 167;
-			/* push element on stack */
-			return exiPushStack(state, 168, se);
-		}
-		else if (state->eventCode == 1) {
-			se->localPart = 34; /* "ServiceType" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 169;
-			/* push element on stack */
-			return exiPushStack(state, 153, se);
-		}
-		else if (state->eventCode == 2) {
-			se->localPart = 32; /* "ServiceScope" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 170;
-			/* push element on stack */
-			return exiPushStack(state, 155, se);
+			return _exiDecodeStartElement(state, se, 5, 25, 165, 166);
 		}
 		break;
 	case 167:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceType), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
+		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 34; /* "ServiceType" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 169;
-			/* push element on stack */
-			return exiPushStack(state, 153, se);
+			return _exiDecodeStartElement(state, se, 5, 14, 169, 170);
 		}
 		else if (state->eventCode == 1) {
-			se->localPart = 32; /* "ServiceScope" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 170;
-			/* push element on stack */
-			return exiPushStack(state, 155, se);
+			return _exiDecodeStartElement(state, se, 5, 10, 171, 172);
 		}
 		break;
 	case 169:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceScope), END_ELEMENT] */
-		if (state->eventCode == 0) {
-			se->localPart = 32; /* "ServiceScope" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 170;
-			/* push element on stack */
-			return exiPushStack(state, 155, se);
-		}
-		break;
-	case 173:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVPubKey)] */
-			se->localPart = 31; /* "PEVPubKey" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 174;
-			/* push element on stack */
-			return exiPushStack(state, 65, se);
-		break;
-	case 175:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringAuthPubKey), END_ELEMENT] */
-		if (state->eventCode == 0) {
-			se->localPart = 16; /* "MeteringAuthPubKey" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 177;
-			/* push element on stack */
-			return exiPushStack(state, 65, se);
-		}
-		break;
-	case 179:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PEVStatus)] */
-			se->localPart = 32; /* "PEVStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 180;
-			/* push element on stack */
-			return exiPushStack(state, 25, se);
-		break;
-	case 181:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEID)] */
-			se->localPart = 3; /* "EVSEID" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 183;
-			/* push element on stack */
-			return exiPushStack(state, 89, se);
-		break;
-	case 183:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}EVSEStatus)] */
-			se->localPart = 7; /* "EVSEStatus" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 184;
-			/* push element on stack */
-			return exiPushStack(state, 36, se);
-		break;
-	case 184:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}TCurrent)] */
-			se->localPart = 63; /* "TCurrent" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 185;
-			/* push element on stack */
-			return exiPushStack(state, 47, se);
-		break;
-	case 187:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Body)] */
-			se->localPart = 0; /* "Body" */
-			se->namespaceURI = 6; /* "urn:iso:15118:2:2010:MsgDef" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 189;
-			/* push element on stack */
-			return exiPushStack(state, 190, se);
-		break;
-	case 188:
-		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}SessionInformation)] */
-			se->localPart = 7; /* "SessionInformation" */
-			se->namespaceURI = 6; /* "urn:iso:15118:2:2010:MsgDef" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 191;
-			/* push element on stack */
-			return exiPushStack(state, 192, se);
-		break;
-	case 190:
-		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}BodyElement), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}LineLockRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringReceiptRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}MeteringStatusRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PaymentDetailsRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDeliveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}PowerDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServiceDiscoveryRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ServicePaymentSelectionRes), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupReq), START_ELEMENT({urn:iso:15118:2:2010:MsgBody}SessionSetupRes), END_ELEMENT] */
-		if (state->eventCode == 0) {
-			se->localPart = 2; /* "BodyElement" */
-			se->namespaceURI = 6; /* "urn:iso:15118:2:2010:MsgDef" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 3, se);
-		}
-		else if (state->eventCode == 1) {
-			se->localPart = 11; /* "LineLockReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 5, se);
-		}
-		else if (state->eventCode == 2) {
-			se->localPart = 13; /* "LineLockRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 6, se);
-		}
-		else if (state->eventCode == 3) {
-			se->localPart = 17; /* "MeteringReceiptReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 7, se);
-		}
-		else if (state->eventCode == 4) {
-			se->localPart = 19; /* "MeteringReceiptRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 8, se);
-		}
-		else if (state->eventCode == 5) {
-			se->localPart = 21; /* "MeteringStatusReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 9, se);
-		}
-		else if (state->eventCode == 6) {
-			se->localPart = 23; /* "MeteringStatusRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 10, se);
-		}
-		else if (state->eventCode == 7) {
-			se->localPart = 33; /* "PaymentDetailsReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 11, se);
-		}
-		else if (state->eventCode == 8) {
-			se->localPart = 35; /* "PaymentDetailsRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 12, se);
-		}
-		else if (state->eventCode == 9) {
-			se->localPart = 37; /* "PowerDeliveryReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 13, se);
-		}
-		else if (state->eventCode == 10) {
-			se->localPart = 39; /* "PowerDeliveryRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 14, se);
-		}
-		else if (state->eventCode == 11) {
-			se->localPart = 41; /* "PowerDiscoveryReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 15, se);
-		}
-		else if (state->eventCode == 12) {
-			se->localPart = 43; /* "PowerDiscoveryRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 16, se);
-		}
-		else if (state->eventCode == 13) {
-			se->localPart = 48; /* "ServiceDiscoveryReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 17, se);
-		}
-		else if (state->eventCode == 14) {
-			se->localPart = 50; /* "ServiceDiscoveryRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 18, se);
-		}
-		else if (state->eventCode == 15) {
-			se->localPart = 53; /* "ServicePaymentSelectionReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 19, se);
-		}
-		else if (state->eventCode == 16) {
-			se->localPart = 55; /* "ServicePaymentSelectionRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 20, se);
-		}
-		else if (state->eventCode == 17) {
-			se->localPart = 59; /* "SessionSetupReq" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 21, se);
-		}
-		else if (state->eventCode == 18) {
-			se->localPart = 61; /* "SessionSetupRes" */
-			se->namespaceURI = 4; /* "urn:iso:15118:2:2010:MsgBody" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 213;
-			/* push element on stack */
-			return exiPushStack(state, 22, se);
-		}
-		break;
-	case 191:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDef}Notification), END_ELEMENT] */
-		if (state->eventCode == 0) {
-			se->localPart = 6; /* "Notification" */
-			se->namespaceURI = 6; /* "urn:iso:15118:2:2010:MsgDef" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 193;
-			/* push element on stack */
-			return exiPushStack(state, 194, se);
-		}
-		break;
-	case 192:
-		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}SessionID)] */
-			se->localPart = 35; /* "SessionID" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 195;
-			/* push element on stack */
-			return exiPushStack(state, 196, se);
-		break;
-	case 194:
-		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultCode), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */
-		if (state->eventCode == 0) {
-			se->localPart = 13; /* "FaultCode" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 202;
-			/* push element on stack */
-			return exiPushStack(state, 203, se);
-		}
-		else if (state->eventCode == 1) {
-			se->localPart = 14; /* "FaultMsg" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 204;
-			/* push element on stack */
-			return exiPushStack(state, 205, se);
-		}
-		else if (state->eventCode == 2) {
-			se->localPart = 10; /* "EventList" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 206;
-			/* push element on stack */
-			return exiPushStack(state, 207, se);
-		}
-		break;
-	case 195:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ServiceSessionID), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion), END_ELEMENT] */
-		if (state->eventCode == 0) {
-			se->localPart = 33; /* "ServiceSessionID" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 197;
-			/* push element on stack */
-			return exiPushStack(state, 196, se);
-		}
-		else if (state->eventCode == 1) {
-			se->localPart = 25; /* "ProtocolVersion" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 198;
-			/* push element on stack */
-			return exiPushStack(state, 199, se);
-		}
-		break;
-	case 197:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}ProtocolVersion), END_ELEMENT] */
-		if (state->eventCode == 0) {
-			se->localPart = 25; /* "ProtocolVersion" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 198;
-			/* push element on stack */
-			return exiPushStack(state, 199, se);
-		}
-		break;
-	case 202:
-		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}FaultMsg), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */
-		if (state->eventCode == 0) {
-			se->localPart = 14; /* "FaultMsg" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 204;
-			/* push element on stack */
-			return exiPushStack(state, 205, se);
-		}
-		else if (state->eventCode == 1) {
-			se->localPart = 10; /* "EventList" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 206;
-			/* push element on stack */
-			return exiPushStack(state, 207, se);
-		}
-		break;
-	case 204:
 		/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EventList), END_ELEMENT] */
 		if (state->eventCode == 0) {
-			se->localPart = 10; /* "EventList" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 206;
-			/* push element on stack */
-			return exiPushStack(state, 207, se);
+			return _exiDecodeStartElement(state, se, 5, 10, 171, 172);
 		}
 		break;
-	case 207:
+	case 172:
 		/* FirstStartTagStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}Event)] */
-			se->localPart = 9; /* "Event" */
-			se->namespaceURI = 5; /* "urn:iso:15118:2:2010:MsgDataTypes" */
-			/* move on */
-			state->grammarStack[state->stackIndex] = 210;
-			/* push element on stack */
-			return exiPushStack(state, 211, se);
+		return _exiDecodeStartElement(state, se, 5, 9, 173, 174);
 		break;
 
 	default:
@@ -2263,282 +1386,152 @@ int exiDecodeCharacters(bitstream_t* stream, exi_state_t* state,
 		exi_value_t* val) {
 	uint8_t xsi;
 	switch (state->grammarStack[state->stackIndex]) {
+	case 64:
+		/* CHARACTERS[ENUMERATION] */
+		val->type = ENUMERATION;
+		decodeNBitUnsignedInteger(stream, 4, &val->enumeration);
+		/* move on */
+		state->grammarStack[state->stackIndex] = 31;
+		return 0;
 	case 27:
+		/* CHARACTERS[BOOLEAN] */
+	case 30:
+		/* CHARACTERS[BOOLEAN] */
+	case 37:
+		/* CHARACTERS[BOOLEAN] */
+	case 41:
+		/* CHARACTERS[BOOLEAN] */
+	case 43:
 		/* CHARACTERS[BOOLEAN] */
 		val->type = BOOLEAN;
 		decodeBoolean(stream, &val->boolean);
 		/* move on */
 		state->grammarStack[state->stackIndex] = 31;
 		return 0;
-	case 30:
-		/* CHARACTERS[BOOLEAN] */
-		val->type = BOOLEAN;
-		decodeBoolean(stream, &val->boolean);
+	case 47:
+		/* CHARACTERS[STRING] */
+	case 55:
+		/* CHARACTERS[STRING] */
+	case 81:
+		/* CHARACTERS[STRING] */
+	case 108:
+		/* CHARACTERS[STRING] */
+	case 112:
+		/* CHARACTERS[STRING] */
+	case 117:
+		/* CHARACTERS[STRING] */
+	case 129:
+		/* CHARACTERS[STRING] */
+	case 139:
+		/* CHARACTERS[STRING] */
+	case 166:
+		/* CHARACTERS[STRING] */
+		val->type = STRING;
+		decodeStringValue(stream, &val->string);
 		/* move on */
-		state->grammarStack[state->stackIndex] = 32;
+		state->grammarStack[state->stackIndex] = 31;
 		return 0;
-	case 34:
+	case 70:
+		/* CHARACTERS[ENUMERATION] */
+	case 72:
+		/* CHARACTERS[ENUMERATION] */
+	case 102:
 		/* CHARACTERS[ENUMERATION] */
 		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 2, &val->enumeration);
+		decodeNBitUnsignedInteger(stream, 1, &val->enumeration);
 		/* move on */
-		state->grammarStack[state->stackIndex] = 37;
-		return 0;
-	case 39:
-		/* CHARACTERS[BOOLEAN] */
-		val->type = BOOLEAN;
-		decodeBoolean(stream, &val->boolean);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 48;
-		return 0;
-	case 43:
-		/* CHARACTERS[BOOLEAN] */
-		val->type = BOOLEAN;
-		decodeBoolean(stream, &val->boolean);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 49;
+		state->grammarStack[state->stackIndex] = 31;
 		return 0;
 	case 45:
-		/* CHARACTERS[BOOLEAN] */
-		val->type = BOOLEAN;
-		decodeBoolean(stream, &val->boolean);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 50;
-		return 0;
-	case 47:
 		/* CHARACTERS[INTEGER_64] */
 		val->type = INTEGER_64;
 		decodeInteger64(stream, &val->int64);
 		/* move on */
-		state->grammarStack[state->stackIndex] = 51;
+		state->grammarStack[state->stackIndex] = 31;
 		return 0;
-	case 53:
-		/* CHARACTERS[STRING] */
-		val->type = STRING;
-		decodeStringValue(stream, &val->string);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 60;
-		return 0;
-	case 57:
+	case 33:
+		/* CHARACTERS[ENUMERATION] */
+	case 83:
+		/* CHARACTERS[ENUMERATION] */
+	case 127:
+		/* CHARACTERS[ENUMERATION] */
+	case 145:
+		/* CHARACTERS[ENUMERATION] */
+	case 168:
 		/* CHARACTERS[ENUMERATION] */
 		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 3, &val->enumeration);
+		decodeNBitUnsignedInteger(stream, 2, &val->enumeration);
 		/* move on */
-		state->grammarStack[state->stackIndex] = 61;
+		state->grammarStack[state->stackIndex] = 31;
 		return 0;
-	case 63:
-		/* CHARACTERS[STRING] */
-		val->type = STRING;
-		decodeStringValue(stream, &val->string);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 71;
-		return 0;
-	case 65:
+	case 57:
+		/* CHARACTERS[BINARY_HEX] */
+	case 74:
+		/* CHARACTERS[BINARY_HEX] */
+	case 137:
+		/* CHARACTERS[BINARY_HEX] */
+	case 163:
 		/* CHARACTERS[BINARY_HEX] */
 		val->type = BINARY_HEX;
 		decodeBinary(stream, &val->binary);
 		/* move on */
-		state->grammarStack[state->stackIndex] = 72;
+		state->grammarStack[state->stackIndex] = 31;
 		return 0;
-	case 74:
+	case 170:
+		/* CHARACTERS[STRING] */
+		/* xsi:type OR xsi:nil */
+		decodeNBitUnsignedInteger(stream, 1, &xsi);
+		val->type = STRING;
+		decodeStringValue(stream, &val->string);
+		/* move on */
+		state->grammarStack[state->stackIndex] = 31;
+		return 0;
+	case 51:
+		/* CHARACTERS[ENUMERATION] */
+	case 92:
+		/* CHARACTERS[ENUMERATION] */
+	case 131:
+		/* CHARACTERS[ENUMERATION] */
+	case 150:
+		/* CHARACTERS[ENUMERATION] */
+	case 174:
 		/* CHARACTERS[ENUMERATION] */
 		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 4, &val->enumeration);
+		decodeNBitUnsignedInteger(stream, 3, &val->enumeration);
 		/* move on */
-		state->grammarStack[state->stackIndex] = 79;
+		state->grammarStack[state->stackIndex] = 31;
 		return 0;
-	case 76:
+	case 68:
+		/* CHARACTERS[INTEGER_64] */
+		/* xsi:type OR xsi:nil */
+		decodeNBitUnsignedInteger(stream, 1, &xsi);
+		val->type = INTEGER_64;
+		decodeInteger64(stream, &val->int64);
+		/* move on */
+		state->grammarStack[state->stackIndex] = 31;
+		return 0;
+	case 61:
+		/* CHARACTERS[INTEGER_16] */
+	case 98:
+		/* CHARACTERS[INTEGER_16] */
+		val->type = INTEGER_16;
+		decodeInteger32(stream, &val->int32);
+		/* move on */
+		state->grammarStack[state->stackIndex] = 31;
+		return 0;
+	case 66:
 		/* CHARACTERS[ENUMERATION] */
 		val->type = ENUMERATION;
 		decodeNBitUnsignedInteger(stream, 5, &val->enumeration);
 		/* move on */
-		state->grammarStack[state->stackIndex] = 80;
-		return 0;
-	case 78:
-		/* CHARACTERS[INTEGER_64] */
-		/* xsi:type OR xsi:nil */
-		decodeNBitUnsignedInteger(stream, 1, &xsi);
-		val->type = INTEGER_64;
-		decodeInteger64(stream, &val->int64);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 81;
-		return 0;
-	case 69:
-		/* CHARACTERS[INTEGER_16] */
-		val->type = INTEGER_16;
-		decodeInteger32(stream, &val->int32);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 82;
-		return 0;
-	case 84:
-		/* CHARACTERS[ENUMERATION] */
-		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 1, &val->enumeration);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 85;
-		return 0;
-	case 87:
-		/* CHARACTERS[ENUMERATION] */
-		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 1, &val->enumeration);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 95;
-		return 0;
-	case 89:
-		/* CHARACTERS[BINARY_HEX] */
-		val->type = BINARY_HEX;
-		decodeBinary(stream, &val->binary);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 96;
-		return 0;
-	case 98:
-		/* CHARACTERS[STRING] */
-		val->type = STRING;
-		decodeStringValue(stream, &val->string);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 99;
-		return 0;
-	case 101:
-		/* CHARACTERS[ENUMERATION] */
-		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 2, &val->enumeration);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 102;
-		return 0;
-	case 111:
-		/* CHARACTERS[ENUMERATION] */
-		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 3, &val->enumeration);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 112;
-		return 0;
-	case 118:
-		/* CHARACTERS[INTEGER_16] */
-		val->type = INTEGER_16;
-		decodeInteger32(stream, &val->int32);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 121;
+		state->grammarStack[state->stackIndex] = 31;
 		return 0;
 	case 123:
-		/* CHARACTERS[ENUMERATION] */
-		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 1, &val->enumeration);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 132;
-		return 0;
-	case 129:
-		/* CHARACTERS[STRING] */
-		val->type = STRING;
-		decodeStringValue(stream, &val->string);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 133;
-		return 0;
-	case 135:
-		/* CHARACTERS[STRING] */
-		val->type = STRING;
-		decodeStringValue(stream, &val->string);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 138;
-		return 0;
-	case 141:
-		/* CHARACTERS[STRING] */
-		val->type = STRING;
-		decodeStringValue(stream, &val->string);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 144;
-		return 0;
-	case 148:
 		/* CHARACTERS[UNSIGNED_INTEGER_32] */
 		val->type = UNSIGNED_INTEGER_32;
 		decodeUnsignedInteger32(stream, &val->uint32);
 		/* move on */
-		state->grammarStack[state->stackIndex] = 151;
-		return 0;
-	case 153:
-		/* CHARACTERS[ENUMERATION] */
-		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 2, &val->enumeration);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 156;
-		return 0;
-	case 155:
-		/* CHARACTERS[STRING] */
-		val->type = STRING;
-		decodeStringValue(stream, &val->string);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 157;
-		return 0;
-	case 159:
-		/* CHARACTERS[ENUMERATION] */
-		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 3, &val->enumeration);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 162;
-		return 0;
-	case 166:
-		/* CHARACTERS[BINARY_HEX] */
-		val->type = BINARY_HEX;
-		decodeBinary(stream, &val->binary);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 171;
-		return 0;
-	case 168:
-		/* CHARACTERS[STRING] */
-		val->type = STRING;
-		decodeStringValue(stream, &val->string);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 172;
-		return 0;
-	case 176:
-		/* CHARACTERS[ENUMERATION] */
-		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 2, &val->enumeration);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 178;
-		return 0;
-	case 182:
-		/* CHARACTERS[ENUMERATION] */
-		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 3, &val->enumeration);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 186;
-		return 0;
-	case 196:
-		/* CHARACTERS[BINARY_HEX] */
-		val->type = BINARY_HEX;
-		decodeBinary(stream, &val->binary);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 200;
-		return 0;
-	case 199:
-		/* CHARACTERS[STRING] */
-		val->type = STRING;
-		decodeStringValue(stream, &val->string);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 201;
-		return 0;
-	case 203:
-		/* CHARACTERS[ENUMERATION] */
-		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 2, &val->enumeration);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 208;
-		return 0;
-	case 205:
-		/* CHARACTERS[STRING] */
-		/* xsi:type OR xsi:nil */
-		decodeNBitUnsignedInteger(stream, 1, &xsi);
-		val->type = STRING;
-		decodeStringValue(stream, &val->string);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 209;
-		return 0;
-	case 211:
-		/* CHARACTERS[ENUMERATION] */
-		val->type = ENUMERATION;
-		decodeNBitUnsignedInteger(stream, 3, &val->enumeration);
-		/* move on */
-		state->grammarStack[state->stackIndex] = 212;
+		state->grammarStack[state->stackIndex] = 31;
 		return 0;
 
 	default:
