@@ -33,13 +33,12 @@
 
 #include "EXITypes.h"
 
-#ifndef BIT_STREAM_C
-#define BIT_STREAM_C
+#ifndef BYTE_STREAM_C
+#define BYTE_STREAM_C
 
-int toBitstream(const char * filename, bitstream_t* bitstream) {
+int readBytesFromFile(const char * filename, uint8_t* data, size_t size, size_t pos) {
 	FILE* f;
 	int character;
-	size_t len = 0, pos = 0, i;
 
 	f = fopen(filename, "rb");
 
@@ -47,32 +46,18 @@ int toBitstream(const char * filename, bitstream_t* bitstream) {
 		printf("\n[Error] no valid file handle !\n");
 		return -1;
 	} else {
-		/* detect file size */
+		/* read bytes */
 		while ((character = getc(f)) != EOF) {
+			if (pos >= size) {
+				return -1;
+			}
+			data[pos++] = (uint8_t) character;
 			/* printf("%u \n", character); */
-			len++;
-		}
-		fclose(f);
-		/* printf("%u Zeichen", len); */
-
-		/* setup stream */
-		bitstream->data = malloc(sizeof(uint8_t) * len);
-		bitstream->size = len;
-		bitstream->pos = &pos;
-		bitstream->buffer = 0;
-		bitstream->capacity = 8;
-
-		/* read file byte per byte */
-		f = fopen(filename, "rb");
-		i = 0;
-		while ((character = getc(f)) != EOF) {
-			bitstream->data[i] = (uint8_t) character;
-			i++;
 		}
 		fclose(f);
 	}
 
-	return 0;
+	return pos;
 }
 
 int writeBytesToFile(uint8_t* data, size_t len, const char * filename) {
@@ -92,11 +77,6 @@ int writeBytesToFile(uint8_t* data, size_t len, const char * filename) {
 		}
 	}
 }
-
-int writeBitstreamToFile(bitstream_t* bitsream, const char * filename) {
-	return writeBytesToFile(bitsream->data, bitsream->size, filename);
-}
-
 
 
 #endif
