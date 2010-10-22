@@ -31,14 +31,12 @@ extern "C" {
 
 #include "EXITypes.h"
 
-#ifndef BIT_STREAM_H
-#define BIT_STREAM_H
+#ifndef BYTE_STREAM_H
+#define BYTE_STREAM_H
 
 int writeBytesToFile(uint8_t* data, size_t len, const char * filename);
 
-int writeBitstreamToFile(bitstream_t* bitsream, const char * filename);
-
-int toBitstream(const char * filename, bitstream_t* bitstream);
+int readBytesFromFile(const char * filename, uint8_t* data, size_t size, size_t pos);
 
 #endif
 
