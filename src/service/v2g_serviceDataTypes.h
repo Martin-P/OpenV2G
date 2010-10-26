@@ -240,9 +240,8 @@ struct SessionInformationType_ServiceSessionID
 
 struct selection_SessionInformationType
 {
-	int ServiceSessionID:1;
-	int ProtocolVersion:1;
-
+	unsigned int ServiceSessionID:1;
+	unsigned int ProtocolVersion:1;
 
 };
 
@@ -271,10 +270,9 @@ struct SessionInformationType
 
 struct selection_NotificationType
 {
-	int FaultCode:1;
-	int FaultMsg:1;
-	int EventList:1;
-
+	unsigned int FaultCode:1;
+	unsigned int FaultMsg:1;
+	unsigned int EventList:1;
 
 };
 
@@ -310,7 +308,7 @@ struct NotificationType
 
 struct selection_HeaderType
 {
-	int Notification:1;
+	unsigned int Notification:1;
 
 
 };
@@ -339,7 +337,7 @@ struct SessionSetupReqType_PEVID
 
 struct selection_SessionSetupReqType
 {
-	int PEVID:1;
+	unsigned int PEVID:1;
 
 
 };
@@ -362,25 +360,24 @@ struct SessionSetupReqType
 
 struct selection_BodyType
 {
-	int SessionSetupReq:1;
-	int SessionSetupRes:1;
-	int ServiceDiscoveryReq:1;
-	int ServiceDiscoveryRes:1;
-	int ServicePaymentSelectionReq:1;
-	int ServicePaymentSelectionRes:1;
-	int PaymentDetailsReq:1;
-	int PaymentDetailsRes:1;
-	int PowerDiscoveryReq:1;
-	int PowerDiscoveryRes:1;
-	int LineLockReq:1;
-	int LineLockRes:1;
-	int PowerDeliveryReq:1;
-	int PowerDeliveryRes:1;
-	int MeteringStatusReq:1;
-	int MeteringStatusRes:1;
-	int MeteringReceiptReq:1;
-	int MeteringReceiptRes:1;
-
+	unsigned int SessionSetupReq:1;
+	unsigned int SessionSetupRes:1;
+	unsigned int ServiceDiscoveryReq:1;
+	unsigned int ServiceDiscoveryRes:1;
+	unsigned int ServicePaymentSelectionReq:1;
+	unsigned int ServicePaymentSelectionRes:1;
+	unsigned int PaymentDetailsReq:1;
+	unsigned int PaymentDetailsRes:1;
+	unsigned int PowerDiscoveryReq:1;
+	unsigned int PowerDiscoveryRes:1;
+	unsigned int LineLockReq:1;
+	unsigned int LineLockRes:1;
+	unsigned int PowerDeliveryReq:1;
+	unsigned int PowerDeliveryRes:1;
+	unsigned int MeteringStatusReq:1;
+	unsigned int MeteringStatusRes:1;
+	unsigned int MeteringReceiptReq:1;
+	unsigned int MeteringReceiptRes:1;
 
 };
 
@@ -422,8 +419,8 @@ struct SessionSetupResType
 
 struct selection_ServiceDiscoveryReqType
 {
-	int ServiceType:1;
-	int ServiceScope:1;
+	unsigned int ServiceType:1;
+	unsigned int ServiceScope:1;
 
 
 };
@@ -480,9 +477,9 @@ struct ServiceDescriptionType_ServiceName
 
 struct selection_ServiceDescriptionType
 {
-	int ServiceName:1;
-	int ServiceType:1;
-	int ServiceScope:1;
+	unsigned int ServiceName:1;
+	unsigned int ServiceType:1;
+	unsigned int ServiceScope:1;
 
 
 };
@@ -527,7 +524,7 @@ struct ServiceListType
 
 struct selection_ServiceDiscoveryResType
 {
-	int ServiceList:1;
+	unsigned int ServiceList:1;
 
 
 };
@@ -578,7 +575,7 @@ struct ServicePaymentSelectionResType_MeteringAuthPubKey
 
 struct selection_ServicePaymentSelectionResType
 {
-	int MeteringAuthPubKey:1;
+	unsigned int MeteringAuthPubKey:1;
 
 
 };
@@ -657,9 +654,8 @@ struct PowerDiscoveryResType_EnergyProvider
 
 struct selection_PowerDiscoveryResType
 {
-	int EnergyProvider:1;
-	int TariffTable:1;
-
+	unsigned int EnergyProvider:1;
+	unsigned int TariffTable:1;
 
 };
 
@@ -693,14 +689,13 @@ struct TariffDescrType_TariffDescription
 
 struct selection_TariffDescrType
 {
-	int TariffDescription:1;
-
+	unsigned int TariffDescription:1;
 
 };
 
 struct selection_TariffEntryType
 {
-	int EPrice:1;
+	unsigned int EPrice:1;
 
 
 };
@@ -783,8 +778,8 @@ struct LineLockResType
 
 struct selection_PowerDeliveryReqType
 {
-	int Tariff:1;
-	int ChargingProfile:1;
+	unsigned int Tariff:1;
+	unsigned int ChargingProfile:1;
 
 
 };
@@ -838,8 +833,8 @@ struct MeteringStatusResType_EVSEID
 
 struct selection_MeteringStatusResType
 {
-	int PCurrent:1;
-	int MeterInfo:1;
+    unsigned int PCurrent:1;
+    unsigned int MeterInfo:1;
 
 
 };
@@ -860,11 +855,11 @@ struct MeterInfoType_MeterID
 
 struct selection_MeterInfoType
 {
-	int MeterID:1;
-	int MeterPubKey:1;
-	int MeterReading:1;
-	int MeterStatus:1;
-	int TMeter:1;
+	unsigned int MeterID:1;
+	unsigned int MeterPubKey:1;
+	unsigned int MeterReading:1;
+	unsigned int MeterStatus:1;
+	unsigned int TMeter:1;
 
 
 };
@@ -923,8 +918,8 @@ struct MeteringReceiptReqType_PEVID
 
 struct selection_MeteringReceiptReqType
 {
-	int PEVID:1;
-	int TCurrent:1;
+	unsigned int PEVID:1;
+	unsigned int TCurrent:1;
 
 
 };
