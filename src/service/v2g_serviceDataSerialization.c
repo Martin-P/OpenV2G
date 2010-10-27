@@ -19,7 +19,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -38,12 +38,13 @@
 
 static int serialize_SessionInformationType(struct SessionInformationType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of SessionID*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=35;	
+			service->eqn.localPart=34;	
 			/* encode start element SessionID */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -53,7 +54,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 		memcpy(service->val.binary.data, type->SessionID.data, service->val.binary.len);
 		
 		/* encode character  SessionID */	
-		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 		{
 				 
 				return -1;
@@ -66,7 +67,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 			 
 			
 			/* encode end element of SessionID */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -76,9 +77,9 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 			
 			/* element ID assignment of ServiceSessionID*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=33;	
+			service->eqn.localPart=32;	
 			/* encode start element ServiceSessionID */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -88,7 +89,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 		memcpy(service->val.binary.data, type->ServiceSessionID.data, service->val.binary.len);
 		
 		/* encode character  ServiceSessionID */	
-		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 		{
 				 
 				return -1;
@@ -101,7 +102,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 			 
 			
 			/* encode end element of ServiceSessionID */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -112,9 +113,9 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 			
 			/* element ID assignment of ProtocolVersion*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=25;	
+			service->eqn.localPart=24;	
 			/* encode start element ProtocolVersion */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -125,7 +126,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 			memcpy(service->val.string.codepoints, type->ProtocolVersion.data, service->val.string.len);
 		
 			/* encode character  ProtocolVersion */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -137,7 +138,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 			 
 			
 			/* encode end element of ProtocolVersion */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -148,24 +149,25 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 }
 
 
-static int serialize_EventListType(struct v2gService* service)
+static int serialize_EventListType(struct EventListType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of Event*/
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=9;	
 			/* encode start element Event */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Header.Notification.EventList.Event;
+			service->val.enumeration=type->Event;
 			
 			/* encode character  Event */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -176,7 +178,7 @@ static int serialize_EventListType(struct v2gService* service)
 			 
 			
 			/* encode end element of Event */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -187,7 +189,8 @@ static int serialize_EventListType(struct v2gService* service)
 
 
 static int serialize_NotificationType(struct NotificationType* type, struct v2gService* service)
-{if(type->isused.FaultCode)
+{
+if(type->isused.FaultCode)
 		{		
 				
 			
@@ -195,17 +198,17 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=13;	
 			/* encode start element FaultCode */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Header.Notification.FaultCode;
+			service->val.enumeration=type->FaultCode;
 			
 			/* encode character  FaultCode */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -216,7 +219,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 			 
 			
 			/* encode end element of FaultCode */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -229,7 +232,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=14;	
 			/* encode start element FaultMsg */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -240,7 +243,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 			memcpy(service->val.string.codepoints, type->FaultMsg.data, service->val.string.len);
 		
 			/* encode character  FaultMsg */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -252,7 +255,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 			 
 			
 			/* encode end element of FaultMsg */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -265,14 +268,14 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=10;	
 			/* encode start element EventList */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of EventList */
-			if(serialize_EventListType(service)<0)
+			if(serialize_EventListType( &(type->EventList),service))
 			{
 				return -1;
 			}
@@ -283,7 +286,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 			 
 			
 			/* encode end element of EventList */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -296,19 +299,20 @@ static int serialize_NotificationType(struct NotificationType* type, struct v2gS
 
 static int serialize_HeaderType(struct HeaderType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of SessionInformation*/
 			service->eqn.namespaceURI=6;			
 			service->eqn.localPart=7;	
 			/* encode start element SessionInformation */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of SessionInformation */
-			if(serialize_SessionInformationType( &(type->SessionInformation),service)<0)
+			if(serialize_SessionInformationType( &(type->SessionInformation),service))
 			{
 				return -1;
 			}
@@ -319,7 +323,7 @@ static int serialize_HeaderType(struct HeaderType* type, struct v2gService* serv
 			 
 			
 			/* encode end element of SessionInformation */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -331,14 +335,14 @@ static int serialize_HeaderType(struct HeaderType* type, struct v2gService* serv
 			service->eqn.namespaceURI=6;			
 			service->eqn.localPart=6;	
 			/* encode start element Notification */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of Notification */
-			if(serialize_NotificationType( &(type->Notification),service)<0)
+			if(serialize_NotificationType( &(type->Notification),service))
 			{
 				return -1;
 			}
@@ -349,7 +353,7 @@ static int serialize_HeaderType(struct HeaderType* type, struct v2gService* serv
 			 
 			
 			/* encode end element of Notification */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -360,24 +364,25 @@ static int serialize_HeaderType(struct HeaderType* type, struct v2gService* serv
 }
 
 
-static int serialize_PEVStatusType(struct v2gService* service)
+static int serialize_PEVStatusType(struct PEVStatusType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ConnectorLocked*/
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=4;	
 			/* encode start element ConnectorLocked */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = BOOLEAN;
-			service->val.boolean=service->v2gMsg.Body.SessionSetupReq.PEVStatus.ConnectorLocked;
+			service->val.boolean=type->ConnectorLocked;
 			
 			/* encode character  ConnectorLocked */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -388,7 +393,7 @@ static int serialize_PEVStatusType(struct v2gService* service)
 			 
 			
 			/* encode end element of ConnectorLocked */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -398,17 +403,17 @@ static int serialize_PEVStatusType(struct v2gService* service)
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=0;	
 			/* encode start element ChargerStandby */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = BOOLEAN;
-			service->val.boolean=service->v2gMsg.Body.SessionSetupReq.PEVStatus.ChargerStandby;
+			service->val.boolean=type->ChargerStandby;
 			
 			/* encode character  ChargerStandby */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -419,7 +424,7 @@ static int serialize_PEVStatusType(struct v2gService* service)
 			 
 			
 			/* encode end element of ChargerStandby */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -430,7 +435,8 @@ static int serialize_PEVStatusType(struct v2gService* service)
 
 
 static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struct v2gService* service)
-{if(type->isused.PEVID)
+{
+if(type->isused.PEVID)
 		{		
 				
 			
@@ -438,7 +444,7 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=26;	
 			/* encode start element PEVID */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -449,7 +455,7 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 			memcpy(service->val.string.codepoints, type->PEVID.data, service->val.string.len);
 		
 			/* encode character  PEVID */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -461,7 +467,7 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 			 
 			
 			/* encode end element of PEVID */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -472,14 +478,14 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=32;	
 			/* encode start element PEVStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PEVStatus */
-			if(serialize_PEVStatusType(service)<0)
+			if(serialize_PEVStatusType( &(type->PEVStatus),service))
 			{
 				return -1;
 			}
@@ -490,7 +496,7 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 			 
 			
 			/* encode end element of PEVStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -500,24 +506,25 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 }
 
 
-static int serialize_EVSEStatusType(struct v2gService* service)
+static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of FatalError*/
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=12;	
 			/* encode start element FatalError */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = BOOLEAN;
-			service->val.boolean=service->v2gMsg.Body.SessionSetupRes.EVSEStatus.FatalError;
+			service->val.boolean=type->FatalError;
 			
 			/* encode character  FatalError */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -528,7 +535,7 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 			 
 			
 			/* encode end element of FatalError */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -538,17 +545,17 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=7;	
 			/* encode start element EVSEStandby */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = BOOLEAN;
-			service->val.boolean=service->v2gMsg.Body.SessionSetupRes.EVSEStatus.EVSEStandby;
+			service->val.boolean=type->EVSEStandby;
 			
 			/* encode character  EVSEStandby */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -559,7 +566,7 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 			 
 			
 			/* encode end element of EVSEStandby */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -569,17 +576,17 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=4;	
 			/* encode start element ConnectorLocked */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = BOOLEAN;
-			service->val.boolean=service->v2gMsg.Body.SessionSetupRes.EVSEStatus.ConnectorLocked;
+			service->val.boolean=type->ConnectorLocked;
 			
 			/* encode character  ConnectorLocked */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -590,7 +597,7 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 			 
 			
 			/* encode end element of ConnectorLocked */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -598,19 +605,19 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 			
 			/* element ID assignment of PowerSwitchClosed*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=24;	
+			service->eqn.localPart=23;	
 			/* encode start element PowerSwitchClosed */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = BOOLEAN;
-			service->val.boolean=service->v2gMsg.Body.SessionSetupRes.EVSEStatus.PowerSwitchClosed;
+			service->val.boolean=type->PowerSwitchClosed;
 			
 			/* encode character  PowerSwitchClosed */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -621,7 +628,7 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 			 
 			
 			/* encode end element of PowerSwitchClosed */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -629,19 +636,19 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 			
 			/* element ID assignment of RCD*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=26;	
+			service->eqn.localPart=25;	
 			/* encode start element RCD */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = BOOLEAN;
-			service->val.boolean=service->v2gMsg.Body.SessionSetupRes.EVSEStatus.RCD;
+			service->val.boolean=type->RCD;
 			
 			/* encode character  RCD */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -652,7 +659,7 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 			 
 			
 			/* encode end element of RCD */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -660,19 +667,19 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 			
 			/* element ID assignment of ShutDownTime*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=37;	
+			service->eqn.localPart=36;	
 			/* encode start element ShutDownTime */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
-			service->val.type = INTEGER_64;
-			service->val.int64=service->v2gMsg.Body.SessionSetupRes.EVSEStatus.ShutDownTime;
+			service->val.type = INTEGER_32;
+			service->val.int32=type->ShutDownTime;
 			
 			/* encode character  ShutDownTime */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -683,7 +690,7 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 			 
 			
 			/* encode end element of ShutDownTime */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -695,22 +702,23 @@ static int serialize_EVSEStatusType(struct v2gService* service)
 
 static int serialize_SessionSetupResType(struct SessionSetupResType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=47;	
 			/* encode start element ResponseCode */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.SessionSetupRes.ResponseCode;
+			service->val.enumeration=type->ResponseCode;
 			
 			/* encode character  ResponseCode */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -721,7 +729,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			 
 			
 			/* encode end element of ResponseCode */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -731,7 +739,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=3;	
 			/* encode start element EVSEID */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -741,7 +749,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 		memcpy(service->val.binary.data, type->EVSEID.data, service->val.binary.len);
 		
 		/* encode character  EVSEID */	
-		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 		{
 				 
 				return -1;
@@ -754,7 +762,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			 
 			
 			/* encode end element of EVSEID */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -764,14 +772,14 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=7;	
 			/* encode start element EVSEStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of EVSEStatus */
-			if(serialize_EVSEStatusType(service)<0)
+			if(serialize_EVSEStatusType( &(type->EVSEStatus),service))
 			{
 				return -1;
 			}
@@ -782,7 +790,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			 
 			
 			/* encode end element of EVSEStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -792,17 +800,17 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=63;	
 			/* encode start element TCurrent */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
-			service->val.type = INTEGER_64;
-			service->val.int64=service->v2gMsg.Body.SessionSetupRes.TCurrent;
+			service->val.type = INTEGER_32;
+			service->val.int32=type->TCurrent;
 			
 			/* encode character  TCurrent */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -813,7 +821,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			 
 			
 			/* encode end element of TCurrent */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -824,7 +832,8 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 
 
 static int serialize_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* type, struct v2gService* service)
-{if(type->isused.ServiceType)
+{
+if(type->isused.ServiceType)
 		{		
 				
 			
@@ -832,17 +841,17 @@ static int serialize_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* typ
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=58;	
 			/* encode start element ServiceType */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.ServiceDiscoveryReq.ServiceType;
+			service->val.enumeration=type->ServiceType;
 			
 			/* encode character  ServiceType */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -853,7 +862,7 @@ static int serialize_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* typ
 			 
 			
 			/* encode end element of ServiceType */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -866,7 +875,7 @@ static int serialize_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* typ
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=57;	
 			/* encode start element ServiceScope */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -877,7 +886,7 @@ static int serialize_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* typ
 			memcpy(service->val.string.codepoints, type->ServiceScope.data, service->val.string.len);
 		
 			/* encode character  ServiceScope */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -889,7 +898,7 @@ static int serialize_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* typ
 			 
 			
 			/* encode end element of ServiceScope */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -902,12 +911,13 @@ static int serialize_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* typ
 
 static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ServiceID*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=29;	
+			service->eqn.localPart=28;	
 			/* encode start element ServiceID */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -917,7 +927,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 		memcpy(service->val.binary.data, type->ServiceID.data, service->val.binary.len);
 		
 		/* encode character  ServiceID */	
-		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 		{
 				 
 				return -1;
@@ -930,7 +940,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			 
 			
 			/* encode end element of ServiceID */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -940,9 +950,9 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			
 			/* element ID assignment of ServiceName*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=31;	
+			service->eqn.localPart=30;	
 			/* encode start element ServiceName */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -953,7 +963,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			memcpy(service->val.string.codepoints, type->ServiceName.data, service->val.string.len);
 		
 			/* encode character  ServiceName */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -965,7 +975,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			 
 			
 			/* encode end element of ServiceName */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -976,19 +986,19 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			
 			/* element ID assignment of ServiceType*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=34;	
+			service->eqn.localPart=33;	
 			/* encode start element ServiceType */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].ServiceType;
+			service->val.enumeration=type->ServiceType;
 			
 			/* encode character  ServiceType */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -999,7 +1009,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			 
 			
 			/* encode end element of ServiceType */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1010,9 +1020,9 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			
 			/* element ID assignment of ServiceScope*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=32;	
+			service->eqn.localPart=31;	
 			/* encode start element ServiceScope */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1023,7 +1033,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			memcpy(service->val.string.codepoints, type->ServiceScope.data, service->val.string.len);
 		
 			/* encode character  ServiceScope */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -1035,7 +1045,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 			 
 			
 			/* encode end element of ServiceScope */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1048,14 +1058,15 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 
 static int serialize_ServiceListType(struct ServiceListType* type, struct v2gService* service)
 {
+
 			size_t i_loop;
 	
 			
 			/* element ID assignment of Service*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=27;	
+			service->eqn.localPart=26;	
 			/* encode start element Service */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1064,7 +1075,7 @@ static int serialize_ServiceListType(struct ServiceListType* type, struct v2gSer
 			for(i_loop=0;i_loop < type->arraylen.Service;i_loop++)
 			{
 				/* encode children of Service */
-				if(serialize_ServiceDescriptionType(&(type->Service[i_loop]),service)<0)
+				if(serialize_ServiceDescriptionType(&(type->Service[i_loop]),service))
 				{
 					return -1;
 				}
@@ -1077,7 +1088,7 @@ static int serialize_ServiceListType(struct ServiceListType* type, struct v2gSer
 			 
 			
 			/* encode end element of Service */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1089,22 +1100,23 @@ static int serialize_ServiceListType(struct ServiceListType* type, struct v2gSer
 
 static int serialize_ServiceDiscoveryResType(struct ServiceDiscoveryResType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=47;	
 			/* encode start element ResponseCode */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.ServiceDiscoveryRes.ResponseCode;
+			service->val.enumeration=type->ResponseCode;
 			
 			/* encode character  ResponseCode */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -1115,7 +1127,7 @@ static int serialize_ServiceDiscoveryResType(struct ServiceDiscoveryResType* typ
 			 
 			
 			/* encode end element of ResponseCode */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1127,14 +1139,14 @@ static int serialize_ServiceDiscoveryResType(struct ServiceDiscoveryResType* typ
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=52;	
 			/* encode start element ServiceList */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of ServiceList */
-			if(serialize_ServiceListType( &(type->ServiceList),service)<0)
+			if(serialize_ServiceListType( &(type->ServiceList),service))
 			{
 				return -1;
 			}
@@ -1145,7 +1157,7 @@ static int serialize_ServiceDiscoveryResType(struct ServiceDiscoveryResType* typ
 			 
 			
 			/* encode end element of ServiceList */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1158,19 +1170,20 @@ static int serialize_ServiceDiscoveryResType(struct ServiceDiscoveryResType* typ
 
 static int serialize_ServicePaymentSelectionReqType(struct ServicePaymentSelectionReqType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ServiceList*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=52;	
 			/* encode start element ServiceList */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of ServiceList */
-			if(serialize_ServiceListType( &(type->ServiceList),service)<0)
+			if(serialize_ServiceListType( &(type->ServiceList),service))
 			{
 				return -1;
 			}
@@ -1181,7 +1194,7 @@ static int serialize_ServicePaymentSelectionReqType(struct ServicePaymentSelecti
 			 
 			
 			/* encode end element of ServiceList */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1191,7 +1204,7 @@ static int serialize_ServicePaymentSelectionReqType(struct ServicePaymentSelecti
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=31;	
 			/* encode start element PEVPubKey */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1201,7 +1214,7 @@ static int serialize_ServicePaymentSelectionReqType(struct ServicePaymentSelecti
 		memcpy(service->val.binary.data, type->PEVPubKey.data, service->val.binary.len);
 		
 		/* encode character  PEVPubKey */	
-		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 		{
 				 
 				return -1;
@@ -1214,7 +1227,7 @@ static int serialize_ServicePaymentSelectionReqType(struct ServicePaymentSelecti
 			 
 			
 			/* encode end element of PEVPubKey */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1226,22 +1239,23 @@ static int serialize_ServicePaymentSelectionReqType(struct ServicePaymentSelecti
 
 static int serialize_ServicePaymentSelectionResType(struct ServicePaymentSelectionResType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=47;	
 			/* encode start element ResponseCode */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.ServicePaymentSelectionRes.ResponseCode;
+			service->val.enumeration=type->ResponseCode;
 			
 			/* encode character  ResponseCode */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -1252,7 +1266,7 @@ static int serialize_ServicePaymentSelectionResType(struct ServicePaymentSelecti
 			 
 			
 			/* encode end element of ResponseCode */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1264,7 +1278,7 @@ static int serialize_ServicePaymentSelectionResType(struct ServicePaymentSelecti
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=16;	
 			/* encode start element MeteringAuthPubKey */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1274,7 +1288,7 @@ static int serialize_ServicePaymentSelectionResType(struct ServicePaymentSelecti
 		memcpy(service->val.binary.data, type->MeteringAuthPubKey.data, service->val.binary.len);
 		
 		/* encode character  MeteringAuthPubKey */	
-		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 		{
 				 
 				return -1;
@@ -1287,7 +1301,7 @@ static int serialize_ServicePaymentSelectionResType(struct ServicePaymentSelecti
 			 
 			
 			/* encode end element of MeteringAuthPubKey */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1300,12 +1314,13 @@ static int serialize_ServicePaymentSelectionResType(struct ServicePaymentSelecti
 
 static int serialize_PaymentDetailsReqType(struct PaymentDetailsReqType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ContractID*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=1;	
 			/* encode start element ContractID */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1316,7 +1331,7 @@ static int serialize_PaymentDetailsReqType(struct PaymentDetailsReqType* type, s
 			memcpy(service->val.string.codepoints, type->ContractID.data, service->val.string.len);
 		
 			/* encode character  ContractID */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -1328,7 +1343,7 @@ static int serialize_PaymentDetailsReqType(struct PaymentDetailsReqType* type, s
 			 
 			
 			/* encode end element of ContractID */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1338,24 +1353,25 @@ static int serialize_PaymentDetailsReqType(struct PaymentDetailsReqType* type, s
 }
 
 
-static int serialize_PaymentDetailsResType(struct v2gService* service)
+static int serialize_PaymentDetailsResType(struct PaymentDetailsResType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=47;	
 			/* encode start element ResponseCode */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.PaymentDetailsRes.ResponseCode;
+			service->val.enumeration=type->ResponseCode;
 			
 			/* encode character  ResponseCode */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -1366,7 +1382,7 @@ static int serialize_PaymentDetailsResType(struct v2gService* service)
 			 
 			
 			/* encode end element of ResponseCode */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1376,24 +1392,25 @@ static int serialize_PaymentDetailsResType(struct v2gService* service)
 }
 
 
-static int serialize_FloatingValueType(struct v2gService* service)
+static int serialize_FloatingValueType(struct FloatingValueType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of Multiplier*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=21;	
+			service->eqn.localPart=20;	
 			/* encode start element Multiplier */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.PowerDiscoveryReq.EAmount.Multiplier;
+			service->val.enumeration=type->Multiplier;
 			
 			/* encode character  Multiplier */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -1404,7 +1421,7 @@ static int serialize_FloatingValueType(struct v2gService* service)
 			 
 			
 			/* encode end element of Multiplier */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1412,19 +1429,19 @@ static int serialize_FloatingValueType(struct v2gService* service)
 			
 			/* element ID assignment of Unit*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=50;	
+			service->eqn.localPart=49;	
 			/* encode start element Unit */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.PowerDiscoveryReq.EAmount.Unit;
+			service->val.enumeration=type->Unit;
 			
 			/* encode character  Unit */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -1435,7 +1452,7 @@ static int serialize_FloatingValueType(struct v2gService* service)
 			 
 			
 			/* encode end element of Unit */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1443,19 +1460,19 @@ static int serialize_FloatingValueType(struct v2gService* service)
 			
 			/* element ID assignment of Value*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=51;	
+			service->eqn.localPart=50;	
 			/* encode start element Value */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
-			service->val.type = INTEGER_64;
-			service->val.int64=service->v2gMsg.Body.PowerDiscoveryReq.EAmount.Value;
+			service->val.type = INTEGER_32;
+			service->val.int32=type->Value;
 			
 			/* encode character  Value */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -1466,7 +1483,7 @@ static int serialize_FloatingValueType(struct v2gService* service)
 			 
 			
 			/* encode end element of Value */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1478,19 +1495,20 @@ static int serialize_FloatingValueType(struct v2gService* service)
 
 static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of PEVStatus*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=32;	
 			/* encode start element PEVStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PEVStatus */
-			if(serialize_PEVStatusType(service)<0)
+			if(serialize_PEVStatusType( &(type->PEVStatus),service))
 			{
 				return -1;
 			}
@@ -1501,7 +1519,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			 
 			
 			/* encode end element of PEVStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1511,17 +1529,17 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=10;	
 			/* encode start element EoC */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
-			service->val.type = INTEGER_64;
-			service->val.int64=service->v2gMsg.Body.PowerDiscoveryReq.EoC;
+			service->val.type = INTEGER_32;
+			service->val.int32=type->EoC;
 			
 			/* encode character  EoC */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -1532,7 +1550,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			 
 			
 			/* encode end element of EoC */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1542,14 +1560,14 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=2;	
 			/* encode start element EAmount */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of EAmount */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->EAmount),service))
 			{
 				return -1;
 			}
@@ -1560,7 +1578,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			 
 			
 			/* encode end element of EAmount */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1570,14 +1588,14 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=28;	
 			/* encode start element PEVMaxPower */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PEVMaxPower */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->PEVMaxPower),service))
 			{
 				return -1;
 			}
@@ -1588,7 +1606,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			 
 			
 			/* encode end element of PEVMaxPower */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1598,17 +1616,17 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=27;	
 			/* encode start element PEVMaxPhases */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = INTEGER_16;
-			service->val.int32=service->v2gMsg.Body.PowerDiscoveryReq.PEVMaxPhases;
+			service->val.int32=type->PEVMaxPhases;
 			
 			/* encode character  PEVMaxPhases */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -1619,7 +1637,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			 
 			
 			/* encode end element of PEVMaxPhases */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1629,14 +1647,14 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=29;	
 			/* encode start element PEVMaxVoltage */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PEVMaxVoltage */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->PEVMaxVoltage),service))
 			{
 				return -1;
 			}
@@ -1647,7 +1665,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			 
 			
 			/* encode end element of PEVMaxVoltage */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1657,14 +1675,14 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=30;	
 			/* encode start element PEVMinVoltage */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PEVMinVoltage */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->PEVMinVoltage),service))
 			{
 				return -1;
 			}
@@ -1675,7 +1693,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			 
 			
 			/* encode end element of PEVMinVoltage */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1687,22 +1705,23 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 
 static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of TariffStart*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=48;	
+			service->eqn.localPart=47;	
 			/* encode start element TariffStart */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = UNSIGNED_INTEGER_32;
-			service->val.uint32=service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffStart;
+			service->val.uint32=type->TariffStart;
 			
 			/* encode character  TariffStart */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -1713,7 +1732,7 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 			 
 			
 			/* encode end element of TariffStart */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1721,16 +1740,16 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 			
 			/* element ID assignment of TariffPMax*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=47;	
+			service->eqn.localPart=46;	
 			/* encode start element TariffPMax */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of TariffPMax */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->TariffPMax),service))
 			{
 				return -1;
 			}
@@ -1741,7 +1760,7 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 			 
 			
 			/* encode end element of TariffPMax */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1753,14 +1772,14 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=6;	
 			/* encode start element EPrice */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of EPrice */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->EPrice),service))
 			{
 				return -1;
 			}
@@ -1771,7 +1790,7 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 			 
 			
 			/* encode end element of EPrice */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1784,14 +1803,15 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct v2gSer
 
 static int serialize_TariffEntriesType(struct TariffEntriesType* type, struct v2gService* service)
 {
+
 			size_t i_loop;
 	
 			
 			/* element ID assignment of TariffEntry*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=44;	
+			service->eqn.localPart=43;	
 			/* encode start element TariffEntry */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1800,7 +1820,7 @@ static int serialize_TariffEntriesType(struct TariffEntriesType* type, struct v2
 			for(i_loop=0;i_loop < type->arraylen.TariffEntry;i_loop++)
 			{
 				/* encode children of TariffEntry */
-				if(serialize_TariffEntryType(&(type->TariffEntry[i_loop]),service)<0)
+				if(serialize_TariffEntryType(&(type->TariffEntry[i_loop]),service))
 				{
 					return -1;
 				}
@@ -1813,7 +1833,7 @@ static int serialize_TariffEntriesType(struct TariffEntriesType* type, struct v2
 			 
 			
 			/* encode end element of TariffEntry */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1825,22 +1845,23 @@ static int serialize_TariffEntriesType(struct TariffEntriesType* type, struct v2
 
 static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of TariffID*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=46;	
+			service->eqn.localPart=45;	
 			/* encode start element TariffID */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffID;
+			service->val.enumeration=type->TariffID;
 			
 			/* encode character  TariffID */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -1851,7 +1872,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 			 
 			
 			/* encode end element of TariffID */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1861,9 +1882,9 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 			
 			/* element ID assignment of TariffDescription*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=41;	
+			service->eqn.localPart=40;	
 			/* encode start element TariffDescription */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1874,7 +1895,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 			memcpy(service->val.string.codepoints, type->TariffDescription.data, service->val.string.len);
 		
 			/* encode character  TariffDescription */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -1886,7 +1907,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 			 
 			
 			/* encode end element of TariffDescription */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1895,16 +1916,16 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 			
 			/* element ID assignment of TariffEntries*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=42;	
+			service->eqn.localPart=41;	
 			/* encode start element TariffEntries */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of TariffEntries */
-			if(serialize_TariffEntriesType( &(type->TariffEntries),service)<0)
+			if(serialize_TariffEntriesType( &(type->TariffEntries),service))
 			{
 				return -1;
 			}
@@ -1915,7 +1936,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 			 
 			
 			/* encode end element of TariffEntries */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1927,6 +1948,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct v2gSer
 
 static int serialize_TariffTableType(struct TariffTableType* type, struct v2gService* service)
 {
+
 			size_t i_loop;
 	
 			
@@ -1934,7 +1956,7 @@ static int serialize_TariffTableType(struct TariffTableType* type, struct v2gSer
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=5;	
 			/* encode start element Currency */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1945,7 +1967,7 @@ static int serialize_TariffTableType(struct TariffTableType* type, struct v2gSer
 			memcpy(service->val.string.codepoints, type->Currency.data, service->val.string.len);
 		
 			/* encode character  Currency */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -1957,7 +1979,7 @@ static int serialize_TariffTableType(struct TariffTableType* type, struct v2gSer
 			 
 			
 			/* encode end element of Currency */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1965,9 +1987,9 @@ static int serialize_TariffTableType(struct TariffTableType* type, struct v2gSer
 			
 			/* element ID assignment of Tariff*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=39;	
+			service->eqn.localPart=38;	
 			/* encode start element Tariff */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -1976,7 +1998,7 @@ static int serialize_TariffTableType(struct TariffTableType* type, struct v2gSer
 			for(i_loop=0;i_loop < type->arraylen.Tariff;i_loop++)
 			{
 				/* encode children of Tariff */
-				if(serialize_TariffDescrType(&(type->Tariff[i_loop]),service)<0)
+				if(serialize_TariffDescrType(&(type->Tariff[i_loop]),service))
 				{
 					return -1;
 				}
@@ -1989,7 +2011,7 @@ static int serialize_TariffTableType(struct TariffTableType* type, struct v2gSer
 			 
 			
 			/* encode end element of Tariff */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2001,22 +2023,23 @@ static int serialize_TariffTableType(struct TariffTableType* type, struct v2gSer
 
 static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=47;	
 			/* encode start element ResponseCode */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.PowerDiscoveryRes.ResponseCode;
+			service->val.enumeration=type->ResponseCode;
 			
 			/* encode character  ResponseCode */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2027,7 +2050,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			 
 			
 			/* encode end element of ResponseCode */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2037,14 +2060,14 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=7;	
 			/* encode start element EVSEStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of EVSEStatus */
-			if(serialize_EVSEStatusType(service)<0)
+			if(serialize_EVSEStatusType( &(type->EVSEStatus),service))
 			{
 				return -1;
 			}
@@ -2055,7 +2078,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			 
 			
 			/* encode end element of EVSEStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2065,14 +2088,14 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=8;	
 			/* encode start element EVSEVoltage */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of EVSEVoltage */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->EVSEVoltage),service))
 			{
 				return -1;
 			}
@@ -2083,7 +2106,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			 
 			
 			/* encode end element of EVSEVoltage */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2093,14 +2116,14 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=4;	
 			/* encode start element EVSEIMax */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of EVSEIMax */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->EVSEIMax),service))
 			{
 				return -1;
 			}
@@ -2111,7 +2134,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			 
 			
 			/* encode end element of EVSEIMax */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2121,17 +2144,17 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=5;	
 			/* encode start element EVSEMaxPhases */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = INTEGER_16;
-			service->val.int32=service->v2gMsg.Body.PowerDiscoveryRes.EVSEMaxPhases;
+			service->val.int32=type->EVSEMaxPhases;
 			
 			/* encode character  EVSEMaxPhases */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2142,7 +2165,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			 
 			
 			/* encode end element of EVSEMaxPhases */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2154,7 +2177,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=9;	
 			/* encode start element EnergyProvider */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2165,7 +2188,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			memcpy(service->val.string.codepoints, type->EnergyProvider.data, service->val.string.len);
 		
 			/* encode character  EnergyProvider */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -2177,7 +2200,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			 
 			
 			/* encode end element of EnergyProvider */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2190,14 +2213,14 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=65;	
 			/* encode start element TariffTable */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of TariffTable */
-			if(serialize_TariffTableType( &(type->TariffTable),service)<0)
+			if(serialize_TariffTableType( &(type->TariffTable),service))
 			{
 				return -1;
 			}
@@ -2208,7 +2231,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			 
 			
 			/* encode end element of TariffTable */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2221,19 +2244,20 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 
 static int serialize_LineLockReqType(struct LineLockReqType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of PEVStatus*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=32;	
 			/* encode start element PEVStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PEVStatus */
-			if(serialize_PEVStatusType(service)<0)
+			if(serialize_PEVStatusType( &(type->PEVStatus),service))
 			{
 				return -1;
 			}
@@ -2244,7 +2268,7 @@ static int serialize_LineLockReqType(struct LineLockReqType* type, struct v2gSer
 			 
 			
 			/* encode end element of PEVStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2254,17 +2278,17 @@ static int serialize_LineLockReqType(struct LineLockReqType* type, struct v2gSer
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=45;	
 			/* encode start element ReqLockStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = BOOLEAN;
-			service->val.boolean=service->v2gMsg.Body.LineLockReq.ReqLockStatus;
+			service->val.boolean=type->ReqLockStatus;
 			
 			/* encode character  ReqLockStatus */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2275,7 +2299,7 @@ static int serialize_LineLockReqType(struct LineLockReqType* type, struct v2gSer
 			 
 			
 			/* encode end element of ReqLockStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2287,22 +2311,23 @@ static int serialize_LineLockReqType(struct LineLockReqType* type, struct v2gSer
 
 static int serialize_LineLockResType(struct LineLockResType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=47;	
 			/* encode start element ResponseCode */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.LineLockRes.ResponseCode;
+			service->val.enumeration=type->ResponseCode;
 			
 			/* encode character  ResponseCode */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2313,7 +2338,7 @@ static int serialize_LineLockResType(struct LineLockResType* type, struct v2gSer
 			 
 			
 			/* encode end element of ResponseCode */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2323,14 +2348,14 @@ static int serialize_LineLockResType(struct LineLockResType* type, struct v2gSer
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=7;	
 			/* encode start element EVSEStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of EVSEStatus */
-			if(serialize_EVSEStatusType(service)<0)
+			if(serialize_EVSEStatusType( &(type->EVSEStatus),service))
 			{
 				return -1;
 			}
@@ -2341,7 +2366,7 @@ static int serialize_LineLockResType(struct LineLockResType* type, struct v2gSer
 			 
 			
 			/* encode end element of EVSEStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2353,22 +2378,23 @@ static int serialize_LineLockResType(struct LineLockResType* type, struct v2gSer
 
 static int serialize_ChargingProfileType(struct ChargingProfileType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ChargingProfileEntryStart*/
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=2;	
 			/* encode start element ChargingProfileEntryStart */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
-			service->val.type = INTEGER_64;
-			service->val.int64=service->v2gMsg.Body.PowerDeliveryReq.ChargingProfile.ChargingProfileEntryStart;
+			service->val.type = INTEGER_32;
+			service->val.int32=type->ChargingProfileEntryStart;
 			
 			/* encode character  ChargingProfileEntryStart */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2379,7 +2405,7 @@ static int serialize_ChargingProfileType(struct ChargingProfileType* type, struc
 			 
 			
 			/* encode end element of ChargingProfileEntryStart */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2389,14 +2415,14 @@ static int serialize_ChargingProfileType(struct ChargingProfileType* type, struc
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=1;	
 			/* encode start element ChargingProfileEntryMaxPower */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of ChargingProfileEntryMaxPower */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->ChargingProfileEntryMaxPower),service))
 			{
 				return -1;
 			}
@@ -2407,7 +2433,7 @@ static int serialize_ChargingProfileType(struct ChargingProfileType* type, struc
 			 
 			
 			/* encode end element of ChargingProfileEntryMaxPower */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2419,19 +2445,20 @@ static int serialize_ChargingProfileType(struct ChargingProfileType* type, struc
 
 static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of PEVStatus*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=32;	
 			/* encode start element PEVStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PEVStatus */
-			if(serialize_PEVStatusType(service)<0)
+			if(serialize_PEVStatusType( &(type->PEVStatus),service))
 			{
 				return -1;
 			}
@@ -2442,7 +2469,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			 
 			
 			/* encode end element of PEVStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2452,17 +2479,17 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=46;	
 			/* encode start element ReqSwitchStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = BOOLEAN;
-			service->val.boolean=service->v2gMsg.Body.PowerDeliveryReq.ReqSwitchStatus;
+			service->val.boolean=type->ReqSwitchStatus;
 			
 			/* encode character  ReqSwitchStatus */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2473,7 +2500,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			 
 			
 			/* encode end element of ReqSwitchStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2485,17 +2512,17 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=64;	
 			/* encode start element Tariff */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.PowerDeliveryReq.Tariff;
+			service->val.enumeration=type->Tariff;
 			
 			/* encode character  Tariff */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2506,7 +2533,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			 
 			
 			/* encode end element of Tariff */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2519,14 +2546,14 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=0;	
 			/* encode start element ChargingProfile */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of ChargingProfile */
-			if(serialize_ChargingProfileType( &(type->ChargingProfile),service)<0)
+			if(serialize_ChargingProfileType( &(type->ChargingProfile),service))
 			{
 				return -1;
 			}
@@ -2537,7 +2564,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			 
 			
 			/* encode end element of ChargingProfile */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2548,24 +2575,25 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 }
 
 
-static int serialize_PowerDeliveryResType(struct v2gService* service)
+static int serialize_PowerDeliveryResType(struct PowerDeliveryResType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=47;	
 			/* encode start element ResponseCode */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.PowerDeliveryRes.ResponseCode;
+			service->val.enumeration=type->ResponseCode;
 			
 			/* encode character  ResponseCode */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2576,7 +2604,7 @@ static int serialize_PowerDeliveryResType(struct v2gService* service)
 			 
 			
 			/* encode end element of ResponseCode */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2586,15 +2614,17 @@ static int serialize_PowerDeliveryResType(struct v2gService* service)
 }
 
 
-static int serialize_MeteringStatusReqType(struct v2gService* service)
+static int serialize_MeteringStatusReqType(struct MeteringStatusReqType* type, struct v2gService* service)
 {
+
 
 	return 0;			
 }
 
 
 static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService* service)
-{if(type->isused.MeterID)
+{
+if(type->isused.MeterID)
 		{		
 				
 			
@@ -2602,7 +2632,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			service->eqn.namespaceURI=5;			
 			service->eqn.localPart=16;	
 			/* encode start element MeterID */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2613,7 +2643,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			memcpy(service->val.string.codepoints, type->MeterID.data, service->val.string.len);
 		
 			/* encode character  MeterID */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -2625,43 +2655,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			 
 			
 			/* encode end element of MeterID */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
-			{
-				 
-					return -1;
-			}}
-				if(type->isused.MeterPubKey)
-		{		
-				
-			
-			/* element ID assignment of MeterPubKey*/
-			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=18;	
-			/* encode start element MeterPubKey */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
-			{
-				 
-					return -1;
-			}
-			service->val.type = BINARY_HEX;
-		service->val.binary.len = type->MeterPubKey.arraylen.data;
-		memcpy(service->val.binary.data, type->MeterPubKey.data, service->val.binary.len);
-		
-		/* encode character  MeterPubKey */	
-		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
-		{
-				 
-				return -1;
-		}
-			
-			
-			
-			
-
-			 
-			
-			/* encode end element of MeterPubKey */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2672,16 +2666,16 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			
 			/* element ID assignment of MeterReading*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=19;	
+			service->eqn.localPart=18;	
 			/* encode start element MeterReading */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of MeterReading */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->MeterReading),service))
 			{
 				return -1;
 			}
@@ -2692,7 +2686,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			 
 			
 			/* encode end element of MeterReading */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2703,19 +2697,19 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			
 			/* element ID assignment of MeterStatus*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=20;	
+			service->eqn.localPart=19;	
 			/* encode start element MeterStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = INTEGER_16;
-			service->val.int32=service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterStatus;
+			service->val.int32=type->MeterStatus;
 			
 			/* encode character  MeterStatus */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2726,7 +2720,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			 
 			
 			/* encode end element of MeterStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2737,19 +2731,19 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			
 			/* element ID assignment of TMeter*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=38;	
+			service->eqn.localPart=37;	
 			/* encode start element TMeter */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
-			service->val.type = INTEGER_64;
-			service->val.int64=service->v2gMsg.Body.MeteringStatusRes.MeterInfo.TMeter;
+			service->val.type = INTEGER_32;
+			service->val.int32=type->TMeter;
 			
 			/* encode character  TMeter */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2760,7 +2754,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 			 
 			
 			/* encode end element of TMeter */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2773,22 +2767,23 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct v2gService
 
 static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=47;	
 			/* encode start element ResponseCode */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.MeteringStatusRes.ResponseCode;
+			service->val.enumeration=type->ResponseCode;
 			
 			/* encode character  ResponseCode */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2799,7 +2794,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			 
 			
 			/* encode end element of ResponseCode */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2809,7 +2804,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=3;	
 			/* encode start element EVSEID */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2819,7 +2814,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 		memcpy(service->val.binary.data, type->EVSEID.data, service->val.binary.len);
 		
 		/* encode character  EVSEID */	
-		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+		if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 		{
 				 
 				return -1;
@@ -2832,7 +2827,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			 
 			
 			/* encode end element of EVSEID */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2842,14 +2837,14 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=7;	
 			/* encode start element EVSEStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of EVSEStatus */
-			if(serialize_EVSEStatusType(service)<0)
+			if(serialize_EVSEStatusType( &(type->EVSEStatus),service))
 			{
 				return -1;
 			}
@@ -2860,7 +2855,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			 
 			
 			/* encode end element of EVSEStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2870,17 +2865,17 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=63;	
 			/* encode start element TCurrent */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
-			service->val.type = INTEGER_64;
-			service->val.int64=service->v2gMsg.Body.MeteringStatusRes.TCurrent;
+			service->val.type = INTEGER_32;
+			service->val.int32=type->TCurrent;
 			
 			/* encode character  TCurrent */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -2891,7 +2886,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			 
 			
 			/* encode end element of TCurrent */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2901,14 +2896,14 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=6;	
 			/* encode start element EVSEMaxPower */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of EVSEMaxPower */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->EVSEMaxPower),service))
 			{
 				return -1;
 			}
@@ -2919,7 +2914,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			 
 			
 			/* encode end element of EVSEMaxPower */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2931,14 +2926,14 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=25;	
 			/* encode start element PCurrent */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PCurrent */
-			if(serialize_FloatingValueType(service)<0)
+			if(serialize_FloatingValueType( &(type->PCurrent),service))
 			{
 				return -1;
 			}
@@ -2949,7 +2944,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			 
 			
 			/* encode end element of PCurrent */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2962,14 +2957,14 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=15;	
 			/* encode start element MeterInfo */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of MeterInfo */
-			if(serialize_MeterInfoType( &(type->MeterInfo),service)<0)
+			if(serialize_MeterInfoType( &(type->MeterInfo),service))
 			{
 				return -1;
 			}
@@ -2980,7 +2975,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			 
 			
 			/* encode end element of MeterInfo */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -2992,7 +2987,8 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 
 
 static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type, struct v2gService* service)
-{if(type->isused.PEVID)
+{
+if(type->isused.PEVID)
 		{		
 				
 			
@@ -3000,7 +2996,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=26;	
 			/* encode start element PEVID */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3011,7 +3007,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			memcpy(service->val.string.codepoints, type->PEVID.data, service->val.string.len);
 		
 			/* encode character  PEVID */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 					return -1;
@@ -3023,7 +3019,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			 
 			
 			/* encode end element of PEVID */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3034,14 +3030,14 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=32;	
 			/* encode start element PEVStatus */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PEVStatus */
-			if(serialize_PEVStatusType(service)<0)
+			if(serialize_PEVStatusType( &(type->PEVStatus),service))
 			{
 				return -1;
 			}
@@ -3052,7 +3048,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			 
 			
 			/* encode end element of PEVStatus */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3064,17 +3060,17 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=63;	
 			/* encode start element TCurrent */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
-			service->val.type = INTEGER_64;
-			service->val.int64=service->v2gMsg.Body.MeteringReceiptReq.TCurrent;
+			service->val.type = INTEGER_32;
+			service->val.int32=type->TCurrent;
 			
 			/* encode character  TCurrent */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -3085,7 +3081,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			 
 			
 			/* encode end element of TCurrent */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3096,17 +3092,17 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=64;	
 			/* encode start element Tariff */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.MeteringReceiptReq.Tariff;
+			service->val.enumeration=type->Tariff;
 			
 			/* encode character  Tariff */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -3117,7 +3113,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			 
 			
 			/* encode end element of Tariff */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3127,14 +3123,14 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=15;	
 			/* encode start element MeterInfo */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of MeterInfo */
-			if(serialize_MeterInfoType( &(type->MeterInfo),service)<0)
+			if(serialize_MeterInfoType( &(type->MeterInfo),service))
 			{
 				return -1;
 			}
@@ -3145,7 +3141,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			 
 			
 			/* encode end element of MeterInfo */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3155,24 +3151,25 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 }
 
 
-static int serialize_MeteringReceiptResType(struct v2gService* service)
+static int serialize_MeteringReceiptResType(struct MeteringReceiptResType* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=47;	
 			/* encode start element ResponseCode */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=service->v2gMsg.Body.MeteringReceiptRes.ResponseCode;
+			service->val.enumeration=type->ResponseCode;
 			
 			/* encode character  ResponseCode */	
-			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)) < 0) 
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
 			{
 				 
 				return -1;
@@ -3183,7 +3180,7 @@ static int serialize_MeteringReceiptResType(struct v2gService* service)
 			 
 			
 			/* encode end element of ResponseCode */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3194,7 +3191,8 @@ static int serialize_MeteringReceiptResType(struct v2gService* service)
 
 
 static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
-{if(type->isused.SessionSetupReq)
+{
+if(type->isused.SessionSetupReq)
 		{		
 				
 			
@@ -3202,14 +3200,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=59;	
 			/* encode start element SessionSetupReq */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of SessionSetupReq */
-			if(serialize_SessionSetupReqType( &(type->SessionSetupReq),service)<0)
+			if(serialize_SessionSetupReqType( &(type->SessionSetupReq),service))
 			{
 				return -1;
 			}
@@ -3220,7 +3218,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of SessionSetupReq */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3233,14 +3231,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=61;	
 			/* encode start element SessionSetupRes */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of SessionSetupRes */
-			if(serialize_SessionSetupResType( &(type->SessionSetupRes),service)<0)
+			if(serialize_SessionSetupResType( &(type->SessionSetupRes),service))
 			{
 				return -1;
 			}
@@ -3251,7 +3249,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of SessionSetupRes */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3264,14 +3262,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=48;	
 			/* encode start element ServiceDiscoveryReq */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of ServiceDiscoveryReq */
-			if(serialize_ServiceDiscoveryReqType( &(type->ServiceDiscoveryReq),service)<0)
+			if(serialize_ServiceDiscoveryReqType( &(type->ServiceDiscoveryReq),service))
 			{
 				return -1;
 			}
@@ -3282,7 +3280,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of ServiceDiscoveryReq */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3295,14 +3293,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=50;	
 			/* encode start element ServiceDiscoveryRes */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of ServiceDiscoveryRes */
-			if(serialize_ServiceDiscoveryResType( &(type->ServiceDiscoveryRes),service)<0)
+			if(serialize_ServiceDiscoveryResType( &(type->ServiceDiscoveryRes),service))
 			{
 				return -1;
 			}
@@ -3313,7 +3311,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of ServiceDiscoveryRes */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3326,14 +3324,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=53;	
 			/* encode start element ServicePaymentSelectionReq */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of ServicePaymentSelectionReq */
-			if(serialize_ServicePaymentSelectionReqType( &(type->ServicePaymentSelectionReq),service)<0)
+			if(serialize_ServicePaymentSelectionReqType( &(type->ServicePaymentSelectionReq),service))
 			{
 				return -1;
 			}
@@ -3344,7 +3342,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of ServicePaymentSelectionReq */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3357,14 +3355,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=55;	
 			/* encode start element ServicePaymentSelectionRes */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of ServicePaymentSelectionRes */
-			if(serialize_ServicePaymentSelectionResType( &(type->ServicePaymentSelectionRes),service)<0)
+			if(serialize_ServicePaymentSelectionResType( &(type->ServicePaymentSelectionRes),service))
 			{
 				return -1;
 			}
@@ -3375,7 +3373,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of ServicePaymentSelectionRes */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3388,14 +3386,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=33;	
 			/* encode start element PaymentDetailsReq */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PaymentDetailsReq */
-			if(serialize_PaymentDetailsReqType( &(type->PaymentDetailsReq),service)<0)
+			if(serialize_PaymentDetailsReqType( &(type->PaymentDetailsReq),service))
 			{
 				return -1;
 			}
@@ -3406,7 +3404,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of PaymentDetailsReq */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3419,14 +3417,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=35;	
 			/* encode start element PaymentDetailsRes */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PaymentDetailsRes */
-			if(serialize_PaymentDetailsResType(service)<0)
+			if(serialize_PaymentDetailsResType( &(type->PaymentDetailsRes),service))
 			{
 				return -1;
 			}
@@ -3437,7 +3435,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of PaymentDetailsRes */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3450,14 +3448,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=41;	
 			/* encode start element PowerDiscoveryReq */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PowerDiscoveryReq */
-			if(serialize_PowerDiscoveryReqType( &(type->PowerDiscoveryReq),service)<0)
+			if(serialize_PowerDiscoveryReqType( &(type->PowerDiscoveryReq),service))
 			{
 				return -1;
 			}
@@ -3468,7 +3466,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of PowerDiscoveryReq */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3481,14 +3479,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=43;	
 			/* encode start element PowerDiscoveryRes */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PowerDiscoveryRes */
-			if(serialize_PowerDiscoveryResType( &(type->PowerDiscoveryRes),service)<0)
+			if(serialize_PowerDiscoveryResType( &(type->PowerDiscoveryRes),service))
 			{
 				return -1;
 			}
@@ -3499,7 +3497,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of PowerDiscoveryRes */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3512,14 +3510,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=11;	
 			/* encode start element LineLockReq */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of LineLockReq */
-			if(serialize_LineLockReqType( &(type->LineLockReq),service)<0)
+			if(serialize_LineLockReqType( &(type->LineLockReq),service))
 			{
 				return -1;
 			}
@@ -3530,7 +3528,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of LineLockReq */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3543,14 +3541,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=13;	
 			/* encode start element LineLockRes */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of LineLockRes */
-			if(serialize_LineLockResType( &(type->LineLockRes),service)<0)
+			if(serialize_LineLockResType( &(type->LineLockRes),service))
 			{
 				return -1;
 			}
@@ -3561,7 +3559,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of LineLockRes */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3574,14 +3572,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=37;	
 			/* encode start element PowerDeliveryReq */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PowerDeliveryReq */
-			if(serialize_PowerDeliveryReqType( &(type->PowerDeliveryReq),service)<0)
+			if(serialize_PowerDeliveryReqType( &(type->PowerDeliveryReq),service))
 			{
 				return -1;
 			}
@@ -3592,7 +3590,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of PowerDeliveryReq */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3605,14 +3603,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=39;	
 			/* encode start element PowerDeliveryRes */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of PowerDeliveryRes */
-			if(serialize_PowerDeliveryResType(service)<0)
+			if(serialize_PowerDeliveryResType( &(type->PowerDeliveryRes),service))
 			{
 				return -1;
 			}
@@ -3623,7 +3621,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of PowerDeliveryRes */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3636,14 +3634,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=21;	
 			/* encode start element MeteringStatusReq */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of MeteringStatusReq */
-			if(serialize_MeteringStatusReqType(service)<0)
+			if(serialize_MeteringStatusReqType( &(type->MeteringStatusReq),service))
 			{
 				return -1;
 			}
@@ -3654,7 +3652,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of MeteringStatusReq */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3667,14 +3665,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=23;	
 			/* encode start element MeteringStatusRes */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of MeteringStatusRes */
-			if(serialize_MeteringStatusResType( &(type->MeteringStatusRes),service)<0)
+			if(serialize_MeteringStatusResType( &(type->MeteringStatusRes),service))
 			{
 				return -1;
 			}
@@ -3685,7 +3683,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of MeteringStatusRes */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3698,14 +3696,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=17;	
 			/* encode start element MeteringReceiptReq */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of MeteringReceiptReq */
-			if(serialize_MeteringReceiptReqType( &(type->MeteringReceiptReq),service)<0)
+			if(serialize_MeteringReceiptReqType( &(type->MeteringReceiptReq),service))
 			{
 				return -1;
 			}
@@ -3716,7 +3714,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of MeteringReceiptReq */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3729,14 +3727,14 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			service->eqn.namespaceURI=4;			
 			service->eqn.localPart=19;	
 			/* encode start element MeteringReceiptRes */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of MeteringReceiptRes */
-			if(serialize_MeteringReceiptResType(service)<0)
+			if(serialize_MeteringReceiptResType( &(type->MeteringReceiptRes),service))
 			{
 				return -1;
 			}
@@ -3747,7 +3745,7 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 			 
 			
 			/* encode end element of MeteringReceiptRes */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3760,19 +3758,20 @@ static int serialize_BodyType(struct BodyType* type, struct v2gService* service)
 
 static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, struct v2gService* service)
 {
+
 			
 			/* element ID assignment of Header*/
 			service->eqn.namespaceURI=6;			
 			service->eqn.localPart=4;	
 			/* encode start element Header */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of Header */
-			if(serialize_HeaderType( &(type->Header),service)<0)
+			if(serialize_HeaderType( &(type->Header),service))
 			{
 				return -1;
 			}
@@ -3783,7 +3782,7 @@ static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, str
 			 
 			
 			/* encode end element of Header */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3793,14 +3792,14 @@ static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, str
 			service->eqn.namespaceURI=6;			
 			service->eqn.localPart=0;	
 			/* encode start element Body */	
-			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
 			}
 						
 			/* encode children of Body */
-			if(serialize_BodyType( &(type->Body),service)<0)
+			if(serialize_BodyType( &(type->Body),service))
 			{
 				return -1;
 			}
@@ -3811,7 +3810,7 @@ static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, str
 			 
 			
 			/* encode end element of Body */
-			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+			if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 				 
 					return -1;
@@ -3831,7 +3830,7 @@ static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, str
 	
 
 	/* encode start document */ 	
-	if (exiEncodeStartDocument(&(service->outStream), &(service->stateEncode)) < 0) 
+	if (exiEncodeStartDocument(&(service->outStream), &(service->stateEncode)) ) 
 	{
 	 
 		return -1;
@@ -3842,18 +3841,25 @@ static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, str
 	service->eqn.localPart=8;
 	
 	/* encode start element V2G_Message */	
-	if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+	if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 	{
 			 
 		return -1;
 	}
 		
 
-	serialize_AnonType_V2G_Message(&(service->v2gMsg), service);
+
+	/* encode root element of V2G_Message */
+	if (serialize_AnonType_V2G_Message(&(service->v2gMsg), service)) 
+	{
+			 
+		return -1;
+	}
+
 
 			
 	/* encode end element of V2G_Message */
-	if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn)) < 0) 
+	if (exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 	{
 			 
 		return -1;
@@ -3861,7 +3867,7 @@ static int serialize_AnonType_V2G_Message(struct AnonType_V2G_Message* type, str
 
 
 	/* encode end document */
-	if (exiEncodeEndDocument(&(service->outStream), &(service->stateEncode)) < 0) {
+	if (exiEncodeEndDocument(&(service->outStream), &(service->stateEncode))) {
 	 
 	return -1;
 	}	

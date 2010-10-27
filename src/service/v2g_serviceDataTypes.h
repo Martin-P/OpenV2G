@@ -19,7 +19,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -128,18 +128,12 @@ enum unitSymbolType
 	F, 
 	g, 
 	h, 
-	H, 
-	Hz, 
-	Hz_1, 
 	J, 
 	J_s, 
 	kg_J, 
 	min, 
 	N, 
-	C, 
 	ohm, 
-	Pa, 
-	rad, 
 	s, 
 	S, 
 	s_1, 
@@ -243,6 +237,7 @@ struct selection_SessionInformationType
 	unsigned int ServiceSessionID:1;
 	unsigned int ProtocolVersion:1;
 
+
 };
 
 struct arraylen_SessionInformationType_ProtocolVersion
@@ -273,6 +268,7 @@ struct selection_NotificationType
 	unsigned int FaultCode:1;
 	unsigned int FaultMsg:1;
 	unsigned int EventList:1;
+
 
 };
 
@@ -379,6 +375,7 @@ struct selection_BodyType
 	unsigned int MeteringReceiptReq:1;
 	unsigned int MeteringReceiptRes:1;
 
+
 };
 
 struct arraylen_SessionSetupResType_EVSEID
@@ -402,7 +399,7 @@ struct EVSEStatusType
 	int ConnectorLocked;
 	int PowerSwitchClosed;
 	int RCD;
-	int64_t ShutDownTime;
+	int32_t ShutDownTime;
 
 
 };
@@ -412,7 +409,7 @@ struct SessionSetupResType
 	enum responseCode_SessionSetupType ResponseCode;
 	struct SessionSetupResType_EVSEID EVSEID;
 	struct EVSEStatusType EVSEStatus;
-	int64_t TCurrent;
+	int32_t TCurrent;
 
 
 };
@@ -620,7 +617,7 @@ struct FloatingValueType
 {
 	enum unitMultiplierType Multiplier;
 	enum unitSymbolType Unit;
-	int64_t Value;
+	int32_t Value;
 
 
 };
@@ -628,10 +625,10 @@ struct FloatingValueType
 struct PowerDiscoveryReqType
 {
 	struct PEVStatusType PEVStatus;
-	int64_t EoC;
+	int32_t EoC;
 	struct FloatingValueType EAmount;
 	struct FloatingValueType PEVMaxPower;
-	int32_t PEVMaxPhases;
+	int16_t PEVMaxPhases;
 	struct FloatingValueType PEVMaxVoltage;
 	struct FloatingValueType PEVMinVoltage;
 
@@ -656,6 +653,7 @@ struct selection_PowerDiscoveryResType
 {
 	unsigned int EnergyProvider:1;
 	unsigned int TariffTable:1;
+
 
 };
 
@@ -690,6 +688,7 @@ struct TariffDescrType_TariffDescription
 struct selection_TariffDescrType
 {
 	unsigned int TariffDescription:1;
+
 
 };
 
@@ -753,7 +752,7 @@ struct PowerDiscoveryResType
 	struct EVSEStatusType EVSEStatus;
 	struct FloatingValueType EVSEVoltage;
 	struct FloatingValueType EVSEIMax;
-	int32_t EVSEMaxPhases;
+	int16_t EVSEMaxPhases;
 	struct PowerDiscoveryResType_EnergyProvider EnergyProvider;
 	struct TariffTableType TariffTable;
 	struct selection_PowerDiscoveryResType isused;
@@ -786,7 +785,7 @@ struct selection_PowerDeliveryReqType
 
 struct ChargingProfileType
 {
-	int64_t ChargingProfileEntryStart;
+	int32_t ChargingProfileEntryStart;
 	struct FloatingValueType ChargingProfileEntryMaxPower;
 
 
@@ -833,8 +832,8 @@ struct MeteringStatusResType_EVSEID
 
 struct selection_MeteringStatusResType
 {
-    unsigned int PCurrent:1;
-    unsigned int MeterInfo:1;
+	unsigned int PCurrent:1;
+	unsigned int MeterInfo:1;
 
 
 };
@@ -856,7 +855,6 @@ struct MeterInfoType_MeterID
 struct selection_MeterInfoType
 {
 	unsigned int MeterID:1;
-	unsigned int MeterPubKey:1;
 	unsigned int MeterReading:1;
 	unsigned int MeterStatus:1;
 	unsigned int TMeter:1;
@@ -864,27 +862,12 @@ struct selection_MeterInfoType
 
 };
 
-struct arraylen_MeterInfoType_MeterPubKey
-{
-	size_t data;
-
-
-};
-
-struct MeterInfoType_MeterPubKey
-{
-	uint8_t data[64];
-	struct arraylen_MeterInfoType_MeterPubKey arraylen;
-
-};
-
 struct MeterInfoType
 {
 	struct MeterInfoType_MeterID MeterID;
-	struct MeterInfoType_MeterPubKey MeterPubKey;
 	struct FloatingValueType MeterReading;
-	int32_t MeterStatus;
-	int64_t TMeter;
+	int16_t MeterStatus;
+	int32_t TMeter;
 	struct selection_MeterInfoType isused;
 
 };
@@ -894,7 +877,7 @@ struct MeteringStatusResType
 	enum responseCode_MeteringStatusType ResponseCode;
 	struct MeteringStatusResType_EVSEID EVSEID;
 	struct EVSEStatusType EVSEStatus;
-	int64_t TCurrent;
+	int32_t TCurrent;
 	struct FloatingValueType EVSEMaxPower;
 	struct FloatingValueType PCurrent;
 	struct MeterInfoType MeterInfo;
@@ -928,7 +911,7 @@ struct MeteringReceiptReqType
 {
 	struct MeteringReceiptReqType_PEVID PEVID;
 	struct PEVStatusType PEVStatus;
-	int64_t TCurrent;
+	int32_t TCurrent;
 	enum tariffIDType Tariff;
 	struct MeterInfoType MeterInfo;
 	struct selection_MeteringReceiptReqType isused;

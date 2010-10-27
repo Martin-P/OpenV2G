@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -26,18 +26,19 @@
 #include "v2g_server.h"
 #include "v2g_service.h"
 #include "v2g_serviceDispatcher.h"
+#include "doIP.h"
 
 #define MAX_BYTE_SIZE 128
 #define MAX_STRING_SIZE 256
 #define MAX_STREAM_SIZE 60
 
-/* Simple EVSE server implementation */
-int testV2GService(uint8_t* inStream, size_t inStreamLength, uint8_t* outStream)
+int testV2GService(uint8_t* inStream, size_t inStreamLength, uint8_t* outStream, size_t* outStreamLength)
 {
 	static uint8_t byte_array[MAX_BYTE_SIZE]; /* define MAX_BYTE_SIZE before*/
 	static uint32_t string_array[MAX_STRING_SIZE]; /* define MAX_STRING_SIZE before*/
 
-	size_t posIn, posOut;
+
+	size_t exiMsgLength;
 
 	struct v2gService service;
 
@@ -49,22 +50,41 @@ int testV2GService(uint8_t* inStream, size_t inStreamLength, uint8_t* outStream)
 
 	/**********************************************
 	 * Init V2G server and initialize array types *
-	 * for the EXI decoding						  *
+	 * for the EXI decoding	as well as the offset *
+	 * for the transportation header			  *
 	 **********************************************/
 
-	init_v2gservice(&service, bytes, string);
+	init_v2gservice(&service, bytes, string, DOIP_HEADER_LENGTH);
 
-	/* assign the position where to read / write in the inStream / outStream */
-	posIn=0;
-	posOut=0;
+	/* check, if the DoIP header is correct and determine payload */
+	if(read_doIPHeader(inStream,inStreamLength, &exiMsgLength))
+	{
+		/* DoIP header not correct */
+		write_doIPNack(outStream, outStreamLength, service.errorCode);
+
+		return -1;
+	}
 
 	/****************************************************************************
-	 * Pass the received EXI message stream (inStream + inStreamLength) to the  *
-	 * message dispatcher. 	The outStream contains the response message stream. *
-	 * posOut==length of outStream                                              *
+	 * Pass the received EXI message stream (inStream + exiMsgLength) to the    *
+	 * v2g message dispatcher. 	The outStream contains the response message     *
+	 * stream.  																*
 	 ****************************************************************************/
 
-	messageDispatcher(&service, inStream, inStreamLength, &posIn, outStream, MAX_STREAM_SIZE, &posOut);
+	if(messageDispatcher(&service, inStream, exiMsgLength, outStream, MAX_STREAM_SIZE, outStreamLength))
+	{
+		/* write DoIP failure */
+		write_doIPNack(outStream, outStreamLength, service.errorCode);
+
+	}
+	else
+	{
+		/* write DoIP header */
+		write_doIPHeader(outStream, outStreamLength, DOIP_EXI_TYPE);
+
+	}
+
 
 	return 0;
+
 }

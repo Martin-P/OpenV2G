@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -33,8 +33,8 @@ extern "C" {
 #include "v2g_serviceDataTypes.h"
 
 
-int init_v2gservice(struct v2gService* service,bytes_t bytes, string_ucs_t string);
-int messageDispatcher(struct v2gService* service, uint8_t* inStream, size_t sizeInStream, size_t* inPos, uint8_t* outStream, size_t sizeOutStream, size_t* outPos);
+int init_v2gservice(struct v2gService* service,bytes_t bytes, string_ucs_t string, uint16_t transportHeaderOffset);
+int messageDispatcher(struct v2gService* service, uint8_t* inStream, size_t sizeInStream, uint8_t* outStream, size_t sizeOutStream, size_t* outPos);
 
 #endif /* V2GSERVER_H_ */
 

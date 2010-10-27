@@ -19,7 +19,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -314,18 +314,10 @@ static  void init_MeterInfoType_MeterID(struct MeterInfoType_MeterID* type)
 
 }
 
-static  void init_MeterInfoType_MeterPubKey(struct MeterInfoType_MeterPubKey* type)
-{	
-	type->arraylen.data=0;
-
-}
-
 static  void init_MeterInfoType(struct MeterInfoType* type)
 {	
 	init_MeterInfoType_MeterID(&(type->MeterID));	
-	type->isused.MeterID=0;	
-	init_MeterInfoType_MeterPubKey(&(type->MeterPubKey));	
-	type->isused.MeterPubKey=0;		
+	type->isused.MeterID=0;		
 	type->isused.MeterReading=0;		
 	type->isused.MeterStatus=0;		
 	type->isused.TMeter=0;

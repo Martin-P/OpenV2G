@@ -21,7 +21,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -128,9 +128,9 @@ static int deserializeElementCharacter(struct v2gService* service)
 		
 				break;
 				case 10: /*EoC*/
-					if(service->val.type == INTEGER_64) 
+					if(service->val.type == INTEGER_32) 
 					{
-							service->v2gMsg.Body.PowerDiscoveryReq.EoC=service->val.int64;
+							service->v2gMsg.Body.PowerDiscoveryReq.EoC=service->val.int32;
 					} 
 					else
 					{
@@ -185,9 +185,9 @@ static int deserializeElementCharacter(struct v2gService* service)
 					service->v2gMsg.Body.PowerDeliveryReq.isused.Tariff=1;
 				break;
 				case 63: /*TCurrent*/
-					if(service->val.type == INTEGER_64) 
+					if(service->val.type == INTEGER_32) 
 					{
-							service->v2gMsg.Body.MeteringReceiptReq.TCurrent=service->val.int64;
+							service->v2gMsg.Body.MeteringReceiptReq.TCurrent=service->val.int32;
 					} 
 					else
 					{
@@ -201,7 +201,7 @@ static int deserializeElementCharacter(struct v2gService* service)
 		break;
 		case 5:
 			switch(service->eqn.localPart) {
-				case 35: /*SessionID*/
+				case 34: /*SessionID*/
 		
 				if(service->val.type == BINARY_HEX) 
 				{
@@ -216,7 +216,7 @@ static int deserializeElementCharacter(struct v2gService* service)
 					}
 		
 				break;
-				case 33: /*ServiceSessionID*/
+				case 32: /*ServiceSessionID*/
 		
 				if(service->val.type == BINARY_HEX) 
 				{
@@ -233,7 +233,7 @@ static int deserializeElementCharacter(struct v2gService* service)
 					/* is used */
 					service->v2gMsg.Header.SessionInformation.isused.ServiceSessionID=1;
 				break;
-				case 25: /*ProtocolVersion*/
+				case 24: /*ProtocolVersion*/
 		
 				if(service->val.type == STRING) 
 				{
@@ -312,7 +312,7 @@ static int deserializeElementCharacter(struct v2gService* service)
 						{ 
 							service->v2gMsg.Body.PowerDeliveryReq.PEVStatus.ConnectorLocked=service->val.boolean;
 							
-						} else if(service->idPath.id[1] == 17)
+						} else if(service->idPath.id[2] == 17)
 						{ 
 							service->v2gMsg.Body.MeteringReceiptReq.PEVStatus.ConnectorLocked=service->val.boolean;
 							
@@ -343,7 +343,7 @@ static int deserializeElementCharacter(struct v2gService* service)
 						{ 
 							service->v2gMsg.Body.PowerDeliveryReq.PEVStatus.ChargerStandby=service->val.boolean;
 							
-						} else if(service->idPath.id[1] == 17)
+						} else if(service->idPath.id[2] == 17)
 						{ 
 							service->v2gMsg.Body.MeteringReceiptReq.PEVStatus.ChargerStandby=service->val.boolean;
 							
@@ -355,7 +355,7 @@ static int deserializeElementCharacter(struct v2gService* service)
 					}
 		
 				break;
-				case 21: /*Multiplier*/
+				case 20: /*Multiplier*/
 					if(service->val.type == ENUMERATION) 
 					{
 						 if(service->idPath.id[3] == 2)
@@ -386,7 +386,7 @@ static int deserializeElementCharacter(struct v2gService* service)
 						{ 
 							service->v2gMsg.Body.MeteringStatusRes.EVSEMaxPower.Multiplier=service->val.enumeration;
 							
-						} else if(service->idPath.id[2] == 25)
+						} else if(service->idPath.id[3] == 25)
 						{ 
 							service->v2gMsg.Body.MeteringStatusRes.PCurrent.Multiplier=service->val.enumeration;
 							
@@ -394,15 +394,15 @@ static int deserializeElementCharacter(struct v2gService* service)
 						{ 
 							service->v2gMsg.Body.PowerDeliveryReq.ChargingProfile.ChargingProfileEntryMaxPower.Multiplier=service->val.enumeration;
 							
-						} else if(service->idPath.id[1] == 23)
+						} else if(service->idPath.id[2] == 23)
 						{ 
 							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterReading.Multiplier=service->val.enumeration;
 							
-						} else if(service->idPath.id[7] == 47)
+						} else if(service->idPath.id[7] == 46)
 						{ 
 							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffPMax.Multiplier=service->val.enumeration;
 							
-						} else if(service->idPath.id[6] == 6)
+						} else if(service->idPath.id[7] == 6)
 						{ 
 							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].EPrice.Multiplier=service->val.enumeration;
 							
@@ -414,7 +414,7 @@ static int deserializeElementCharacter(struct v2gService* service)
 					}
 		
 				break;
-				case 50: /*Unit*/
+				case 49: /*Unit*/
 					if(service->val.type == ENUMERATION) 
 					{
 						 if(service->idPath.id[3] == 2)
@@ -445,7 +445,7 @@ static int deserializeElementCharacter(struct v2gService* service)
 						{ 
 							service->v2gMsg.Body.MeteringStatusRes.EVSEMaxPower.Unit=service->val.enumeration;
 							
-						} else if(service->idPath.id[2] == 25)
+						} else if(service->idPath.id[3] == 25)
 						{ 
 							service->v2gMsg.Body.MeteringStatusRes.PCurrent.Unit=service->val.enumeration;
 							
@@ -453,15 +453,15 @@ static int deserializeElementCharacter(struct v2gService* service)
 						{ 
 							service->v2gMsg.Body.PowerDeliveryReq.ChargingProfile.ChargingProfileEntryMaxPower.Unit=service->val.enumeration;
 							
-						} else if(service->idPath.id[1] == 23)
+						} else if(service->idPath.id[2] == 23)
 						{ 
 							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterReading.Unit=service->val.enumeration;
 							
-						} else if(service->idPath.id[7] == 47)
+						} else if(service->idPath.id[7] == 46)
 						{ 
 							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffPMax.Unit=service->val.enumeration;
 							
-						} else if(service->idPath.id[6] == 6)
+						} else if(service->idPath.id[7] == 6)
 						{ 
 							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].EPrice.Unit=service->val.enumeration;
 							
@@ -473,56 +473,56 @@ static int deserializeElementCharacter(struct v2gService* service)
 					}
 		
 				break;
-				case 51: /*Value*/
-					if(service->val.type == INTEGER_64) 
+				case 50: /*Value*/
+					if(service->val.type == INTEGER_32) 
 					{
 						 if(service->idPath.id[3] == 2)
 						{ 
-							service->v2gMsg.Body.PowerDiscoveryReq.EAmount.Value=service->val.int64;
+							service->v2gMsg.Body.PowerDiscoveryReq.EAmount.Value=service->val.int32;
 							
 						} else if(service->idPath.id[3] == 28)
 						{ 
-							service->v2gMsg.Body.PowerDiscoveryReq.PEVMaxPower.Value=service->val.int64;
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMaxPower.Value=service->val.int32;
 							
 						} else if(service->idPath.id[3] == 29)
 						{ 
-							service->v2gMsg.Body.PowerDiscoveryReq.PEVMaxVoltage.Value=service->val.int64;
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMaxVoltage.Value=service->val.int32;
 							
 						} else if(service->idPath.id[3] == 30)
 						{ 
-							service->v2gMsg.Body.PowerDiscoveryReq.PEVMinVoltage.Value=service->val.int64;
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMinVoltage.Value=service->val.int32;
 							
 						} else if(service->idPath.id[3] == 8)
 						{ 
-							service->v2gMsg.Body.PowerDiscoveryRes.EVSEVoltage.Value=service->val.int64;
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEVoltage.Value=service->val.int32;
 							
 						} else if(service->idPath.id[3] == 4)
 						{ 
-							service->v2gMsg.Body.PowerDiscoveryRes.EVSEIMax.Value=service->val.int64;
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEIMax.Value=service->val.int32;
 							
 						} else if(service->idPath.id[3] == 6)
 						{ 
-							service->v2gMsg.Body.MeteringStatusRes.EVSEMaxPower.Value=service->val.int64;
+							service->v2gMsg.Body.MeteringStatusRes.EVSEMaxPower.Value=service->val.int32;
 							
-						} else if(service->idPath.id[2] == 25)
+						} else if(service->idPath.id[3] == 25)
 						{ 
-							service->v2gMsg.Body.MeteringStatusRes.PCurrent.Value=service->val.int64;
+							service->v2gMsg.Body.MeteringStatusRes.PCurrent.Value=service->val.int32;
 							
 						} else if(service->idPath.id[2] == 37)
 						{ 
-							service->v2gMsg.Body.PowerDeliveryReq.ChargingProfile.ChargingProfileEntryMaxPower.Value=service->val.int64;
+							service->v2gMsg.Body.PowerDeliveryReq.ChargingProfile.ChargingProfileEntryMaxPower.Value=service->val.int32;
 							
-						} else if(service->idPath.id[1] == 23)
+						} else if(service->idPath.id[2] == 23)
 						{ 
-							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterReading.Value=service->val.int64;
+							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterReading.Value=service->val.int32;
 							
-						} else if(service->idPath.id[7] == 47)
+						} else if(service->idPath.id[7] == 46)
 						{ 
-							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffPMax.Value=service->val.int64;
+							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffPMax.Value=service->val.int32;
 							
-						} else if(service->idPath.id[6] == 6)
+						} else if(service->idPath.id[7] == 6)
 						{ 
-							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].EPrice.Value=service->val.int64;
+							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].EPrice.Value=service->val.int32;
 							
 						}
 					} 
@@ -533,9 +533,9 @@ static int deserializeElementCharacter(struct v2gService* service)
 		
 				break;
 				case 2: /*ChargingProfileEntryStart*/
-					if(service->val.type == INTEGER_64) 
+					if(service->val.type == INTEGER_32) 
 					{
-							service->v2gMsg.Body.PowerDeliveryReq.ChargingProfile.ChargingProfileEntryStart=service->val.int64;
+							service->v2gMsg.Body.PowerDeliveryReq.ChargingProfile.ChargingProfileEntryStart=service->val.int32;
 					} 
 					else
 					{
@@ -561,31 +561,14 @@ static int deserializeElementCharacter(struct v2gService* service)
 					/* is used */
 					service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.MeterID=1;
 				break;
-				case 18: /*MeterPubKey*/
-		
-				if(service->val.type == BINARY_HEX) 
-				{
-					/* array copy and array length assignment */
-					memcpy(service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterPubKey.data, service->val.binary.data,service->val.binary.len);
-					service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterPubKey.arraylen.data = service->val.binary.len;
-		
-					} 
-					else
-					{
-						return -1; /* wrong data type */
-					}
-		
-					/* is used */
-					service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.MeterPubKey=1;
-				break;
-				case 20: /*MeterStatus*/
+				case 19: /*MeterStatus*/
 					if(service->val.type == INTEGER_16) 
 					{
 						 if(service->idPath.id[2] == 23)
 						{ 
 							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterStatus=service->val.int32;
 							
-						} else if(service->idPath.id[1] == 17)
+						} else if(service->idPath.id[2] == 17)
 						{ 
 							service->v2gMsg.Body.MeteringReceiptReq.MeterInfo.MeterStatus=service->val.int32;
 							
@@ -599,16 +582,16 @@ static int deserializeElementCharacter(struct v2gService* service)
 					/* is used */
 					service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.MeterStatus=1;
 				break;
-				case 38: /*TMeter*/
-					if(service->val.type == INTEGER_64) 
+				case 37: /*TMeter*/
+					if(service->val.type == INTEGER_32) 
 					{
 						 if(service->idPath.id[2] == 23)
 						{ 
-							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.TMeter=service->val.int64;
+							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.TMeter=service->val.int32;
 							
-						} else if(service->idPath.id[1] == 17)
+						} else if(service->idPath.id[2] == 17)
 						{ 
-							service->v2gMsg.Body.MeteringReceiptReq.MeterInfo.TMeter=service->val.int64;
+							service->v2gMsg.Body.MeteringReceiptReq.MeterInfo.TMeter=service->val.int32;
 							
 						}
 					} 
@@ -676,6 +659,15 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 				case 59:/* SessionSetupReq */	
 	
  		
+			
+							
+					/* test, if data length is unequal to the expected payload  */
+					if((service->inStream.size)!= *(service->inStream.pos))
+					{
+						service->errorCode = V2G_NON_VALID_MESSAGE;
+						return -1;
+					}			
+			
 					/* service call */
 					sessionSetup(&(service->v2gMsg.Body.SessionSetupReq), &(service->v2gMsg.Body.SessionSetupRes));
 							
@@ -683,7 +675,11 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 					service->v2gMsg.Body.isused.SessionSetupRes=1;
 					
 					/* serialize the response data */
-					serialize_message(service); 
+					if(serialize_message(service))
+					{
+						/* serializiation error*/
+						service->errorCode= V2G_SERIALIZATION_FAILED;
+					} 
 
 			
 		
@@ -691,6 +687,15 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 				case 48:/* ServiceDiscoveryReq */	
 	
  		
+			
+							
+					/* test, if data length is unequal to the expected payload  */
+					if((service->inStream.size)!= *(service->inStream.pos))
+					{
+						service->errorCode = V2G_NON_VALID_MESSAGE;
+						return -1;
+					}			
+			
 					/* service call */
 					serviceDiscovery(&(service->v2gMsg.Body.ServiceDiscoveryReq), &(service->v2gMsg.Body.ServiceDiscoveryRes));
 							
@@ -698,7 +703,11 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 					service->v2gMsg.Body.isused.ServiceDiscoveryRes=1;
 					
 					/* serialize the response data */
-					serialize_message(service); 
+					if(serialize_message(service))
+					{
+						/* serializiation error*/
+						service->errorCode= V2G_SERIALIZATION_FAILED;
+					} 
 
 			
 		
@@ -706,6 +715,15 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 				case 53:/* ServicePaymentSelectionReq */	
 	
  		
+			
+							
+					/* test, if data length is unequal to the expected payload  */
+					if((service->inStream.size)!= *(service->inStream.pos))
+					{
+						service->errorCode = V2G_NON_VALID_MESSAGE;
+						return -1;
+					}			
+			
 					/* service call */
 					selectedServicePayment(&(service->v2gMsg.Body.ServicePaymentSelectionReq), &(service->v2gMsg.Body.ServicePaymentSelectionRes));
 							
@@ -713,7 +731,11 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 					service->v2gMsg.Body.isused.ServicePaymentSelectionRes=1;
 					
 					/* serialize the response data */
-					serialize_message(service); 
+					if(serialize_message(service))
+					{
+						/* serializiation error*/
+						service->errorCode= V2G_SERIALIZATION_FAILED;
+					} 
 
 			
 		
@@ -721,6 +743,15 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 				case 33:/* PaymentDetailsReq */	
 	
  		
+			
+							
+					/* test, if data length is unequal to the expected payload  */
+					if((service->inStream.size)!= *(service->inStream.pos))
+					{
+						service->errorCode = V2G_NON_VALID_MESSAGE;
+						return -1;
+					}			
+			
 					/* service call */
 					paymentDetails(&(service->v2gMsg.Body.PaymentDetailsReq), &(service->v2gMsg.Body.PaymentDetailsRes));
 							
@@ -728,7 +759,11 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 					service->v2gMsg.Body.isused.PaymentDetailsRes=1;
 					
 					/* serialize the response data */
-					serialize_message(service); 
+					if(serialize_message(service))
+					{
+						/* serializiation error*/
+						service->errorCode= V2G_SERIALIZATION_FAILED;
+					} 
 
 			
 		
@@ -736,6 +771,15 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 				case 41:/* PowerDiscoveryReq */	
 	
  		
+			
+							
+					/* test, if data length is unequal to the expected payload  */
+					if((service->inStream.size)!= *(service->inStream.pos))
+					{
+						service->errorCode = V2G_NON_VALID_MESSAGE;
+						return -1;
+					}			
+			
 					/* service call */
 					powerDiscovery(&(service->v2gMsg.Body.PowerDiscoveryReq), &(service->v2gMsg.Body.PowerDiscoveryRes));
 							
@@ -743,7 +787,11 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 					service->v2gMsg.Body.isused.PowerDiscoveryRes=1;
 					
 					/* serialize the response data */
-					serialize_message(service); 
+					if(serialize_message(service))
+					{
+						/* serializiation error*/
+						service->errorCode= V2G_SERIALIZATION_FAILED;
+					} 
 
 			
 		
@@ -751,6 +799,15 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 				case 11:/* LineLockReq */	
 	
  		
+			
+							
+					/* test, if data length is unequal to the expected payload  */
+					if((service->inStream.size)!= *(service->inStream.pos))
+					{
+						service->errorCode = V2G_NON_VALID_MESSAGE;
+						return -1;
+					}			
+			
 					/* service call */
 					lineLock(&(service->v2gMsg.Body.LineLockReq), &(service->v2gMsg.Body.LineLockRes));
 							
@@ -758,7 +815,11 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 					service->v2gMsg.Body.isused.LineLockRes=1;
 					
 					/* serialize the response data */
-					serialize_message(service); 
+					if(serialize_message(service))
+					{
+						/* serializiation error*/
+						service->errorCode= V2G_SERIALIZATION_FAILED;
+					} 
 
 			
 		
@@ -766,6 +827,15 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 				case 37:/* PowerDeliveryReq */	
 	
  		
+			
+							
+					/* test, if data length is unequal to the expected payload  */
+					if((service->inStream.size)!= *(service->inStream.pos))
+					{
+						service->errorCode = V2G_NON_VALID_MESSAGE;
+						return -1;
+					}			
+			
 					/* service call */
 					powerDelivery(&(service->v2gMsg.Body.PowerDeliveryReq), &(service->v2gMsg.Body.PowerDeliveryRes));
 							
@@ -773,7 +843,11 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 					service->v2gMsg.Body.isused.PowerDeliveryRes=1;
 					
 					/* serialize the response data */
-					serialize_message(service); 
+					if(serialize_message(service))
+					{
+						/* serializiation error*/
+						service->errorCode= V2G_SERIALIZATION_FAILED;
+					} 
 
 			
 		
@@ -781,6 +855,15 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 				case 21:/* MeteringStatusReq */	
 	
  		
+			
+							
+					/* test, if data length is unequal to the expected payload  */
+					if((service->inStream.size)!= *(service->inStream.pos))
+					{
+						service->errorCode = V2G_NON_VALID_MESSAGE;
+						return -1;
+					}			
+			
 					/* service call */
 					meteringStatus(&(service->v2gMsg.Body.MeteringStatusReq), &(service->v2gMsg.Body.MeteringStatusRes));
 							
@@ -788,7 +871,11 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 					service->v2gMsg.Body.isused.MeteringStatusRes=1;
 					
 					/* serialize the response data */
-					serialize_message(service); 
+					if(serialize_message(service))
+					{
+						/* serializiation error*/
+						service->errorCode= V2G_SERIALIZATION_FAILED;
+					} 
 
 			
 		
@@ -796,6 +883,15 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 				case 17:/* MeteringReceiptReq */	
 	
  		
+			
+							
+					/* test, if data length is unequal to the expected payload  */
+					if((service->inStream.size)!= *(service->inStream.pos))
+					{
+						service->errorCode = V2G_NON_VALID_MESSAGE;
+						return -1;
+					}			
+			
 					/* service call */
 					meteringReceipt(&(service->v2gMsg.Body.MeteringReceiptReq), &(service->v2gMsg.Body.MeteringReceiptRes));
 							
@@ -803,7 +899,11 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 					service->v2gMsg.Body.isused.MeteringReceiptRes=1;
 					
 					/* serialize the response data */
-					serialize_message(service); 
+					if(serialize_message(service))
+					{
+						/* serializiation error*/
+						service->errorCode= V2G_SERIALIZATION_FAILED;
+					} 
 
 			
 		
@@ -812,13 +912,13 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 		break;
 		case 5:
 			switch(service->eqn.localPart) {
-				case 33:/* ServiceSessionID */	
+				case 32:/* ServiceSessionID */	
 	
  				
 				/* is used */
 				service->v2gMsg.Header.SessionInformation.isused.ServiceSessionID=1;
 				break;
-				case 25:/* ProtocolVersion */	
+				case 24:/* ProtocolVersion */	
 	
  				
 				/* is used */
@@ -848,25 +948,19 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 				/* is used */
 				service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.MeterID=1;
 				break;
-				case 18:/* MeterPubKey */	
-	
- 				
-				/* is used */
-				service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.MeterPubKey=1;
-				break;
-				case 19:/* MeterReading */	
+				case 18:/* MeterReading */	
 	
  				
 				/* is used */
 				service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.MeterReading=1;
 				break;
-				case 20:/* MeterStatus */	
+				case 19:/* MeterStatus */	
 	
  				
 				/* is used */
 				service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.MeterStatus=1;
 				break;
-				case 38:/* TMeter */	
+				case 37:/* TMeter */	
 	
  				
 				/* is used */
@@ -897,49 +991,55 @@ static int deserializeElementOrServiceCall(struct v2gService* service)
 static int deserializeMessage(struct v2gService* service)
 {
 	int noEndOfDocument = 1; /* true */
-	int errno=0;
+	int returnCode=0;
 
 
 	do {
 			exiDecodeNextEvent(&(service->inStream), &(service->stateDecode), &(service->event));
-			if (errno < 0) {
-				printf("[ERROR] %d \n", errno);
-				return errno;
+			if (returnCode) 
+			{
+				
+				if(service->errorCode==0) 
+				{
+					service->errorCode= V2G_NON_VALID_MESSAGE;
+				}
+			
+				return returnCode;
 			}
 
 			switch (service->event) {
 			case START_DOCUMENT:
 
-				errno = exiDecodeStartDocument(&(service->inStream), &(service->stateDecode));
+				returnCode = exiDecodeStartDocument(&(service->inStream), &(service->stateDecode));
 
 				break;
 			case END_DOCUMENT:
 
-				errno = exiDecodeEndDocument(&(service->inStream), &(service->stateDecode));
+				returnCode = exiDecodeEndDocument(&(service->inStream), &(service->stateDecode));
 				noEndOfDocument = 0; /* false */
 				break;
 			case START_ELEMENT:
-				errno = exiDecodeStartElement(&(service->inStream), &(service->stateDecode), &(service->eqn));
+				returnCode = exiDecodeStartElement(&(service->inStream), &(service->stateDecode), &(service->eqn));
 				service->idPath.id[service->idPath.pos++]=service->eqn.localPart;
 				 
 				break;
 			case END_ELEMENT:
 
-				errno = exiDecodeEndElement(&(service->inStream), &(service->stateDecode), &(service->eqn));
-				errno = deserializeElementOrServiceCall(service);
+				returnCode = exiDecodeEndElement(&(service->inStream), &(service->stateDecode), &(service->eqn));
+				returnCode = deserializeElementOrServiceCall(service);
 				service->idPath.pos--;
 				 
 				break;
 			case CHARACTERS:
 				/* decode */
-				errno = exiDecodeCharacters(&(service->inStream), &(service->stateDecode), &(service->val));
+				returnCode = exiDecodeCharacters(&(service->inStream), &(service->stateDecode), &(service->val));
 				 
 				/* assign data to the v2g message structure */
-				errno = deserializeElementCharacter(service);
+				returnCode = deserializeElementCharacter(service);
 				break;
 			case ATTRIBUTE:
 				/* decode */
-				/*	errno = exiDecodeAttribute(&isStream, &stateDecode, &eqn, &val); */
+				/*	returnCode = exiDecodeAttribute(&isStream, &stateDecode, &eqn, &val); */
 				break;
 			default:
 				/* ERROR */
@@ -956,28 +1056,30 @@ static int deserializeMessage(struct v2gService* service)
  * Takes the EXI stream, invokes the called service method, and provides the response EXI stream 
  * @return 0 = 0K; -1 = ERROR
  */
-int messageDispatcher(struct v2gService* service, uint8_t* inStream, size_t sizeInStream, size_t* inPos, uint8_t* outStream, size_t sizeOutStream, size_t* outPos)
+int messageDispatcher(struct v2gService* service, uint8_t* inStream, size_t sizeInStream, uint8_t* outStream, size_t sizeOutStream, size_t* outStreamLength)
 {
 
-	int responseCode;
-
+	size_t inPos, outPos;
+	
 	/* assign inStream data to service v2g structure */
+	inPos = service->transportHeaderOffset;
 	service->inStream.data = inStream;
-	service->inStream.size = sizeInStream;
-	service->inStream.pos = inPos;
+	service->inStream.size = sizeInStream+inPos;
+	service->inStream.pos = &inPos;
 	service->inStream.buffer=0;
 	service->inStream.capacity=0;
-	
-	
+
 	
 	/* assign outStream data to service v2g structure */
+	outPos=service->transportHeaderOffset;
 	service->outStream.data = outStream;
 	service->outStream.size = sizeOutStream;
-	service->outStream.pos = outPos;
+	service->outStream.pos = &outPos;
 	service->outStream.buffer=0;
 	service->outStream.capacity=8;
 	
-	
+	/* clear error code */
+	service->errorCode = 0;
 	
 	/* init EXI decoder (read header, set initial state) */
 	exiInitDecoder(&(service->inStream), &(service->stateDecode));
@@ -992,30 +1094,24 @@ int messageDispatcher(struct v2gService* service, uint8_t* inStream, size_t size
 	init_AnonType_V2G_Message(&(service->v2gMsg));
 
 	/* deserialize the input stream and call the corresponding service */
-	responseCode = deserializeMessage(service);
-	
-	
-
-	if(responseCode<0)
+	if(deserializeMessage(service))
 	{
-		/* an error occurred */
-		return -1;
-	} else if(responseCode==1)
-	{
-		
-		return 0;
+		return -1; /* something went wrong */
 	}
 
+	/* determine payload size (without transport offset) */	
+	outPos -= service->transportHeaderOffset;
+	*outStreamLength = outPos;
 
+	
 	return 0;
-
 }
 
 /** 
  * Init the service
  * @return 0 = 0K; -1 = ERROR
  */
-int init_v2gservice(struct v2gService* service, bytes_t bytes, string_ucs_t string)
+int init_v2gservice(struct v2gService* service, bytes_t bytes, string_ucs_t string, uint16_t transportHeaderOffset)
 {
 
 	/* init byte array */
@@ -1024,6 +1120,8 @@ int init_v2gservice(struct v2gService* service, bytes_t bytes, string_ucs_t stri
 	/* init string array */
 	 service->val.string = string;
 
+	/* init offset for transport protocoll */
+	 service->transportHeaderOffset=transportHeaderOffset;
 
 	return 0;
 }

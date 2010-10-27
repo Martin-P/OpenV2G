@@ -18,14 +18,14 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
 
 #include "v2g_serviceClientDataTransmitter.h"
 #include "v2g_server.h"
-
+#include "doip.h"
 
 /* This method has to be implemented!
  * Send EXI stream (outStream) to EVSE and receive response stream (inStream)*/
@@ -34,7 +34,14 @@ int serviceDataTransmitter(uint8_t* outStream, size_t outStreamLength, uint8_t* 
 	/* send output stream to the underlying network to the EVSE and wait for response
 	 * --> here provide data to the V2G server directly*/
 
-	testV2GService(outStream,  outStreamLength, inStream);
+	size_t inStreamLength = 0;
+	size_t payloadLength = 0;
 
-	return 0;
+	/* setup DoIP header information; outStreamLength==payloadLength*/
+	write_doIPHeader(outStream,&outStreamLength,DOIP_EXI_TYPE);
+
+	/* send data to EVSE server (add DoIP offset)*/
+	testV2GService(outStream, outStreamLength, inStream, &inStreamLength);
+
+	return read_doIPHeader(inStream,inStreamLength, &payloadLength);
 }
