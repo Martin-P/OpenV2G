@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -29,12 +29,15 @@
 #include "v2g_serviceDataTypes.h"
 #include "v2g_serviceClientStubs.h"
 #include "EXITypes.h"
+#include "doIP.h"
 
 #include <stdio.h>
 
 #define MAX_BYTE_SIZE 128
 #define MAX_STRING_SIZE 256
 #define MAX_STREAM_SIZE 60
+
+static void printErrorMessage(struct v2gService* service);
 
 int main_service(int argc, char *argv[])
 {
@@ -46,14 +49,19 @@ int main_service(int argc, char *argv[])
 	uint8_t inStream[MAX_STREAM_SIZE]; /* define MAX_STREAM_SIZE before */
 	uint8_t outStream[MAX_STREAM_SIZE]; /* define MAX_STREAM_SIZE before */
 
+	/* define offset variable for transport header data */
+	uint16_t transportHeaderOffset;
+
+
 	/* service data structure */
 	struct v2gService service;
 	struct HeaderType v2gHeader;
 	struct SessionSetupReqType sessionSetup;
 	struct SessionSetupResType resultSessionSetup;
-/*	struct PowerDiscoveryReqType powerDiscovery;
-	struct PowerDiscoveryResType resultPowerDiscovery;
-*/
+	/*struct PowerDiscoveryReqType powerDiscovery;
+	struct PowerDiscoveryResType resultPowerDiscovery; */
+
+
 
 	/* BINARY memory setup */
 	bytes_t bytes = { MAX_BYTE_SIZE, byte_array, 0 };
@@ -61,6 +69,9 @@ int main_service(int argc, char *argv[])
 	/* STRING memory setup */
 	string_ucs_t string = { MAX_STRING_SIZE, string_array, 0 };
 
+	/* setup offset for DoIP header (otherwise set
+	 * transportHeaderOffset=0 if no transfer protocol is used)*/
+	transportHeaderOffset = DOIP_HEADER_LENGTH;
 
 
 	printf("+++Start V2G Client / Service Example+++\n\n");
@@ -69,7 +80,7 @@ int main_service(int argc, char *argv[])
 	 * Init V2G Client *
 	 *******************/
 
-	init_v2gServiceClient(&service,bytes,string,inStream,MAX_STREAM_SIZE, outStream, MAX_STREAM_SIZE);
+	init_v2gServiceClient(&service,bytes,string,inStream,MAX_STREAM_SIZE, outStream, MAX_STREAM_SIZE, transportHeaderOffset);
 
 	/*******************************
 	 * Setup data for sessionSetup *
@@ -82,32 +93,50 @@ int main_service(int argc, char *argv[])
 	v2gHeader.SessionInformation.isused.ProtocolVersion = 1; /* important: signalize, protocol version is used */
 	v2gHeader.isused.Notification=0; /* no notification */
 
-	/* setup sessionSetup parameters */
+	/* setup sessionSetup parameter */
 	sessionSetup.isused.PEVID=1; /* no PEVID is transported */
 	sessionSetup.PEVStatus.ChargerStandby=1; /* charger standby = true */
 	sessionSetup.PEVStatus.ConnectorLocked=0; /* connector locked = false */
 
 
 	printf("PEV: call EVSE sessionSetup\n");
+
 	/*********************
 	 * Call sessionSetup *
 	 *********************/
-	call_sessionSetup(&service,&v2gHeader,&sessionSetup,&resultSessionSetup);
-
-	/* show results of the answer message of EVSE sessionSetup*/
-	printf("PEV: received response message from EVSE\n");
-	printf("\tResponseCode=%d\n",resultSessionSetup.ResponseCode);
-	printf("\tEVSEID=%d\n",	resultSessionSetup.EVSEID.data[0]);
-	printf("\tEVSEStatus:\n\t\tConnectorLocked=%d\n",resultSessionSetup.EVSEStatus.ConnectorLocked);
-	printf("\t\tEVSEStandby=%d\n",resultSessionSetup.EVSEStatus.EVSEStandby);
-	printf("\t\tFatalError=%d\n",resultSessionSetup.EVSEStatus.FatalError);
-	printf("\t\tPowerSwitchClosed=%d\n",resultSessionSetup.EVSEStatus.PowerSwitchClosed);
-	printf("\t\tRCD=%d\n",resultSessionSetup.EVSEStatus.RCD);
-	printf("\t\tShutDownTime=%lld\n",resultSessionSetup.EVSEStatus.ShutDownTime);
-	printf("\tTCurrent=%lld\n",resultSessionSetup.TCurrent);
+	if(call_sessionSetup(&service,&v2gHeader,&sessionSetup,&resultSessionSetup))
+	{
+		printErrorMessage(&service);
+	}
+	else
+	{
+		/* show result of the answer message of EVSE sessionSetup*/
+		printf("PEV: received response message from EVSE\n");
+		printf("\tResponseCode=%d\n",resultSessionSetup.ResponseCode);
+		printf("\tEVSEID=%d\n",	resultSessionSetup.EVSEID.data[0]);
+		printf("\tEVSEStatus:\n\t\tConnectorLocked=%d\n",resultSessionSetup.EVSEStatus.ConnectorLocked);
+		printf("\t\tEVSEStandby=%d\n",resultSessionSetup.EVSEStatus.EVSEStandby);
+		printf("\t\tFatalError=%d\n",resultSessionSetup.EVSEStatus.FatalError);
+		printf("\t\tPowerSwitchClosed=%d\n",resultSessionSetup.EVSEStatus.PowerSwitchClosed);
+		printf("\t\tRCD=%d\n",resultSessionSetup.EVSEStatus.RCD);
+		printf("\t\tShutDownTime=%d\n",resultSessionSetup.EVSEStatus.ShutDownTime);
+		printf("\tTCurrent=%d\n",resultSessionSetup.TCurrent);
+	}
 
 	printf("\n+++Terminate V2G Client / Service Example+++");
 
 	return 0;
+}
+
+static void printErrorMessage(struct v2gService* service)
+{
+	if(service->errorCode==V2G_NON_VALID_MESSAGE)
+	{
+		printf("PEV did not send a valid V2G message!\n");
+	}
+	else if(service->errorCode==V2G_SERIALIZATION_FAILED)
+	{
+		printf("EVSE error: Could not serialize the response message\n");
+	}
 }
 

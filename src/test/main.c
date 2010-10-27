@@ -19,10 +19,10 @@
  *
  * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
- * <p>Switch for sample programs: EXI codec only or for entire service</p>
+ * <p>Switch for sample programs: EXI codec only or for entire V2G service</p>
  *
  ********************************************************************/
 
@@ -33,12 +33,10 @@
 
 int main(int argc, char *argv[]) {
 	/* EXI codec only */
-	/* return main_codec(argc, argv);*/
+	 /*return main_codec(argc, argv);*/
 
 	/* V2G client / service example scenario */
 	return main_service(argc, argv);
 
-	/* network example 1 */
-	/* return main_network_1(argc, argv); */
 }
 
