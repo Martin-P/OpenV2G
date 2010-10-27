@@ -30,5 +30,6 @@
 
 int main_codec(int argc, char *argv[]);
 int main_service(int argc, char *argv[]);
+int main_network_1(int argc, char *argv[]);
 
 #endif
