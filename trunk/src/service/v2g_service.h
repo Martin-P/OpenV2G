@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -58,9 +58,19 @@ struct v2gService
 
 	/* unique id for ambiguous elements */
 	struct uniqueIDPath idPath;
+
+	/* error code */
+	uint8_t errorCode;
+
+	/* offset for transport header data */
+	uint16_t transportHeaderOffset;
 };
 
+/* define error codes (TODO: define precise error codes) */
+#define V2G_NON_VALID_MESSAGE 0x01
+#define V2G_SERIALIZATION_FAILED 0x02
 
+#define V2G_UNKNOWN_ERROR 0xFF
 
 #endif /* V2G_SERVICE_H_ */
 

@@ -19,7 +19,7 @@
  *
  * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  *
@@ -30,6 +30,5 @@
 
 int main_codec(int argc, char *argv[]);
 int main_service(int argc, char *argv[]);
-int main_network_1(int argc, char *argv[]);
 
 #endif

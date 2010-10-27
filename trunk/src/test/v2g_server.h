@@ -18,15 +18,16 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
+
 #ifndef V2G_SERVER_H_
 #define V2G_SERVER_H_
 
 #include "EXITypes.h"
 
-int testV2GService(uint8_t* inStream, size_t inStreamLength, uint8_t* outStream);
+int testV2GService(uint8_t* inStream, size_t inStreamLength, uint8_t* outStream,size_t* outStreamLength);
 
 #endif /* V2G_SERVER_H_ */
