@@ -37,5 +37,8 @@ int main(int argc, char *argv[]) {
 
 	/* V2G client / service example scenario */
 	return main_service(argc, argv);
+
+	/* network example 1 */
+	/* return main_network_1(argc, argv); */
 }
 
