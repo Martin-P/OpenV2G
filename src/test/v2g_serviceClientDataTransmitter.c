@@ -25,7 +25,7 @@
 
 #include "v2g_serviceClientDataTransmitter.h"
 #include "v2g_server.h"
-#include "doip.h"
+#include "doIP.h"
 
 /* This method has to be implemented!
  * Send EXI stream (outStream) to EVSE and receive response stream (inStream)*/
