@@ -1,13 +1,13 @@
 -------------------------------------------------------------------------
 OpenV2G - an open source project implementing the basic functionality of the ISO IEC 15118 vehicle to grid (V2G) communication interface 
-Version 0.3.1, released December 22, 2010
+Version 0.4, released April 14, 2011
 http://openv2g.sourceforge.net/
 
 Please report bugs via the SourceForge bug tracking system at http://sourceforge.net/tracker/?group_id=350113.
 Thank you.
 
 
-Copyright (C) 2007-2010 Siemens AG
+Copyright (C) 2007-2011 Siemens AG
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published
@@ -23,14 +23,23 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -------------------------------------------------------------------------
+CHANGES from version 0.3.1:
+-------------------------------------------------------------------------
+* adaption of V2G schema changes
+* supporting of DC messages
+* example program showing the message sequence of AC charging and 
+DC charging
+* bug-fixes
+
+-------------------------------------------------------------------------
 CHANGES from version 0.3:
 -------------------------------------------------------------------------
 * Bug-fixes
 * reduced memory usage
 * some type changes in the EXI codec and V2G service: 
-** struct v2gService->struct EXIService
-** size_t->uint16_t
-* renaming of some enumeration values 
+** struct v2gService->struct EXIService in v2g_service.h
+** size_t->uint16_t in v2g_serviceClientDataTransmitter.h and doIP.h
+* renaming of some enumeration values in v2g_serviceDataTypes.h
 
 -------------------------------------------------------------------------
 CHANGES from version 0.2.2:
