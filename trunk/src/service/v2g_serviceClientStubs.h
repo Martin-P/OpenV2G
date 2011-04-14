@@ -3,7 +3,7 @@
 
 
 /*
- * Copyright (C) 2007-2010 Siemens AG
+ * Copyright (C) 2007-2011 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -22,7 +22,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.3.1
+ * @version 0.3.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -89,13 +89,13 @@ extern "C" {
 
 	
 /**  
- * \brief   Calls the remote powerDiscovery method
+ * \brief   Calls the remote chargeParameterDiscovery method
  * \param	service  struct EXIService* Service data structure (has to be initialized before)
  * \param	header   struct HeaderType* Header data structure
- * \param	params   struct PowerDiscoveryReqType* Request data for the server (has to be set up before)
- * \param	result   struct PowerDiscoveryResType* Contains the response data from the server 
+ * \param	params   struct ChargeParameterDiscoveryReqType* Request data for the server (has to be set up before)
+ * \param	result   struct ChargeParameterDiscoveryResType* Contains the response data from the server 
  * \return  0 = 0K; -1 = ERROR */
-	int call_powerDiscovery(struct EXIService* service, struct HeaderType* header, struct PowerDiscoveryReqType* params, struct PowerDiscoveryResType* result);
+	int call_chargeParameterDiscovery(struct EXIService* service, struct HeaderType* header, struct ChargeParameterDiscoveryReqType* params, struct ChargeParameterDiscoveryResType* result);
 
  
 
@@ -143,6 +143,66 @@ extern "C" {
  * \param	result   struct MeteringReceiptResType* Contains the response data from the server 
  * \return  0 = 0K; -1 = ERROR */
 	int call_meteringReceipt(struct EXIService* service, struct HeaderType* header, struct MeteringReceiptReqType* params, struct MeteringReceiptResType* result);
+
+ 
+
+	
+/**  
+ * \brief   Calls the remote cableCheck method
+ * \param	service  struct EXIService* Service data structure (has to be initialized before)
+ * \param	header   struct HeaderType* Header data structure
+ * \param	params   struct CableCheckReqType* Request data for the server (has to be set up before)
+ * \param	result   struct CableCheckResType* Contains the response data from the server 
+ * \return  0 = 0K; -1 = ERROR */
+	int call_cableCheck(struct EXIService* service, struct HeaderType* header, struct CableCheckReqType* params, struct CableCheckResType* result);
+
+ 
+
+	
+/**  
+ * \brief   Calls the remote preCharge method
+ * \param	service  struct EXIService* Service data structure (has to be initialized before)
+ * \param	header   struct HeaderType* Header data structure
+ * \param	params   struct PreChargeReqType* Request data for the server (has to be set up before)
+ * \param	result   struct PreChargeResType* Contains the response data from the server 
+ * \return  0 = 0K; -1 = ERROR */
+	int call_preCharge(struct EXIService* service, struct HeaderType* header, struct PreChargeReqType* params, struct PreChargeResType* result);
+
+ 
+
+	
+/**  
+ * \brief   Calls the remote currentDemand method
+ * \param	service  struct EXIService* Service data structure (has to be initialized before)
+ * \param	header   struct HeaderType* Header data structure
+ * \param	params   struct CurrentDemandReqType* Request data for the server (has to be set up before)
+ * \param	result   struct CurrentDemandResType* Contains the response data from the server 
+ * \return  0 = 0K; -1 = ERROR */
+	int call_currentDemand(struct EXIService* service, struct HeaderType* header, struct CurrentDemandReqType* params, struct CurrentDemandResType* result);
+
+ 
+
+	
+/**  
+ * \brief   Calls the remote weldingDetection method
+ * \param	service  struct EXIService* Service data structure (has to be initialized before)
+ * \param	header   struct HeaderType* Header data structure
+ * \param	params   struct WeldingDetectionReqType* Request data for the server (has to be set up before)
+ * \param	result   struct WeldingDetectionResType* Contains the response data from the server 
+ * \return  0 = 0K; -1 = ERROR */
+	int call_weldingDetection(struct EXIService* service, struct HeaderType* header, struct WeldingDetectionReqType* params, struct WeldingDetectionResType* result);
+
+ 
+
+	
+/**  
+ * \brief   Calls the remote terminateCharging method
+ * \param	service  struct EXIService* Service data structure (has to be initialized before)
+ * \param	header   struct HeaderType* Header data structure
+ * \param	params   struct TerminateChargingReqType* Request data for the server (has to be set up before)
+ * \param	result   struct TerminateChargingResType* Contains the response data from the server 
+ * \return  0 = 0K; -1 = ERROR */
+	int call_terminateCharging(struct EXIService* service, struct HeaderType* header, struct TerminateChargingReqType* params, struct TerminateChargingResType* result);
 
  
 

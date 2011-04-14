@@ -3,7 +3,7 @@
 
 
 /*
- * Copyright (C) 2007-2010 Siemens AG
+ * Copyright (C) 2007-2011 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -22,7 +22,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.3.1
+ * @version 0.3.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -47,7 +47,7 @@ int	selectedServicePayment(struct ServicePaymentSelectionReqType* param, struct 
 					
 int	paymentDetails(struct PaymentDetailsReqType* param, struct PaymentDetailsResType* result);
 					
-int	powerDiscovery(struct PowerDiscoveryReqType* param, struct PowerDiscoveryResType* result);
+int	chargeParameterDiscovery(struct ChargeParameterDiscoveryReqType* param, struct ChargeParameterDiscoveryResType* result);
 					
 int	lineLock(struct LineLockReqType* param, struct LineLockResType* result);
 					
@@ -56,6 +56,16 @@ int	powerDelivery(struct PowerDeliveryReqType* param, struct PowerDeliveryResTyp
 int	meteringStatus(struct MeteringStatusReqType* param, struct MeteringStatusResType* result);
 					
 int	meteringReceipt(struct MeteringReceiptReqType* param, struct MeteringReceiptResType* result);
+					
+int	cableCheck(struct CableCheckReqType* param, struct CableCheckResType* result);
+					
+int	preCharge(struct PreChargeReqType* param, struct PreChargeResType* result);
+					
+int	currentDemand(struct CurrentDemandReqType* param, struct CurrentDemandResType* result);
+					
+int	weldingDetection(struct WeldingDetectionReqType* param, struct WeldingDetectionResType* result);
+					
+int	terminateCharging(struct TerminateChargingReqType* param, struct TerminateChargingResType* result);
 						
 	
 
