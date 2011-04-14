@@ -1,6 +1,6 @@
 
 /*
- * Copyright (C) 2007-2010 Siemens AG
+ * Copyright (C) 2007-2011 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,7 +19,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.3.1
+ * @version 0.3.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -105,19 +105,10 @@ enum responseCode_PaymentDetailsType
 
 }; 
 
-enum unitMultiplierType
+enum chargingModeType
 {
-	d_unitMultiplierType, 
-	c_unitMultiplierType, 
-	m_unitMultiplierType, 
-	micro_unitMultiplierType, 
-	n_unitMultiplierType, 
-	p_unitMultiplierType, 
-	k_unitMultiplierType, 
-	M_unitMultiplierType, 
-	G_unitMultiplierType, 
-	T_unitMultiplierType, 
-	none_unitMultiplierType
+	AC_charging_chargingModeType, 
+	DC_charging_chargingModeType
 
 }; 
 
@@ -126,16 +117,9 @@ enum unitSymbolType
 	A_unitSymbolType, 
 	deg_unitSymbolType, 
 	F_unitSymbolType, 
-	g_unitSymbolType, 
 	h_unitSymbolType, 
-	J_unitSymbolType, 
-	J_s_unitSymbolType, 
-	kg_J_unitSymbolType, 
 	min_unitSymbolType, 
-	N_unitSymbolType, 
-	ohm_unitSymbolType, 
 	s_unitSymbolType, 
-	S_unitSymbolType, 
 	s_1_unitSymbolType, 
 	V_unitSymbolType, 
 	V_VAr_unitSymbolType, 
@@ -147,14 +131,15 @@ enum unitSymbolType
 	W_Hz_unitSymbolType, 
 	W_s_unitSymbolType, 
 	Wh_unitSymbolType, 
-	Ah_unitSymbolType
-
+	Ah_unitSymbolType,
+	J_unitSymbolType
 }; 
 
-enum responseCode_PowerDiscoveryType
+enum responseCode_ChargeParameterDiscoveryType
 {
-	OK_PowerDiscovery_responseCode_PowerDiscoveryType, 
-	FAILED_UnknownError_InPowerDiscovery_responseCode_PowerDiscoveryType
+	OK_responseCode_ChargeParameterDiscoveryType, 
+	FAILED_BatteryNotCompatible_responseCode_ChargeParameterDiscoveryType, 
+	FAILED_UnknownError_responseCode_ChargeParameterDiscoveryType
 
 }; 
 
@@ -201,34 +186,55 @@ enum responseCode_MeteringReceiptType
 
 }; 
 
+enum responseCode_CableCheckType
+{
+	OK_responseCode_CableCheckType, 
+	FAILED_UnknownError_responseCode_CableCheckType
+
+}; 
+
+enum responseCode_PreChargeType
+{
+	OK_responseCode_PreChargeType, 
+	FAILED_UnknownError_responseCode_PreChargeType
+
+}; 
+
+enum responseCode_CurrentDemandType
+{
+	OK_responseCode_CurrentDemandType, 
+	FAILED_UnknownError_responseCode_CurrentDemandType
+
+}; 
+
+enum responseCode_WeldingDetectionType
+{
+	OK_responseCode_WeldingDetectionType, 
+	FAILED_UnknownError_responseCode_WeldingDetectionType
+
+}; 
+
+enum responseCode_TerminateChargingType
+{
+	OK_responseCode_TerminateChargingType, 
+	FAILED_UnknownError_responseCode_TerminateChargingType
+
+}; 
 
 
 
-struct arraylen_SessionInformationType_SessionID
+
+struct arraylen_sessionIDType
 {
 	size_t data;
 
 
 };
 
-struct SessionInformationType_SessionID
+struct sessionIDType
 {
 	uint8_t data[8];
-	struct arraylen_SessionInformationType_SessionID arraylen;
-
-};
-
-struct arraylen_SessionInformationType_ServiceSessionID
-{
-	size_t data;
-
-
-};
-
-struct SessionInformationType_ServiceSessionID
-{
-	uint8_t data[8];
-	struct arraylen_SessionInformationType_ServiceSessionID arraylen;
+	struct arraylen_sessionIDType arraylen;
 
 };
 
@@ -240,25 +246,25 @@ struct selection_SessionInformationType
 
 };
 
-struct arraylen_SessionInformationType_ProtocolVersion
+struct arraylen_protocolVersionType
 {
 	size_t data;
 
 
 };
 
-struct SessionInformationType_ProtocolVersion
+struct protocolVersionType
 {
 	uint32_t data[5];
-	struct arraylen_SessionInformationType_ProtocolVersion arraylen;
+	struct arraylen_protocolVersionType arraylen;
 
 };
 
 struct SessionInformationType
 {
-	struct SessionInformationType_SessionID SessionID;
-	struct SessionInformationType_ServiceSessionID ServiceSessionID;
-	struct SessionInformationType_ProtocolVersion ProtocolVersion;
+	struct sessionIDType SessionID;
+	struct sessionIDType ServiceSessionID;
+	struct protocolVersionType ProtocolVersion;
 	struct selection_SessionInformationType isused;
 
 };
@@ -272,17 +278,17 @@ struct selection_NotificationType
 
 };
 
-struct arraylen_NotificationType_FaultMsg
+struct arraylen_service_string
 {
 	size_t data;
 
 
 };
 
-struct NotificationType_FaultMsg
+struct service_string
 {
 	uint32_t data[256];
-	struct arraylen_NotificationType_FaultMsg arraylen;
+	struct arraylen_service_string arraylen;
 
 };
 
@@ -296,7 +302,7 @@ struct EventListType
 struct NotificationType
 {
 	enum faultCodeType FaultCode;
-	struct NotificationType_FaultMsg FaultMsg;
+	struct service_string FaultMsg;
 	struct EventListType EventList;
 	struct selection_NotificationType isused;
 
@@ -317,17 +323,17 @@ struct HeaderType
 
 };
 
-struct arraylen_SessionSetupReqType_PEVID
+struct arraylen_pevIDType
 {
 	size_t data;
 
 
 };
 
-struct SessionSetupReqType_PEVID
+struct pevIDType
 {
 	uint32_t data[32];
-	struct arraylen_SessionSetupReqType_PEVID arraylen;
+	struct arraylen_pevIDType arraylen;
 
 };
 
@@ -342,13 +348,14 @@ struct PEVStatusType
 {
 	int ConnectorLocked;
 	int ChargerStandby;
+	int ReadyToCharge;
 
 
 };
 
 struct SessionSetupReqType
 {
-	struct SessionSetupReqType_PEVID PEVID;
+	struct pevIDType PEVID;
 	struct PEVStatusType PEVStatus;
 	struct selection_SessionSetupReqType isused;
 
@@ -364,8 +371,8 @@ struct selection_BodyType
 	unsigned int ServicePaymentSelectionRes:1;
 	unsigned int PaymentDetailsReq:1;
 	unsigned int PaymentDetailsRes:1;
-	unsigned int PowerDiscoveryReq:1;
-	unsigned int PowerDiscoveryRes:1;
+	unsigned int ChargeParameterDiscoveryReq:1;
+	unsigned int ChargeParameterDiscoveryRes:1;
 	unsigned int LineLockReq:1;
 	unsigned int LineLockRes:1;
 	unsigned int PowerDeliveryReq:1;
@@ -374,21 +381,31 @@ struct selection_BodyType
 	unsigned int MeteringStatusRes:1;
 	unsigned int MeteringReceiptReq:1;
 	unsigned int MeteringReceiptRes:1;
+	unsigned int CableCheckReq:1;
+	unsigned int CableCheckRes:1;
+	unsigned int PreChargeReq:1;
+	unsigned int PreChargeRes:1;
+	unsigned int CurrentDemandReq:1;
+	unsigned int CurrentDemandRes:1;
+	unsigned int WeldingDetectionReq:1;
+	unsigned int WeldingDetectionRes:1;
+	unsigned int TerminateChargingReq:1;
+	unsigned int TerminateChargingRes:1;
 
 
 };
 
-struct arraylen_SessionSetupResType_EVSEID
+struct arraylen_evseIDType
 {
 	size_t data;
 
 
 };
 
-struct SessionSetupResType_EVSEID
+struct evseIDType
 {
 	uint8_t data[32];
-	struct arraylen_SessionSetupResType_EVSEID arraylen;
+	struct arraylen_evseIDType arraylen;
 
 };
 
@@ -400,6 +417,9 @@ struct EVSEStatusType
 	int PowerSwitchClosed;
 	int RCD;
 	int32_t ShutDownTime;
+	int ChargerStandby;
+	int EVSEMalfunction;
+	int StopCharging;
 
 
 };
@@ -407,7 +427,7 @@ struct EVSEStatusType
 struct SessionSetupResType
 {
 	enum responseCode_SessionSetupType ResponseCode;
-	struct SessionSetupResType_EVSEID EVSEID;
+	struct evseIDType EVSEID;
 	struct EVSEStatusType EVSEStatus;
 	int32_t TCurrent;
 
@@ -422,53 +442,53 @@ struct selection_ServiceDiscoveryReqType
 
 };
 
-struct arraylen_ServiceDiscoveryReqType_ServiceScope
+struct arraylen_serviceScopeType
 {
 	size_t data;
 
 
 };
 
-struct ServiceDiscoveryReqType_ServiceScope
+struct serviceScopeType
 {
 	uint32_t data[20];
-	struct arraylen_ServiceDiscoveryReqType_ServiceScope arraylen;
+	struct arraylen_serviceScopeType arraylen;
 
 };
 
 struct ServiceDiscoveryReqType
 {
 	enum serviceTypeType ServiceType;
-	struct ServiceDiscoveryReqType_ServiceScope ServiceScope;
+	struct serviceScopeType ServiceScope;
 	struct selection_ServiceDiscoveryReqType isused;
 
 };
 
-struct arraylen_ServiceDescriptionType_ServiceID
+struct arraylen_serviceIDType
 {
 	size_t data;
 
 
 };
 
-struct ServiceDescriptionType_ServiceID
+struct serviceIDType
 {
 	uint8_t data[8];
-	struct arraylen_ServiceDescriptionType_ServiceID arraylen;
+	struct arraylen_serviceIDType arraylen;
 
 };
 
-struct arraylen_ServiceDescriptionType_ServiceName
+struct arraylen_serviceNameType
 {
 	size_t data;
 
 
 };
 
-struct ServiceDescriptionType_ServiceName
+struct serviceNameType
 {
 	uint32_t data[20];
-	struct arraylen_ServiceDescriptionType_ServiceName arraylen;
+	struct arraylen_serviceNameType arraylen;
 
 };
 
@@ -481,26 +501,12 @@ struct selection_ServiceDescriptionType
 
 };
 
-struct arraylen_ServiceDescriptionType_ServiceScope
-{
-	size_t data;
-
-
-};
-
-struct ServiceDescriptionType_ServiceScope
-{
-	uint32_t data[20];
-	struct arraylen_ServiceDescriptionType_ServiceScope arraylen;
-
-};
-
 struct ServiceDescriptionType
 {
-	struct ServiceDescriptionType_ServiceID ServiceID;
-	struct ServiceDescriptionType_ServiceName ServiceName;
+	struct serviceIDType ServiceID;
+	struct serviceNameType ServiceName;
 	enum serviceTypeType ServiceType;
-	struct ServiceDescriptionType_ServiceScope ServiceScope;
+	struct serviceScopeType ServiceScope;
 	struct selection_ServiceDescriptionType isused;
 
 };
@@ -548,23 +554,23 @@ struct ServicePaymentSelectionResType
 
 };
 
-struct arraylen_PaymentDetailsReqType_ContractID
+struct arraylen_contractIDType
 {
 	size_t data;
 
 
 };
 
-struct PaymentDetailsReqType_ContractID
+struct contractIDType
 {
 	uint32_t data[128];
-	struct arraylen_PaymentDetailsReqType_ContractID arraylen;
+	struct arraylen_contractIDType arraylen;
 
 };
 
 struct PaymentDetailsReqType
 {
-	struct PaymentDetailsReqType_ContractID ContractID;
+	struct contractIDType ContractID;
 
 
 };
@@ -572,47 +578,51 @@ struct PaymentDetailsReqType
 struct PaymentDetailsResType
 {
 	enum responseCode_PaymentDetailsType ResponseCode;
+	int32_t TCurrent;
 
 
 };
 
 struct FloatingValueType
 {
-	enum unitMultiplierType Multiplier;
+	int16_t Multiplier;
 	enum unitSymbolType Unit;
 	int32_t Value;
 
 
 };
 
-struct PowerDiscoveryReqType
+struct ChargeParameterDiscoveryReqType
 {
 	struct PEVStatusType PEVStatus;
+	enum chargingModeType ChargingMode;
 	int32_t EoC;
 	struct FloatingValueType EAmount;
 	struct FloatingValueType PEVMaxPower;
 	int16_t PEVMaxPhases;
 	struct FloatingValueType PEVMaxVoltage;
 	struct FloatingValueType PEVMinVoltage;
+	struct FloatingValueType PEVMaxCurrent;
+	struct FloatingValueType PEVMinCurrent;
 
 
 };
 
-struct arraylen_PowerDiscoveryResType_EnergyProvider
+struct arraylen_energyProviderType
 {
 	size_t data;
 
 
 };
 
-struct PowerDiscoveryResType_EnergyProvider
+struct energyProviderType
 {
 	uint32_t data[20];
-	struct arraylen_PowerDiscoveryResType_EnergyProvider arraylen;
+	struct arraylen_energyProviderType arraylen;
 
 };
 
-struct selection_PowerDiscoveryResType
+struct selection_ChargeParameterDiscoveryResType
 {
 	unsigned int EnergyProvider:1;
 	unsigned int TariffTable:1;
@@ -620,31 +630,31 @@ struct selection_PowerDiscoveryResType
 
 };
 
-struct arraylen_TariffTableType_Currency
+struct arraylen_currencyType
 {
 	size_t data;
 
 
 };
 
-struct TariffTableType_Currency
+struct currencyType
 {
 	uint32_t data[3];
-	struct arraylen_TariffTableType_Currency arraylen;
+	struct arraylen_currencyType arraylen;
 
 };
 
-struct arraylen_TariffDescrType_TariffDescription
+struct arraylen_tariffDescriptionType
 {
 	size_t data;
 
 
 };
 
-struct TariffDescrType_TariffDescription
+struct tariffDescriptionType
 {
 	uint32_t data[32];
-	struct arraylen_TariffDescrType_TariffDescription arraylen;
+	struct arraylen_tariffDescriptionType arraylen;
 
 };
 
@@ -688,7 +698,7 @@ struct TariffEntriesType
 struct TariffDescrType
 {
 	enum tariffIDType TariffID;
-	struct TariffDescrType_TariffDescription TariffDescription;
+	struct tariffDescriptionType TariffDescription;
 	struct TariffEntriesType TariffEntries;
 	struct selection_TariffDescrType isused;
 
@@ -703,22 +713,24 @@ struct arraylen_TariffTableType
 
 struct TariffTableType
 {
-	struct TariffTableType_Currency Currency;
+	struct currencyType Currency;
 	struct TariffDescrType Tariff[6];
 	struct arraylen_TariffTableType arraylen;
 
 };
 
-struct PowerDiscoveryResType
+struct ChargeParameterDiscoveryResType
 {
-	enum responseCode_PowerDiscoveryType ResponseCode;
+	enum responseCode_ChargeParameterDiscoveryType ResponseCode;
 	struct EVSEStatusType EVSEStatus;
-	struct FloatingValueType EVSEVoltage;
-	struct FloatingValueType EVSEIMax;
+	struct FloatingValueType EVSEMaxVoltage;
+	struct FloatingValueType EVSEMinVoltage;
+	struct FloatingValueType EVSEMaxCurrent;
+	struct FloatingValueType EVSEMinCurrent;
 	int16_t EVSEMaxPhases;
-	struct PowerDiscoveryResType_EnergyProvider EnergyProvider;
+	struct energyProviderType EnergyProvider;
 	struct TariffTableType TariffTable;
-	struct selection_PowerDiscoveryResType isused;
+	struct selection_ChargeParameterDiscoveryResType isused;
 
 };
 
@@ -757,6 +769,7 @@ struct PowerDeliveryReqType
 struct PowerDeliveryResType
 {
 	enum responseCode_PowerDeliveryType ResponseCode;
+	struct EVSEStatusType EVSEStatus;
 
 
 };
@@ -769,20 +782,6 @@ struct MeteringStatusReqType
 	
 };
 
-struct arraylen_MeteringStatusResType_EVSEID
-{
-	size_t data;
-
-
-};
-
-struct MeteringStatusResType_EVSEID
-{
-	uint8_t data[32];
-	struct arraylen_MeteringStatusResType_EVSEID arraylen;
-
-};
-
 struct selection_MeteringStatusResType
 {
 	unsigned int PCurrent:1;
@@ -791,17 +790,17 @@ struct selection_MeteringStatusResType
 
 };
 
-struct arraylen_MeterInfoType_MeterID
+struct arraylen_meterIDType
 {
 	size_t data;
 
 
 };
 
-struct MeterInfoType_MeterID
+struct meterIDType
 {
 	uint32_t data[32];
-	struct arraylen_MeterInfoType_MeterID arraylen;
+	struct arraylen_meterIDType arraylen;
 
 };
 
@@ -817,7 +816,7 @@ struct selection_MeterInfoType
 
 struct MeterInfoType
 {
-	struct MeterInfoType_MeterID MeterID;
+	struct meterIDType MeterID;
 	struct FloatingValueType MeterReading;
 	int16_t MeterStatus;
 	int32_t TMeter;
@@ -828,27 +827,13 @@ struct MeterInfoType
 struct MeteringStatusResType
 {
 	enum responseCode_MeteringStatusType ResponseCode;
-	struct MeteringStatusResType_EVSEID EVSEID;
+	struct evseIDType EVSEID;
 	struct EVSEStatusType EVSEStatus;
 	int32_t TCurrent;
 	struct FloatingValueType EVSEMaxPower;
 	struct FloatingValueType PCurrent;
 	struct MeterInfoType MeterInfo;
 	struct selection_MeteringStatusResType isused;
-
-};
-
-struct arraylen_MeteringReceiptReqType_PEVID
-{
-	size_t data;
-
-
-};
-
-struct MeteringReceiptReqType_PEVID
-{
-	uint32_t data[32];
-	struct arraylen_MeteringReceiptReqType_PEVID arraylen;
 
 };
 
@@ -862,7 +847,7 @@ struct selection_MeteringReceiptReqType
 
 struct MeteringReceiptReqType
 {
-	struct MeteringReceiptReqType_PEVID PEVID;
+	struct pevIDType PEVID;
 	struct PEVStatusType PEVStatus;
 	int32_t TCurrent;
 	enum tariffIDType Tariff;
@@ -878,6 +863,93 @@ struct MeteringReceiptResType
 
 };
 
+struct CableCheckReqType
+{
+	struct PEVStatusType PEVStatus;
+
+
+};
+
+struct CableCheckResType
+{
+	enum responseCode_CableCheckType ResponseCode;
+	struct EVSEStatusType EVSEStatus;
+
+
+};
+
+struct PreChargeReqType
+{
+	struct PEVStatusType PEVStatus;
+	struct FloatingValueType PEVTargetVoltage;
+	struct FloatingValueType PEVDemandCurrent;
+	struct FloatingValueType VoltageDifferential;
+
+
+};
+
+struct PreChargeResType
+{
+	enum responseCode_PreChargeType ResponseCode;
+	struct EVSEStatusType EVSEStatus;
+	struct FloatingValueType EVSEPresentVoltage;
+
+
+};
+
+struct CurrentDemandReqType
+{
+	struct PEVStatusType PEVStatus;
+	struct FloatingValueType PEVTargetVoltage;
+	struct FloatingValueType PEVDemandCurrent;
+	struct FloatingValueType CurrentDifferential;
+	struct FloatingValueType VoltageDifferential;
+
+
+};
+
+struct CurrentDemandResType
+{
+	enum responseCode_CurrentDemandType ResponseCode;
+	struct EVSEStatusType EVSEStatus;
+	struct FloatingValueType EVSEPresentVoltage;
+	struct FloatingValueType EVSEPresentCurrent;
+
+
+};
+
+struct WeldingDetectionReqType
+{
+	struct PEVStatusType PEVStatus;
+
+
+};
+
+struct WeldingDetectionResType
+{
+	enum responseCode_WeldingDetectionType ResponseCode;
+	struct EVSEStatusType EVSEStatus;
+	struct FloatingValueType EVSEPresentVoltage;
+
+
+};
+
+struct TerminateChargingReqType
+{
+	struct PEVStatusType PEVStatus;
+
+
+};
+
+struct TerminateChargingResType
+{
+	enum responseCode_TerminateChargingType ResponseCode;
+	struct EVSEStatusType EVSEStatus;
+	struct FloatingValueType EVSEPresentVoltage;
+
+
+};
+
 struct BodyType
 {
 	struct SessionSetupReqType* SessionSetupReq;
@@ -888,8 +960,8 @@ struct BodyType
 	struct ServicePaymentSelectionResType* ServicePaymentSelectionRes;
 	struct PaymentDetailsReqType* PaymentDetailsReq;
 	struct PaymentDetailsResType* PaymentDetailsRes;
-	struct PowerDiscoveryReqType* PowerDiscoveryReq;
-	struct PowerDiscoveryResType* PowerDiscoveryRes;
+	struct ChargeParameterDiscoveryReqType* ChargeParameterDiscoveryReq;
+	struct ChargeParameterDiscoveryResType* ChargeParameterDiscoveryRes;
 	struct LineLockReqType* LineLockReq;
 	struct LineLockResType* LineLockRes;
 	struct PowerDeliveryReqType* PowerDeliveryReq;
@@ -898,6 +970,16 @@ struct BodyType
 	struct MeteringStatusResType* MeteringStatusRes;
 	struct MeteringReceiptReqType* MeteringReceiptReq;
 	struct MeteringReceiptResType* MeteringReceiptRes;
+	struct CableCheckReqType* CableCheckReq;
+	struct CableCheckResType* CableCheckRes;
+	struct PreChargeReqType* PreChargeReq;
+	struct PreChargeResType* PreChargeRes;
+	struct CurrentDemandReqType* CurrentDemandReq;
+	struct CurrentDemandResType* CurrentDemandRes;
+	struct WeldingDetectionReqType* WeldingDetectionReq;
+	struct WeldingDetectionResType* WeldingDetectionRes;
+	struct TerminateChargingReqType* TerminateChargingReq;
+	struct TerminateChargingResType* TerminateChargingRes;
 	struct selection_BodyType isused;
 
 };

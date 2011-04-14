@@ -1,6 +1,6 @@
 
 /*
- * Copyright (C) 2007-2010 Siemens AG
+ * Copyright (C) 2007-2011 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,7 +19,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.3.1
+ * @version 0.3.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -41,7 +41,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 	
 			/* element ID assignment of SessionID*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=34;	
+			service->eqn.localPart=36;	
 			/* encode start element SessionID */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -69,7 +69,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 					
 			/* element ID assignment of ServiceSessionID*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=32;	
+			service->eqn.localPart=34;	
 			/* encode start element ServiceSessionID */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -98,7 +98,7 @@ static int serialize_SessionInformationType(struct SessionInformationType* type,
 					
 			/* element ID assignment of ProtocolVersion*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=24;	
+			service->eqn.localPart=25;	
 			/* encode start element ProtocolVersion */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -132,7 +132,7 @@ static int serialize_EventListType(struct EventListType* type, struct EXIService
 	
 			/* element ID assignment of Event*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=9;	
+			service->eqn.localPart=10;	
 			/* encode start element Event */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -167,7 +167,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct EXIS
 					
 			/* element ID assignment of FaultCode*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=13;	
+			service->eqn.localPart=14;	
 			/* encode start element FaultCode */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -195,7 +195,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct EXIS
 					
 			/* element ID assignment of FaultMsg*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=14;	
+			service->eqn.localPart=15;	
 			/* encode start element FaultMsg */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -224,7 +224,7 @@ static int serialize_NotificationType(struct NotificationType* type, struct EXIS
 					
 			/* element ID assignment of EventList*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=10;	
+			service->eqn.localPart=11;	
 			/* encode start element EventList */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -353,6 +353,30 @@ static int serialize_PEVStatusType(struct PEVStatusType* type, struct EXIService
 			/* encode end element of ChargerStandby */
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
+			
+			/* element ID assignment of ReadyToCharge*/
+			service->eqn.namespaceURI=5;			
+			service->eqn.localPart=27;	
+			/* encode start element ReadyToCharge */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+			
+			service->val.type = BOOLEAN;
+			service->val.boolean=type->ReadyToCharge;
+			
+			/* encode character  ReadyToCharge */	
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
+			{
+				 
+				return -1;
+			}
+				
+			 
+			/* encode end element of ReadyToCharge */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
 		
 
 	return 0;			
@@ -367,7 +391,7 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 					
 			/* element ID assignment of PEVID*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=24;	
+			service->eqn.localPart=43;	
 			/* encode start element PEVID */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -393,7 +417,7 @@ static int serialize_SessionSetupReqType(struct SessionSetupReqType* type, struc
 					
 			/* element ID assignment of PEVStatus*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=29;	
+			service->eqn.localPart=50;	
 			/* encode start element PEVStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -422,7 +446,7 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct EXIServi
 	
 			/* element ID assignment of FatalError*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=12;	
+			service->eqn.localPart=13;	
 			/* encode start element FatalError */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -446,7 +470,7 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct EXIServi
 			
 			/* element ID assignment of EVSEStandby*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=7;	
+			service->eqn.localPart=8;	
 			/* encode start element EVSEStandby */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -494,7 +518,7 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct EXIServi
 			
 			/* element ID assignment of PowerSwitchClosed*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=23;	
+			service->eqn.localPart=24;	
 			/* encode start element PowerSwitchClosed */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -518,7 +542,7 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct EXIServi
 			
 			/* element ID assignment of RCD*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=25;	
+			service->eqn.localPart=26;	
 			/* encode start element RCD */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -542,7 +566,7 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct EXIServi
 			
 			/* element ID assignment of ShutDownTime*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=36;	
+			service->eqn.localPart=38;	
 			/* encode start element ShutDownTime */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -563,6 +587,78 @@ static int serialize_EVSEStatusType(struct EVSEStatusType* type, struct EXIServi
 			/* encode end element of ShutDownTime */
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
+			
+			/* element ID assignment of ChargerStandby*/
+			service->eqn.namespaceURI=5;			
+			service->eqn.localPart=0;	
+			/* encode start element ChargerStandby */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+			
+			service->val.type = BOOLEAN;
+			service->val.boolean=type->ChargerStandby;
+			
+			/* encode character  ChargerStandby */	
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
+			{
+				 
+				return -1;
+			}
+				
+			 
+			/* encode end element of ChargerStandby */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEMalfunction*/
+			service->eqn.namespaceURI=5;			
+			service->eqn.localPart=7;	
+			/* encode start element EVSEMalfunction */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+			
+			service->val.type = BOOLEAN;
+			service->val.boolean=type->EVSEMalfunction;
+			
+			/* encode character  EVSEMalfunction */	
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
+			{
+				 
+				return -1;
+			}
+				
+			 
+			/* encode end element of EVSEMalfunction */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of StopCharging*/
+			service->eqn.namespaceURI=5;			
+			service->eqn.localPart=39;	
+			/* encode start element StopCharging */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+			
+			service->val.type = BOOLEAN;
+			service->val.boolean=type->StopCharging;
+			
+			/* encode character  StopCharging */	
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
+			{
+				 
+				return -1;
+			}
+				
+			 
+			/* encode end element of StopCharging */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
 		
 
 	return 0;			
@@ -574,7 +670,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 	
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=44;	
+			service->eqn.localPart=66;	
 			/* encode start element ResponseCode */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -598,7 +694,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			
 			/* element ID assignment of EVSEID*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=2;	
+			service->eqn.localPart=16;	
 			/* encode start element EVSEID */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -623,7 +719,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			
 			/* element ID assignment of EVSEStatus*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=6;	
+			service->eqn.localPart=25;	
 			/* encode start element EVSEStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -644,7 +740,7 @@ static int serialize_SessionSetupResType(struct SessionSetupResType* type, struc
 			
 			/* element ID assignment of TCurrent*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=60;	
+			service->eqn.localPart=82;	
 			/* encode start element TCurrent */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -679,7 +775,7 @@ static int serialize_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* typ
 					
 			/* element ID assignment of ServiceType*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=55;	
+			service->eqn.localPart=77;	
 			/* encode start element ServiceType */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -707,7 +803,7 @@ static int serialize_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* typ
 					
 			/* element ID assignment of ServiceScope*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=54;	
+			service->eqn.localPart=76;	
 			/* encode start element ServiceScope */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -741,7 +837,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 	
 			/* element ID assignment of ServiceID*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=28;	
+			service->eqn.localPart=30;	
 			/* encode start element ServiceID */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -769,7 +865,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 					
 			/* element ID assignment of ServiceName*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=30;	
+			service->eqn.localPart=32;	
 			/* encode start element ServiceName */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -798,7 +894,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 					
 			/* element ID assignment of ServiceType*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=33;	
+			service->eqn.localPart=35;	
 			/* encode start element ServiceType */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -826,7 +922,7 @@ static int serialize_ServiceDescriptionType(struct ServiceDescriptionType* type,
 					
 			/* element ID assignment of ServiceScope*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=31;	
+			service->eqn.localPart=33;	
 			/* encode start element ServiceScope */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -865,7 +961,7 @@ static int serialize_ServiceListType(struct ServiceListType* type, struct EXISer
 			
 			/* element ID assignment of Service*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=26;	
+			service->eqn.localPart=28;	
 			/* encode start element Service */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -894,7 +990,7 @@ static int serialize_ServiceDiscoveryResType(struct ServiceDiscoveryResType* typ
 	
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=44;	
+			service->eqn.localPart=66;	
 			/* encode start element ResponseCode */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -921,7 +1017,7 @@ static int serialize_ServiceDiscoveryResType(struct ServiceDiscoveryResType* typ
 					
 			/* element ID assignment of ServiceList*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=49;	
+			service->eqn.localPart=71;	
 			/* encode start element ServiceList */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -951,7 +1047,7 @@ static int serialize_ServicePaymentSelectionReqType(struct ServicePaymentSelecti
 	
 			/* element ID assignment of ServiceList*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=49;	
+			service->eqn.localPart=71;	
 			/* encode start element ServiceList */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -980,7 +1076,7 @@ static int serialize_ServicePaymentSelectionResType(struct ServicePaymentSelecti
 	
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=44;	
+			service->eqn.localPart=66;	
 			/* encode start element ResponseCode */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1012,7 +1108,7 @@ static int serialize_PaymentDetailsReqType(struct PaymentDetailsReqType* type, s
 	
 			/* element ID assignment of ContractID*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=0;	
+			service->eqn.localPart=9;	
 			/* encode start element ContractID */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1045,7 +1141,7 @@ static int serialize_PaymentDetailsResType(struct PaymentDetailsResType* type, s
 	
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=44;	
+			service->eqn.localPart=66;	
 			/* encode start element ResponseCode */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1066,6 +1162,30 @@ static int serialize_PaymentDetailsResType(struct PaymentDetailsResType* type, s
 			/* encode end element of ResponseCode */
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
+			
+			/* element ID assignment of TCurrent*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=82;	
+			/* encode start element TCurrent */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+			
+			service->val.type = INTEGER_32;
+			service->val.int32=type->TCurrent;
+			
+			/* encode character  TCurrent */	
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
+			{
+				 
+				return -1;
+			}
+				
+			 
+			/* encode end element of TCurrent */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
 		
 
 	return 0;			
@@ -1077,15 +1197,15 @@ static int serialize_FloatingValueType(struct FloatingValueType* type, struct EX
 	
 			/* element ID assignment of Multiplier*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=20;	
+			service->eqn.localPart=21;	
 			/* encode start element Multiplier */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 					return -1;
 			}
 			
-			service->val.type = ENUMERATION;
-			service->val.enumeration=type->Multiplier;
+			service->val.type = INTEGER_16;
+			service->val.int32=type->Multiplier;
 			
 			/* encode character  Multiplier */	
 			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
@@ -1101,7 +1221,7 @@ static int serialize_FloatingValueType(struct FloatingValueType* type, struct EX
 			
 			/* element ID assignment of Unit*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=49;	
+			service->eqn.localPart=52;	
 			/* encode start element Unit */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1125,7 +1245,7 @@ static int serialize_FloatingValueType(struct FloatingValueType* type, struct EX
 			
 			/* element ID assignment of Value*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=50;	
+			service->eqn.localPart=53;	
 			/* encode start element Value */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1152,12 +1272,12 @@ static int serialize_FloatingValueType(struct FloatingValueType* type, struct EX
 }
 
 
-static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, struct EXIService* service)
+static int serialize_ChargeParameterDiscoveryReqType(struct ChargeParameterDiscoveryReqType* type, struct EXIService* service)
 {
 	
 			/* element ID assignment of PEVStatus*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=29;	
+			service->eqn.localPart=50;	
 			/* encode start element PEVStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1176,9 +1296,33 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
 			
+			/* element ID assignment of ChargingMode*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=8;	
+			/* encode start element ChargingMode */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+			
+			service->val.type = ENUMERATION;
+			service->val.enumeration=type->ChargingMode;
+			
+			/* encode character  ChargingMode */	
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
+			{
+				 
+				return -1;
+			}
+				
+			 
+			/* encode end element of ChargingMode */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
 			/* element ID assignment of EoC*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=9;	
+			service->eqn.localPart=27;	
 			/* encode start element EoC */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1202,7 +1346,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			
 			/* element ID assignment of EAmount*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=1;	
+			service->eqn.localPart=15;	
 			/* encode start element EAmount */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1223,7 +1367,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			
 			/* element ID assignment of PEVMaxPower*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=26;	
+			service->eqn.localPart=46;	
 			/* encode start element PEVMaxPower */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1244,7 +1388,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			
 			/* element ID assignment of PEVMaxPhases*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=25;	
+			service->eqn.localPart=45;	
 			/* encode start element PEVMaxPhases */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1268,7 +1412,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			
 			/* element ID assignment of PEVMaxVoltage*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=27;	
+			service->eqn.localPart=47;	
 			/* encode start element PEVMaxVoltage */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1289,7 +1433,7 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			
 			/* element ID assignment of PEVMinVoltage*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=28;	
+			service->eqn.localPart=49;	
 			/* encode start element PEVMinVoltage */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1307,6 +1451,48 @@ static int serialize_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type, s
 			/* encode end element of PEVMinVoltage */
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
+			
+			/* element ID assignment of PEVMaxCurrent*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=44;	
+			/* encode start element PEVMaxCurrent */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PEVMaxCurrent */
+			if(serialize_FloatingValueType( &(type->PEVMaxCurrent),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PEVMaxCurrent */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of PEVMinCurrent*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=48;	
+			/* encode start element PEVMinCurrent */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PEVMinCurrent */
+			if(serialize_FloatingValueType( &(type->PEVMinCurrent),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PEVMinCurrent */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
 		
 
 	return 0;			
@@ -1318,7 +1504,7 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct EXISer
 	
 			/* element ID assignment of TariffStart*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=47;	
+			service->eqn.localPart=50;	
 			/* encode start element TariffStart */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1342,7 +1528,7 @@ static int serialize_TariffEntryType(struct TariffEntryType* type, struct EXISer
 			
 			/* element ID assignment of TariffPMax*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=46;	
+			service->eqn.localPart=49;	
 			/* encode start element TariffPMax */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1401,7 +1587,7 @@ static int serialize_TariffEntriesType(struct TariffEntriesType* type, struct EX
 			
 			/* element ID assignment of TariffEntry*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=43;	
+			service->eqn.localPart=46;	
 			/* encode start element TariffEntry */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1430,7 +1616,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct EXISer
 	
 			/* element ID assignment of TariffID*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=45;	
+			service->eqn.localPart=48;	
 			/* encode start element TariffID */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1457,7 +1643,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct EXISer
 					
 			/* element ID assignment of TariffDescription*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=40;	
+			service->eqn.localPart=43;	
 			/* encode start element TariffDescription */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1483,7 +1669,7 @@ static int serialize_TariffDescrType(struct TariffDescrType* type, struct EXISer
 					
 			/* element ID assignment of TariffEntries*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=41;	
+			service->eqn.localPart=44;	
 			/* encode start element TariffEntries */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1542,7 +1728,7 @@ static int serialize_TariffTableType(struct TariffTableType* type, struct EXISer
 			
 			/* element ID assignment of Tariff*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=38;	
+			service->eqn.localPart=41;	
 			/* encode start element Tariff */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1566,12 +1752,12 @@ static int serialize_TariffTableType(struct TariffTableType* type, struct EXISer
 }
 
 
-static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, struct EXIService* service)
+static int serialize_ChargeParameterDiscoveryResType(struct ChargeParameterDiscoveryResType* type, struct EXIService* service)
 {
 	
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=44;	
+			service->eqn.localPart=66;	
 			/* encode start element ResponseCode */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1595,7 +1781,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			
 			/* element ID assignment of EVSEStatus*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=6;	
+			service->eqn.localPart=25;	
 			/* encode start element EVSEStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1614,51 +1800,93 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
 			
-			/* element ID assignment of EVSEVoltage*/
+			/* element ID assignment of EVSEMaxVoltage*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=7;	
-			/* encode start element EVSEVoltage */	
+			service->eqn.localPart=20;	
+			/* encode start element EVSEMaxVoltage */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 					return -1;
 			}
 						
-			/* encode children of EVSEVoltage */
-			if(serialize_FloatingValueType( &(type->EVSEVoltage),service))
+			/* encode children of EVSEMaxVoltage */
+			if(serialize_FloatingValueType( &(type->EVSEMaxVoltage),service))
 			{
 				return -1;
 			}
 
 			
 			 
-			/* encode end element of EVSEVoltage */
+			/* encode end element of EVSEMaxVoltage */
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
 			
-			/* element ID assignment of EVSEIMax*/
+			/* element ID assignment of EVSEMinVoltage*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=3;	
-			/* encode start element EVSEIMax */	
+			service->eqn.localPart=22;	
+			/* encode start element EVSEMinVoltage */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 					return -1;
 			}
 						
-			/* encode children of EVSEIMax */
-			if(serialize_FloatingValueType( &(type->EVSEIMax),service))
+			/* encode children of EVSEMinVoltage */
+			if(serialize_FloatingValueType( &(type->EVSEMinVoltage),service))
 			{
 				return -1;
 			}
 
 			
 			 
-			/* encode end element of EVSEIMax */
+			/* encode end element of EVSEMinVoltage */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEMaxCurrent*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=17;	
+			/* encode start element EVSEMaxCurrent */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEMaxCurrent */
+			if(serialize_FloatingValueType( &(type->EVSEMaxCurrent),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEMaxCurrent */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEMinCurrent*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=21;	
+			/* encode start element EVSEMinCurrent */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEMinCurrent */
+			if(serialize_FloatingValueType( &(type->EVSEMinCurrent),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEMinCurrent */
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
 			
 			/* element ID assignment of EVSEMaxPhases*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=4;	
+			service->eqn.localPart=18;	
 			/* encode start element EVSEMaxPhases */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1685,7 +1913,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 					
 			/* element ID assignment of EnergyProvider*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=8;	
+			service->eqn.localPart=26;	
 			/* encode start element EnergyProvider */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1714,7 +1942,7 @@ static int serialize_PowerDiscoveryResType(struct PowerDiscoveryResType* type, s
 					
 			/* element ID assignment of TariffTable*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=62;	
+			service->eqn.localPart=84;	
 			/* encode start element TariffTable */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1744,7 +1972,7 @@ static int serialize_LineLockReqType(struct LineLockReqType* type, struct EXISer
 	
 			/* element ID assignment of PEVStatus*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=29;	
+			service->eqn.localPart=50;	
 			/* encode start element PEVStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1765,7 +1993,7 @@ static int serialize_LineLockReqType(struct LineLockReqType* type, struct EXISer
 			
 			/* element ID assignment of ReqLockStatus*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=42;	
+			service->eqn.localPart=64;	
 			/* encode start element ReqLockStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1797,7 +2025,7 @@ static int serialize_LineLockResType(struct LineLockResType* type, struct EXISer
 	
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=44;	
+			service->eqn.localPart=66;	
 			/* encode start element ResponseCode */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1821,7 +2049,7 @@ static int serialize_LineLockResType(struct LineLockResType* type, struct EXISer
 			
 			/* element ID assignment of EVSEStatus*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=6;	
+			service->eqn.localPart=25;	
 			/* encode start element EVSEStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1850,7 +2078,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 	
 			/* element ID assignment of PEVStatus*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=29;	
+			service->eqn.localPart=50;	
 			/* encode start element PEVStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1871,7 +2099,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 			
 			/* element ID assignment of ReqSwitchStatus*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=43;	
+			service->eqn.localPart=65;	
 			/* encode start element ReqSwitchStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1898,7 +2126,7 @@ static int serialize_PowerDeliveryReqType(struct PowerDeliveryReqType* type, str
 					
 			/* element ID assignment of Tariff*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=61;	
+			service->eqn.localPart=83;	
 			/* encode start element Tariff */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1931,7 +2159,7 @@ static int serialize_PowerDeliveryResType(struct PowerDeliveryResType* type, str
 	
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=44;	
+			service->eqn.localPart=66;	
 			/* encode start element ResponseCode */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -1950,6 +2178,27 @@ static int serialize_PowerDeliveryResType(struct PowerDeliveryResType* type, str
 				
 			 
 			/* encode end element of ResponseCode */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEStatus*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=25;	
+			/* encode start element EVSEStatus */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEStatus */
+			if(serialize_EVSEStatusType( &(type->EVSEStatus),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEStatus */
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
 		
@@ -1974,7 +2223,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct EXIService
 					
 			/* element ID assignment of MeterID*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=16;	
+			service->eqn.localPart=17;	
 			/* encode start element MeterID */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2003,7 +2252,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct EXIService
 					
 			/* element ID assignment of MeterReading*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=18;	
+			service->eqn.localPart=19;	
 			/* encode start element MeterReading */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2028,7 +2277,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct EXIService
 					
 			/* element ID assignment of MeterStatus*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=19;	
+			service->eqn.localPart=20;	
 			/* encode start element MeterStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2056,7 +2305,7 @@ static int serialize_MeterInfoType(struct MeterInfoType* type, struct EXIService
 					
 			/* element ID assignment of TMeter*/
 			service->eqn.namespaceURI=5;			
-			service->eqn.localPart=37;	
+			service->eqn.localPart=40;	
 			/* encode start element TMeter */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2089,7 +2338,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 	
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=44;	
+			service->eqn.localPart=66;	
 			/* encode start element ResponseCode */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2113,7 +2362,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			
 			/* element ID assignment of EVSEID*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=2;	
+			service->eqn.localPart=16;	
 			/* encode start element EVSEID */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2138,7 +2387,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			
 			/* element ID assignment of EVSEStatus*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=6;	
+			service->eqn.localPart=25;	
 			/* encode start element EVSEStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2159,7 +2408,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			
 			/* element ID assignment of TCurrent*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=60;	
+			service->eqn.localPart=82;	
 			/* encode start element TCurrent */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2183,7 +2432,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 			
 			/* element ID assignment of EVSEMaxPower*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=5;	
+			service->eqn.localPart=19;	
 			/* encode start element EVSEMaxPower */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2207,7 +2456,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 					
 			/* element ID assignment of PCurrent*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=23;	
+			service->eqn.localPart=41;	
 			/* encode start element PCurrent */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2232,7 +2481,7 @@ static int serialize_MeteringStatusResType(struct MeteringStatusResType* type, s
 					
 			/* element ID assignment of MeterInfo*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=14;	
+			service->eqn.localPart=32;	
 			/* encode start element MeterInfo */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2265,7 +2514,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 					
 			/* element ID assignment of PEVID*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=24;	
+			service->eqn.localPart=43;	
 			/* encode start element PEVID */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2291,7 +2540,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 					
 			/* element ID assignment of PEVStatus*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=29;	
+			service->eqn.localPart=50;	
 			/* encode start element PEVStatus */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2315,7 +2564,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 					
 			/* element ID assignment of TCurrent*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=60;	
+			service->eqn.localPart=82;	
 			/* encode start element TCurrent */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2340,7 +2589,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 					
 			/* element ID assignment of Tariff*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=61;	
+			service->eqn.localPart=83;	
 			/* encode start element Tariff */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2364,7 +2613,7 @@ static int serialize_MeteringReceiptReqType(struct MeteringReceiptReqType* type,
 			
 			/* element ID assignment of MeterInfo*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=14;	
+			service->eqn.localPart=32;	
 			/* encode start element MeterInfo */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2393,7 +2642,7 @@ static int serialize_MeteringReceiptResType(struct MeteringReceiptResType* type,
 	
 			/* element ID assignment of ResponseCode*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=44;	
+			service->eqn.localPart=66;	
 			/* encode start element ResponseCode */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2420,6 +2669,668 @@ static int serialize_MeteringReceiptResType(struct MeteringReceiptResType* type,
 }
 
 
+static int serialize_CableCheckReqType(struct CableCheckReqType* type, struct EXIService* service)
+{
+	
+			/* element ID assignment of PEVStatus*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=50;	
+			/* encode start element PEVStatus */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PEVStatus */
+			if(serialize_PEVStatusType( &(type->PEVStatus),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PEVStatus */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		
+
+	return 0;			
+}
+
+
+static int serialize_CableCheckResType(struct CableCheckResType* type, struct EXIService* service)
+{
+	
+			/* element ID assignment of ResponseCode*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=66;	
+			/* encode start element ResponseCode */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+			
+			service->val.type = ENUMERATION;
+			service->val.enumeration=type->ResponseCode;
+			
+			/* encode character  ResponseCode */	
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
+			{
+				 
+				return -1;
+			}
+				
+			 
+			/* encode end element of ResponseCode */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEStatus*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=25;	
+			/* encode start element EVSEStatus */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEStatus */
+			if(serialize_EVSEStatusType( &(type->EVSEStatus),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEStatus */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		
+
+	return 0;			
+}
+
+
+static int serialize_PreChargeReqType(struct PreChargeReqType* type, struct EXIService* service)
+{
+	
+			/* element ID assignment of PEVStatus*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=50;	
+			/* encode start element PEVStatus */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PEVStatus */
+			if(serialize_PEVStatusType( &(type->PEVStatus),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PEVStatus */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of PEVTargetVoltage*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=51;	
+			/* encode start element PEVTargetVoltage */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PEVTargetVoltage */
+			if(serialize_FloatingValueType( &(type->PEVTargetVoltage),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PEVTargetVoltage */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of PEVDemandCurrent*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=42;	
+			/* encode start element PEVDemandCurrent */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PEVDemandCurrent */
+			if(serialize_FloatingValueType( &(type->PEVDemandCurrent),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PEVDemandCurrent */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of VoltageDifferential*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=89;	
+			/* encode start element VoltageDifferential */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of VoltageDifferential */
+			if(serialize_FloatingValueType( &(type->VoltageDifferential),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of VoltageDifferential */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		
+
+	return 0;			
+}
+
+
+static int serialize_PreChargeResType(struct PreChargeResType* type, struct EXIService* service)
+{
+	
+			/* element ID assignment of ResponseCode*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=66;	
+			/* encode start element ResponseCode */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+			
+			service->val.type = ENUMERATION;
+			service->val.enumeration=type->ResponseCode;
+			
+			/* encode character  ResponseCode */	
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
+			{
+				 
+				return -1;
+			}
+				
+			 
+			/* encode end element of ResponseCode */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEStatus*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=25;	
+			/* encode start element EVSEStatus */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEStatus */
+			if(serialize_EVSEStatusType( &(type->EVSEStatus),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEStatus */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEPresentVoltage*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=24;	
+			/* encode start element EVSEPresentVoltage */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEPresentVoltage */
+			if(serialize_FloatingValueType( &(type->EVSEPresentVoltage),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEPresentVoltage */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		
+
+	return 0;			
+}
+
+
+static int serialize_CurrentDemandReqType(struct CurrentDemandReqType* type, struct EXIService* service)
+{
+	
+			/* element ID assignment of PEVStatus*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=50;	
+			/* encode start element PEVStatus */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PEVStatus */
+			if(serialize_PEVStatusType( &(type->PEVStatus),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PEVStatus */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of PEVTargetVoltage*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=51;	
+			/* encode start element PEVTargetVoltage */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PEVTargetVoltage */
+			if(serialize_FloatingValueType( &(type->PEVTargetVoltage),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PEVTargetVoltage */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of PEVDemandCurrent*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=42;	
+			/* encode start element PEVDemandCurrent */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PEVDemandCurrent */
+			if(serialize_FloatingValueType( &(type->PEVDemandCurrent),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PEVDemandCurrent */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of CurrentDifferential*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=14;	
+			/* encode start element CurrentDifferential */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of CurrentDifferential */
+			if(serialize_FloatingValueType( &(type->CurrentDifferential),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of CurrentDifferential */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of VoltageDifferential*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=89;	
+			/* encode start element VoltageDifferential */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of VoltageDifferential */
+			if(serialize_FloatingValueType( &(type->VoltageDifferential),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of VoltageDifferential */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		
+
+	return 0;			
+}
+
+
+static int serialize_CurrentDemandResType(struct CurrentDemandResType* type, struct EXIService* service)
+{
+	
+			/* element ID assignment of ResponseCode*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=66;	
+			/* encode start element ResponseCode */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+			
+			service->val.type = ENUMERATION;
+			service->val.enumeration=type->ResponseCode;
+			
+			/* encode character  ResponseCode */	
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
+			{
+				 
+				return -1;
+			}
+				
+			 
+			/* encode end element of ResponseCode */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEStatus*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=25;	
+			/* encode start element EVSEStatus */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEStatus */
+			if(serialize_EVSEStatusType( &(type->EVSEStatus),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEStatus */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEPresentVoltage*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=24;	
+			/* encode start element EVSEPresentVoltage */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEPresentVoltage */
+			if(serialize_FloatingValueType( &(type->EVSEPresentVoltage),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEPresentVoltage */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEPresentCurrent*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=23;	
+			/* encode start element EVSEPresentCurrent */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEPresentCurrent */
+			if(serialize_FloatingValueType( &(type->EVSEPresentCurrent),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEPresentCurrent */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		
+
+	return 0;			
+}
+
+
+static int serialize_WeldingDetectionReqType(struct WeldingDetectionReqType* type, struct EXIService* service)
+{
+	
+			/* element ID assignment of PEVStatus*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=50;	
+			/* encode start element PEVStatus */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PEVStatus */
+			if(serialize_PEVStatusType( &(type->PEVStatus),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PEVStatus */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		
+
+	return 0;			
+}
+
+
+static int serialize_WeldingDetectionResType(struct WeldingDetectionResType* type, struct EXIService* service)
+{
+	
+			/* element ID assignment of ResponseCode*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=66;	
+			/* encode start element ResponseCode */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+			
+			service->val.type = ENUMERATION;
+			service->val.enumeration=type->ResponseCode;
+			
+			/* encode character  ResponseCode */	
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
+			{
+				 
+				return -1;
+			}
+				
+			 
+			/* encode end element of ResponseCode */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEStatus*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=25;	
+			/* encode start element EVSEStatus */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEStatus */
+			if(serialize_EVSEStatusType( &(type->EVSEStatus),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEStatus */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEPresentVoltage*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=24;	
+			/* encode start element EVSEPresentVoltage */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEPresentVoltage */
+			if(serialize_FloatingValueType( &(type->EVSEPresentVoltage),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEPresentVoltage */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		
+
+	return 0;			
+}
+
+
+static int serialize_TerminateChargingReqType(struct TerminateChargingReqType* type, struct EXIService* service)
+{
+	
+			/* element ID assignment of PEVStatus*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=50;	
+			/* encode start element PEVStatus */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PEVStatus */
+			if(serialize_PEVStatusType( &(type->PEVStatus),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PEVStatus */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		
+
+	return 0;			
+}
+
+
+static int serialize_TerminateChargingResType(struct TerminateChargingResType* type, struct EXIService* service)
+{
+	
+			/* element ID assignment of ResponseCode*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=66;	
+			/* encode start element ResponseCode */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+			
+			service->val.type = ENUMERATION;
+			service->val.enumeration=type->ResponseCode;
+			
+			/* encode character  ResponseCode */	
+			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
+			{
+				 
+				return -1;
+			}
+				
+			 
+			/* encode end element of ResponseCode */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEStatus*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=25;	
+			/* encode start element EVSEStatus */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEStatus */
+			if(serialize_EVSEStatusType( &(type->EVSEStatus),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEStatus */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+			
+			/* element ID assignment of EVSEPresentVoltage*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=24;	
+			/* encode start element EVSEPresentVoltage */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of EVSEPresentVoltage */
+			if(serialize_FloatingValueType( &(type->EVSEPresentVoltage),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of EVSEPresentVoltage */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		
+
+	return 0;			
+}
+
+
 static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 {
 
@@ -2428,7 +3339,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of SessionSetupReq*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=56;	
+			service->eqn.localPart=78;	
 			/* encode start element SessionSetupReq */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2453,7 +3364,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of SessionSetupRes*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=58;	
+			service->eqn.localPart=80;	
 			/* encode start element SessionSetupRes */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2478,7 +3389,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of ServiceDiscoveryReq*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=45;	
+			service->eqn.localPart=67;	
 			/* encode start element ServiceDiscoveryReq */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2503,7 +3414,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of ServiceDiscoveryRes*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=47;	
+			service->eqn.localPart=69;	
 			/* encode start element ServiceDiscoveryRes */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2528,7 +3439,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of ServicePaymentSelectionReq*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=50;	
+			service->eqn.localPart=72;	
 			/* encode start element ServicePaymentSelectionReq */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2553,7 +3464,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of ServicePaymentSelectionRes*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=52;	
+			service->eqn.localPart=74;	
 			/* encode start element ServicePaymentSelectionRes */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2578,7 +3489,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of PaymentDetailsReq*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=30;	
+			service->eqn.localPart=52;	
 			/* encode start element PaymentDetailsReq */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2603,7 +3514,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of PaymentDetailsRes*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=32;	
+			service->eqn.localPart=54;	
 			/* encode start element PaymentDetailsRes */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2623,52 +3534,52 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 
 		}
 				
-	if(type->isused.PowerDiscoveryReq)
+	if(type->isused.ChargeParameterDiscoveryReq)
 		{		
 					
-			/* element ID assignment of PowerDiscoveryReq*/
+			/* element ID assignment of ChargeParameterDiscoveryReq*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=38;	
-			/* encode start element PowerDiscoveryReq */	
+			service->eqn.localPart=4;	
+			/* encode start element ChargeParameterDiscoveryReq */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 					return -1;
 			}
 						
-			/* encode children of PowerDiscoveryReq */
-			if(serialize_PowerDiscoveryReqType( (type->PowerDiscoveryReq),service))
+			/* encode children of ChargeParameterDiscoveryReq */
+			if(serialize_ChargeParameterDiscoveryReqType( (type->ChargeParameterDiscoveryReq),service))
 			{
 				return -1;
 			}
 
 			
 			 
-			/* encode end element of PowerDiscoveryReq */
+			/* encode end element of ChargeParameterDiscoveryReq */
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
 		}
 				
-	if(type->isused.PowerDiscoveryRes)
+	if(type->isused.ChargeParameterDiscoveryRes)
 		{		
 					
-			/* element ID assignment of PowerDiscoveryRes*/
+			/* element ID assignment of ChargeParameterDiscoveryRes*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=40;	
-			/* encode start element PowerDiscoveryRes */	
+			service->eqn.localPart=6;	
+			/* encode start element ChargeParameterDiscoveryRes */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
 					return -1;
 			}
 						
-			/* encode children of PowerDiscoveryRes */
-			if(serialize_PowerDiscoveryResType( (type->PowerDiscoveryRes),service))
+			/* encode children of ChargeParameterDiscoveryRes */
+			if(serialize_ChargeParameterDiscoveryResType( (type->ChargeParameterDiscoveryRes),service))
 			{
 				return -1;
 			}
 
 			
 			 
-			/* encode end element of PowerDiscoveryRes */
+			/* encode end element of ChargeParameterDiscoveryRes */
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
 		}
@@ -2678,7 +3589,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of LineLockReq*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=10;	
+			service->eqn.localPart=28;	
 			/* encode start element LineLockReq */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2703,7 +3614,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of LineLockRes*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=12;	
+			service->eqn.localPart=30;	
 			/* encode start element LineLockRes */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2728,7 +3639,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of PowerDeliveryReq*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=34;	
+			service->eqn.localPart=56;	
 			/* encode start element PowerDeliveryReq */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2753,7 +3664,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of PowerDeliveryRes*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=36;	
+			service->eqn.localPart=58;	
 			/* encode start element PowerDeliveryRes */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2778,7 +3689,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of MeteringStatusReq*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=19;	
+			service->eqn.localPart=37;	
 			/* encode start element MeteringStatusReq */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2803,7 +3714,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of MeteringStatusRes*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=21;	
+			service->eqn.localPart=39;	
 			/* encode start element MeteringStatusRes */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2828,7 +3739,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of MeteringReceiptReq*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=15;	
+			service->eqn.localPart=33;	
 			/* encode start element MeteringReceiptReq */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2853,7 +3764,7 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 					
 			/* element ID assignment of MeteringReceiptRes*/
 			service->eqn.namespaceURI=4;			
-			service->eqn.localPart=17;	
+			service->eqn.localPart=35;	
 			/* encode start element MeteringReceiptRes */	
 			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
 			{
@@ -2869,6 +3780,256 @@ static int serialize_BodyType(struct BodyType* type, struct EXIService* service)
 			
 			 
 			/* encode end element of MeteringReceiptRes */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		}
+				
+	if(type->isused.CableCheckReq)
+		{		
+					
+			/* element ID assignment of CableCheckReq*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=0;	
+			/* encode start element CableCheckReq */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of CableCheckReq */
+			if(serialize_CableCheckReqType( (type->CableCheckReq),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of CableCheckReq */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		}
+				
+	if(type->isused.CableCheckRes)
+		{		
+					
+			/* element ID assignment of CableCheckRes*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=2;	
+			/* encode start element CableCheckRes */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of CableCheckRes */
+			if(serialize_CableCheckResType( (type->CableCheckRes),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of CableCheckRes */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		}
+				
+	if(type->isused.PreChargeReq)
+		{		
+					
+			/* element ID assignment of PreChargeReq*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=60;	
+			/* encode start element PreChargeReq */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PreChargeReq */
+			if(serialize_PreChargeReqType( (type->PreChargeReq),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PreChargeReq */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		}
+				
+	if(type->isused.PreChargeRes)
+		{		
+					
+			/* element ID assignment of PreChargeRes*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=62;	
+			/* encode start element PreChargeRes */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of PreChargeRes */
+			if(serialize_PreChargeResType( (type->PreChargeRes),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of PreChargeRes */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		}
+				
+	if(type->isused.CurrentDemandReq)
+		{		
+					
+			/* element ID assignment of CurrentDemandReq*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=10;	
+			/* encode start element CurrentDemandReq */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of CurrentDemandReq */
+			if(serialize_CurrentDemandReqType( (type->CurrentDemandReq),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of CurrentDemandReq */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		}
+				
+	if(type->isused.CurrentDemandRes)
+		{		
+					
+			/* element ID assignment of CurrentDemandRes*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=12;	
+			/* encode start element CurrentDemandRes */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of CurrentDemandRes */
+			if(serialize_CurrentDemandResType( (type->CurrentDemandRes),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of CurrentDemandRes */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		}
+				
+	if(type->isused.WeldingDetectionReq)
+		{		
+					
+			/* element ID assignment of WeldingDetectionReq*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=90;	
+			/* encode start element WeldingDetectionReq */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of WeldingDetectionReq */
+			if(serialize_WeldingDetectionReqType( (type->WeldingDetectionReq),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of WeldingDetectionReq */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		}
+				
+	if(type->isused.WeldingDetectionRes)
+		{		
+					
+			/* element ID assignment of WeldingDetectionRes*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=92;	
+			/* encode start element WeldingDetectionRes */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of WeldingDetectionRes */
+			if(serialize_WeldingDetectionResType( (type->WeldingDetectionRes),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of WeldingDetectionRes */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		}
+				
+	if(type->isused.TerminateChargingReq)
+		{		
+					
+			/* element ID assignment of TerminateChargingReq*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=85;	
+			/* encode start element TerminateChargingReq */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of TerminateChargingReq */
+			if(serialize_TerminateChargingReqType( (type->TerminateChargingReq),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of TerminateChargingReq */
+			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
+
+		}
+				
+	if(type->isused.TerminateChargingRes)
+		{		
+					
+			/* element ID assignment of TerminateChargingRes*/
+			service->eqn.namespaceURI=4;			
+			service->eqn.localPart=87;	
+			/* encode start element TerminateChargingRes */	
+			if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn))) 
+			{
+					return -1;
+			}
+						
+			/* encode children of TerminateChargingRes */
+			if(serialize_TerminateChargingResType( (type->TerminateChargingRes),service))
+			{
+				return -1;
+			}
+
+			
+			 
+			/* encode end element of TerminateChargingRes */
 			exiEncodeEndElement(&(service->outStream), &(service->stateEncode), &(service->eqn));
 
 		}

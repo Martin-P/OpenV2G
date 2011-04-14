@@ -1,6 +1,6 @@
 
 /*
- * Copyright (C) 2007-2010 Siemens AG
+ * Copyright (C) 2007-2011 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,7 +19,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.3.1
+ * @version 0.3.2
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -29,19 +29,13 @@
 #include "v2g_serviceDataTypes.h"
 
 
-static  void init_SessionInformationType_SessionID(struct SessionInformationType_SessionID* type)
+static  void init_sessionIDType(struct sessionIDType* type)
 {	
 	type->arraylen.data=0;
 
 }
 
-static  void init_SessionInformationType_ServiceSessionID(struct SessionInformationType_ServiceSessionID* type)
-{	
-	type->arraylen.data=0;
-
-}
-
-static  void init_SessionInformationType_ProtocolVersion(struct SessionInformationType_ProtocolVersion* type)
+static  void init_protocolVersionType(struct protocolVersionType* type)
 {	
 	type->arraylen.data=0;
 
@@ -49,15 +43,15 @@ static  void init_SessionInformationType_ProtocolVersion(struct SessionInformati
 
 static  void init_SessionInformationType(struct SessionInformationType* type)
 {	
-	init_SessionInformationType_SessionID(&(type->SessionID));	
-	init_SessionInformationType_ServiceSessionID(&(type->ServiceSessionID));	
+	init_sessionIDType(&(type->SessionID));	
+	init_sessionIDType(&(type->ServiceSessionID));	
 	type->isused.ServiceSessionID=0;	
-	init_SessionInformationType_ProtocolVersion(&(type->ProtocolVersion));	
+	init_protocolVersionType(&(type->ProtocolVersion));	
 	type->isused.ProtocolVersion=0;
 
 }
 
-static  void init_NotificationType_FaultMsg(struct NotificationType_FaultMsg* type)
+static  void init_service_string(struct service_string* type)
 {	
 	type->arraylen.data=0;
 
@@ -66,7 +60,7 @@ static  void init_NotificationType_FaultMsg(struct NotificationType_FaultMsg* ty
 static  void init_NotificationType(struct NotificationType* type)
 {		
 	type->isused.FaultCode=0;	
-	init_NotificationType_FaultMsg(&(type->FaultMsg));	
+	init_service_string(&(type->FaultMsg));	
 	type->isused.FaultMsg=0;		
 	type->isused.EventList=0;
 
@@ -80,7 +74,7 @@ static  void init_HeaderType(struct HeaderType* type)
 
 }
 
-static  void init_SessionSetupReqType_PEVID(struct SessionSetupReqType_PEVID* type)
+static  void init_pevIDType(struct pevIDType* type)
 {	
 	type->arraylen.data=0;
 
@@ -88,12 +82,12 @@ static  void init_SessionSetupReqType_PEVID(struct SessionSetupReqType_PEVID* ty
 
 static  void init_SessionSetupReqType(struct SessionSetupReqType* type)
 {	
-	init_SessionSetupReqType_PEVID(&(type->PEVID));	
+	init_pevIDType(&(type->PEVID));	
 	type->isused.PEVID=0;	
 
 }
 
-static  void init_SessionSetupResType_EVSEID(struct SessionSetupResType_EVSEID* type)
+static  void init_evseIDType(struct evseIDType* type)
 {	
 	type->arraylen.data=0;
 
@@ -101,11 +95,11 @@ static  void init_SessionSetupResType_EVSEID(struct SessionSetupResType_EVSEID* 
 
 static  void init_SessionSetupResType(struct SessionSetupResType* type)
 {		
-	init_SessionSetupResType_EVSEID(&(type->EVSEID));		
+	init_evseIDType(&(type->EVSEID));		
 
 }
 
-static  void init_ServiceDiscoveryReqType_ServiceScope(struct ServiceDiscoveryReqType_ServiceScope* type)
+static  void init_serviceScopeType(struct serviceScopeType* type)
 {	
 	type->arraylen.data=0;
 
@@ -114,24 +108,18 @@ static  void init_ServiceDiscoveryReqType_ServiceScope(struct ServiceDiscoveryRe
 static  void init_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* type)
 {		
 	type->isused.ServiceType=0;	
-	init_ServiceDiscoveryReqType_ServiceScope(&(type->ServiceScope));	
+	init_serviceScopeType(&(type->ServiceScope));	
 	type->isused.ServiceScope=0;
 
 }
 
-static  void init_ServiceDescriptionType_ServiceID(struct ServiceDescriptionType_ServiceID* type)
+static  void init_serviceIDType(struct serviceIDType* type)
 {	
 	type->arraylen.data=0;
 
 }
 
-static  void init_ServiceDescriptionType_ServiceName(struct ServiceDescriptionType_ServiceName* type)
-{	
-	type->arraylen.data=0;
-
-}
-
-static  void init_ServiceDescriptionType_ServiceScope(struct ServiceDescriptionType_ServiceScope* type)
+static  void init_serviceNameType(struct serviceNameType* type)
 {	
 	type->arraylen.data=0;
 
@@ -139,11 +127,11 @@ static  void init_ServiceDescriptionType_ServiceScope(struct ServiceDescriptionT
 
 static  void init_ServiceDescriptionType(struct ServiceDescriptionType* type)
 {	
-	init_ServiceDescriptionType_ServiceID(&(type->ServiceID));	
-	init_ServiceDescriptionType_ServiceName(&(type->ServiceName));	
+	init_serviceIDType(&(type->ServiceID));	
+	init_serviceNameType(&(type->ServiceName));	
 	type->isused.ServiceName=0;		
 	type->isused.ServiceType=0;	
-	init_ServiceDescriptionType_ServiceScope(&(type->ServiceScope));	
+	init_serviceScopeType(&(type->ServiceScope));	
 	type->isused.ServiceScope=0;
 
 }
@@ -174,7 +162,7 @@ static  void init_ServicePaymentSelectionReqType(struct ServicePaymentSelectionR
 
 }
 
-static  void init_PaymentDetailsReqType_ContractID(struct PaymentDetailsReqType_ContractID* type)
+static  void init_contractIDType(struct contractIDType* type)
 {	
 	type->arraylen.data=0;
 
@@ -182,28 +170,28 @@ static  void init_PaymentDetailsReqType_ContractID(struct PaymentDetailsReqType_
 
 static  void init_PaymentDetailsReqType(struct PaymentDetailsReqType* type)
 {	
-	init_PaymentDetailsReqType_ContractID(&(type->ContractID));
+	init_contractIDType(&(type->ContractID));
 
 }
 
-static  void init_PowerDiscoveryReqType(struct PowerDiscoveryReqType* type)
-{							
+static  void init_ChargeParameterDiscoveryReqType(struct ChargeParameterDiscoveryReqType* type)
+{										
 
 }
 
-static  void init_PowerDiscoveryResType_EnergyProvider(struct PowerDiscoveryResType_EnergyProvider* type)
+static  void init_energyProviderType(struct energyProviderType* type)
 {	
 	type->arraylen.data=0;
 
 }
 
-static  void init_TariffTableType_Currency(struct TariffTableType_Currency* type)
+static  void init_currencyType(struct currencyType* type)
 {	
 	type->arraylen.data=0;
 
 }
 
-static  void init_TariffDescrType_TariffDescription(struct TariffDescrType_TariffDescription* type)
+static  void init_tariffDescriptionType(struct tariffDescriptionType* type)
 {	
 	type->arraylen.data=0;
 
@@ -230,7 +218,7 @@ static  void init_TariffEntriesType(struct TariffEntriesType* type)
 
 static  void init_TariffDescrType(struct TariffDescrType* type)
 {		
-	init_TariffDescrType_TariffDescription(&(type->TariffDescription));	
+	init_tariffDescriptionType(&(type->TariffDescription));	
 	type->isused.TariffDescription=0;	
 	init_TariffEntriesType(&(type->TariffEntries));
 
@@ -240,7 +228,7 @@ static  void init_TariffTableType(struct TariffTableType* type)
 {
 	int i_loop;
 		
-	init_TariffTableType_Currency(&(type->Currency));	
+	init_currencyType(&(type->Currency));	
 	for(i_loop=0; i_loop<6;i_loop++)
 	{
 		init_TariffDescrType(&(type->Tariff[i_loop]));
@@ -250,9 +238,9 @@ static  void init_TariffTableType(struct TariffTableType* type)
 
 }
 
-static  void init_PowerDiscoveryResType(struct PowerDiscoveryResType* type)
-{						
-	init_PowerDiscoveryResType_EnergyProvider(&(type->EnergyProvider));	
+static  void init_ChargeParameterDiscoveryResType(struct ChargeParameterDiscoveryResType* type)
+{								
+	init_energyProviderType(&(type->EnergyProvider));	
 	type->isused.EnergyProvider=0;	
 	init_TariffTableType(&(type->TariffTable));	
 	type->isused.TariffTable=0;
@@ -275,13 +263,12 @@ static  void init_PowerDeliveryReqType(struct PowerDeliveryReqType* type)
 
 }
 
-static  void init_MeteringStatusResType_EVSEID(struct MeteringStatusResType_EVSEID* type)
-{	
-	type->arraylen.data=0;
+static  void init_PowerDeliveryResType(struct PowerDeliveryResType* type)
+{		
 
 }
 
-static  void init_MeterInfoType_MeterID(struct MeterInfoType_MeterID* type)
+static  void init_meterIDType(struct meterIDType* type)
 {	
 	type->arraylen.data=0;
 
@@ -289,7 +276,7 @@ static  void init_MeterInfoType_MeterID(struct MeterInfoType_MeterID* type)
 
 static  void init_MeterInfoType(struct MeterInfoType* type)
 {	
-	init_MeterInfoType_MeterID(&(type->MeterID));	
+	init_meterIDType(&(type->MeterID));	
 	type->isused.MeterID=0;		
 	type->isused.MeterReading=0;		
 	type->isused.MeterStatus=0;		
@@ -299,25 +286,69 @@ static  void init_MeterInfoType(struct MeterInfoType* type)
 
 static  void init_MeteringStatusResType(struct MeteringStatusResType* type)
 {		
-	init_MeteringStatusResType_EVSEID(&(type->EVSEID));					
+	init_evseIDType(&(type->EVSEID));					
 	type->isused.PCurrent=0;	
 	init_MeterInfoType(&(type->MeterInfo));	
 	type->isused.MeterInfo=0;
 
 }
 
-static  void init_MeteringReceiptReqType_PEVID(struct MeteringReceiptReqType_PEVID* type)
-{	
-	type->arraylen.data=0;
-
-}
-
 static  void init_MeteringReceiptReqType(struct MeteringReceiptReqType* type)
 {	
-	init_MeteringReceiptReqType_PEVID(&(type->PEVID));	
+	init_pevIDType(&(type->PEVID));	
 	type->isused.PEVID=0;			
 	type->isused.TCurrent=0;		
 	init_MeterInfoType(&(type->MeterInfo));
+
+}
+
+static  void init_CableCheckReqType(struct CableCheckReqType* type)
+{	
+
+}
+
+static  void init_CableCheckResType(struct CableCheckResType* type)
+{		
+
+}
+
+static  void init_PreChargeReqType(struct PreChargeReqType* type)
+{				
+
+}
+
+static  void init_PreChargeResType(struct PreChargeResType* type)
+{			
+
+}
+
+static  void init_CurrentDemandReqType(struct CurrentDemandReqType* type)
+{					
+
+}
+
+static  void init_CurrentDemandResType(struct CurrentDemandResType* type)
+{				
+
+}
+
+static  void init_WeldingDetectionReqType(struct WeldingDetectionReqType* type)
+{	
+
+}
+
+static  void init_WeldingDetectionResType(struct WeldingDetectionResType* type)
+{			
+
+}
+
+static  void init_TerminateChargingReqType(struct TerminateChargingReqType* type)
+{	
+
+}
+
+static  void init_TerminateChargingResType(struct TerminateChargingResType* type)
+{			
 
 }
 
@@ -331,8 +362,8 @@ static  void init_BodyType(struct BodyType* type)
 	type->isused.ServicePaymentSelectionRes=0;		
 	type->isused.PaymentDetailsReq=0;		
 	type->isused.PaymentDetailsRes=0;		
-	type->isused.PowerDiscoveryReq=0;		
-	type->isused.PowerDiscoveryRes=0;		
+	type->isused.ChargeParameterDiscoveryReq=0;		
+	type->isused.ChargeParameterDiscoveryRes=0;		
 	type->isused.LineLockReq=0;		
 	type->isused.LineLockRes=0;		
 	type->isused.PowerDeliveryReq=0;		
@@ -340,7 +371,17 @@ static  void init_BodyType(struct BodyType* type)
 	type->isused.MeteringStatusReq=0;		
 	type->isused.MeteringStatusRes=0;		
 	type->isused.MeteringReceiptReq=0;		
-	type->isused.MeteringReceiptRes=0;
+	type->isused.MeteringReceiptRes=0;		
+	type->isused.CableCheckReq=0;		
+	type->isused.CableCheckRes=0;		
+	type->isused.PreChargeReq=0;		
+	type->isused.PreChargeRes=0;		
+	type->isused.CurrentDemandReq=0;		
+	type->isused.CurrentDemandRes=0;		
+	type->isused.WeldingDetectionReq=0;		
+	type->isused.WeldingDetectionRes=0;		
+	type->isused.TerminateChargingReq=0;		
+	type->isused.TerminateChargingRes=0;
 
 }
 
