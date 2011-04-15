@@ -1,0 +1,398 @@
+
+/*
+ * Copyright (C) 2007-2011 Siemens AG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*******************************************************************
+ *
+ * @author Sebastian.Kaebisch.EXT@siemens.com
+ * @version 0.3.2
+ * @contact Joerg.Heuer@siemens.com
+ *
+ ********************************************************************/
+
+
+#include "EXITypes.h"
+#include "v2g_serviceDataTypes.h"
+
+
+static  void init_sessionIDType(struct sessionIDType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_protocolVersionType(struct protocolVersionType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_SessionInformationType(struct SessionInformationType* type)
+{	
+	init_sessionIDType(&(type->SessionID));	
+	init_sessionIDType(&(type->ServiceSessionID));	
+	type->isused.ServiceSessionID=0;	
+	init_protocolVersionType(&(type->ProtocolVersion));	
+	type->isused.ProtocolVersion=0;
+
+}
+
+static  void init_service_string(struct service_string* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_NotificationType(struct NotificationType* type)
+{		
+	type->isused.FaultCode=0;	
+	init_service_string(&(type->FaultMsg));	
+	type->isused.FaultMsg=0;		
+	type->isused.EventList=0;
+
+}
+
+static  void init_HeaderType(struct HeaderType* type)
+{	
+	init_SessionInformationType(&(type->SessionInformation));	
+	init_NotificationType(&(type->Notification));	
+	type->isused.Notification=0;
+
+}
+
+static  void init_pevIDType(struct pevIDType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_SessionSetupReqType(struct SessionSetupReqType* type)
+{	
+	init_pevIDType(&(type->PEVID));	
+	type->isused.PEVID=0;	
+
+}
+
+static  void init_evseIDType(struct evseIDType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_SessionSetupResType(struct SessionSetupResType* type)
+{		
+	init_evseIDType(&(type->EVSEID));		
+
+}
+
+static  void init_serviceScopeType(struct serviceScopeType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_ServiceDiscoveryReqType(struct ServiceDiscoveryReqType* type)
+{		
+	type->isused.ServiceType=0;	
+	init_serviceScopeType(&(type->ServiceScope));	
+	type->isused.ServiceScope=0;
+
+}
+
+static  void init_serviceIDType(struct serviceIDType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_serviceNameType(struct serviceNameType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_ServiceDescriptionType(struct ServiceDescriptionType* type)
+{	
+	init_serviceIDType(&(type->ServiceID));	
+	init_serviceNameType(&(type->ServiceName));	
+	type->isused.ServiceName=0;		
+	type->isused.ServiceType=0;	
+	init_serviceScopeType(&(type->ServiceScope));	
+	type->isused.ServiceScope=0;
+
+}
+
+static  void init_ServiceListType(struct ServiceListType* type)
+{
+	int i_loop;
+		
+	for(i_loop=0; i_loop<8;i_loop++)
+	{
+		init_ServiceDescriptionType(&(type->Service[i_loop]));
+	}
+	
+	type->arraylen.Service=0;
+
+}
+
+static  void init_ServiceDiscoveryResType(struct ServiceDiscoveryResType* type)
+{		
+	init_ServiceListType(&(type->ServiceList));	
+	type->isused.ServiceList=0;
+
+}
+
+static  void init_ServicePaymentSelectionReqType(struct ServicePaymentSelectionReqType* type)
+{	
+	init_ServiceListType(&(type->ServiceList));
+
+}
+
+static  void init_contractIDType(struct contractIDType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_PaymentDetailsReqType(struct PaymentDetailsReqType* type)
+{	
+	init_contractIDType(&(type->ContractID));
+
+}
+
+static  void init_ChargeParameterDiscoveryReqType(struct ChargeParameterDiscoveryReqType* type)
+{										
+
+}
+
+static  void init_energyProviderType(struct energyProviderType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_currencyType(struct currencyType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_tariffDescriptionType(struct tariffDescriptionType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_TariffEntryType(struct TariffEntryType* type)
+{				
+	type->isused.EPrice=0;
+
+}
+
+static  void init_TariffEntriesType(struct TariffEntriesType* type)
+{
+	int i_loop;
+		
+	for(i_loop=0; i_loop<8;i_loop++)
+	{
+		init_TariffEntryType(&(type->TariffEntry[i_loop]));
+	}
+	
+	type->arraylen.TariffEntry=0;
+
+}
+
+static  void init_TariffDescrType(struct TariffDescrType* type)
+{		
+	init_tariffDescriptionType(&(type->TariffDescription));	
+	type->isused.TariffDescription=0;	
+	init_TariffEntriesType(&(type->TariffEntries));
+
+}
+
+static  void init_TariffTableType(struct TariffTableType* type)
+{
+	int i_loop;
+		
+	init_currencyType(&(type->Currency));	
+	for(i_loop=0; i_loop<6;i_loop++)
+	{
+		init_TariffDescrType(&(type->Tariff[i_loop]));
+	}
+	
+	type->arraylen.Tariff=0;
+
+}
+
+static  void init_ChargeParameterDiscoveryResType(struct ChargeParameterDiscoveryResType* type)
+{								
+	init_energyProviderType(&(type->EnergyProvider));	
+	type->isused.EnergyProvider=0;	
+	init_TariffTableType(&(type->TariffTable));	
+	type->isused.TariffTable=0;
+
+}
+
+static  void init_LineLockReqType(struct LineLockReqType* type)
+{		
+
+}
+
+static  void init_LineLockResType(struct LineLockResType* type)
+{		
+
+}
+
+static  void init_PowerDeliveryReqType(struct PowerDeliveryReqType* type)
+{				
+	type->isused.Tariff=0;
+
+}
+
+static  void init_PowerDeliveryResType(struct PowerDeliveryResType* type)
+{		
+
+}
+
+static  void init_meterIDType(struct meterIDType* type)
+{	
+	type->arraylen.data=0;
+
+}
+
+static  void init_MeterInfoType(struct MeterInfoType* type)
+{	
+	init_meterIDType(&(type->MeterID));	
+	type->isused.MeterID=0;		
+	type->isused.MeterReading=0;		
+	type->isused.MeterStatus=0;		
+	type->isused.TMeter=0;
+
+}
+
+static  void init_MeteringStatusResType(struct MeteringStatusResType* type)
+{		
+	init_evseIDType(&(type->EVSEID));					
+	type->isused.PCurrent=0;	
+	init_MeterInfoType(&(type->MeterInfo));	
+	type->isused.MeterInfo=0;
+
+}
+
+static  void init_MeteringReceiptReqType(struct MeteringReceiptReqType* type)
+{	
+	init_pevIDType(&(type->PEVID));	
+	type->isused.PEVID=0;			
+	type->isused.TCurrent=0;		
+	init_MeterInfoType(&(type->MeterInfo));
+
+}
+
+static  void init_CableCheckReqType(struct CableCheckReqType* type)
+{	
+
+}
+
+static  void init_CableCheckResType(struct CableCheckResType* type)
+{		
+
+}
+
+static  void init_PreChargeReqType(struct PreChargeReqType* type)
+{				
+
+}
+
+static  void init_PreChargeResType(struct PreChargeResType* type)
+{			
+
+}
+
+static  void init_CurrentDemandReqType(struct CurrentDemandReqType* type)
+{					
+
+}
+
+static  void init_CurrentDemandResType(struct CurrentDemandResType* type)
+{				
+
+}
+
+static  void init_WeldingDetectionReqType(struct WeldingDetectionReqType* type)
+{	
+
+}
+
+static  void init_WeldingDetectionResType(struct WeldingDetectionResType* type)
+{			
+
+}
+
+static  void init_TerminateChargingReqType(struct TerminateChargingReqType* type)
+{	
+
+}
+
+static  void init_TerminateChargingResType(struct TerminateChargingResType* type)
+{			
+
+}
+
+static  void init_BodyType(struct BodyType* type)
+{		
+	type->isused.SessionSetupReq=0;		
+	type->isused.SessionSetupRes=0;		
+	type->isused.ServiceDiscoveryReq=0;		
+	type->isused.ServiceDiscoveryRes=0;		
+	type->isused.ServicePaymentSelectionReq=0;		
+	type->isused.ServicePaymentSelectionRes=0;		
+	type->isused.PaymentDetailsReq=0;		
+	type->isused.PaymentDetailsRes=0;		
+	type->isused.ChargeParameterDiscoveryReq=0;		
+	type->isused.ChargeParameterDiscoveryRes=0;		
+	type->isused.LineLockReq=0;		
+	type->isused.LineLockRes=0;		
+	type->isused.PowerDeliveryReq=0;		
+	type->isused.PowerDeliveryRes=0;		
+	type->isused.MeteringStatusReq=0;		
+	type->isused.MeteringStatusRes=0;		
+	type->isused.MeteringReceiptReq=0;		
+	type->isused.MeteringReceiptRes=0;		
+	type->isused.CableCheckReq=0;		
+	type->isused.CableCheckRes=0;		
+	type->isused.PreChargeReq=0;		
+	type->isused.PreChargeRes=0;		
+	type->isused.CurrentDemandReq=0;		
+	type->isused.CurrentDemandRes=0;		
+	type->isused.WeldingDetectionReq=0;		
+	type->isused.WeldingDetectionRes=0;		
+	type->isused.TerminateChargingReq=0;		
+	type->isused.TerminateChargingRes=0;
+
+}
+
+static  void init_AnonType_V2G_Message(struct AnonType_V2G_Message* type)
+{		
+	init_BodyType(&(type->Body));
+
+}
+
+static  void init_EXIDocumentType(struct EXIDocumentType* type)
+{	
+	init_AnonType_V2G_Message(&(type->V2G_Message));
+
+}
