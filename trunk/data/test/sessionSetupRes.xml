@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<v2gci_d:V2G_Message xmlns:v2gci_d="urn:iso:15118:2:2010:MsgDef"
- xmlns:v2gci_t="urn:iso:15118:2:2010:MsgDataTypes"
- xmlns:ns0="urn:iso:15118:2:2010:MsgBody"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="urn:iso:15118:2:2010:MsgDef V2G_CI_MsgDef.xsd">
-    <v2gci_d:Header>
-        <v2gci_d:SessionInformation>
-            <v2gci_t:SessionID>0Fb80Fb80Fb80Fb8</v2gci_t:SessionID>
-            <v2gci_t:ProtocolVersion>1</v2gci_t:ProtocolVersion>
-        </v2gci_d:SessionInformation>
-    </v2gci_d:Header>
-    <v2gci_d:Body>
-        <ns0:SessionSetupRes>
-            <ns0:ResponseCode>OK_SessionSetup</ns0:ResponseCode>
-            <ns0:EVSEID>54</ns0:EVSEID>
-            <ns0:EVSEStatus>
-                <v2gci_t:FatalError>0</v2gci_t:FatalError>
-                <v2gci_t:EVSEStandby>1</v2gci_t:EVSEStandby>
-                <v2gci_t:ConnectorLocked>1</v2gci_t:ConnectorLocked>
-                <v2gci_t:PowerSwitchClosed>0</v2gci_t:PowerSwitchClosed>
-                <v2gci_t:RCD>1</v2gci_t:RCD>
-                <v2gci_t:ShutDownTime>123456789</v2gci_t:ShutDownTime>
-            </ns0:EVSEStatus>
-            <ns0:TCurrent>123456789</ns0:TCurrent>
-        </ns0:SessionSetupRes>
-    </v2gci_d:Body>
-</v2gci_d:V2G_Message>
+<ns0:V2G_Message xmlns:ns0="urn:iso:15118:2:2010:eval1.0:MsgDef"
+    xmlns:ns1="urn:iso:15118:2:2010:eval1.0:MsgBody"
+    xmlns:ns2="urn:iso:15118:2:2010:eval1.0:MsgDataTypes"
+    xmlns:ns3="urn:iso:15118:2:2010:eval1.0:MsgHeader"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:iso:15118:2:2010:eval1.0:MsgDef V2G_CI_MsgDef.xsd">
+    <ns0:Header>
+        <ns3:SessionInformation>
+            <ns2:SessionID>0Fb80Fb80Fb80Fb8</ns2:SessionID>
+            <ns2:ProtocolVersion>1</ns2:ProtocolVersion>
+        </ns3:SessionInformation>
+    </ns0:Header>
+    <ns0:Body>
+        <ns1:SessionSetupRes>
+            <ns1:ResponseCode>OK_SessionSetup</ns1:ResponseCode>
+            <ns1:EVSEID>54</ns1:EVSEID>
+            <ns1:EVSEStatus>
+                <ns2:FatalError>0</ns2:FatalError>
+                <ns2:EVSEStandby>1</ns2:EVSEStandby>
+                <ns2:ConnectorLocked>1</ns2:ConnectorLocked>
+                <ns2:PowerSwitchClosed>0</ns2:PowerSwitchClosed>
+                <ns2:RCD>1</ns2:RCD>
+                <ns2:ShutDownTime>123456789</ns2:ShutDownTime>
+                <ns2:ChargerStandby>1</ns2:ChargerStandby>
+                <ns2:EVSEMalfunction>false</ns2:EVSEMalfunction>
+                <ns2:StopCharging>true</ns2:StopCharging>
+            </ns1:EVSEStatus>
+            <ns1:TCurrent>123456789</ns1:TCurrent>
+        </ns1:SessionSetupRes>
+    </ns0:Body>
+</ns0:V2G_Message>
