@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -36,7 +36,7 @@
 #ifndef BYTE_STREAM_C
 #define BYTE_STREAM_C
 
-int readBytesFromFile(const char * filename, uint8_t* data, uint16_t size, uint16_t pos) {
+int readBytesFromFile(const char * filename, uint8_t* data, size_t size, size_t pos) {
 	FILE* f;
 	int character;
 
@@ -60,8 +60,8 @@ int readBytesFromFile(const char * filename, uint8_t* data, uint16_t size, uint1
 	return pos;
 }
 
-int writeBytesToFile(uint8_t* data, uint16_t len, const char * filename) {
-	uint16_t rlen;
+int writeBytesToFile(uint8_t* data, size_t len, const char * filename) {
+	size_t rlen;
 	FILE* f = fopen(filename, "wb+");
 
 	if (f == NULL) {

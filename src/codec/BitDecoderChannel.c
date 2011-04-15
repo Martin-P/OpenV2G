@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  * Bit decoding functionalities
@@ -38,59 +38,36 @@
 #ifndef BIT_DECODER_CHANNEL_C
 #define BIT_DECODER_CHANNEL_C
 
-/* only the least significant 8 bits are filled properly */
-int _decode(bitstream_t* stream, uint32_t* b) {
+int decode(bitstream_t* stream, uint8_t* b) {
 	return readBits(stream, 8, b);
 }
 
 int decodeBoolean(bitstream_t* stream, int* b) {
-	uint32_t ub;
+	uint8_t ub;
 	int errn = readBits(stream, 1, &ub);
 	*b = (ub == 0) ? 0 : 1;
 	return errn;
 }
 
-int decodeNBitUnsignedInteger(bitstream_t* stream, uint16_t nbits, uint32_t* uint32) {
+int decodeNBitUnsignedInteger(bitstream_t* stream, size_t nbits, uint8_t* uint8) {
 	if (nbits == 0) {
-		*uint32 = 0;
+		*uint8 = 0;
 		return 0;
 	} else {
-		return readBits(stream, nbits, uint32);
+		return readBits(stream, nbits, uint8);
 	}
-}
-
-int decodeUnsignedInteger16(bitstream_t* stream, uint16_t* uint16) {
-	unsigned int mShift = 0;
-	int errn = 0;
-	uint32_t b;
-	*uint16 = 0;
-
-	do {
-		/* 1. Read the next octet */
-		errn = _decode(stream, &b);
-		/* 2. Multiply the value of the unsigned number represented by the 7
-		 * least significant
-		 * bits of the octet by the current multiplier and add the result to
-		 * the current value */
-		*uint16 += (b & 127) << mShift;
-		/* 3. Multiply the multiplier by 128 */
-		mShift += 7;
-		/* 4. If the most significant bit of the octet was 1, go back to step 1 */
-	} while (errn >= 0 && (b >> 7) == 1);
-
-	return errn;
 }
 
 int decodeUnsignedInteger32(bitstream_t* stream, uint32_t* uint32) {
 	/* 0XXXXXXX ... 1XXXXXXX 1XXXXXXX */
 	unsigned int mShift = 0;
 	int errn = 0;
-	uint32_t b;
+	uint8_t b;
 	*uint32 = 0;
 
 	do {
 		/* 1. Read the next octet */
-		errn = _decode(stream, &b);
+		errn = decode(stream, &b);
 		/* 2. Multiply the value of the unsigned number represented by the 7
 		 * least significant
 		 * bits of the octet by the current multiplier and add the result to
@@ -113,11 +90,11 @@ int decodeUnsignedInteger32(bitstream_t* stream, uint32_t* uint32) {
 int decodeUnsignedInteger64(bitstream_t* stream, uint64_t* uint64) {
 	unsigned int mShift = 0;
 	int errn = 0;
-	uint32_t b;
+	uint8_t b;
 	*uint64 = 0L;
 
 	do {
-		errn = _decode(stream, &b);
+		errn = decode(stream, &b);
 		*uint64 += ((uint64_t) (b & 127)) << mShift;
 		mShift += 7;
 	} while (errn >= 0 && (b >> 7) == 1);
@@ -200,7 +177,7 @@ int decodeFloat(bitstream_t* stream, float_me_t* f) {
 /**
  * Decode a sequence of characters for a given length.
  */
-int decodeStringOnly(bitstream_t* stream, uint16_t len, string_ucs_t* s) {
+int decodeStringOnly(bitstream_t* stream, size_t len, string_ucs_t* s) {
 	decodeCharacters(stream, len, s->codepoints);
 	s->len = len;
 	return 0;
@@ -210,7 +187,7 @@ int decodeStringOnly(bitstream_t* stream, uint16_t len, string_ucs_t* s) {
  * Decode a length prefixed sequence of characters.
  */
 int decodeString(bitstream_t* stream, string_ucs_t* s) {
-	int errn = decodeUnsignedInteger16(stream, &s->len);
+	int errn = decodeUnsignedInteger32(stream, &s->len);
 	if (errn < 0) {
 		return errn;
 	}
@@ -218,7 +195,7 @@ int decodeString(bitstream_t* stream, string_ucs_t* s) {
 }
 
 int decodeStringValue(bitstream_t* stream, string_ucs_t* s) {
-	int errn = decodeUnsignedInteger16(stream, &s->len);
+	int errn = decodeUnsignedInteger32(stream, &s->len);
 	if (errn < 0) {
 		return errn;
 	}
@@ -249,14 +226,11 @@ int decodeStringValue(bitstream_t* stream, string_ucs_t* s) {
  * Each character is represented by its UCS [ISO/IEC 10646]
  * code point encoded as an Unsigned Integer
  */
-int decodeCharacters(bitstream_t* stream, uint16_t len, uint32_t* chars) {
+int decodeCharacters(bitstream_t* stream, size_t len, uint32_t* chars) {
 	unsigned int i;
 	int errn = 0;
 	for (i = 0; i < len && errn >= 0; i++) {
 		errn = decodeUnsignedInteger32(stream, &chars[i]);
-		if (errn < 0) {
-			return errn;
-		}
 	}
 
 	return errn;
@@ -267,18 +241,13 @@ int decodeCharacters(bitstream_t* stream, uint16_t len, uint32_t* chars) {
  */
 int decodeBinary(bitstream_t* stream, bytes_t* bytes) {
 	unsigned int i;
-	uint32_t b;
-	int errn = decodeUnsignedInteger16(stream, &bytes->len);
+	int errn = decodeUnsignedInteger32(stream, &bytes->len);
 	if (errn < 0) {
 		return errn;
 	}
 
 	for (i = 0; i < bytes->len && errn >= 0; i++) {
-		errn = _decode(stream, &b);
-		if (errn < 0) {
-			return errn;
-		}
-		bytes->data[i] = (uint8_t)b;
+		errn = decode(stream, &bytes->data[i]);
 	}
 
 	return errn;

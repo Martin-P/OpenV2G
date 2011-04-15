@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -27,8 +27,8 @@
 extern "C" {
 #endif
 
-#ifndef EXI_SERVICE_H_
-#define EXI_SERVICE_H_
+#ifndef V2G_SERVICE_H_
+#define V2G_SERVICE_H_
 
 #include "v2g_serviceDataTypes.h"
 #include "EXITypes.h"
@@ -40,7 +40,7 @@ struct uniqueIDPath
 };
 
 
-struct EXIService
+struct v2gService
 {
 	/* in-/ out-stream */
 	bitstream_t inStream;
@@ -54,7 +54,7 @@ struct EXIService
 	exi_value_t val;
 
 	/* v2g message data structure */
-	struct EXIDocumentType exiMsg;
+	struct AnonType_V2G_Message v2gMsg;
 
 	/* unique id for ambiguous elements */
 	struct uniqueIDPath idPath;
@@ -67,12 +67,12 @@ struct EXIService
 };
 
 /* define error codes (TODO: define precise error codes) */
-#define EXI_NON_VALID_MESSAGE 0x01
-#define EXI_SERIALIZATION_FAILED 0x02
+#define V2G_NON_VALID_MESSAGE 0x01
+#define V2G_SERIALIZATION_FAILED 0x02
 
-#define EXI_UNKNOWN_ERROR 0xFF
+#define V2G_UNKNOWN_ERROR 0xFF
 
-#endif /* EXI_SERVICE_H_ */
+#endif /* V2G_SERVICE_H_ */
 
 #ifdef __cplusplus
 }

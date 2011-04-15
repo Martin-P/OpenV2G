@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -37,9 +37,9 @@ extern "C" {
 #include "EXITypes.h"
 
 
-/* uint16_t exiGetCurrentState(struct exiState* state); */
+/* size_t exiGetCurrentState(struct exiState* state); */
 
-int exiPushStack(exi_state_t* state, uint16_t newState, eqname_t* eqn);
+int exiPushStack(exi_state_t* state, size_t newState, eqname_t* eqn);
 
 int exiPopStack(exi_state_t* state);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -32,15 +32,15 @@
 #define MAX_STRING_SIZE 256
 #define MAX_STREAM_SIZE 60
 
-int testV2GService(uint8_t* inStream, uint16_t inStreamLength, uint8_t* outStream, uint16_t* outStreamLength)
+int testV2GService(uint8_t* inStream, size_t inStreamLength, uint8_t* outStream, size_t* outStreamLength)
 {
 	static uint8_t byte_array[MAX_BYTE_SIZE]; /* define MAX_BYTE_SIZE before*/
 	static uint32_t string_array[MAX_STRING_SIZE]; /* define MAX_STRING_SIZE before*/
 
 
-	uint16_t exiMsgLength;
+	size_t exiMsgLength;
 
-	struct EXIService service;
+	struct v2gService service;
 
 	/* BINARY memory setup */
 	bytes_t bytes = { MAX_BYTE_SIZE, byte_array, 0 };

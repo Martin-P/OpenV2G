@@ -1,6 +1,6 @@
 
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,7 +19,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -55,11 +55,11 @@ extern "C" {
 
 
 /* DoIP methods */
-int write_doIPNack(uint8_t* outStream, uint16_t* outStreamLength, uint8_t nackCode);
+int write_doIPNack(uint8_t* outStream, uint32_t* outStreamLength, uint8_t nackCode);
 
-int write_doIPHeader(uint8_t* outStream, uint16_t* outStreamLength, uint16_t payloadType);
+int write_doIPHeader(uint8_t* outStream, uint32_t* outStreamLength, uint16_t payloadType);
 
-int read_doIPHeader(uint8_t* inStream, uint16_t inStreamLength, uint16_t* payloadLength);
+int read_doIPHeader(uint8_t* inStream, size_t inStreamLength, uint32_t* payloadLength);
 
 #endif /* DOIP_H_ */
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -32,7 +32,7 @@
 #define BIT_OUTPUT_STREAM_C
 
 /*	NOTE: nbits <= 8 */
-int writeBits(bitstream_t* stream, uint16_t nbits, uint32_t val) {
+int writeBits(bitstream_t* stream, size_t nbits, uint8_t val) {
 	/*  is there enough space in the buffer */
 	if (nbits <= stream->capacity) {
 		/* all bits fit into the current buffer */

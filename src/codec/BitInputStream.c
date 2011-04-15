@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -49,7 +49,7 @@ int readBuffer(bitstream_t* stream)
 	return errn;
 }
 
-int readBits(bitstream_t* stream, uint16_t num_bits, uint32_t* b)
+int readBits(bitstream_t* stream, size_t num_bits, uint8_t* b)
 {
 	int errn = readBuffer(stream);
 	if (errn < 0) {

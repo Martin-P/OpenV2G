@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -35,8 +35,6 @@ extern "C" {
 
 #define BITS_IN_BYTE 8
 
-#define UINT_MAX_VALUE 65535
-
 #define EXI_ELEMENT_STACK_SIZE 16
 
 /* EXI automaton methods prefixes such as "inline" etc. */
@@ -51,29 +49,29 @@ extern "C" {
 
 typedef struct {
 	/*	Integer Array */
-	uint16_t size; /* array size */
+	size_t size; /* array size */
 	uint8_t* data; /* int data array */
-	uint16_t* pos; /* next position in array */
+	size_t* pos; /* next position in array */
 	/* Current byte buffer & its remaining bit capacity */
 	uint8_t buffer;
-	uint16_t capacity;
+	size_t capacity;
 } bitstream_t;
 
 typedef struct {
 	/* Bytes Size and array container */
-	uint16_t size;
+	size_t size;
 	uint8_t* data;
 	/* current length (len <= size) */
-	uint16_t len;
+	size_t len;
 } bytes_t;
 
 /* Universal Character Set (UCS) strings */
 typedef struct {
 	/* UCS size and UCS character container*/
-	uint16_t size;
+	size_t size;
 	uint32_t* codepoints;
 	/* current length == number of code-points, (len <= size) */
-	uint16_t len;
+	size_t len;
 } string_ucs_t;
 
 typedef struct {
@@ -129,27 +127,27 @@ typedef enum
 /* TODO list support */
 typedef struct {
 	/* List container with memory size */
-	uint16_t size;
+	size_t size;
 	uint8_t* data;
 	/* list item type */
 	exi_datatype_t type;
 	/* number of items */
-	uint16_t len;
+	size_t len;
 } list_t;
 
 
 typedef struct {
-	uint16_t namespaceURI;
-	uint16_t localPart;
+	unsigned int namespaceURI;
+	unsigned int localPart;
 } eqname_t;
 
 typedef struct  {
 	/* stack of grammar states and elements */
-	uint16_t grammarStack [EXI_ELEMENT_STACK_SIZE];
+	size_t grammarStack [EXI_ELEMENT_STACK_SIZE];
 	eqname_t elementStack [EXI_ELEMENT_STACK_SIZE];
-	uint16_t stackIndex;
+	size_t stackIndex;
 	/* event-code */
-	uint32_t eventCode;
+	uint8_t eventCode;
 } exi_state_t;
 
 
@@ -159,16 +157,16 @@ typedef struct  {
 
 	/* base types */
 	int boolean;
+	int8_t int8;
+	uint8_t uint8;
 	uint32_t uint32;
-	uint64_t uint64;
 	int32_t int32;
 	int64_t int64;
-	uint32_t enumeration;
+	uint8_t enumeration;
 
 	/* Bytes, Strings and Lists are not native types anymore */
 	bytes_t binary;
 	string_ucs_t string;
-	float_me_t float_me;
 	list_t list;
 } exi_value_t;
 

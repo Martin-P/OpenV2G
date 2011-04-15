@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -36,14 +36,14 @@
 
 struct exiPartition {
 	/* length of array */
-	uint16_t len;
+	size_t len;
 	/* array of string entries */
 	const char** entries;
 };
 
 struct exiStringTable {
 	/* length of both arrays (uris & localNames) */
-	uint16_t len;
+	size_t len;
 	/* URI entries*/
 	const char** uris;
 	/* localName entries divided by URI */

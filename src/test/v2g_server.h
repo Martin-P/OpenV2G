@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -28,6 +28,6 @@
 
 #include "EXITypes.h"
 
-int testV2GService(uint8_t* inStream, uint16_t inStreamLength, uint8_t* outStream,uint16_t* outStreamLength);
+int testV2GService(uint8_t* inStream, size_t inStreamLength, uint8_t* outStream,size_t* outStreamLength);
 
 #endif /* V2G_SERVER_H_ */

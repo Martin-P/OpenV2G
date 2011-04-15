@@ -27,16 +27,15 @@
 extern "C" {
 #endif
 
-#ifndef V2GSERVER_H_
-#define V2GSERVER_H_
+#ifndef V2GSERVICEDATASERIAL_H_
+#define V2GSERVICEDATASERIAL_H_
 
-#include "v2g_serviceDataTypes.h"
+#include "v2g_service.h"
+
+int serialize_message(struct v2gService* service);
 
 
-int init_v2gservice(struct v2gService* service,bytes_t bytes, string_ucs_t string, uint16_t transportHeaderOffset);
-int messageDispatcher(struct v2gService* service, uint8_t* inStream, size_t sizeInStream, uint8_t* outStream, size_t sizeOutStream, size_t* outPos);
-
-#endif /* V2GSERVER_H_ */
+#endif /* V2GSERVICEDATASERIAL_H_ */
 
 #ifdef __cplusplus
 }

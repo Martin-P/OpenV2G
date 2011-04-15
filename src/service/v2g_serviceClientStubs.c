@@ -1,7 +1,7 @@
 
 
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -20,34 +20,27 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.3.2
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
 
  
  #include "v2g_serviceDataTypes.h"
-  #include "v2g_serviceDataTypes.c"
  #include "v2g_serviceClientStubs.h"
- #include "v2g_serviceDataSerialization.c"
+ #include "v2g_serviceDataSerializiation.h"
  #include "v2g_serviceClientDataTransmitter.h"
  #include "EXITypes.h"
  #include "EXIDecoder.h"
  #include "EXIEncoder.h"
  
 
-static int deserializeMessage(struct EXIService* service);
+static int deserializeMessage(struct v2gService* service);
  
-/** 
- * \brief   Calls the remote sessionSetup method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct SessionSetupReqType* Request data for the server (has to be set up before)
- * \param	result   struct SessionSetupResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_sessionSetup(struct EXIService* service, struct HeaderType* header, struct SessionSetupReqType* params, struct SessionSetupResType* result)
+/* call sessionSetup  */
+int call_sessionSetup(struct v2gService* service, struct HeaderType* header, struct SessionSetupReqType* params, struct SessionSetupResType* result)
 {
-	uint16_t posEncode, posDecode;
+	size_t posEncode, posDecode;
 	
 	/* init uniqueID stack */
 	service->idPath.pos=0;
@@ -69,15 +62,13 @@ int call_sessionSetup(struct EXIService* service, struct HeaderType* header, str
 	
 
 
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
+	/* init v2g message */
+	init_AnonType_V2G_Message(&(service->v2gMsg));
 
-	
 	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.SessionSetupReq = params;
-	service->exiMsg.V2G_Message.Body.isused.SessionSetupReq=1;
+ 	service->v2gMsg.Header = *header;
+	service->v2gMsg.Body.SessionSetupReq = *params;
+	service->v2gMsg.Body.isused.SessionSetupReq=1;
 	
 	/* encode data to exi stream*/
 	if(serialize_message(service))
@@ -95,8 +86,6 @@ int call_sessionSetup(struct EXIService* service, struct HeaderType* header, str
  	
  	
 
- 	service->exiMsg.V2G_Message.Body.SessionSetupRes = result;
-
 	/* init decoder (read header, set initial state) */
 	exiInitDecoder(&(service->inStream), &(service->stateDecode));
 
@@ -106,22 +95,16 @@ int call_sessionSetup(struct EXIService* service, struct HeaderType* header, str
  	 
  		return -1;
  	}
-
+ 	*result = service->v2gMsg.Body.SessionSetupRes;
  		
  	
 	return 0;
 }	
 
-/** 
- * \brief   Calls the remote serviceDiscovery method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct ServiceDiscoveryReqType* Request data for the server (has to be set up before)
- * \param	result   struct ServiceDiscoveryResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_serviceDiscovery(struct EXIService* service, struct HeaderType* header, struct ServiceDiscoveryReqType* params, struct ServiceDiscoveryResType* result)
+/* call serviceDiscovery  */
+int call_serviceDiscovery(struct v2gService* service, struct HeaderType* header, struct ServiceDiscoveryReqType* params, struct ServiceDiscoveryResType* result)
 {
-	uint16_t posEncode, posDecode;
+	size_t posEncode, posDecode;
 	
 	/* init uniqueID stack */
 	service->idPath.pos=0;
@@ -143,15 +126,13 @@ int call_serviceDiscovery(struct EXIService* service, struct HeaderType* header,
 	
 
 
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
+	/* init v2g message */
+	init_AnonType_V2G_Message(&(service->v2gMsg));
 
-	
 	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.ServiceDiscoveryReq = params;
-	service->exiMsg.V2G_Message.Body.isused.ServiceDiscoveryReq=1;
+ 	service->v2gMsg.Header = *header;
+	service->v2gMsg.Body.ServiceDiscoveryReq = *params;
+	service->v2gMsg.Body.isused.ServiceDiscoveryReq=1;
 	
 	/* encode data to exi stream*/
 	if(serialize_message(service))
@@ -169,8 +150,6 @@ int call_serviceDiscovery(struct EXIService* service, struct HeaderType* header,
  	
  	
 
- 	service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes = result;
-
 	/* init decoder (read header, set initial state) */
 	exiInitDecoder(&(service->inStream), &(service->stateDecode));
 
@@ -180,22 +159,16 @@ int call_serviceDiscovery(struct EXIService* service, struct HeaderType* header,
  	 
  		return -1;
  	}
-
+ 	*result = service->v2gMsg.Body.ServiceDiscoveryRes;
  		
  	
 	return 0;
 }	
 
-/** 
- * \brief   Calls the remote selectedServicePayment method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct ServicePaymentSelectionReqType* Request data for the server (has to be set up before)
- * \param	result   struct ServicePaymentSelectionResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_selectedServicePayment(struct EXIService* service, struct HeaderType* header, struct ServicePaymentSelectionReqType* params, struct ServicePaymentSelectionResType* result)
+/* call selectedServicePayment  */
+int call_selectedServicePayment(struct v2gService* service, struct HeaderType* header, struct ServicePaymentSelectionReqType* params, struct ServicePaymentSelectionResType* result)
 {
-	uint16_t posEncode, posDecode;
+	size_t posEncode, posDecode;
 	
 	/* init uniqueID stack */
 	service->idPath.pos=0;
@@ -217,15 +190,13 @@ int call_selectedServicePayment(struct EXIService* service, struct HeaderType* h
 	
 
 
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
+	/* init v2g message */
+	init_AnonType_V2G_Message(&(service->v2gMsg));
 
-	
 	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.ServicePaymentSelectionReq = params;
-	service->exiMsg.V2G_Message.Body.isused.ServicePaymentSelectionReq=1;
+ 	service->v2gMsg.Header = *header;
+	service->v2gMsg.Body.ServicePaymentSelectionReq = *params;
+	service->v2gMsg.Body.isused.ServicePaymentSelectionReq=1;
 	
 	/* encode data to exi stream*/
 	if(serialize_message(service))
@@ -243,8 +214,6 @@ int call_selectedServicePayment(struct EXIService* service, struct HeaderType* h
  	
  	
 
- 	service->exiMsg.V2G_Message.Body.ServicePaymentSelectionRes = result;
-
 	/* init decoder (read header, set initial state) */
 	exiInitDecoder(&(service->inStream), &(service->stateDecode));
 
@@ -254,22 +223,16 @@ int call_selectedServicePayment(struct EXIService* service, struct HeaderType* h
  	 
  		return -1;
  	}
-
+ 	*result = service->v2gMsg.Body.ServicePaymentSelectionRes;
  		
  	
 	return 0;
 }	
 
-/** 
- * \brief   Calls the remote paymentDetails method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct PaymentDetailsReqType* Request data for the server (has to be set up before)
- * \param	result   struct PaymentDetailsResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_paymentDetails(struct EXIService* service, struct HeaderType* header, struct PaymentDetailsReqType* params, struct PaymentDetailsResType* result)
+/* call paymentDetails  */
+int call_paymentDetails(struct v2gService* service, struct HeaderType* header, struct PaymentDetailsReqType* params, struct PaymentDetailsResType* result)
 {
-	uint16_t posEncode, posDecode;
+	size_t posEncode, posDecode;
 	
 	/* init uniqueID stack */
 	service->idPath.pos=0;
@@ -291,15 +254,13 @@ int call_paymentDetails(struct EXIService* service, struct HeaderType* header, s
 	
 
 
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
+	/* init v2g message */
+	init_AnonType_V2G_Message(&(service->v2gMsg));
 
-	
 	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.PaymentDetailsReq = params;
-	service->exiMsg.V2G_Message.Body.isused.PaymentDetailsReq=1;
+ 	service->v2gMsg.Header = *header;
+	service->v2gMsg.Body.PaymentDetailsReq = *params;
+	service->v2gMsg.Body.isused.PaymentDetailsReq=1;
 	
 	/* encode data to exi stream*/
 	if(serialize_message(service))
@@ -317,8 +278,6 @@ int call_paymentDetails(struct EXIService* service, struct HeaderType* header, s
  	
  	
 
- 	service->exiMsg.V2G_Message.Body.PaymentDetailsRes = result;
-
 	/* init decoder (read header, set initial state) */
 	exiInitDecoder(&(service->inStream), &(service->stateDecode));
 
@@ -328,22 +287,16 @@ int call_paymentDetails(struct EXIService* service, struct HeaderType* header, s
  	 
  		return -1;
  	}
-
+ 	*result = service->v2gMsg.Body.PaymentDetailsRes;
  		
  	
 	return 0;
 }	
 
-/** 
- * \brief   Calls the remote chargeParameterDiscovery method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct ChargeParameterDiscoveryReqType* Request data for the server (has to be set up before)
- * \param	result   struct ChargeParameterDiscoveryResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_chargeParameterDiscovery(struct EXIService* service, struct HeaderType* header, struct ChargeParameterDiscoveryReqType* params, struct ChargeParameterDiscoveryResType* result)
+/* call powerDiscovery  */
+int call_powerDiscovery(struct v2gService* service, struct HeaderType* header, struct PowerDiscoveryReqType* params, struct PowerDiscoveryResType* result)
 {
-	uint16_t posEncode, posDecode;
+	size_t posEncode, posDecode;
 	
 	/* init uniqueID stack */
 	service->idPath.pos=0;
@@ -365,15 +318,13 @@ int call_chargeParameterDiscovery(struct EXIService* service, struct HeaderType*
 	
 
 
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
+	/* init v2g message */
+	init_AnonType_V2G_Message(&(service->v2gMsg));
 
-	
 	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryReq = params;
-	service->exiMsg.V2G_Message.Body.isused.ChargeParameterDiscoveryReq=1;
+ 	service->v2gMsg.Header = *header;
+	service->v2gMsg.Body.PowerDiscoveryReq = *params;
+	service->v2gMsg.Body.isused.PowerDiscoveryReq=1;
 	
 	/* encode data to exi stream*/
 	if(serialize_message(service))
@@ -391,8 +342,6 @@ int call_chargeParameterDiscovery(struct EXIService* service, struct HeaderType*
  	
  	
 
- 	service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes = result;
-
 	/* init decoder (read header, set initial state) */
 	exiInitDecoder(&(service->inStream), &(service->stateDecode));
 
@@ -402,22 +351,16 @@ int call_chargeParameterDiscovery(struct EXIService* service, struct HeaderType*
  	 
  		return -1;
  	}
-
+ 	*result = service->v2gMsg.Body.PowerDiscoveryRes;
  		
  	
 	return 0;
 }	
 
-/** 
- * \brief   Calls the remote lineLock method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct LineLockReqType* Request data for the server (has to be set up before)
- * \param	result   struct LineLockResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_lineLock(struct EXIService* service, struct HeaderType* header, struct LineLockReqType* params, struct LineLockResType* result)
+/* call lineLock  */
+int call_lineLock(struct v2gService* service, struct HeaderType* header, struct LineLockReqType* params, struct LineLockResType* result)
 {
-	uint16_t posEncode, posDecode;
+	size_t posEncode, posDecode;
 	
 	/* init uniqueID stack */
 	service->idPath.pos=0;
@@ -439,15 +382,13 @@ int call_lineLock(struct EXIService* service, struct HeaderType* header, struct 
 	
 
 
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
+	/* init v2g message */
+	init_AnonType_V2G_Message(&(service->v2gMsg));
 
-	
 	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.LineLockReq = params;
-	service->exiMsg.V2G_Message.Body.isused.LineLockReq=1;
+ 	service->v2gMsg.Header = *header;
+	service->v2gMsg.Body.LineLockReq = *params;
+	service->v2gMsg.Body.isused.LineLockReq=1;
 	
 	/* encode data to exi stream*/
 	if(serialize_message(service))
@@ -465,8 +406,6 @@ int call_lineLock(struct EXIService* service, struct HeaderType* header, struct 
  	
  	
 
- 	service->exiMsg.V2G_Message.Body.LineLockRes = result;
-
 	/* init decoder (read header, set initial state) */
 	exiInitDecoder(&(service->inStream), &(service->stateDecode));
 
@@ -476,22 +415,16 @@ int call_lineLock(struct EXIService* service, struct HeaderType* header, struct 
  	 
  		return -1;
  	}
-
+ 	*result = service->v2gMsg.Body.LineLockRes;
  		
  	
 	return 0;
 }	
 
-/** 
- * \brief   Calls the remote powerDelivery method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct PowerDeliveryReqType* Request data for the server (has to be set up before)
- * \param	result   struct PowerDeliveryResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_powerDelivery(struct EXIService* service, struct HeaderType* header, struct PowerDeliveryReqType* params, struct PowerDeliveryResType* result)
+/* call powerDelivery  */
+int call_powerDelivery(struct v2gService* service, struct HeaderType* header, struct PowerDeliveryReqType* params, struct PowerDeliveryResType* result)
 {
-	uint16_t posEncode, posDecode;
+	size_t posEncode, posDecode;
 	
 	/* init uniqueID stack */
 	service->idPath.pos=0;
@@ -513,15 +446,13 @@ int call_powerDelivery(struct EXIService* service, struct HeaderType* header, st
 	
 
 
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
+	/* init v2g message */
+	init_AnonType_V2G_Message(&(service->v2gMsg));
 
-	
 	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.PowerDeliveryReq = params;
-	service->exiMsg.V2G_Message.Body.isused.PowerDeliveryReq=1;
+ 	service->v2gMsg.Header = *header;
+	service->v2gMsg.Body.PowerDeliveryReq = *params;
+	service->v2gMsg.Body.isused.PowerDeliveryReq=1;
 	
 	/* encode data to exi stream*/
 	if(serialize_message(service))
@@ -539,8 +470,6 @@ int call_powerDelivery(struct EXIService* service, struct HeaderType* header, st
  	
  	
 
- 	service->exiMsg.V2G_Message.Body.PowerDeliveryRes = result;
-
 	/* init decoder (read header, set initial state) */
 	exiInitDecoder(&(service->inStream), &(service->stateDecode));
 
@@ -550,21 +479,16 @@ int call_powerDelivery(struct EXIService* service, struct HeaderType* header, st
  	 
  		return -1;
  	}
-
+ 	*result = service->v2gMsg.Body.PowerDeliveryRes;
  		
  	
 	return 0;
 }	
 
-/** 
- * \brief   Calls the remote meteringStatus method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
-  * \param	result   struct MeteringStatusResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_meteringStatus(struct EXIService* service, struct HeaderType* header, struct MeteringStatusResType* result)
+/* call meteringStatus  */
+int call_meteringStatus(struct v2gService* service, struct HeaderType* header, struct MeteringStatusResType* result)
 {
-	uint16_t posEncode, posDecode;
+	size_t posEncode, posDecode;
 	
 	/* init uniqueID stack */
 	service->idPath.pos=0;
@@ -586,14 +510,12 @@ int call_meteringStatus(struct EXIService* service, struct HeaderType* header, s
 	
 
 
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
+	/* init v2g message */
+	init_AnonType_V2G_Message(&(service->v2gMsg));
 
-	
 	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.isused.MeteringStatusReq=1;
+ 	service->v2gMsg.Header = *header;
+	service->v2gMsg.Body.isused.MeteringStatusReq=1;
 	
 	/* encode data to exi stream*/
 	if(serialize_message(service))
@@ -611,8 +533,6 @@ int call_meteringStatus(struct EXIService* service, struct HeaderType* header, s
  	
  	
 
- 	service->exiMsg.V2G_Message.Body.MeteringStatusRes = result;
-
 	/* init decoder (read header, set initial state) */
 	exiInitDecoder(&(service->inStream), &(service->stateDecode));
 
@@ -622,22 +542,16 @@ int call_meteringStatus(struct EXIService* service, struct HeaderType* header, s
  	 
  		return -1;
  	}
-
+ 	*result = service->v2gMsg.Body.MeteringStatusRes;
  		
  	
 	return 0;
 }	
 
-/** 
- * \brief   Calls the remote meteringReceipt method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct MeteringReceiptReqType* Request data for the server (has to be set up before)
- * \param	result   struct MeteringReceiptResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_meteringReceipt(struct EXIService* service, struct HeaderType* header, struct MeteringReceiptReqType* params, struct MeteringReceiptResType* result)
+/* call meteringReceipt  */
+int call_meteringReceipt(struct v2gService* service, struct HeaderType* header, struct MeteringReceiptReqType* params, struct MeteringReceiptResType* result)
 {
-	uint16_t posEncode, posDecode;
+	size_t posEncode, posDecode;
 	
 	/* init uniqueID stack */
 	service->idPath.pos=0;
@@ -659,15 +573,13 @@ int call_meteringReceipt(struct EXIService* service, struct HeaderType* header, 
 	
 
 
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
+	/* init v2g message */
+	init_AnonType_V2G_Message(&(service->v2gMsg));
 
-	
 	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.MeteringReceiptReq = params;
-	service->exiMsg.V2G_Message.Body.isused.MeteringReceiptReq=1;
+ 	service->v2gMsg.Header = *header;
+	service->v2gMsg.Body.MeteringReceiptReq = *params;
+	service->v2gMsg.Body.isused.MeteringReceiptReq=1;
 	
 	/* encode data to exi stream*/
 	if(serialize_message(service))
@@ -685,8 +597,6 @@ int call_meteringReceipt(struct EXIService* service, struct HeaderType* header, 
  	
  	
 
- 	service->exiMsg.V2G_Message.Body.MeteringReceiptRes = result;
-
 	/* init decoder (read header, set initial state) */
 	exiInitDecoder(&(service->inStream), &(service->stateDecode));
 
@@ -696,377 +606,7 @@ int call_meteringReceipt(struct EXIService* service, struct HeaderType* header, 
  	 
  		return -1;
  	}
-
- 		
- 	
-	return 0;
-}	
-
-/** 
- * \brief   Calls the remote cableCheck method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct CableCheckReqType* Request data for the server (has to be set up before)
- * \param	result   struct CableCheckResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_cableCheck(struct EXIService* service, struct HeaderType* header, struct CableCheckReqType* params, struct CableCheckResType* result)
-{
-	uint16_t posEncode, posDecode;
-	
-	/* init uniqueID stack */
-	service->idPath.pos=0;
-	
-	/* init outStream data structure */
-	posEncode = service->transportHeaderOffset;
-	service->outStream.pos = &posEncode;
-	service->outStream.buffer = 0;
-	service->outStream.capacity = 8;
-	
-	/* init encoder (write header, set initial state) */
-	exiInitEncoder(&(service->outStream), &(service->stateEncode));
-
-	/* init inStream data structure */
-	posDecode = service->transportHeaderOffset;
-	service->inStream.pos = &posDecode;
-	service->inStream.buffer=0;
-	service->inStream.capacity=0;
-	
-
-
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
-
-	
-	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.CableCheckReq = params;
-	service->exiMsg.V2G_Message.Body.isused.CableCheckReq=1;
-	
-	/* encode data to exi stream*/
-	if(serialize_message(service))
-	{ 
-	
-		return -1;
-	}
- 
- 	/* send data to server and wait for the response message */
- 	service->errorCode=serviceDataTransmitter(service->outStream.data, (*(service->outStream.pos)-service->transportHeaderOffset), service->inStream.data);
- 	if(service->errorCode) 
- 	{
-		return -1;
- 	}
- 	
- 	
-
- 	service->exiMsg.V2G_Message.Body.CableCheckRes = result;
-
-	/* init decoder (read header, set initial state) */
-	exiInitDecoder(&(service->inStream), &(service->stateDecode));
-
-	/* deserilize the response message */
- 	if(deserializeMessage(service)<0)
- 	{
- 	 
- 		return -1;
- 	}
-
- 		
- 	
-	return 0;
-}	
-
-/** 
- * \brief   Calls the remote preCharge method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct PreChargeReqType* Request data for the server (has to be set up before)
- * \param	result   struct PreChargeResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_preCharge(struct EXIService* service, struct HeaderType* header, struct PreChargeReqType* params, struct PreChargeResType* result)
-{
-	uint16_t posEncode, posDecode;
-	
-	/* init uniqueID stack */
-	service->idPath.pos=0;
-	
-	/* init outStream data structure */
-	posEncode = service->transportHeaderOffset;
-	service->outStream.pos = &posEncode;
-	service->outStream.buffer = 0;
-	service->outStream.capacity = 8;
-	
-	/* init encoder (write header, set initial state) */
-	exiInitEncoder(&(service->outStream), &(service->stateEncode));
-
-	/* init inStream data structure */
-	posDecode = service->transportHeaderOffset;
-	service->inStream.pos = &posDecode;
-	service->inStream.buffer=0;
-	service->inStream.capacity=0;
-	
-
-
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
-
-	
-	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.PreChargeReq = params;
-	service->exiMsg.V2G_Message.Body.isused.PreChargeReq=1;
-	
-	/* encode data to exi stream*/
-	if(serialize_message(service))
-	{ 
-	
-		return -1;
-	}
- 
- 	/* send data to server and wait for the response message */
- 	service->errorCode=serviceDataTransmitter(service->outStream.data, (*(service->outStream.pos)-service->transportHeaderOffset), service->inStream.data);
- 	if(service->errorCode) 
- 	{
-		return -1;
- 	}
- 	
- 	
-
- 	service->exiMsg.V2G_Message.Body.PreChargeRes = result;
-
-	/* init decoder (read header, set initial state) */
-	exiInitDecoder(&(service->inStream), &(service->stateDecode));
-
-	/* deserilize the response message */
- 	if(deserializeMessage(service)<0)
- 	{
- 	 
- 		return -1;
- 	}
-
- 		
- 	
-	return 0;
-}	
-
-/** 
- * \brief   Calls the remote currentDemand method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct CurrentDemandReqType* Request data for the server (has to be set up before)
- * \param	result   struct CurrentDemandResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_currentDemand(struct EXIService* service, struct HeaderType* header, struct CurrentDemandReqType* params, struct CurrentDemandResType* result)
-{
-	uint16_t posEncode, posDecode;
-	
-	/* init uniqueID stack */
-	service->idPath.pos=0;
-	
-	/* init outStream data structure */
-	posEncode = service->transportHeaderOffset;
-	service->outStream.pos = &posEncode;
-	service->outStream.buffer = 0;
-	service->outStream.capacity = 8;
-	
-	/* init encoder (write header, set initial state) */
-	exiInitEncoder(&(service->outStream), &(service->stateEncode));
-
-	/* init inStream data structure */
-	posDecode = service->transportHeaderOffset;
-	service->inStream.pos = &posDecode;
-	service->inStream.buffer=0;
-	service->inStream.capacity=0;
-	
-
-
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
-
-	
-	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.CurrentDemandReq = params;
-	service->exiMsg.V2G_Message.Body.isused.CurrentDemandReq=1;
-	
-	/* encode data to exi stream*/
-	if(serialize_message(service))
-	{ 
-	
-		return -1;
-	}
- 
- 	/* send data to server and wait for the response message */
- 	service->errorCode=serviceDataTransmitter(service->outStream.data, (*(service->outStream.pos)-service->transportHeaderOffset), service->inStream.data);
- 	if(service->errorCode) 
- 	{
-		return -1;
- 	}
- 	
- 	
-
- 	service->exiMsg.V2G_Message.Body.CurrentDemandRes = result;
-
-	/* init decoder (read header, set initial state) */
-	exiInitDecoder(&(service->inStream), &(service->stateDecode));
-
-	/* deserilize the response message */
- 	if(deserializeMessage(service)<0)
- 	{
- 	 
- 		return -1;
- 	}
-
- 		
- 	
-	return 0;
-}	
-
-/** 
- * \brief   Calls the remote weldingDetection method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct WeldingDetectionReqType* Request data for the server (has to be set up before)
- * \param	result   struct WeldingDetectionResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_weldingDetection(struct EXIService* service, struct HeaderType* header, struct WeldingDetectionReqType* params, struct WeldingDetectionResType* result)
-{
-	uint16_t posEncode, posDecode;
-	
-	/* init uniqueID stack */
-	service->idPath.pos=0;
-	
-	/* init outStream data structure */
-	posEncode = service->transportHeaderOffset;
-	service->outStream.pos = &posEncode;
-	service->outStream.buffer = 0;
-	service->outStream.capacity = 8;
-	
-	/* init encoder (write header, set initial state) */
-	exiInitEncoder(&(service->outStream), &(service->stateEncode));
-
-	/* init inStream data structure */
-	posDecode = service->transportHeaderOffset;
-	service->inStream.pos = &posDecode;
-	service->inStream.buffer=0;
-	service->inStream.capacity=0;
-	
-
-
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
-
-	
-	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.WeldingDetectionReq = params;
-	service->exiMsg.V2G_Message.Body.isused.WeldingDetectionReq=1;
-	
-	/* encode data to exi stream*/
-	if(serialize_message(service))
-	{ 
-	
-		return -1;
-	}
- 
- 	/* send data to server and wait for the response message */
- 	service->errorCode=serviceDataTransmitter(service->outStream.data, (*(service->outStream.pos)-service->transportHeaderOffset), service->inStream.data);
- 	if(service->errorCode) 
- 	{
-		return -1;
- 	}
- 	
- 	
-
- 	service->exiMsg.V2G_Message.Body.WeldingDetectionRes = result;
-
-	/* init decoder (read header, set initial state) */
-	exiInitDecoder(&(service->inStream), &(service->stateDecode));
-
-	/* deserilize the response message */
- 	if(deserializeMessage(service)<0)
- 	{
- 	 
- 		return -1;
- 	}
-
- 		
- 	
-	return 0;
-}	
-
-/** 
- * \brief   Calls the remote terminateCharging method
- * \param	service  struct EXIService* Service data structure (has to be initialized before)
- * \param	header   struct HeaderType* Header data structure
- * \param	params   struct TerminateChargingReqType* Request data for the server (has to be set up before)
- * \param	result   struct TerminateChargingResType* Contains the response data from the server 
- * \return  0 = 0K; -1 = ERROR */
-int call_terminateCharging(struct EXIService* service, struct HeaderType* header, struct TerminateChargingReqType* params, struct TerminateChargingResType* result)
-{
-	uint16_t posEncode, posDecode;
-	
-	/* init uniqueID stack */
-	service->idPath.pos=0;
-	
-	/* init outStream data structure */
-	posEncode = service->transportHeaderOffset;
-	service->outStream.pos = &posEncode;
-	service->outStream.buffer = 0;
-	service->outStream.capacity = 8;
-	
-	/* init encoder (write header, set initial state) */
-	exiInitEncoder(&(service->outStream), &(service->stateEncode));
-
-	/* init inStream data structure */
-	posDecode = service->transportHeaderOffset;
-	service->inStream.pos = &posDecode;
-	service->inStream.buffer=0;
-	service->inStream.capacity=0;
-	
-
-
-	/* init EXI message */
-	init_EXIDocumentType(&(service->exiMsg));
-	
-
-	
-	/* assign data to service data structure */
- 	service->exiMsg.V2G_Message.Header = header;
-	service->exiMsg.V2G_Message.Body.TerminateChargingReq = params;
-	service->exiMsg.V2G_Message.Body.isused.TerminateChargingReq=1;
-	
-	/* encode data to exi stream*/
-	if(serialize_message(service))
-	{ 
-	
-		return -1;
-	}
- 
- 	/* send data to server and wait for the response message */
- 	service->errorCode=serviceDataTransmitter(service->outStream.data, (*(service->outStream.pos)-service->transportHeaderOffset), service->inStream.data);
- 	if(service->errorCode) 
- 	{
-		return -1;
- 	}
- 	
- 	
-
- 	service->exiMsg.V2G_Message.Body.TerminateChargingRes = result;
-
-	/* init decoder (read header, set initial state) */
-	exiInitDecoder(&(service->inStream), &(service->stateDecode));
-
-	/* deserilize the response message */
- 	if(deserializeMessage(service)<0)
- 	{
- 	 
- 		return -1;
- 	}
-
+ 	*result = service->v2gMsg.Body.MeteringReceiptRes;
  		
  	
 	return 0;
@@ -1078,1105 +618,693 @@ int call_terminateCharging(struct EXIService* service, struct HeaderType* header
  * Deserialize an element value of the EXI stream and assign it to the
  * service data structure 
  */
-static int deserializeElementCharacter(struct EXIService* service)
+static int deserializeElementCharacter(struct v2gService* service)
 {
 
 	switch(service->eqn.namespaceURI) {
 		case 4:
 			switch(service->eqn.localPart) {
-				case 66: /*ResponseCode*/
-
-				if(service->val.type == ENUMERATION) 
+				case 47: /*ResponseCode*/
+					if(service->val.type == ENUMERATION) 
 					{
-						if( service->idPath.id[2] == 80)
-						{
-							service->exiMsg.V2G_Message.Body.SessionSetupRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 69)
-						{
-							service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 74)
-						{
-							service->exiMsg.V2G_Message.Body.ServicePaymentSelectionRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 54)
-						{
-							service->exiMsg.V2G_Message.Body.PaymentDetailsRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 30)
-						{
-							service->exiMsg.V2G_Message.Body.LineLockRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 58)
-						{
-							service->exiMsg.V2G_Message.Body.PowerDeliveryRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 39)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->ResponseCode = service->val.enumeration;
-
+						 if(service->idPath.id[2] == 50)
+						{ 
+							service->v2gMsg.Body.ServiceDiscoveryRes.ResponseCode=service->val.enumeration;
+							
+						} else if(service->idPath.id[2] == 55)
+						{ 
+							service->v2gMsg.Body.ServicePaymentSelectionRes.ResponseCode=service->val.enumeration;
+							
 						} else if(service->idPath.id[2] == 35)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringReceiptRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 2)
-						{
-							service->exiMsg.V2G_Message.Body.CableCheckRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->ResponseCode = service->val.enumeration;
-
-						} else if(service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->ResponseCode = service->val.enumeration;
+						{ 
+							service->v2gMsg.Body.PaymentDetailsRes.ResponseCode=service->val.enumeration;
+							
+						} else if(service->idPath.id[2] == 43)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.ResponseCode=service->val.enumeration;
+							
+						} else if(service->idPath.id[2] == 13)
+						{ 
+							service->v2gMsg.Body.LineLockRes.ResponseCode=service->val.enumeration;
+							
+						} else if(service->idPath.id[2] == 39)
+						{ 
+							service->v2gMsg.Body.PowerDeliveryRes.ResponseCode=service->val.enumeration;
+							
+						} else if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.ResponseCode=service->val.enumeration;
+							
+						} else if(service->idPath.id[2] == 19)
+						{ 
+							service->v2gMsg.Body.MeteringReceiptRes.ResponseCode=service->val.enumeration;
+							
+						} else if(service->idPath.id[2] == 61)
+						{ 
+							service->v2gMsg.Body.SessionSetupRes.ResponseCode=service->val.enumeration;
+							
 						}
-
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 16: /*EVSEID*/
-
+				case 3: /*EVSEID*/
+		
 				if(service->val.type == BINARY_HEX) 
-					{
-						if( service->idPath.id[2] == 80)
-						{
-							memcpy(service->exiMsg.V2G_Message.Body.SessionSetupRes->EVSEID.data, service->val.binary.data,service->val.binary.len);
-						service->exiMsg.V2G_Message.Body.SessionSetupRes->EVSEID.arraylen.data = service->val.binary.len;
+				{
+					/* array copy and array length assignment */
+					memcpy(service->v2gMsg.Body.SessionSetupRes.EVSEID.data, service->val.binary.data,service->val.binary.len);
+					service->v2gMsg.Body.SessionSetupRes.EVSEID.arraylen.data = service->val.binary.len;
 
-						} else if(service->idPath.id[2] == 39)
-						{
-							memcpy(service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEID.data, service->val.binary.data,service->val.binary.len);
-						service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEID.arraylen.data = service->val.binary.len;
-						}
-
+					/* array copy and array length assignment */
+					memcpy(service->v2gMsg.Body.MeteringStatusRes.EVSEID.data, service->val.binary.data,service->val.binary.len);
+					service->v2gMsg.Body.MeteringStatusRes.EVSEID.arraylen.data = service->val.binary.len;
+		
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 82: /*TCurrent*/
-
-				if(service->val.type == INTEGER_32) 
+				case 63: /*TCurrent*/
+					if(service->val.type == INTEGER_32) 
 					{
-						if( service->idPath.id[2] == 80)
-						{
-							service->exiMsg.V2G_Message.Body.SessionSetupRes->TCurrent = service->val.int32;
-
-						} else if(service->idPath.id[2] == 54)
-						{
-							service->exiMsg.V2G_Message.Body.PaymentDetailsRes->TCurrent = service->val.int32;
-
-						} else if(service->idPath.id[2] == 39)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->TCurrent = service->val.int32;
-						}
-
+							service->v2gMsg.Body.SessionSetupRes.TCurrent=service->val.int32;
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 18: /*EVSEMaxPhases*/
-
-				if(service->val.type == INTEGER_16) 
-					{
-						service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMaxPhases = service->val.int32;
-
+				case 16: /*MeteringAuthPubKey*/
+		
+				if(service->val.type == BINARY_HEX) 
+				{
+					/* array copy and array length assignment */
+					memcpy(service->v2gMsg.Body.ServicePaymentSelectionRes.MeteringAuthPubKey.data, service->val.binary.data,service->val.binary.len);
+					service->v2gMsg.Body.ServicePaymentSelectionRes.MeteringAuthPubKey.arraylen.data = service->val.binary.len;
+		
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
+				/* is used */
+				service->v2gMsg.Body.ServicePaymentSelectionRes.isused.MeteringAuthPubKey=1;
 				break;
-				case 26: /*EnergyProvider*/
-
-				if(service->val.type == STRING) 
+				case 5: /*EVSEMaxPhases*/
+					if(service->val.type == INTEGER_16) 
 					{
-						memcpy(service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EnergyProvider.data, service->val.string.codepoints,service->val.string.len*sizeof(uint32_t));
-						service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EnergyProvider.arraylen.data = service->val.string.len;
-						service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->isused.EnergyProvider=1;
-
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEMaxPhases=service->val.int32;
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
+				break;
+				case 9: /*EnergyProvider*/
+		
+		if(service->val.type == STRING) 
+		{
+			/* string copy and string length assignment */
+			memcpy(service->v2gMsg.Body.PowerDiscoveryRes.EnergyProvider.data, service->val.string.codepoints,service->val.string.len);
+			service->v2gMsg.Body.PowerDiscoveryRes.EnergyProvider.arraylen.data = service->val.string.len;
 
+		
+					} 
+					else
+					{
+						return -1; /* wrong data type */
+					}
+		
+				/* is used */
+				service->v2gMsg.Body.PowerDiscoveryRes.isused.EnergyProvider=1;
 				break;	
 			} /* close switch(service->eqn.localPart) */	
 		break;
 		case 5:
 			switch(service->eqn.localPart) {
-				case 36: /*SessionID*/
-
+				case 34: /*SessionID*/
+		
 				if(service->val.type == BINARY_HEX) 
-					{
-						memcpy(service->exiMsg.V2G_Message.Header->SessionInformation.SessionID.data, service->val.binary.data,service->val.binary.len);
-						service->exiMsg.V2G_Message.Header->SessionInformation.SessionID.arraylen.data = service->val.binary.len;
-
+				{
+					/* array copy and array length assignment */
+					memcpy(service->v2gMsg.Header.SessionInformation.SessionID.data, service->val.binary.data,service->val.binary.len);
+					service->v2gMsg.Header.SessionInformation.SessionID.arraylen.data = service->val.binary.len;
+		
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 34: /*ServiceSessionID*/
-
+				case 32: /*ServiceSessionID*/
+		
 				if(service->val.type == BINARY_HEX) 
-					{
-						memcpy(service->exiMsg.V2G_Message.Header->SessionInformation.ServiceSessionID.data, service->val.binary.data,service->val.binary.len);
-						service->exiMsg.V2G_Message.Header->SessionInformation.ServiceSessionID.arraylen.data = service->val.binary.len;
-						service->exiMsg.V2G_Message.Header->SessionInformation.isused.ServiceSessionID=1;
-
+				{
+					/* array copy and array length assignment */
+					memcpy(service->v2gMsg.Header.SessionInformation.ServiceSessionID.data, service->val.binary.data,service->val.binary.len);
+					service->v2gMsg.Header.SessionInformation.ServiceSessionID.arraylen.data = service->val.binary.len;
+		
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
+				/* is used */
+				service->v2gMsg.Header.SessionInformation.isused.ServiceSessionID=1;
 				break;
-				case 25: /*ProtocolVersion*/
+				case 24: /*ProtocolVersion*/
+		
+		if(service->val.type == STRING) 
+		{
+			/* string copy and string length assignment */
+			memcpy(service->v2gMsg.Header.SessionInformation.ProtocolVersion.data, service->val.string.codepoints,service->val.string.len);
+			service->v2gMsg.Header.SessionInformation.ProtocolVersion.arraylen.data = service->val.string.len;
 
-				if(service->val.type == STRING) 
-					{
-						memcpy(service->exiMsg.V2G_Message.Header->SessionInformation.ProtocolVersion.data, service->val.string.codepoints,service->val.string.len*sizeof(uint32_t));
-						service->exiMsg.V2G_Message.Header->SessionInformation.ProtocolVersion.arraylen.data = service->val.string.len;
-						service->exiMsg.V2G_Message.Header->SessionInformation.isused.ProtocolVersion=1;
-
+		
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
+				/* is used */
+				service->v2gMsg.Header.SessionInformation.isused.ProtocolVersion=1;
 				break;
-				case 10: /*Event*/
-
-				if(service->val.type == ENUMERATION) 
+				case 13: /*FaultCode*/
+					if(service->val.type == ENUMERATION) 
 					{
-						service->exiMsg.V2G_Message.Header->Notification.EventList.Event = service->val.enumeration;
-
+							service->v2gMsg.Header.Notification.FaultCode=service->val.enumeration;
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
+				/* is used */
+				service->v2gMsg.Header.Notification.isused.FaultCode=1;
 				break;
-				case 14: /*FaultCode*/
+				case 14: /*FaultMsg*/
+		
+		if(service->val.type == STRING) 
+		{
+			/* string copy and string length assignment */
+			memcpy(service->v2gMsg.Header.Notification.FaultMsg.data, service->val.string.codepoints,service->val.string.len);
+			service->v2gMsg.Header.Notification.FaultMsg.arraylen.data = service->val.string.len;
 
-				if(service->val.type == ENUMERATION) 
-					{
-						service->exiMsg.V2G_Message.Header->Notification.FaultCode = service->val.enumeration;
-						service->exiMsg.V2G_Message.Header->Notification.isused.FaultCode=1;
-
+		
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
+				/* is used */
+				service->v2gMsg.Header.Notification.isused.FaultMsg=1;
 				break;
-				case 15: /*FaultMsg*/
-
-				if(service->val.type == STRING) 
+				case 12: /*FatalError*/
+					if(service->val.type == BOOLEAN) 
 					{
-						memcpy(service->exiMsg.V2G_Message.Header->Notification.FaultMsg.data, service->val.string.codepoints,service->val.string.len*sizeof(uint32_t));
-						service->exiMsg.V2G_Message.Header->Notification.FaultMsg.arraylen.data = service->val.string.len;
-						service->exiMsg.V2G_Message.Header->Notification.isused.FaultMsg=1;
-
-					} 
-					else
-					{
-						return -1; /* wrong data type */
-					}
-		
-
-				break;
-				case 13: /*FatalError*/
-
-				if(service->val.type == BOOLEAN) 
-					{
-						if( service->idPath.id[2] == 80)
-						{
-							service->exiMsg.V2G_Message.Body.SessionSetupRes->EVSEStatus.FatalError = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEStatus.FatalError = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 30)
-						{
-							service->exiMsg.V2G_Message.Body.LineLockRes->EVSEStatus.FatalError = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 58)
-						{
-							service->exiMsg.V2G_Message.Body.PowerDeliveryRes->EVSEStatus.FatalError = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 39)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEStatus.FatalError = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 2)
-						{
-							service->exiMsg.V2G_Message.Body.CableCheckRes->EVSEStatus.FatalError = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEStatus.FatalError = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEStatus.FatalError = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEStatus.FatalError = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEStatus.FatalError = service->val.boolean;
+						 if(service->idPath.id[2] == 61)
+						{ 
+							service->v2gMsg.Body.SessionSetupRes.EVSEStatus.FatalError=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 43)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEStatus.FatalError=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 13)
+						{ 
+							service->v2gMsg.Body.LineLockRes.EVSEStatus.FatalError=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.EVSEStatus.FatalError=service->val.boolean;
+							
 						}
-
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 8: /*EVSEStandby*/
-
-				if(service->val.type == BOOLEAN) 
+				case 7: /*EVSEStandby*/
+					if(service->val.type == BOOLEAN) 
 					{
-						if( service->idPath.id[2] == 80)
-						{
-							service->exiMsg.V2G_Message.Body.SessionSetupRes->EVSEStatus.EVSEStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEStatus.EVSEStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 30)
-						{
-							service->exiMsg.V2G_Message.Body.LineLockRes->EVSEStatus.EVSEStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 58)
-						{
-							service->exiMsg.V2G_Message.Body.PowerDeliveryRes->EVSEStatus.EVSEStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 39)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEStatus.EVSEStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 2)
-						{
-							service->exiMsg.V2G_Message.Body.CableCheckRes->EVSEStatus.EVSEStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEStatus.EVSEStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEStatus.EVSEStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEStatus.EVSEStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEStatus.EVSEStandby = service->val.boolean;
+						 if(service->idPath.id[2] == 61)
+						{ 
+							service->v2gMsg.Body.SessionSetupRes.EVSEStatus.EVSEStandby=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 43)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEStatus.EVSEStandby=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 13)
+						{ 
+							service->v2gMsg.Body.LineLockRes.EVSEStatus.EVSEStandby=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.EVSEStatus.EVSEStandby=service->val.boolean;
+							
 						}
-
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
 				case 4: /*ConnectorLocked*/
-
-				if(service->val.type == BOOLEAN) 
+					if(service->val.type == BOOLEAN) 
 					{
-						if( service->idPath.id[2] == 80)
-						{
-							service->exiMsg.V2G_Message.Body.SessionSetupRes->EVSEStatus.ConnectorLocked = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEStatus.ConnectorLocked = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 30)
-						{
-							service->exiMsg.V2G_Message.Body.LineLockRes->EVSEStatus.ConnectorLocked = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 58)
-						{
-							service->exiMsg.V2G_Message.Body.PowerDeliveryRes->EVSEStatus.ConnectorLocked = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 39)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEStatus.ConnectorLocked = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 2)
-						{
-							service->exiMsg.V2G_Message.Body.CableCheckRes->EVSEStatus.ConnectorLocked = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEStatus.ConnectorLocked = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEStatus.ConnectorLocked = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEStatus.ConnectorLocked = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEStatus.ConnectorLocked = service->val.boolean;
+						 if(service->idPath.id[2] == 61)
+						{ 
+							service->v2gMsg.Body.SessionSetupRes.EVSEStatus.ConnectorLocked=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 43)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEStatus.ConnectorLocked=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 13)
+						{ 
+							service->v2gMsg.Body.LineLockRes.EVSEStatus.ConnectorLocked=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.EVSEStatus.ConnectorLocked=service->val.boolean;
+							
 						}
-
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 24: /*PowerSwitchClosed*/
-
-				if(service->val.type == BOOLEAN) 
+				case 23: /*PowerSwitchClosed*/
+					if(service->val.type == BOOLEAN) 
 					{
-						if( service->idPath.id[2] == 80)
-						{
-							service->exiMsg.V2G_Message.Body.SessionSetupRes->EVSEStatus.PowerSwitchClosed = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEStatus.PowerSwitchClosed = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 30)
-						{
-							service->exiMsg.V2G_Message.Body.LineLockRes->EVSEStatus.PowerSwitchClosed = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 58)
-						{
-							service->exiMsg.V2G_Message.Body.PowerDeliveryRes->EVSEStatus.PowerSwitchClosed = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 39)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEStatus.PowerSwitchClosed = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 2)
-						{
-							service->exiMsg.V2G_Message.Body.CableCheckRes->EVSEStatus.PowerSwitchClosed = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEStatus.PowerSwitchClosed = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEStatus.PowerSwitchClosed = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEStatus.PowerSwitchClosed = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEStatus.PowerSwitchClosed = service->val.boolean;
+						 if(service->idPath.id[2] == 61)
+						{ 
+							service->v2gMsg.Body.SessionSetupRes.EVSEStatus.PowerSwitchClosed=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 43)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEStatus.PowerSwitchClosed=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 13)
+						{ 
+							service->v2gMsg.Body.LineLockRes.EVSEStatus.PowerSwitchClosed=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.EVSEStatus.PowerSwitchClosed=service->val.boolean;
+							
 						}
-
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 26: /*RCD*/
-
-				if(service->val.type == BOOLEAN) 
+				case 25: /*RCD*/
+					if(service->val.type == BOOLEAN) 
 					{
-						if( service->idPath.id[2] == 80)
-						{
-							service->exiMsg.V2G_Message.Body.SessionSetupRes->EVSEStatus.RCD = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEStatus.RCD = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 30)
-						{
-							service->exiMsg.V2G_Message.Body.LineLockRes->EVSEStatus.RCD = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 58)
-						{
-							service->exiMsg.V2G_Message.Body.PowerDeliveryRes->EVSEStatus.RCD = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 39)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEStatus.RCD = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 2)
-						{
-							service->exiMsg.V2G_Message.Body.CableCheckRes->EVSEStatus.RCD = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEStatus.RCD = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEStatus.RCD = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEStatus.RCD = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEStatus.RCD = service->val.boolean;
+						 if(service->idPath.id[2] == 61)
+						{ 
+							service->v2gMsg.Body.SessionSetupRes.EVSEStatus.RCD=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 43)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEStatus.RCD=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 13)
+						{ 
+							service->v2gMsg.Body.LineLockRes.EVSEStatus.RCD=service->val.boolean;
+							
+						} else if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.EVSEStatus.RCD=service->val.boolean;
+							
 						}
-
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 38: /*ShutDownTime*/
-
-				if(service->val.type == INTEGER_32) 
+				case 36: /*ShutDownTime*/
+					if(service->val.type == INTEGER_32) 
 					{
-						if( service->idPath.id[2] == 80)
-						{
-							service->exiMsg.V2G_Message.Body.SessionSetupRes->EVSEStatus.ShutDownTime = service->val.int32;
-
-						} else if(service->idPath.id[2] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEStatus.ShutDownTime = service->val.int32;
-
-						} else if(service->idPath.id[2] == 30)
-						{
-							service->exiMsg.V2G_Message.Body.LineLockRes->EVSEStatus.ShutDownTime = service->val.int32;
-
-						} else if(service->idPath.id[2] == 58)
-						{
-							service->exiMsg.V2G_Message.Body.PowerDeliveryRes->EVSEStatus.ShutDownTime = service->val.int32;
-
-						} else if(service->idPath.id[2] == 39)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEStatus.ShutDownTime = service->val.int32;
-
-						} else if(service->idPath.id[2] == 2)
-						{
-							service->exiMsg.V2G_Message.Body.CableCheckRes->EVSEStatus.ShutDownTime = service->val.int32;
-
-						} else if(service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEStatus.ShutDownTime = service->val.int32;
-
-						} else if(service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEStatus.ShutDownTime = service->val.int32;
-
-						} else if(service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEStatus.ShutDownTime = service->val.int32;
-
-						} else if(service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEStatus.ShutDownTime = service->val.int32;
+						 if(service->idPath.id[2] == 61)
+						{ 
+							service->v2gMsg.Body.SessionSetupRes.EVSEStatus.ShutDownTime=service->val.int32;
+							
+						} else if(service->idPath.id[2] == 43)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEStatus.ShutDownTime=service->val.int32;
+							
+						} else if(service->idPath.id[2] == 13)
+						{ 
+							service->v2gMsg.Body.LineLockRes.EVSEStatus.ShutDownTime=service->val.int32;
+							
+						} else if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.EVSEStatus.ShutDownTime=service->val.int32;
+							
 						}
-
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 0: /*ChargerStandby*/
-
-				if(service->val.type == BOOLEAN) 
-					{
-						if( service->idPath.id[2] == 80)
-						{
-							service->exiMsg.V2G_Message.Body.SessionSetupRes->EVSEStatus.ChargerStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEStatus.ChargerStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 30)
-						{
-							service->exiMsg.V2G_Message.Body.LineLockRes->EVSEStatus.ChargerStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 58)
-						{
-							service->exiMsg.V2G_Message.Body.PowerDeliveryRes->EVSEStatus.ChargerStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 39)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEStatus.ChargerStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 2)
-						{
-							service->exiMsg.V2G_Message.Body.CableCheckRes->EVSEStatus.ChargerStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEStatus.ChargerStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEStatus.ChargerStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEStatus.ChargerStandby = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEStatus.ChargerStandby = service->val.boolean;
-						}
-
-					} 
-					else
-					{
-						return -1; /* wrong data type */
-					}
+				case 28: /*ServiceID*/
 		
-
-				break;
-				case 7: /*EVSEMalfunction*/
-
-				if(service->val.type == BOOLEAN) 
-					{
-						if( service->idPath.id[2] == 80)
-						{
-							service->exiMsg.V2G_Message.Body.SessionSetupRes->EVSEStatus.EVSEMalfunction = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEStatus.EVSEMalfunction = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 30)
-						{
-							service->exiMsg.V2G_Message.Body.LineLockRes->EVSEStatus.EVSEMalfunction = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 58)
-						{
-							service->exiMsg.V2G_Message.Body.PowerDeliveryRes->EVSEStatus.EVSEMalfunction = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 39)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEStatus.EVSEMalfunction = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 2)
-						{
-							service->exiMsg.V2G_Message.Body.CableCheckRes->EVSEStatus.EVSEMalfunction = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEStatus.EVSEMalfunction = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEStatus.EVSEMalfunction = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEStatus.EVSEMalfunction = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEStatus.EVSEMalfunction = service->val.boolean;
-						}
-
-					} 
-					else
-					{
-						return -1; /* wrong data type */
-					}
-		
-
-				break;
-				case 39: /*StopCharging*/
-
-				if(service->val.type == BOOLEAN) 
-					{
-						if( service->idPath.id[2] == 80)
-						{
-							service->exiMsg.V2G_Message.Body.SessionSetupRes->EVSEStatus.StopCharging = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEStatus.StopCharging = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 30)
-						{
-							service->exiMsg.V2G_Message.Body.LineLockRes->EVSEStatus.StopCharging = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 58)
-						{
-							service->exiMsg.V2G_Message.Body.PowerDeliveryRes->EVSEStatus.StopCharging = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 39)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEStatus.StopCharging = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 2)
-						{
-							service->exiMsg.V2G_Message.Body.CableCheckRes->EVSEStatus.StopCharging = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEStatus.StopCharging = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEStatus.StopCharging = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEStatus.StopCharging = service->val.boolean;
-
-						} else if(service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEStatus.StopCharging = service->val.boolean;
-						}
-
-					} 
-					else
-					{
-						return -1; /* wrong data type */
-					}
-		
-
-				break;
-				case 30: /*ServiceID*/
-
 				if(service->val.type == BINARY_HEX) 
-					{
-						memcpy(service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.Service[service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.arraylen.Service].ServiceID.data, service->val.binary.data,service->val.binary.len);
-						service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.Service[service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.arraylen.Service].ServiceID.arraylen.data = service->val.binary.len;
-
+				{
+					/* array copy and array length assignment */
+					memcpy(service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].ServiceID.data, service->val.binary.data,service->val.binary.len);
+					service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].ServiceID.arraylen.data = service->val.binary.len;
+		
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 32: /*ServiceName*/
+				case 30: /*ServiceName*/
+		
+		if(service->val.type == STRING) 
+		{
+			/* string copy and string length assignment */
+			memcpy(service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].ServiceName.data, service->val.string.codepoints,service->val.string.len);
+			service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].ServiceName.arraylen.data = service->val.string.len;
 
-				if(service->val.type == STRING) 
-					{
-						memcpy(service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.Service[service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.arraylen.Service].ServiceName.data, service->val.string.codepoints,service->val.string.len*sizeof(uint32_t));
-						service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.Service[service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.arraylen.Service].ServiceName.arraylen.data = service->val.string.len;
-						service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.Service[service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.arraylen.Service].isused.ServiceName=1;
-
+		
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
+				/* is used */
+				service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].isused.ServiceName=1;
 				break;
-				case 35: /*ServiceType*/
-
-				if(service->val.type == ENUMERATION) 
+				case 33: /*ServiceType*/
+					if(service->val.type == ENUMERATION) 
 					{
-						service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.Service[service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.arraylen.Service].ServiceType = service->val.enumeration;
-						service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.Service[service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.arraylen.Service].isused.ServiceType=1;
-
+							service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].ServiceType=service->val.enumeration;
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
+				/* is used */
+				service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].isused.ServiceType=1;
 				break;
-				case 33: /*ServiceScope*/
+				case 31: /*ServiceScope*/
+		
+		if(service->val.type == STRING) 
+		{
+			/* string copy and string length assignment */
+			memcpy(service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].ServiceScope.data, service->val.string.codepoints,service->val.string.len);
+			service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].ServiceScope.arraylen.data = service->val.string.len;
 
-				if(service->val.type == STRING) 
-					{
-						memcpy(service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.Service[service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.arraylen.Service].ServiceScope.data, service->val.string.codepoints,service->val.string.len*sizeof(uint32_t));
-						service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.Service[service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.arraylen.Service].ServiceScope.arraylen.data = service->val.string.len;
-						service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.Service[service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.arraylen.Service].isused.ServiceScope=1;
-
+		
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
+				/* is used */
+				service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].isused.ServiceScope=1;
 				break;
-				case 21: /*Multiplier*/
-
-				if(service->val.type == INTEGER_16) 
+				case 20: /*Multiplier*/
+					if(service->val.type == ENUMERATION) 
 					{
-						if( service->idPath.id[3] == 20)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMaxVoltage.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[3] == 22)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMinVoltage.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[3] == 17)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMaxCurrent.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[3] == 21)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMinCurrent.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[3] == 19)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEMaxPower.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[3] == 41)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->PCurrent.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEPresentVoltage.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEPresentVoltage.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[3] == 23)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEPresentCurrent.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEPresentVoltage.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEPresentVoltage.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[4] == 19)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->MeterInfo.MeterReading.Multiplier = service->val.int32;
-
-						} else if(service->idPath.id[7] == 49)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffPMax.Multiplier = service->val.int32;
-
+						 if(service->idPath.id[3] == 2)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.EAmount.Multiplier=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 28)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMaxPower.Multiplier=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 29)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMaxVoltage.Multiplier=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 30)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMinVoltage.Multiplier=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 8)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEVoltage.Multiplier=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 4)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEIMax.Multiplier=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 6)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.EVSEMaxPower.Multiplier=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 25)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.PCurrent.Multiplier=service->val.enumeration;
+							
+						} else if(service->idPath.id[2] == 37)
+						{ 
+							service->v2gMsg.Body.PowerDeliveryReq.ChargingProfile.ChargingProfileEntryMaxPower.Multiplier=service->val.enumeration;
+							
+						} else if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterReading.Multiplier=service->val.enumeration;
+							
+						} else if(service->idPath.id[7] == 46)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffPMax.Multiplier=service->val.enumeration;
+							
 						} else if(service->idPath.id[7] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].EPrice.Multiplier = service->val.int32;
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].EPrice.Multiplier=service->val.enumeration;
+							
 						}
-
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 52: /*Unit*/
-
-				if(service->val.type == ENUMERATION) 
+				case 49: /*Unit*/
+					if(service->val.type == ENUMERATION) 
 					{
-						if( service->idPath.id[3] == 20)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMaxVoltage.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[3] == 22)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMinVoltage.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[3] == 17)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMaxCurrent.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[3] == 21)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMinCurrent.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[3] == 19)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEMaxPower.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[3] == 41)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->PCurrent.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEPresentVoltage.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEPresentVoltage.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[3] == 23)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEPresentCurrent.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEPresentVoltage.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEPresentVoltage.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[4] == 19)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->MeterInfo.MeterReading.Unit = service->val.enumeration;
-
-						} else if(service->idPath.id[7] == 49)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffPMax.Unit = service->val.enumeration;
-
+						 if(service->idPath.id[3] == 2)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.EAmount.Unit=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 28)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMaxPower.Unit=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 29)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMaxVoltage.Unit=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 30)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMinVoltage.Unit=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 8)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEVoltage.Unit=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 4)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEIMax.Unit=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 6)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.EVSEMaxPower.Unit=service->val.enumeration;
+							
+						} else if(service->idPath.id[3] == 25)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.PCurrent.Unit=service->val.enumeration;
+							
+						} else if(service->idPath.id[2] == 37)
+						{ 
+							service->v2gMsg.Body.PowerDeliveryReq.ChargingProfile.ChargingProfileEntryMaxPower.Unit=service->val.enumeration;
+							
+						} else if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterReading.Unit=service->val.enumeration;
+							
+						} else if(service->idPath.id[7] == 46)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffPMax.Unit=service->val.enumeration;
+							
 						} else if(service->idPath.id[7] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].EPrice.Unit = service->val.enumeration;
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].EPrice.Unit=service->val.enumeration;
+							
 						}
-
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 53: /*Value*/
-
-				if(service->val.type == INTEGER_32) 
+				case 50: /*Value*/
+					if(service->val.type == INTEGER_32) 
 					{
-						if( service->idPath.id[3] == 20)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMaxVoltage.Value = service->val.int32;
-
-						} else if(service->idPath.id[3] == 22)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMinVoltage.Value = service->val.int32;
-
-						} else if(service->idPath.id[3] == 17)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMaxCurrent.Value = service->val.int32;
-
-						} else if(service->idPath.id[3] == 21)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->EVSEMinCurrent.Value = service->val.int32;
-
-						} else if(service->idPath.id[3] == 19)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->EVSEMaxPower.Value = service->val.int32;
-
-						} else if(service->idPath.id[3] == 41)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->PCurrent.Value = service->val.int32;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 62)
-						{
-							service->exiMsg.V2G_Message.Body.PreChargeRes->EVSEPresentVoltage.Value = service->val.int32;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 12)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEPresentVoltage.Value = service->val.int32;
-
-						} else if(service->idPath.id[3] == 23)
-						{
-							service->exiMsg.V2G_Message.Body.CurrentDemandRes->EVSEPresentCurrent.Value = service->val.int32;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 92)
-						{
-							service->exiMsg.V2G_Message.Body.WeldingDetectionRes->EVSEPresentVoltage.Value = service->val.int32;
-
-						} else if(service->idPath.id[3] == 24 && service->idPath.id[2] == 87)
-						{
-							service->exiMsg.V2G_Message.Body.TerminateChargingRes->EVSEPresentVoltage.Value = service->val.int32;
-
-						} else if(service->idPath.id[4] == 19)
-						{
-							service->exiMsg.V2G_Message.Body.MeteringStatusRes->MeterInfo.MeterReading.Value = service->val.int32;
-
-						} else if(service->idPath.id[7] == 49)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffPMax.Value = service->val.int32;
-
+						 if(service->idPath.id[3] == 2)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.EAmount.Value=service->val.int32;
+							
+						} else if(service->idPath.id[3] == 28)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMaxPower.Value=service->val.int32;
+							
+						} else if(service->idPath.id[3] == 29)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMaxVoltage.Value=service->val.int32;
+							
+						} else if(service->idPath.id[3] == 30)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryReq.PEVMinVoltage.Value=service->val.int32;
+							
+						} else if(service->idPath.id[3] == 8)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEVoltage.Value=service->val.int32;
+							
+						} else if(service->idPath.id[3] == 4)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.EVSEIMax.Value=service->val.int32;
+							
+						} else if(service->idPath.id[3] == 6)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.EVSEMaxPower.Value=service->val.int32;
+							
+						} else if(service->idPath.id[3] == 25)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.PCurrent.Value=service->val.int32;
+							
+						} else if(service->idPath.id[2] == 37)
+						{ 
+							service->v2gMsg.Body.PowerDeliveryReq.ChargingProfile.ChargingProfileEntryMaxPower.Value=service->val.int32;
+							
+						} else if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterReading.Value=service->val.int32;
+							
+						} else if(service->idPath.id[7] == 46)
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffPMax.Value=service->val.int32;
+							
 						} else if(service->idPath.id[7] == 6)
-						{
-							service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].EPrice.Value = service->val.int32;
+						{ 
+							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].EPrice.Value=service->val.int32;
+							
 						}
-
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 50: /*TariffStart*/
-
-				if(service->val.type == UNSIGNED_INTEGER_32) 
+				case 45: /*TariffID*/
+					if(service->val.type == ENUMERATION) 
 					{
-						service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].TariffStart = service->val.uint32;
-
+							service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffID=service->val.enumeration;
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
 				break;
-				case 48: /*TariffID*/
+				case 40: /*TariffDescription*/
+		
+		if(service->val.type == STRING) 
+		{
+			/* string copy and string length assignment */
+			memcpy(service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffDescription.data, service->val.string.codepoints,service->val.string.len);
+			service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffDescription.arraylen.data = service->val.string.len;
 
-				if(service->val.type == ENUMERATION) 
-					{
-						service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffID = service->val.enumeration;
-
+		
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
+				/* is used */
+				service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].isused.TariffDescription=1;
 				break;
-				case 43: /*TariffDescription*/
-
-				if(service->val.type == STRING) 
+				case 19: /*MeterStatus*/
+					if(service->val.type == INTEGER_16) 
 					{
-						memcpy(service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffDescription.data, service->val.string.codepoints,service->val.string.len*sizeof(uint32_t));
-						service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffDescription.arraylen.data = service->val.string.len;
-						service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].isused.TariffDescription=1;
-
+						 if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.MeterStatus=service->val.int32;
+							
+						} else if(service->idPath.id[2] == 17)
+						{ 
+							service->v2gMsg.Body.MeteringReceiptReq.MeterInfo.MeterStatus=service->val.int32;
+							
+						}
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
+				/* is used */
+				service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.MeterStatus=1;
 				break;
-				case 5: /*Currency*/
-
-				if(service->val.type == STRING) 
+				case 37: /*TMeter*/
+					if(service->val.type == INTEGER_32) 
 					{
-						memcpy(service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Currency.data, service->val.string.codepoints,service->val.string.len*sizeof(uint32_t));
-						service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Currency.arraylen.data = service->val.string.len;
-
+						 if(service->idPath.id[2] == 23)
+						{ 
+							service->v2gMsg.Body.MeteringStatusRes.MeterInfo.TMeter=service->val.int32;
+							
+						} else if(service->idPath.id[2] == 17)
+						{ 
+							service->v2gMsg.Body.MeteringReceiptReq.MeterInfo.TMeter=service->val.int32;
+							
+						}
 					} 
 					else
 					{
 						return -1; /* wrong data type */
 					}
 		
-
-				break;
-				case 17: /*MeterID*/
-
-				if(service->val.type == STRING) 
-					{
-						memcpy(service->exiMsg.V2G_Message.Body.MeteringStatusRes->MeterInfo.MeterID.data, service->val.string.codepoints,service->val.string.len*sizeof(uint32_t));
-						service->exiMsg.V2G_Message.Body.MeteringStatusRes->MeterInfo.MeterID.arraylen.data = service->val.string.len;
-						service->exiMsg.V2G_Message.Body.MeteringStatusRes->MeterInfo.isused.MeterID=1;
-
-					} 
-					else
-					{
-						return -1; /* wrong data type */
-					}
-		
-
-				break;
-				case 20: /*MeterStatus*/
-
-				if(service->val.type == INTEGER_16) 
-					{
-						service->exiMsg.V2G_Message.Body.MeteringStatusRes->MeterInfo.MeterStatus = service->val.int32;
-						service->exiMsg.V2G_Message.Body.MeteringStatusRes->MeterInfo.isused.MeterStatus=1;
-
-					} 
-					else
-					{
-						return -1; /* wrong data type */
-					}
-		
-
-				break;
-				case 40: /*TMeter*/
-
-				if(service->val.type == INTEGER_32) 
-					{
-						service->exiMsg.V2G_Message.Body.MeteringStatusRes->MeterInfo.TMeter = service->val.int32;
-						service->exiMsg.V2G_Message.Body.MeteringStatusRes->MeterInfo.isused.TMeter=1;
-
-					} 
-					else
-					{
-						return -1; /* wrong data type */
-					}
-		
-
+				/* is used */
+				service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.TMeter=1;
 				break;	
 			} /* close switch(service->eqn.localPart) */	
 		break;
@@ -2189,81 +1317,169 @@ static int deserializeElementCharacter(struct EXIService* service)
  * Deserialize an element of the EXI stream
  * @return 0 = 0K; -1 = ERROR
  */
-static int deserializeElement(struct EXIService* service)
+static int deserializeElement(struct v2gService* service)
 {
 	switch(service->eqn.namespaceURI) {
 		case 4:
 			switch(service->eqn.localPart) {
-				case 71:/* ServiceList */	
+				case 52:/* ServiceList */	
 
-								service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->isused.ServiceList=1;
-		  
+ 					/* is used */
+					service->v2gMsg.Body.ServiceDiscoveryRes.isused.ServiceList=1;
 				break;	
-				case 84:/* TariffTable */	
+				case 16:/* MeteringAuthPubKey */	
 
-								service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->isused.TariffTable=1;
-		  
+ 					/* is used */
+					service->v2gMsg.Body.ServicePaymentSelectionRes.isused.MeteringAuthPubKey=1;
 				break;	
-				case 41:/* PCurrent */	
+				case 9:/* EnergyProvider */	
 
-								service->exiMsg.V2G_Message.Body.MeteringStatusRes->isused.PCurrent=1;
-		  
+ 					/* is used */
+					service->v2gMsg.Body.PowerDiscoveryRes.isused.EnergyProvider=1;
 				break;	
-				case 32:/* MeterInfo */	
+				case 65:/* TariffTable */	
 
-								service->exiMsg.V2G_Message.Body.MeteringStatusRes->isused.MeterInfo=1;
-		  
+ 					/* is used */
+					service->v2gMsg.Body.PowerDiscoveryRes.isused.TariffTable=1;
 				break;	
+				case 25:/* PCurrent */	
 
+ 					/* is used */
+					service->v2gMsg.Body.MeteringStatusRes.isused.PCurrent=1;
+				break;	
+				case 15:/* MeterInfo */	
+
+ 					/* is used */
+					service->v2gMsg.Body.MeteringStatusRes.isused.MeterInfo=1;
+				break;	
+				case 61:/* SessionSetupRes */	
+
+ 					/* is used */
+					service->v2gMsg.Body.isused.SessionSetupRes=1;
+				break;	
+				case 50:/* ServiceDiscoveryRes */	
+
+ 					/* is used */
+					service->v2gMsg.Body.isused.ServiceDiscoveryRes=1;
+				break;	
+				case 55:/* ServicePaymentSelectionRes */	
+
+ 					/* is used */
+					service->v2gMsg.Body.isused.ServicePaymentSelectionRes=1;
+				break;	
+				case 35:/* PaymentDetailsRes */	
+
+ 					/* is used */
+					service->v2gMsg.Body.isused.PaymentDetailsRes=1;
+				break;	
+				case 43:/* PowerDiscoveryRes */	
+
+ 					/* is used */
+					service->v2gMsg.Body.isused.PowerDiscoveryRes=1;
+				break;	
+				case 13:/* LineLockRes */	
+
+ 					/* is used */
+					service->v2gMsg.Body.isused.LineLockRes=1;
+				break;	
+				case 39:/* PowerDeliveryRes */	
+
+ 					/* is used */
+					service->v2gMsg.Body.isused.PowerDeliveryRes=1;
+				break;	
+				case 23:/* MeteringStatusRes */	
+
+ 					/* is used */
+					service->v2gMsg.Body.isused.MeteringStatusRes=1;
+				break;	
+				case 19:/* MeteringReceiptRes */	
+
+ 					/* is used */
+					service->v2gMsg.Body.isused.MeteringReceiptRes=1;
+				break;	
 			}
-		break;
-		case 5:
+		break;case 5:
 			switch(service->eqn.localPart) {
-				case 11:/* EventList */	
+				case 32:/* ServiceSessionID */	
 
-								service->exiMsg.V2G_Message.Header->Notification.isused.EventList=1;
-		  
+ 					/* is used */
+					service->v2gMsg.Header.SessionInformation.isused.ServiceSessionID=1;
 				break;	
-				case 28:/* Service */	
+				case 24:/* ProtocolVersion */	
 
-								service->exiMsg.V2G_Message.Body.ServiceDiscoveryRes->ServiceList.arraylen.Service++;
-		  
+ 					/* is used */
+					service->v2gMsg.Header.SessionInformation.isused.ProtocolVersion=1;
+				break;	
+				case 13:/* FaultCode */	
+
+ 					/* is used */
+					service->v2gMsg.Header.Notification.isused.FaultCode=1;
+				break;	
+				case 14:/* FaultMsg */	
+
+ 					/* is used */
+					service->v2gMsg.Header.Notification.isused.FaultMsg=1;
+				break;	
+				case 10:/* EventList */	
+
+ 					/* is used */
+					service->v2gMsg.Header.Notification.isused.EventList=1;
+				break;	
+				case 30:/* ServiceName */	
+
+ 					/* is used */
+					service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].isused.ServiceName=1;
+				break;	
+				case 33:/* ServiceType */	
+
+ 					/* is used */
+					service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].isused.ServiceType=1;
+				break;	
+				case 31:/* ServiceScope */	
+
+ 					/* is used */
+					service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.Service[service->v2gMsg.Body.ServiceDiscoveryRes.ServiceList.arraylen.Service].isused.ServiceScope=1;
 				break;	
 				case 6:/* EPrice */	
 
-								service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].isused.EPrice=1;
-		  
+ 					/* is used */
+					service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.TariffEntry[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry].isused.EPrice=1;
 				break;	
-				case 46:/* TariffEntry */	
+				case 40:/* TariffDescription */	
 
-								service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.Tariff[service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff].TariffEntries.arraylen.TariffEntry++;
-		  
+ 					/* is used */
+					service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.Tariff[service->v2gMsg.Body.PowerDiscoveryRes.TariffTable.arraylen.Tariff].isused.TariffDescription=1;
 				break;	
-				case 41:/* Tariff */	
+				case 16:/* MeterID */	
 
-								service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryRes->TariffTable.arraylen.Tariff++;
-		  
+ 					/* is used */
+					service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.MeterID=1;
 				break;	
-				case 19:/* MeterReading */	
+				case 18:/* MeterReading */	
 
-								service->exiMsg.V2G_Message.Body.MeteringStatusRes->MeterInfo.isused.MeterReading=1;
-		  
+ 					/* is used */
+					service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.MeterReading=1;
 				break;	
+				case 19:/* MeterStatus */	
 
+ 					/* is used */
+					service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.MeterStatus=1;
+				break;	
+				case 37:/* TMeter */	
+
+ 					/* is used */
+					service->v2gMsg.Body.MeteringStatusRes.MeterInfo.isused.TMeter=1;
+				break;	
 			}
-		break;
-		case 7:
+		break;case 6:
 			switch(service->eqn.localPart) {
-				case 1:/* Notification */	
+				case 6:/* Notification */	
 
-								service->exiMsg.V2G_Message.Header->isused.Notification=1;
-		  
+ 					/* is used */
+					service->v2gMsg.Header.isused.Notification=1;
 				break;	
-
 			}
 		break;
-		
-
 	}
 	return 0;
 }
@@ -2275,7 +1491,7 @@ static int deserializeElement(struct EXIService* service)
  * Deserialize the EXI stream
  * @return 0 = 0K; -1 = ERROR
  */
-static int deserializeMessage(struct EXIService* service)
+static int deserializeMessage(struct v2gService* service)
 {
 	int noEndOfDocument = 1; /* true */
 	int returnCode=0;
@@ -2335,7 +1551,7 @@ static int deserializeMessage(struct EXIService* service)
  
  
  /* Initialize the v2g client */
-int init_v2gServiceClient(struct EXIService* service, bytes_t bytes, string_ucs_t string, uint8_t* inStream, size_t max_inStream_size, uint8_t* outStream, size_t max_outStream_size, uint16_t transportHeaderOffset)
+int init_v2gServiceClient(struct v2gService* service, bytes_t bytes, string_ucs_t string, uint8_t* inStream, size_t max_inStream_size, uint8_t* outStream, size_t max_outStream_size, uint16_t transportHeaderOffset)
 {
 
 	/* init byte array */

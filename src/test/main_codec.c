@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  * <p>Sample program to illustrate how to read an EXI stream and
@@ -36,10 +36,10 @@
 #include "EXITypes.h"
 #include "ByteStream.h"
 
-#define BUFFER_SIZE 1000
+#define BUFFER_SIZE 100
 
-#define ARRAY_SIZE_BYTES 100
-#define ARRAY_SIZE_STRINGS 100
+#define ARRAY_SIZE_BYTES 50
+#define ARRAY_SIZE_STRINGS 50
 
 /* avoids warning: initializer element is not computable at load time */
 uint8_t bufferIn[BUFFER_SIZE];
@@ -53,8 +53,8 @@ int main_codec(int argc, char *argv[]) {
 	unsigned int i;
 
 	bitstream_t iStream, oStream;
-	uint16_t posDecode;
-	uint16_t posEncode;
+	size_t posDecode;
+	size_t posEncode;
 
 	/* EXI set-up */
 	exi_state_t stateDecode;
@@ -66,7 +66,7 @@ int main_codec(int argc, char *argv[]) {
 	/* BINARY memory setup */
 	bytes_t bytes = { ARRAY_SIZE_BYTES, data, 0 };
 
-	/* STRING memory setup */
+	/* STRING memory setuo */
 	string_ucs_t string = { ARRAY_SIZE_STRINGS, codepoints, 0 };
 
 	const char * localName;
@@ -182,7 +182,7 @@ int main_codec(int argc, char *argv[]) {
 				return errn;
 			}
 			if (val.type == INTEGER_BIG) {
-				printf(" CH int64 : %ld \n", (long int)val.int64);
+				printf(" CH int64 : %lld \n", val.int64);
 			} else if (val.type == BINARY_BASE64 || val.type == BINARY_HEX) {
 				printf(" CH Binary (len == %d) : ", val.binary.len);
 				for(i=0; i<val.binary.len; i++) {
@@ -224,7 +224,7 @@ int main_codec(int argc, char *argv[]) {
 	} while (noEndOfDocument);
 
 	/* write to file */
-	writeBytesToFile(oStream.data, posEncode, argv[2]);
+	writeBytesToFile(oStream.data, iStream.size, argv[2]);
 
 	return 0;
 }

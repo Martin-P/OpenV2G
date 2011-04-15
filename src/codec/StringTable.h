@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -32,17 +32,17 @@ extern "C" {
 
 #include "EXITypes.h"
 
-int exiGetUri(uint16_t uriID, const char** uri);
+int exiGetUri(size_t uriID, const char** uri);
 
-int exiGetUriLength(uint16_t* uriLength);
+int exiGetUriLength(size_t* uriLength);
 
-int exiGetUriID(const char* uri, uint16_t* uriID);
+int exiGetUriID(const char* uri, size_t* uriID);
 
-int exiGetLocalName(uint16_t uriID, uint16_t localNameID, const char** localName);
+int exiGetLocalName(size_t uriID, size_t localNameID, const char** localName);
 
-int exiGetLocalNameLength(uint16_t uriID, uint16_t* localNameLength);
+int exiGetLocalNameLength(size_t uriID, size_t* localNameLength);
 
-int exiGetLocalNameID(uint16_t uriID, const char* localName, uint16_t* localNameID);
+int exiGetLocalNameID(size_t uriID, const char* localName, size_t* localNameID);
 
 #endif
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2011 Siemens AG
+ * Copyright (C) 2007-2010 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,7 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.4
+ * @version 0.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -41,15 +41,7 @@ int decodeBoolean(bitstream_t* stream, int* b);
 /**
  * Decodes and returns an n-bit unsigned integer.
  */
-int decodeNBitUnsignedInteger(bitstream_t* stream, uint16_t nbits, uint32_t* uint32);
-
-/**
- * Decode an arbitrary precision non negative integer using a sequence of
- * octets. The most significant bit of the last octet is set to zero to
- * indicate sequence termination. Only seven bits per octet are used to
- * store the integer's value.
- */
-int decodeUnsignedInteger16(bitstream_t* stream, uint16_t* uint16);
+int decodeNBitUnsignedInteger(bitstream_t* stream, size_t nbits, uint8_t* uint8);
 
 /**
  * Decode an arbitrary precision non negative integer using a sequence of
@@ -91,12 +83,6 @@ int decodeInteger64(bitstream_t* stream, int64_t* int64);
  */
 int decodeFloat(bitstream_t* stream, float_me_t* f);
 
-
-/**
- * Decode a sequence of characters for a given length.
- */
-int decodeStringOnly(bitstream_t* stream, uint16_t len, string_ucs_t* s);
-
 /**
  * Decode a length prefixed sequence of characters.
  */
@@ -114,7 +100,7 @@ int decodeStringValue(bitstream_t* stream, string_ucs_t* s);
 /**
  * Decode a sequence of characters according to a given length.
  */
-int decodeCharacters(bitstream_t* stream, uint16_t len, uint32_t* chars);
+int decodeCharacters(bitstream_t* stream, size_t len, uint32_t* chars);
 
 /**
  * Decode a binary value as a length-prefixed sequence of octets.
