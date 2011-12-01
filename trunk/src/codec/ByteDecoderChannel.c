@@ -28,43 +28,63 @@
 
 
 #include "DecoderChannel.h"
+#include "CoderChannel.h"
 #include "BitInputStream.h"
 #include "EXITypes.h"
 
-#ifndef BIT_DECODER_CHANNEL_C
-#define BIT_DECODER_CHANNEL_C
+#ifndef BYTE_DECODER_CHANNEL_C
+#define BYTE_DECODER_CHANNEL_C
 
 
-#if EXI_ALIGNMENT == BIT_PACKED
+#if EXI_ALIGNMENT == BYTE_ALIGNMENT
 
 int decode(bitstream_t* stream, uint8_t* b) {
-	uint32_t bb;
-	int errn =  readBits(stream, 8, &bb);
-	if (errn < 0) {
-		return errn;
-	}
-	if (bb > 256) {
-		return EXI_ERROR_UNEXPECTED_BYTE_VALUE;
+	int errn = 0;
+#if EXI_STREAM == BYTE_ARRAY
+	if ( (*stream->pos) < stream->size ) {
+		*b = stream->data[(*stream->pos)++];
 	} else {
-		*b = (uint8_t)bb;
+		errn = EXI_ERROR_INPUT_STREAM_EOF;
 	}
+#endif /* EXI_STREAM == BYTE_ARRAY */
+#if EXI_STREAM == FILE_STREAM
+	*b = getc(stream->file);
+	/* EOF cannot be used, 0xFF valid value */
+	if ( feof(stream->file) || ferror(stream->file) ) {
+		return EXI_ERROR_INPUT_STREAM_EOF;
+	}
+#endif /* EXI_STREAM == FILE_STREAM */
+
 	return errn;
 }
 
 int decodeBoolean(bitstream_t* stream, int* b) {
-	uint32_t ub;
-	int errn = readBits(stream, 1, &ub);
-	*b = (ub == 0) ? 0 : 1;
+	uint8_t bb;
+	int errn = decode(stream, &bb);
+	*b = (bb == 0) ? 0 : 1;
 	return errn;
 }
 
+/**
+ * Decodes and returns an n-bit unsigned integer using the minimum number of
+ * bytes required for n bits.
+ */
 int decodeNBitUnsignedInteger(bitstream_t* stream, uint16_t nbits, uint32_t* uint32) {
-	if (nbits == 0) {
-		*uint32 = 0;
-		return 0;
-	} else {
-		return readBits(stream, nbits, uint32);
+	uint16_t bitsRead = 0;
+	uint8_t b;
+	int errn = 0;
+	*uint32 = 0;
+
+	while (bitsRead < nbits) {
+		errn = decode(stream, &b);
+		if (errn != 0) {
+			return errn;
+		}
+		*uint32 += (b << bitsRead);
+		bitsRead += 8;
 	}
+
+	return errn;
 }
 
 #endif
