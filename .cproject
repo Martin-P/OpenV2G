@@ -16,37 +16,37 @@
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
 <configuration artifactName="OpenV2G" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.debug.181718907" name="Debug" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
 <folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.181718907." name="/" resourcePath="">
-<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.base.61547579" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
-<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.base.2111260617" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.mingw.base"/>
-<builder buildPath="${workspace_loc:/OpenV2G/Debug}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1906140327" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
-<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.1571190553" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
-<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1866737768" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.base.186426714" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
+<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.base.208578740" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.mingw.base"/>
+<builder buildPath="${workspace_loc:/OpenV2G/Debug}" id="org.eclipse.cdt.build.core.internal.builder.962624174" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="org.eclipse.cdt.build.core.internal.builder"/>
+<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.467817276" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
+<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1213164158" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
-<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1290025209" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
-<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.390259959" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
-<option id="gnu.cpp.compiler.option.optimization.level.1512753216" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-<option id="gnu.cpp.compiler.option.debugging.level.531182604" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.260408959" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1208420490" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
+<option id="gnu.cpp.compiler.option.optimization.level.650473997" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.option.debugging.level.2034188123" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 </tool>
-<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.949740711" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
-<option id="gnu.c.compiler.option.include.paths.2099943524" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1511109002" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
+<option id="gnu.c.compiler.option.include.paths.229245493" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/codec}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/transport}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/service}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/test}&quot;"/>
 </option>
-<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.462712729" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
-<option id="gnu.c.compiler.option.debugging.level.1008589022" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-<option id="gnu.c.compiler.option.misc.ansi.1860994344" name="Support ANSI programs (-ansi)" superClass="gnu.c.compiler.option.misc.ansi" value="true" valueType="boolean"/>
-<option id="gnu.c.compiler.option.warnings.pedantic.1156304229" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
-<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2007502172" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.1880660058" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
+<option id="gnu.c.compiler.option.debugging.level.890071608" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+<option id="gnu.c.compiler.option.warnings.pedantic.1983095151" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+<option id="gnu.c.compiler.option.misc.ansi.1916749690" name="Support ANSI programs (-ansi)" superClass="gnu.c.compiler.option.misc.ansi" value="true" valueType="boolean"/>
+<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1904654876" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
-<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.1261045096" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
-<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.605182894" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
+<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.1907160138" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
+<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1866282924" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>
 </inputType>
 </tool>
-<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1948082912" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.521623519" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
 </toolChain>
 </folderInfo>
 <sourceEntries>
@@ -561,7 +561,7 @@
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.release.681614450" moduleId="org.eclipse.cdt.core.settings" name="Release">
 <externalSettings/>
 <extensions>
-<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
@@ -570,36 +570,39 @@
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
 <configuration artifactName="OpenV2G" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.release.681614450" name="Release" parent="cdt.managedbuild.config.gnu.mingw.exe.release">
 <folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.release.681614450." name="/" resourcePath="">
-<toolChain id="cdt.managedbuild.toolchain.gnu.base.506532925" name="Linux GCC" nonInternalBuilderId="cdt.managedbuild.target.gnu.builder.base" superClass="cdt.managedbuild.toolchain.gnu.base">
-<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.platform.base.784544317" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
-<builder autoBuildTarget="all" buildPath="${workspace_loc:/OpenV2G/Release}" cleanBuildTarget="clean" id="org.eclipse.cdt.build.core.internal.builder.332458815" incrementalBuildTarget="all" managedBuildOn="true" name="CDT Internal Builder" superClass="org.eclipse.cdt.build.core.internal.builder"/>
-<tool id="cdt.managedbuild.tool.gnu.archiver.base.501212056" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
-<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.605628336" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
-<option id="gnu.cpp.compiler.option.optimization.level.937286096" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
-<option id="gnu.cpp.compiler.option.debugging.level.1762244177" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
+<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.base.544862828" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
+<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.base.452289502" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.mingw.base"/>
+<builder buildPath="${workspace_loc:/OpenV2G/Release}" id="org.eclipse.cdt.build.core.internal.builder.1562717014" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="org.eclipse.cdt.build.core.internal.builder"/>
+<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.586100401" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
+<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1634756901" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
-<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.1358204014" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
-<option id="gnu.c.compiler.option.include.paths.1801191227" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.934860510" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.596457747" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
+<option id="gnu.cpp.compiler.option.optimization.level.2131218410" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.option.debugging.level.1665313885" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.2107890734" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
+<option id="gnu.c.compiler.option.include.paths.289860304" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/codec}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/transport}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/service}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/test}&quot;"/>
 </option>
-<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.option.optimization.level.269511649" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
-<option id="gnu.c.compiler.option.debugging.level.1614677996" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
-<option id="gnu.c.compiler.option.optimization.flags.435817870" name="Other optimization flags" superClass="gnu.c.compiler.option.optimization.flags" value="-Os" valueType="string"/>
-<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.822105819" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.option.optimization.level.899621054" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
+<option id="gnu.c.compiler.option.debugging.level.1251127335" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
+<option id="gnu.c.compiler.option.misc.ansi.496561434" name="Support ANSI programs (-ansi)" superClass="gnu.c.compiler.option.misc.ansi" value="true" valueType="boolean"/>
+<option id="gnu.c.compiler.option.warnings.pedantic.289278524" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+<option id="gnu.c.compiler.option.warnings.pedantic.error.822372173" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.c.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
+<option id="gnu.c.compiler.option.optimization.flags.1051939537" superClass="gnu.c.compiler.option.optimization.flags" value="-Os" valueType="string"/>
+<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.898314529" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
-<tool id="cdt.managedbuild.tool.gnu.c.linker.base.1432229809" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base">
-<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1805334009" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
+<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.2082341498" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
+<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.153003457" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>
 </inputType>
 </tool>
-<tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.1184740467" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base"/>
-<tool id="cdt.managedbuild.tool.gnu.assembler.base.1998194122" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
-<inputType id="cdt.managedbuild.tool.gnu.assembler.input.67175024" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-</tool>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.557104889" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
 </toolChain>
 </folderInfo>
 </configuration>
