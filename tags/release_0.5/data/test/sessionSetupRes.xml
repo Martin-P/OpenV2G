@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<v2gci_d:V2G_Message xmlns:v2gci_b="urn:iso:15118:2:2010:MsgBody"
+ xmlns:xmlsig="http://www.w3.org/2000/09/xmldsig#"
+ xmlns:v2gci_d="urn:iso:15118:2:2010:MsgDef"
+ xmlns:v2gci_t="urn:iso:15118:2:2010:MsgDataTypes"
+ xmlns:v2gci_h="urn:iso:15118:2:2010:MsgHeader"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <v2gci_d:Header>
+        <v2gci_h:SessionInformation>
+            <v2gci_t:SessionID>0000000000000010</v2gci_t:SessionID>
+        </v2gci_h:SessionInformation>
+    </v2gci_d:Header>
+    <v2gci_d:Body>
+        <v2gci_b:SessionSetupRes>
+            <v2gci_b:ResponseCode>OK</v2gci_b:ResponseCode>
+            <v2gci_b:EVSEID>01</v2gci_b:EVSEID>
+            <v2gci_b:TCurrent>12345678</v2gci_b:TCurrent>
+        </v2gci_b:SessionSetupRes>
+    </v2gci_d:Body>
+</v2gci_d:V2G_Message>
