@@ -6,13 +6,11 @@
  xmlns:v2gci_h="urn:iso:15118:2:2010:MsgHeader"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <v2gci_d:Header>
-        <v2gci_h:SessionInformation>
-            <v2gci_t:SessionID>0000000000000000</v2gci_t:SessionID>
-        </v2gci_h:SessionInformation>
+            <v2gci_h:SessionID>0000000000000000</v2gci_h:SessionID>
     </v2gci_d:Header>
     <v2gci_d:Body>
         <v2gci_b:SessionSetupReq>
-            <v2gci_b:PEVID>10</v2gci_b:PEVID>
+            <v2gci_b:EVCCID>01</v2gci_b:EVCCID>
         </v2gci_b:SessionSetupReq>
     </v2gci_d:Body>
 </v2gci_d:V2G_Message>
