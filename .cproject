@@ -30,6 +30,8 @@
 <tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1511109002" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
 <option id="gnu.c.compiler.option.include.paths.229245493" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/codec}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/appHandshake}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/codec/appHandCodec}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/transport}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/service}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/OpenV2G/src/test}&quot;"/>
