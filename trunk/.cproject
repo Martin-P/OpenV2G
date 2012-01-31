@@ -40,6 +40,8 @@
 <option id="gnu.c.compiler.option.debugging.level.890071608" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 <option id="gnu.c.compiler.option.warnings.pedantic.1983095151" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
 <option id="gnu.c.compiler.option.misc.ansi.1916749690" name="Support ANSI programs (-ansi)" superClass="gnu.c.compiler.option.misc.ansi" value="true" valueType="boolean"/>
+<option id="gnu.c.compiler.option.warnings.toerrors.990186240" superClass="gnu.c.compiler.option.warnings.toerrors" value="false" valueType="boolean"/>
+<option id="gnu.c.compiler.option.warnings.pedantic.error.145905553" superClass="gnu.c.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
 <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1904654876" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.1907160138" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">

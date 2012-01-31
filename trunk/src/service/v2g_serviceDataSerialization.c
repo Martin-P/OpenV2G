@@ -320,40 +320,6 @@ static int serialize_SignedInfoType(struct SignedInfoType* type, struct EXIServi
 }
 
 
-static int serialize_SignatureValueType(struct SignatureValueType* type, struct EXIService* service)
-{
-
-	/* element ID assignment of attr_Id*/
-	service->eqn.namespaceURI=0;
-	service->eqn.localPart=2;
-	/* encode start element attr_Id */
-	if (exiEncodeStartElement(&(service->outStream), &(service->stateEncode), &(service->eqn)))
-	{
-			return -1;
-	}
-
-	service->val.type = STRING;
-/* service->val.string.len = type->attr_Id.arraylen.data;
-	service->val.string.codepoints = type->attr_Id.data;
-*/
-	/* encode character  attr_Id */
-	if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val)))
-	{
-
-			return -1;
-	}
-
-
-	/* encode end element of attr_Id */
-	exiEncodeEndElement(&(service->outStream), &(service->stateEncode));
-
-
-
-
-	return 0;			
-}
-
-
 static int serialize_X509IssuerSerialType(struct X509IssuerSerialType* type, struct EXIService* service)
 {
 	

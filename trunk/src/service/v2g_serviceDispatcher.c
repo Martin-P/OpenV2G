@@ -45,19 +45,19 @@
 static int deserializeMessage(struct EXIService* service);
 
 
-static int _setInt32Value(integer_t* iv, int32_t* int32) {
+static int _setUInt32Value(integer_t* iv, uint32_t* uint32) {
 	int errn = 0;
 	switch(iv->type) {
 	/* Unsigned Integer */
 	case UNSIGNED_INTEGER_8:
-		*int32 = iv->val.uint8;
+		*uint32 = iv->val.uint8;
 		break;
 	case UNSIGNED_INTEGER_16:
-		*int32 = iv->val.uint16;
+		*uint32 = iv->val.uint16;
 		break;
 	case UNSIGNED_INTEGER_32:
 		if (iv->val.uint32 <= 2147483647) {
-			*int32 = iv->val.uint32;
+			*uint32 = iv->val.uint32;
 		} else {
 			errn = EXI_UNSUPPORTED_INTEGER_VALUE;
 		}
@@ -67,13 +67,13 @@ static int _setInt32Value(integer_t* iv, int32_t* int32) {
 		break;
 	/* (Signed) Integer */
 	case INTEGER_8:
-		*int32 = iv->val.int8;
+		*uint32 = iv->val.int8;
 		break;
 	case INTEGER_16:
-		*int32 = iv->val.int16;
+		*uint32 = iv->val.int16;
 		break;
 	case INTEGER_32:
-		*int32 = iv->val.int32;
+		*uint32 = iv->val.int32;
 		break;
 	case INTEGER_64:
 		errn = EXI_UNSUPPORTED_INTEGER_VALUE;
@@ -993,7 +993,7 @@ static int deserializeElementAttributeCharacter(struct EXIService* service)
 				case 30: /*DepartureTime*/
 		if(service->val.type == UNSIGNED_INTEGER) 
 					{
-						_setInt32Value( &(service->val.integer),&(service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryReq->AC_EVChargeParameter->DepartureTime));
+						_setUInt32Value( &(service->val.integer),&(service->exiMsg.V2G_Message.Body.ChargeParameterDiscoveryReq->AC_EVChargeParameter->DepartureTime));
 
 
 					} 
@@ -1226,7 +1226,7 @@ static int deserializeElementAttributeCharacter(struct EXIService* service)
 				case 12: /*ChargingProfileEntryStart*/
 		if(service->val.type == UNSIGNED_INTEGER) 
 					{
-						_setInt32Value( &(service->val.integer),&(service->exiMsg.V2G_Message.Body.PowerDeliveryReq->ChargingProfile.ProfileEntry[service->exiMsg.V2G_Message.Body.PowerDeliveryReq->ChargingProfile.arraylen.ProfileEntry].ChargingProfileEntryStart));
+						_setUInt32Value( &(service->val.integer),&(service->exiMsg.V2G_Message.Body.PowerDeliveryReq->ChargingProfile.ProfileEntry[service->exiMsg.V2G_Message.Body.PowerDeliveryReq->ChargingProfile.arraylen.ProfileEntry].ChargingProfileEntryStart));
 
 
 					} 
