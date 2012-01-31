@@ -75,7 +75,7 @@ char * uris[] = {
 #endif /*EXI_DEBUG*/
 
 #if EXI_DEBUG == EXI_DEBUG_ON
-struct exiNamePartition localNamePartitions[5] = {
+static struct exiNamePartition localNamePartitions[5] = {
  { 7, localNames0 },
  { 4, localNames1 },
  { 2, localNames2 },
