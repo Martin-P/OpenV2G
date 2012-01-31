@@ -179,7 +179,7 @@ struct exiNamePartition localNamePartitions[9] = {
 #endif /*EXI_DEBUG*/
 
 #if EXI_DEBUG == EXI_DEBUG_OFF
-struct exiNamePartition localNamePartitions[9] = {
+static struct exiNamePartition localNamePartitions[9] = {
  { 9 },
  { 4 },
  { 2 },
