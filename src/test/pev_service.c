@@ -34,7 +34,6 @@
 #include "appHand_dataTypes.h"
 
 
-
 /* includes V2GTP */
 #include "v2gtp.h"
 
@@ -699,6 +698,7 @@ static int dc_charging()
 	 *******************************************/
 
 	serviceDiscovery.isused.ServiceCategory=1;
+	/* we are only interested in charging */
 	serviceDiscovery.ServiceCategory = 	EVCharging_serviceCategoryType;
 	serviceDiscovery.isused.ServiceScope=0;
 
@@ -1205,11 +1205,6 @@ static int dc_charging()
 		printf("\t EVSEMaximumPowerLimit=%d\n",resultCurrentDemand.EVSEMaximumPowerLimit.Value);
 	}
 
-
-
-
-
-
 	/***********************************
 	 * Setup data for weldingDetection *
 	 ***********************************/
@@ -1323,7 +1318,7 @@ int main_service()
 	getchar();
 	printf("+++ Start V2G client / service example for AC charging +++\n\n");
 
-	 ac_charging();
+	ac_charging();
 
 	printf("\n+++Terminate V2G Client / Service example for AC charging +++\n");
 	printf("Please press enter for DC charging!\n");
