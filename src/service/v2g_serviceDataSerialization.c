@@ -1017,7 +1017,7 @@ static int serialize_PaymentOptionsType(struct PaymentOptionsType* type, struct 
 			}
 			
 			service->val.type = ENUMERATION;
-			service->val.enumeration=type->PaymentOption;
+			service->val.enumeration=type->PaymentOption[i_loop];
 			
 			/* encode character  PaymentOption */	
 			if (exiEncodeCharacters(&(service->outStream), &(service->stateEncode), &(service->val))) 
