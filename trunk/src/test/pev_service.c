@@ -798,7 +798,7 @@ static int dc_charging()
 
 	/* setup EVStatus */
 
-	EVStatus.EVRESSSOC = 89;
+	EVStatus.EVRESSSOC = 30;
 	EVStatus.EVReady = 1;
 	EVStatus.EVCabinConditioning = 1;
 	EVStatus.EVRESSConditioning = 1;
@@ -1112,12 +1112,12 @@ static int dc_charging()
 	currentDemand.DC_EVStatus = EVStatus;
 
 	float_type.Unit = A_unitSymbolType;
-	float_type.Value = 100;
+	float_type.Value = 50;
 
 	currentDemand.EVTargetCurrent = float_type;
 
 	float_type.Unit = V_unitSymbolType;
-	float_type.Value = 420;
+	float_type.Value = 400;
 
 	currentDemand.EVMaximumVoltageLimit = float_type;
 	currentDemand.isused.EVMaximumVoltageLimit = 1;
@@ -1129,7 +1129,7 @@ static int dc_charging()
 	currentDemand.isused.EVMaximumPowerLimit = 1;
 
 	float_type.Unit = A_unitSymbolType;
-	float_type.Value = 60;
+	float_type.Value = 50;
 
 	currentDemand.EVMaximumCurrentLimit = float_type;
 	currentDemand.isused.EVMaximumCurrentLimit = 1;
@@ -1139,17 +1139,16 @@ static int dc_charging()
 
 	currentDemand.ChargingComplete = 0;
 
-	float_type.Unit = s_unitSymbolType;
-	float_type.Value = 300; /* 5 min*/
+	/* float_type.Unit = s_unitSymbolType;
+	float_type.Value = 1200;
+	currentDemand.RemainingTimeToFullSoC = float_type; */
+	currentDemand.isused.RemainingTimeToFullSoC = 0;
 
-	currentDemand.RemainingTimeToFullSoC = float_type;
-	currentDemand.isused.RemainingTimeToFullSoC = 1;
+	/* float_type.Unit = s_unitSymbolType;
+	float_type.Value = 1200;
 
-	float_type.Unit = s_unitSymbolType;
-	float_type.Value = 120; /* 3 min */
-
-	currentDemand.RemainingTimeToBulkSoC = float_type;
-	currentDemand.isused.RemainingTimeToBulkSoC = 1;
+	currentDemand.RemainingTimeToBulkSoC = float_type; */
+	currentDemand.isused.RemainingTimeToBulkSoC = 0;
 
 
 	float_type.Unit = V_unitSymbolType;

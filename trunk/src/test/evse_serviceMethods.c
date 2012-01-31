@@ -468,7 +468,7 @@ int	currentDemand(struct MessageHeaderType* header, struct CurrentDemandReqType*
 
 	f.Multiplier = 0;
 	f.Unit = V_unitSymbolType;
-	f.Value = 400;
+	f.Value = 300;
 
 	result->EVSEPresentVoltage=f;
 
@@ -479,7 +479,7 @@ int	currentDemand(struct MessageHeaderType* header, struct CurrentDemandReqType*
 
 	result->EVSECurrentLimitAchieved=0;
 
-	result->EVSEVoltageLimitAchieved=1;
+	result->EVSEVoltageLimitAchieved=0;
 
 	result->EVSEPowerLimitAchieved=0;
 
