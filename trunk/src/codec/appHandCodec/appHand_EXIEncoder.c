@@ -35,7 +35,7 @@
 #include "EncoderChannel.h"
 
 #include "StringTable.h"
-#include "NameTableEntries.h"
+#include "appHand_NameTableEntries.h"
 #include "MethodsBag.h"
 
 #include "EXICoder.h"
