@@ -32,11 +32,13 @@
 #include "main.h"
 
 int main(int argc, char *argv[]) {
+#if CODE_VERSION == CODE_VERSION_EXI
 	/* EXI codec only */
-	/*return main_codec(argc, argv);*/
-
+	return main_codec(argc, argv);
+#elif CODE_VERSION == CODE_VERSION_SERVICE
 	/* V2G client / service example scenario */
 	return main_service(argc, argv);
+#endif
 
 }
 
