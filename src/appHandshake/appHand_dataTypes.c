@@ -56,7 +56,7 @@ void init_AnonType_supportedAppProtocolReq(struct AnonType_supportedAppProtocolR
 
 }
 
- void init_AnonType_supportedAppProtocolRes(struct AnonType_supportedAppProtocolRes* type)
+void init_AnonType_supportedAppProtocolRes(struct AnonType_supportedAppProtocolRes* type)
 {			
 	type->isused.SchemaID=0;
 

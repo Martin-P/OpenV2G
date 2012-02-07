@@ -130,7 +130,7 @@ static int appHandshake()
 		return -1;
 	}
 
-	printf("EV side: Response of the EVSE \n");
+	printf("\nEV side: Response of the EVSE \n");
 	if(resultHandshake.ResponseCode==OK_SuccessfulNegotiation_responseCodeType)
 	{
 		printf("\t\tResponseCode=OK_SuccessfulNegotiation\n");
@@ -231,7 +231,7 @@ static int ac_charging()
 
 	prepare_sessionSetup(&service,&v2gHeader, &sessionSetup,&resultSessionSetup);
 
-	printf("EV side: call EVSE sessionSetup\n");
+	printf("\n\n\n\nEV side: call EVSE sessionSetup\n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -250,7 +250,7 @@ static int ac_charging()
 	if(resMsg==SESSIONSETUPRES)
 	{
 		/* show result of the answer message of EVSE sessionSetup */
-		printf("EV side: received response message from EVSE\n");
+		printf("\nEV side: received response message from EVSE\n");
 		printf("\tHeader SessionID=");
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\tResponseCode=%d\n",resultSessionSetup.ResponseCode);
@@ -272,7 +272,7 @@ static int ac_charging()
 
 	prepare_serviceDiscovery(&service,&v2gHeader, &serviceDiscovery,&resultServiceDiscovery);
 
-	printf("EV side: call EVSE serviceDiscovery \n");
+	printf("\n\nEV side: call EVSE serviceDiscovery \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -292,7 +292,7 @@ static int ac_charging()
 	if(resMsg==SERVICEDISCOVERYRES)
 	{
 		/* show result of the answer message of EVSE serviceDiscovery */
-		printf("EV side: received response message from EVSE\n");
+		printf("\nEV side: received response message from EVSE\n");
 		printf("\tHeader SessionID=");
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\t ResponseCode=%d\n",resultServiceDiscovery.ResponseCode);
@@ -324,7 +324,7 @@ static int ac_charging()
 		return 0;
 	}
 
-	printf("EV side: call EVSE ServicePaymentSelection \n");
+	printf("\n\nEV side: call EVSE ServicePaymentSelection \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -344,7 +344,7 @@ static int ac_charging()
 	if(resMsg==SERVICEPAYMENTSELECTIONRES)
 	{
 		/* show result of the answer message of EVSE servicePaymentSelection */
-		printf("EV side: received response message from EVSE\n");
+		printf("\nEV side: received response message from EVSE\n");
 		printf("\tHeader SessionID=");
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\t ResponseCode=%d\n",resultServicePayment.ResponseCode);
@@ -354,7 +354,6 @@ static int ac_charging()
 	/*******************************************
 	 * Setup data for chargeParameterDiscovery *
 	 *******************************************/
-	printf("\n\nEV side: prepare EVSE chargeParameterDiscovery\n");
 
 	powerDiscovery.EVRequestedEnergyTransferType = AC_three_phase_core_EVRequestedEnergyTransferType;
 
@@ -393,7 +392,7 @@ static int ac_charging()
 	prepare_chargeParameterDiscovery(&service,&v2gHeader,&powerDiscovery,&resultPowerDiscovery);
 
 
-	printf("EV side: call EVSE chargeParameterDiscovery \n");
+	printf("\n\nEV side: call EVSE chargeParameterDiscovery \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -415,7 +414,7 @@ static int ac_charging()
 	{
 
 		/* show result of the answer message of EVSE sessionSetup*/
-		printf("EV side: received response message from EVSE\n");
+		printf("\nEV side: received response message from EVSE\n");
 		printf("\tHeader SessionID=");
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\tResponseCode=%d\n",resultPowerDiscovery.ResponseCode);
@@ -438,7 +437,7 @@ static int ac_charging()
 
 	prepare_powerDelivery(&service,&v2gHeader,&powerDelivery,&resultPowerDelivery);
 
-	printf("EV side: call EVSE powerDelivery \n");
+	printf("\n\nEV side: call EVSE powerDelivery \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -459,7 +458,7 @@ static int ac_charging()
 	{
 
 		/* show result of the answer message of EVSE sessionSetup*/
-		printf("EV side: received response message from EVSE\n");
+		printf("\nEV side: received response message from EVSE\n");
 		printf("\tResponseCode=%d\n",resultPowerDelivery.ResponseCode);
 		printACEVSEStatus(&evseStatus);
 	}
@@ -481,7 +480,7 @@ static int ac_charging()
 		return 0; /* stop here */
 	}
 
-	printf("EV side: call EVSE chargingStatus \n");
+	printf("\n\nEV side: call EVSE chargingStatus \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -501,7 +500,7 @@ static int ac_charging()
 	if(resMsg==CHARGINGSTATUSRES)
 	{
 		/* show result of the answer message of EVSE sessionSetup*/
-		printf("EV side: received response message from EVSE\n");
+		printf("\nEV side: received response message from EVSE\n");
 		/* show result of the answer message of EVSE powerDiscovery*/
 		printf("\tResponseCode=%d\n",resultChargingStatus.ResponseCode);
 		printACEVSEStatus(&evseStatus);
@@ -531,7 +530,7 @@ static int ac_charging()
 		return 0; /* stop here */
 	}
 
-	printf("EV side: call EVSE stopSession \n");
+	printf("\n\nEV side: call EVSE stopSession \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -551,7 +550,7 @@ static int ac_charging()
 	if(resMsg==SESSIONSTOPRES)
 	{
 		/* show result of the answer message of EVSE sessionSetup*/
-		printf("EV side: received response message from EVSE\n");
+		printf("\nEV side: received response message from EVSE\n");
 		/* show result of the answer message of EVSE powerDiscovery*/
 		printf("\tResponseCode=%d\n",resultSessionStop.ResponseCode);
 	}
@@ -658,15 +657,13 @@ static int dc_charging()
 	sessionSetup.EVCCID.data[0]=10;
 	sessionSetup.EVCCID.arraylen.data=1;
 
-	printf("EV side: prepare EVSE sessionSetup\n");
-
 	/************************
 	 * Prepare sessionSetup *
 	 ************************/
 
 	prepare_sessionSetup(&service,&v2gHeader, &sessionSetup,&resultSessionSetup);
 
-	printf("EV side: call EVSE sessionSetup\n");
+	printf("\n\nEV side: call EVSE sessionSetup\n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -703,7 +700,6 @@ static int dc_charging()
 	serviceDiscovery.isused.ServiceScope=0;
 
 
-	printf("\n\nEV side: prepare EVSE serviceDiscovery\n");
 
 	/****************************
 	 * Prepare serviceDiscovery *
@@ -711,7 +707,7 @@ static int dc_charging()
 
 	prepare_serviceDiscovery(&service,&v2gHeader, &serviceDiscovery,&resultServiceDiscovery);
 
-	printf("EV side: call EVSE serviceDiscovery \n");
+	printf("\n\nEV side: call EVSE serviceDiscovery \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -731,7 +727,7 @@ static int dc_charging()
 	if(resMsg==SERVICEDISCOVERYRES)
 	{
 		/* show result of the answer message of EVSE sessionSetup */
-		printf("\nEV side: received response message from EVSE\n");
+		printf("\n\nEV side: received response message from EVSE\n");
 		printf("\tHeader SessionID=");
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\t ResponseCode=%d\n",resultServiceDiscovery.ResponseCode);
@@ -752,7 +748,6 @@ static int dc_charging()
 	servicePayment.SelectedServiceList.SelectedService[0].isused.ParameterSetID=0; /* is not used */
 	servicePayment.SelectedServiceList.arraylen.SelectedService=1; /* only one service was selected */
 
-	printf("\n\nEV side: prepare EVSE servicePaymentSelection\n");
 
 	/**************************************
 	 * Prepare ServicePaymentSelection *
@@ -764,7 +759,7 @@ static int dc_charging()
 		return 0;
 	}
 
-	printf("EV side: call EVSE ServicePaymentSelection \n");
+	printf("\n\nEV side: call EVSE ServicePaymentSelection \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -856,8 +851,6 @@ static int dc_charging()
 	resultPowerDiscovery.SAScheduleList = &pmaxScheduleList; /* the EVSE can provide some PMax information; should be always assign here! */
 
 
-	printf("\n\nEV side: prepare EVSE chargeParameterDiscovery\n");
-
 	/************************************
 	 * Prepare chargeParameterDiscovery *
 	 ************************************/
@@ -868,7 +861,7 @@ static int dc_charging()
 		return 0;
 	}
 
-	printf("EV side: call EVSE chargeParameterDiscovery \n");
+	printf("\n\nEV side: call EVSE chargeParameterDiscovery \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -936,8 +929,6 @@ static int dc_charging()
 	cableCheck.DC_EVStatus =EVStatus;
 
 
-	printf("\n\nEV side: prepare EVSE cableCheck\n");
-
 	/**********************
 	 * Prepare cableCheck *
 	 **********************/
@@ -948,7 +939,7 @@ static int dc_charging()
 		return 0; /* stop here */
 	}
 
-	printf("EV side: call EVSE cableCheck \n");
+	printf("\n\nEV side: call EVSE cableCheck \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -968,7 +959,7 @@ static int dc_charging()
 	if(resMsg==CABLECHECKRES)
 	{
 		/* show result of the answer message of EVSE sessionSetup*/
-		printf("EV side: received response message from EVSE\n");
+		printf("\nEV side: received response message from EVSE\n");
 		printf("\t\t Header SessionID=%d\n",v2gHeader.SessionID.data[0]);
 		printf("\tResponseCode=%d\n",resultCableCheck.ResponseCode);
 		printDCEVSEStatus(&(resultCableCheck.DC_EVSEStatus));
@@ -990,7 +981,6 @@ static int dc_charging()
 	float_type.Value = 200;
 	preCharge.EVTargetVoltage = float_type;
 
-	printf("\n\nEV side: prepare EVSE preCharge\n");
 
 	/**********************
 	 * Prepare preCharge  *
@@ -1002,7 +992,7 @@ static int dc_charging()
 		return 0; /* stop here */
 	}
 
-	printf("EV side: call EVSE preCharge \n");
+	printf("\n\nEV side: call EVSE preCharge \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -1022,7 +1012,7 @@ static int dc_charging()
 	if(resMsg==PRECHARGERES)
 	{
 		/* show result of the answer message of EVSE sessionSetup*/
-		printf("EV side: received response message from EVSE\n");
+		printf("\nEV side: received response message from EVSE\n");
 		/* show result of the answer message of EVSE powerDiscovery*/
 		printf("\tResponseCode=%d\n",resultPreCharge.ResponseCode);
 		printDCEVSEStatus(&resultPreCharge.DC_EVSEStatus);
@@ -1062,8 +1052,6 @@ static int dc_charging()
 
 	resultPowerDelivery.DC_EVSEStatus = &evseStatus; /* we expect the DC-based EVSE status */
 
-	printf("\n\nEV side: prepare EVSE powerDelivery\n");
-
 
 	/**************************
 	 * Prepare powerDelivery  *
@@ -1075,7 +1063,7 @@ static int dc_charging()
 		return 0; /* stop here */
 	}
 
-	printf("EV side: call EVSE powerDelivery \n");
+	printf("\n\nEV side: call EVSE powerDelivery \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -1157,8 +1145,6 @@ static int dc_charging()
 	currentDemand.EVTargetVoltage = float_type;
 
 
-	printf("\n\nEV side: prepare EVSE currentDemand\n");
-
 	/**************************
 	 * Prepare currentDemand  *
 	 **************************/
@@ -1169,7 +1155,7 @@ static int dc_charging()
 		return 0; /* stop here */
 	}
 
-	printf("EV side: call EVSE currentDemand \n");
+	printf("\n\nEV side: call EVSE currentDemand \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -1212,7 +1198,6 @@ static int dc_charging()
 
 
 
-	printf("\n\nEV side: prepare EVSE weldingDetection\n");
 
 	/**************************
 	 * Prepare weldingDetection  *
@@ -1224,7 +1209,7 @@ static int dc_charging()
 		return 0; /* stop here */
 	}
 
-	printf("EV side: call EVSE weldingDetection \n");
+	printf("\n\nEV side: call EVSE weldingDetection \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -1244,7 +1229,7 @@ static int dc_charging()
 	if(resMsg==WELDINGDETECTIONRES)
 	{
 		/* show result of the answer message of EVSE sessionSetup*/
-		printf("EV side: received response message from EVSE\n");
+		printf("\nEV side: received response message from EVSE\n");
 		/* show result of the answer message of EVSE powerDiscovery*/
 		printf("\tResponseCode=%d\n",resultCurrentDemand.ResponseCode);
 		printDCEVSEStatus(&resultCurrentDemand.DC_EVSEStatus);
@@ -1259,7 +1244,6 @@ static int dc_charging()
 	 * Setup data for stopSession *
 	 ***********************************/
 
-	printf("\n\nEV side: prepare EVSE stopSession\n");
 
 	/************************
 	 * Prepare stopSession  *
@@ -1271,7 +1255,7 @@ static int dc_charging()
 		return 0; /* stop here */
 	}
 
-	printf("EV side: call EVSE stopSession \n");
+	printf("\n\nEV side: call EVSE stopSession \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -1291,7 +1275,7 @@ static int dc_charging()
 	if(resMsg==SESSIONSTOPRES)
 	{
 		/* show result of the answer message of EVSE sessionSetup*/
-		printf("EV side: received response message from EVSE\n");
+		printf("\nEV side: received response message from EVSE\n");
 		/* show result of the answer message of EVSE powerDiscovery*/
 		printf("\tResponseCode=%d\n",resultCurrentDemand.ResponseCode);
 	}

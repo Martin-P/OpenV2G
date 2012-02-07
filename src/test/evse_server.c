@@ -130,6 +130,7 @@ static int appHandshakeHandler(struct EXIDatabinder* appHandService, uint8_t* in
 	struct AnonType_supportedAppProtocolRes resultHandshake;
 	size_t i;
 
+	init_AnonType_supportedAppProtocolReq(&handshake);
 	init_EXIDocumentType_appHand(&exiDoc);
 
 	/* we expect a supportedAppProtocolReq */
