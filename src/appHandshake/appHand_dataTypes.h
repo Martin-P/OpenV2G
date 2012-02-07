@@ -122,6 +122,7 @@ struct EXIDocumentType_appHand
 };
 
 void init_EXIDocumentType_appHand(struct EXIDocumentType_appHand* type);
+void init_AnonType_supportedAppProtocolReq(struct AnonType_supportedAppProtocolReq* type);
 
 #endif
 
