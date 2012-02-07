@@ -25,10 +25,18 @@
  *
  ********************************************************************/
 
+
+#define CODE_VERSION_EXI 1
+#define CODE_VERSION_SERVICE 2
+#define CODE_VERSION CODE_VERSION_SERVICE
+
 #ifndef MAIN_H_
 #define MAIN_H_
 
+#if CODE_VERSION == CODE_VERSION_EXI
 int main_codec(int argc, char *argv[]);
+#elif CODE_VERSION == CODE_VERSION_SERVICE
 int main_service(int argc, char *argv[]);
+#endif
 
 #endif
