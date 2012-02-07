@@ -36,19 +36,8 @@ extern "C" {
 
 #include "EXITypes.h"
 
-#if EXI_DEBUG == EXI_DEBUG_ON
-int exiGetUri(exi_name_table_prepopulated_t* prepopulatedTable, exi_name_table_runtime_t* runtimeTable, uint16_t uriID, const char** uri);
-/*  0 ... Success, 1 ... Miss, -1 ... Error */
-int exiGetUriID(exi_name_table_prepopulated_t* prepopulatedTable, exi_name_table_runtime_t* runtimeTable, const char* uri, uint16_t* uriID);
-#endif /*EXI_DEBUG*/
 
 int exiGetUriSize(exi_name_table_prepopulated_t* prepopulatedTable, exi_name_table_runtime_t* runtimeTable, uint16_t* uriLength);
-
-#if EXI_DEBUG == EXI_DEBUG_ON
-int exiGetLocalName(exi_name_table_prepopulated_t* prepopulatedTable, exi_name_table_runtime_t* runtimeTable, uint16_t uriID, uint16_t localNameID, const char** localName);
-/*  0 ... Success, 1 ... Miss, -1 ... Error */
-int exiGetLocalNameID(exi_name_table_prepopulated_t* prepopulatedTable, exi_name_table_runtime_t* runtimeTable, uint16_t uriID, const char* localName, uint16_t* localNameID);
-#endif /*EXI_DEBUG*/
 
 int exiGetLocalNameSize(exi_name_table_prepopulated_t* prepopulatedTable, exi_name_table_runtime_t* runtimeTable, uint16_t uriID, uint16_t* localNameLength);
 

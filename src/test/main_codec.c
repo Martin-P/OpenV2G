@@ -61,9 +61,6 @@ uint32_t codepoints[ARRAY_SIZE_STRINGS];
 char charsNamespaceURI[ARRAY_SIZE_STRINGS_ASCII];
 char charsLocalName[ARRAY_SIZE_STRINGS_ASCII];
 
-#if EXI_DEBUG == EXI_DEBUG_ON
-static void debugValue(exi_value_t* val);
-#endif /*EXI_DEBUG*/
 
 int main_codec(int argc, char *argv[]) {
 
@@ -87,10 +84,6 @@ int main_codec(int argc, char *argv[]) {
 	/* BINARY memory setup */
 	bytes_t bytes = { ARRAY_SIZE_BYTES, bytesData, 0 };
 
-#if EXI_DEBUG == EXI_DEBUG_ON
-	const char * localName;
-	const char * namespaceURI;
-#endif /*EXI_DEBUG*/
 	int noEndOfDocument = 1; /* true */
 
 	/* STRING memory setup */
@@ -157,24 +150,14 @@ int main_codec(int argc, char *argv[]) {
 	errn = exiInitNameTableRuntime(&runtimeTableEncode);
 	exiInitEncoder(&oStream, &stateEncode, runtimeTableEncode);
 
-#if EXI_DEBUG == EXI_DEBUG_ON
-	printf("[DECODE] >>> EXI  >>> [ENCODE] \n");
-#endif /*EXI_DEBUG*/
-
 	do {
 		if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-			printf("[Encode-ERROR] %d \n", errn);
-#endif /*EXI_DEBUG*/
 			return errn;
 		}
 
 		errn = exiDecodeNextEvent(&iStream, &stateDecode,
 				&event);
 		if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-			printf("[Decode-ERROR] %d \n", errn);
-#endif /*EXI_DEBUG*/
 			return errn;
 		}
 
@@ -184,14 +167,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeStartDocument(&iStream,
 					&stateDecode);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-SD] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			printf(">> START_DOCUMENT \n");
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn = exiEncodeStartDocument(&oStream,
 					&stateEncode);
@@ -201,14 +178,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeEndDocument(&iStream,
 					&stateDecode);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-ED] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			printf(">> END_DOCUMENT \n");
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn = exiEncodeEndDocument(&oStream,
 					&stateEncode);
@@ -220,19 +191,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeStartElement(&iStream,
 					&stateDecode, &eqn);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-SE] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			exiGetLocalName(&(stateDecode.nameTablePrepopulated),
-					&(stateDecode.nameTableRuntime), eqn.namespaceURI,
-					eqn.localPart, &localName);
-			exiGetUri(&(stateDecode.nameTablePrepopulated),
-					&(stateDecode.nameTableRuntime), eqn.namespaceURI,
-					&namespaceURI);
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn = exiEncodeStartElement(&oStream,
 					&stateEncode, &eqn);
@@ -242,15 +202,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeStartElementGeneric(&iStream,
 					&stateDecode, &qn);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-SEgen] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			printf(">> SE_Gen {%s}%s \n", stringNamespaceURI.chars,
-					stringLocalName.chars);
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn = exiEncodeStartElementGeneric(&oStream,
 					&stateEncode, &stringNamespaceURI, &stringLocalName);
@@ -260,14 +213,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeEndElement(&iStream,
 					&stateDecode, &eqn);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-EE] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			printf("<< EE \n");
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn
 					= exiEncodeEndElement(&oStream,
@@ -278,14 +225,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeEndElementUndeclared(&iStream,
 					&stateDecode, &eqn);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-EE-Undecl] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			printf("<< EEundecl \n");
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn
 					= exiEncodeEndElement(&oStream,
@@ -296,14 +237,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeCharacters(&iStream,
 					&stateDecode, &val);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-CH] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			debugValue(&val);
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn = exiEncodeCharacters(&oStream,
 					&stateEncode, &val);
@@ -313,14 +248,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeCharactersGeneric(&iStream,
 					&stateDecode, &val);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-CHgen] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			debugValue(&val);
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn = exiEncodeCharacters(&oStream,
 					&stateEncode, &val);
@@ -330,14 +259,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeCharactersGenericUndeclared(
 					&iStream, &stateDecode, &val);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-CHgenUndecl] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			debugValue(&val);
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn = exiEncodeCharacters(&oStream,
 					&stateEncode, &val);
@@ -347,21 +270,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeAttribute(&iStream, &stateDecode,
 					&eqn, &val);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-AT] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			exiGetLocalName(&(stateDecode.nameTablePrepopulated),
-					&(stateDecode.nameTableRuntime), eqn.namespaceURI,
-					eqn.localPart, &localName);
-			exiGetUri(&(stateDecode.nameTablePrepopulated),
-					&(stateDecode.nameTableRuntime), eqn.namespaceURI,
-					&namespaceURI);
-			printf(" AT {%s}%s \n", namespaceURI, localName);
-			debugValue(&val);
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn = exiEncodeAttribute(&oStream, &stateEncode,
 					&eqn, &val);
@@ -371,14 +281,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeAttributeXsiNil(&iStream,
 					&stateDecode, &val);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-AT-NIL] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			printf(" AT {xsi}nil == %i \n", val.boolean);
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn = exiEncodeAttributeXsiNil(&oStream,
 					&stateEncode, &val);
@@ -388,20 +292,8 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeAttributeXsiType(&iStream,
 					&stateDecode, &val);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-AT-TYPE] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			exiGetLocalName(&(stateDecode.nameTablePrepopulated),
-					&(stateDecode.nameTableRuntime), val.eqname.namespaceURI,
-					val.eqname.localPart, &localName);
-			exiGetUri(&(stateDecode.nameTablePrepopulated),
-					&(stateDecode.nameTableRuntime), val.eqname.namespaceURI,
-					&namespaceURI);
-			printf(" AT {type}type == {%s}%s \n", namespaceURI, localName);
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn = exiEncodeAttributeXsiType(&oStream,
 					&stateEncode, &val);
@@ -411,26 +303,14 @@ int main_codec(int argc, char *argv[]) {
 			errn = exiDecodeAttributeGenericUndeclared(
 					&iStream, &stateDecode, &qn, &val);
 			if (errn < 0) {
-#if EXI_DEBUG == EXI_DEBUG_ON
-				printf("[Decode-ERROR-ATgenUnd] %d \n", errn);
-#endif /*EXI_DEBUG*/
 				return errn;
 			}
-#if EXI_DEBUG == EXI_DEBUG_ON
-			/* exiGetLocalName(&(stateDecode.nameTablePrepopulated), &(stateDecode.nameTableRuntime), eqn.namespaceURI, eqn.localPart, &localName);
-			 exiGetUri(&(stateDecode.nameTablePrepopulated), &(stateDecode.nameTableRuntime), eqn.namespaceURI, &namespaceURI); */
-			printf(" AT {%s}%s \n", qn.namespaceURI.chars, qn.localName.chars);
-			debugValue(&val);
-#endif /*EXI_DEBUG*/
 			/* encode */
 			errn = exiEncodeAttribute(&oStream, &stateEncode,
 					&eqn, &val);
 			break;
 		default:
 			/* ERROR */
-#if EXI_DEBUG == EXI_DEBUG_ON
-			printf("[Unknown-Event] %d \n", event);
-#endif /*EXI_DEBUG*/
 			return EXI_ERROR_UNKOWN_EVENT;
 		}
 
@@ -447,99 +327,4 @@ int main_codec(int argc, char *argv[]) {
 
 	return 0;
 }
-
-static int _setInt32Value(integer_t* iv, int32_t* int32) {
-	int errn = 0;
-	switch (iv->type) {
-	/* Unsigned Integer */
-	case UNSIGNED_INTEGER_8:
-		*int32 = iv->val.uint8;
-		break;
-	case UNSIGNED_INTEGER_16:
-		*int32 = iv->val.uint16;
-		break;
-	case UNSIGNED_INTEGER_32:
-		if (iv->val.uint32 <= 2147483647) {
-			*int32 = iv->val.uint32;
-		} else {
-			errn = EXI_UNSUPPORTED_INTEGER_VALUE;
-		}
-		break;
-	case UNSIGNED_INTEGER_64:
-		errn = EXI_UNSUPPORTED_INTEGER_VALUE;
-		break;
-		/* (Signed) Integer */
-	case INTEGER_8:
-		*int32 = iv->val.int8;
-		break;
-	case INTEGER_16:
-		*int32 = iv->val.int16;
-		break;
-	case INTEGER_32:
-		*int32 = iv->val.int32;
-		break;
-	case INTEGER_64:
-		errn = EXI_UNSUPPORTED_INTEGER_VALUE;
-	}
-	return errn;
-}
-
-#if EXI_DEBUG == EXI_DEBUG_ON
-static void debugValue(exi_value_t* val) {
-	int i;
-	switch (val->type) {
-	case INTEGER:
-		switch (val->integer.type) {
-		/* Unsigned Integer */
-		case UNSIGNED_INTEGER_8:
-			printf(" Value uint8 : %d \n", val->integer.val.uint8);
-			break;
-		case UNSIGNED_INTEGER_16:
-			printf(" Value uint16 : %d \n", val->integer.val.uint16);
-			break;
-		case UNSIGNED_INTEGER_32:
-			printf(" Value uint32 : %d \n", val->integer.val.uint32);
-			break;
-		case UNSIGNED_INTEGER_64:
-			printf(" Value uint64 : %ld \n",
-					(long unsigned int) val->integer.val.uint64);
-			break;
-			/* (Signed) Integer */
-		case INTEGER_8:
-			printf(" Value int8 : %d \n", val->integer.val.int8);
-			break;
-		case INTEGER_16:
-			printf(" Value int16 : %d \n", val->integer.val.int16);
-			break;
-		case INTEGER_32:
-			printf(" Value int32 : %d \n", val->integer.val.int32);
-			break;
-		case INTEGER_64:
-			printf(" Value int64 : %ld \n", (long int) val->integer.val.int64);
-			break;
-		}
-		break;
-	case BINARY_BASE64:
-	case BINARY_HEX:
-		printf(" Value Binary (len == %d) : ", val->binary.len);
-		for (i = 0; i < val->binary.len; i++) {
-			printf(" [%d]", val->binary.data[i]);
-		}
-		printf("\n");
-		break;
-	case BOOLEAN:
-		printf(" Value Boolean : %d \n", val->boolean);
-		break;
-	case STRING:
-		printf(" Value String (len==%d) : '", val->string.len);
-		for (i = 0; i < val->string.len; i++) {
-			printf("%c", (char) val->string.codepoints[i]);
-		}
-		printf("'\n");
-		break;
-	default:
-		printf(" Value ?? \n");
-	}
-}
-#endif /*EXI_DEBUG*/
 
