@@ -47,7 +47,7 @@
 #if EXI_STREAM == BYTE_ARRAY
 /* 64 kilobytes = 65 536 bytes */
 /* 1 megabyte = 1 048 576 bytes*/
-#define BUFFER_SIZE 200
+#define BUFFER_SIZE 1048576
 uint8_t bufferIn[BUFFER_SIZE];
 uint8_t bufferOut[BUFFER_SIZE];
 #endif /* EXI_STREAM == BYTE_ARRAY */
