@@ -3342,6 +3342,24 @@ static int deserializeMessage(struct EXIService* service)
 				returnCode = exiDecodeAttribute(&(service->inStream), &(service->stateDecode), &(service->eqn), &(service->val));
 				returnCode = deserializeElementAttributeCharacter(service);
 				break;
+			case START_ELEMENT_GENERIC:
+				break;
+			case START_ELEMENT_GENERIC_UNDECLARED:
+				break;
+			case END_ELEMENT_UNDECLARED:
+				break;
+			case CHARACTERS_GENERIC:
+				break;
+			case CHARACTERS_GENERIC_UNDECLARED:
+				break;
+			case ATTRIBUTE_GENERIC:
+				break;
+			case ATTRIBUTE_INVALID_VALUE:
+				break;
+			case ATTRIBUTE_ANY_INVALID_VALUE:
+				break;
+			case ATTRIBUTE_GENERIC_UNDECLARED:
+				break;
 			default:
 				/* ERROR */
 				return -1;

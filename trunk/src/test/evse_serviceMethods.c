@@ -455,8 +455,11 @@ int	currentDemand(struct MessageHeaderType* header, struct CurrentDemandReqType*
 	printf("\t\t EVMaximumCurrentLimit=%d\n", param->EVMaximumCurrentLimit.Value);
 	printf("\t\t BulkChargingComplete=%d\n", param->BulkChargingComplete);
 	printf("\t\t ChargingComplete=%d\n", param->ChargingComplete);
-	printf("\t\t RemainingTimeToFullSoC=%d\n", param->RemainingTimeToFullSoC.Value);
-	printf("\t\t RemainingTimeToBulkSoC=%d\n", param->RemainingTimeToBulkSoC.Value);
+
+	if(param->isused.RemainingTimeToFullSoC)
+		printf("\t\t RemainingTimeToFullSoC=%d\n", param->RemainingTimeToFullSoC.Value);
+	if(param->isused.RemainingTimeToBulkSoC)
+		printf("\t\t RemainingTimeToBulkSoC=%d\n", param->RemainingTimeToBulkSoC.Value);
 
 	printf("\t\t EVTargetVoltage=%d\n", param->EVTargetVoltage.Value);
 
