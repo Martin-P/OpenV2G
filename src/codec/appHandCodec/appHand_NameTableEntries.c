@@ -37,53 +37,6 @@
 /* ==================================== */
 /* String Table Population */
 
-#if EXI_DEBUG == EXI_DEBUG_ON
-/* localName entries for URI id = 0 */
-char * localNames0[] = {
-  "AppProtocol",  "Priority",  "ProtocolNamespace",  "ResponseCode",  "SchemaID",
-  "VersionNumberMajor",  "VersionNumberMinor"
-};
-/* localName entries for URI id = 1 */
-char * localNames1[] = {
-  "base",  "id",  "lang",  "space"
-};
-/* localName entries for URI id = 2 */
-char * localNames2[] = {
-  "nil",  "type"
-};
-/* localName entries for URI id = 3 */
-char * localNames3[] = {
-  "ENTITIES",  "ENTITY",  "ID",  "IDREF",  "IDREFS",
-  "NCName",  "NMTOKEN",  "NMTOKENS",  "NOTATION",  "Name",
-  "QName",  "anySimpleType",  "anyType",  "anyURI",  "base64Binary",
-  "boolean",  "byte",  "date",  "dateTime",  "decimal",
-  "double",  "duration",  "float",  "gDay",  "gMonth",
-  "gMonthDay",  "gYear",  "gYearMonth",  "hexBinary",  "int",
-  "integer",  "language",  "long",  "negativeInteger",  "nonNegativeInteger",
-  "nonPositiveInteger",  "normalizedString",  "positiveInteger",  "short",  "string",
-  "time",  "token",  "unsignedByte",  "unsignedInt",  "unsignedLong",
-  "unsignedShort"
-};
-/* localName entries for URI id = 4 */
-char * localNames4[] = {
-  "AppProtocolType",  "idType",  "priorityType",  "protocolNameType",  "protocolNamespaceType",
-  "responseCodeType",  "supportedAppProtocolReq",  "supportedAppProtocolRes"
-};
-char * uris[] = {
-  "",  "http://www.w3.org/XML/1998/namespace",  "http://www.w3.org/2001/XMLSchema-instance",  "http://www.w3.org/2001/XMLSchema",  "urn:iso:15118:2:2010:AppProtocol"
-};
-#endif /*EXI_DEBUG*/
-
-#if EXI_DEBUG == EXI_DEBUG_ON
-static struct exiNamePartition localNamePartitions[5] = {
- { 7, localNames0 },
- { 4, localNames1 },
- { 2, localNames2 },
- { 46, localNames3 },
- { 8, localNames4 }
-};
-#endif /*EXI_DEBUG*/
-
 #if EXI_DEBUG == EXI_DEBUG_OFF
 struct exiNamePartition localNamePartitions[5] = {
  { 7 },
@@ -94,10 +47,6 @@ struct exiNamePartition localNamePartitions[5] = {
 };
 #endif /*EXI_DEBUG*/
 
-
-#if EXI_DEBUG == EXI_DEBUG_ON
-exi_name_table_prepopulated_t exiappHandNameTablePrepopulated = { 5, uris, localNamePartitions };
-#endif /*EXI_DEBUG*/
 #if EXI_DEBUG == EXI_DEBUG_OFF
 exi_name_table_prepopulated_t exiappHandNameTablePrepopulated = { 5, localNamePartitions };
 #endif /*EXI_DEBUG*/
