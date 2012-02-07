@@ -109,32 +109,6 @@ static int _decodeListValues(bitstream_t* stream, exi_datatype_t dt, uint16_t le
 
 	return 0;
 }
-static int _decodeListIntegerValues(bitstream_t* stream, exi_integer_type_t dt, uint16_t len) {
-	unsigned int i;
-
-	integer_t iv;
-
-	for(i = 0; i<len; i++) {
-		switch(dt) {
-		case UNSIGNED_INTEGER_8:
-		case UNSIGNED_INTEGER_16:
-		case UNSIGNED_INTEGER_32:
-		case UNSIGNED_INTEGER_64:
-			errn = decodeUnsignedInteger(stream, &iv);
-			break;
-		case INTEGER_8:
-		case INTEGER_16:
-		case INTEGER_32:
-		case INTEGER_64:
-			errn = decodeInteger(stream, &iv);
-			break;
-		default:
-			return EXI_UNSUPPORTED_LIST_VALUE_TYPE;
-		}
-	}
-
-	return 0;
-}
 
 
 int exiInitDecoder(bitstream_t* stream, exi_state_t* state, exi_name_table_runtime_t runtimeTable) {
