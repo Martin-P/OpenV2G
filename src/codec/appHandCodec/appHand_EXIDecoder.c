@@ -45,7 +45,6 @@
 
 
 /* local variables */
-static uint32_t xsi;
 static uint32_t bits;
 static int errn;
 
