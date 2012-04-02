@@ -1411,7 +1411,7 @@ static int dc_charging()
 
 
 
-int main()
+int main_service()
 {
 	printf("+++ Start application handshake protocol example +++\n\n");
 
@@ -1426,7 +1426,7 @@ int main()
 
 	 ac_charging();
 
-	printf("\n+++Terminate V2G Client / Service example for AC charging +++\n");
+	printf("\n+++ Terminate V2G Client / Service example for AC charging +++\n");
 	printf("Please press enter for DC charging!\n");
 	fflush(stdout);
 	getchar();
@@ -1435,7 +1435,7 @@ int main()
 
 	dc_charging();
 
-	printf("\n+++Terminate V2G client / service example for DC charging +++");
+	printf("\n+++ Terminate V2G client / service example for DC charging +++");
 
 	return 0;
 }

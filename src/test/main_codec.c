@@ -66,7 +66,7 @@ static void debugValue(exi_value_t* val);
 #endif /*EXI_DEBUG*/
 
 
-int xmain(int argc, char *argv[]) {
+int main_codec(int argc, char *argv[]) {
 
 	int errn = 0;
 
