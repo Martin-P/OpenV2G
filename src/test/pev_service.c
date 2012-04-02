@@ -533,7 +533,7 @@ static int ac_charging()
 		/* show result of the answer message of EVSE sessionSetup*/
 		printf("EV side: received response message from EVSE\n");
 		/* show result of the answer message of EVSE powerDiscovery*/
-		printf("\tResponseCode=%d\n",resultSessionStop.ResponseCode);
+		printf("\tResponseCode=%d\n",resultChargingStatus.ResponseCode);
 		printACEVSEStatus(&evseStatus);
 		printf("\tReceiptRequired=%d\n",resultChargingStatus.ReceiptRequired);
 		printf("\tSAScheduleTupleID=%d\n",resultChargingStatus.SAScheduleTupleID);

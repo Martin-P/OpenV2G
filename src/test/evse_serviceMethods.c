@@ -595,43 +595,6 @@ int	certificateInstallation(struct MessageHeaderType* header, struct Certificate
 {
 
 	printf("EVSE: certificateInstallation called\n"  );
-	printf("\tReceived data:\n");
-	printf("\t\t\t OEMProvisioningCert=%d\n", param->OEMProvisioningCert.data[0]);
-	printf("\t\t\t RootCertificateID[0]=%d\n", param->ListOfRootCertificateIDs.RootCertificateID[0].data[0]);
-	printf("\t\t\t DHParams[0]=%d\n", param->DHParams.data[0]);
-
-
-
-
-/*	result->ContractEncryptionEncryptedPrivateKey.data[0]=200;
-	result->ContractEncryptionEncryptedPrivateKey.arraylen.data=1;
-*/
-
-	result->ContractID.data[0]=50;
-	result->ContractID.arraylen.data=1;
-
-	result->ContractSignatureEncryptedPrivateKey.data[0]=12;
-	result->ContractSignatureEncryptedPrivateKey.arraylen.data=1;
-
-
-
-	result->ContractSignatureCertChain.Certificate.data[0]=40;
-	result->ContractSignatureCertChain.Certificate.arraylen.data=1;
-
-	result->ContractSignatureCertChain.SubCertificates.arraylen.Certificate=2;
-	result->ContractSignatureCertChain.SubCertificates.Certificate[0].data[0]=20;
-	result->ContractSignatureCertChain.SubCertificates.Certificate[0].arraylen.data=1;
-	result->ContractSignatureCertChain.SubCertificates.Certificate[1].data[0]=40;
-	result->ContractSignatureCertChain.SubCertificates.Certificate[1].arraylen.data=1;
-	result->ContractSignatureCertChain.isused.SubCertificates=1;
-
-	result->DHParams.data[0]=99;
-	result->DHParams.arraylen.data=1;
-
-	result->attr_Id.data[0]=33;
-	result->attr_Id.arraylen.data=1;
-
-	result->ResponseCode = OK_responseCodeType;
 
 	return 0;
 }
