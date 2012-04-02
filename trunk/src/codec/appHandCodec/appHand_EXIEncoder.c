@@ -45,7 +45,6 @@
 
 
 /* local variables */
-static uint32_t bits;
 static int errn;
 
 /* ==================================== */
@@ -105,106 +104,6 @@ int exiappHandEncodeListValue(bitstream_t* stream, exi_value_t* val, list_t lt) 
 
 
 
-/* <0 ... Error, 1 .. Not-Found, 0.. Success */
-static int _exiGet1stLevelEventCode(exi_state_t* state, exi_event_t eventType, uint16_t* resGrammarID) {
-	/* retrieve current grammar-rule ID */
-	uint16_t grammarID = state->grammarStack[ state->stackIndex ];
-
-	switch(grammarID) {
-	case DOCUMENT:
-		switch(eventType) {
-		case EXI_EVENT_START_DOCUMENT:
-			*resGrammarID = 0;
-			return 0;
-		default:
-			return 1; /* not found */
-		}
-		break;
-	case DOC_CONTENT:
-		switch(eventType) {
-		/* TODO other IDs */
-		case EXI_EVENT_START_ELEMENT_GENERIC:
-			*resGrammarID = 0;
-			return 0;
-		default:
-			return 1; /* not found */
-		}
-		break;
-	case DOC_END:
-		switch(eventType) {
-		case EXI_EVENT_END_DOCUMENT:
-			*resGrammarID = 0;
-			return 0;
-		default:
-			return 1; /* not found */
-		}
-		break;
-	case UR_TYPE_GRAMMAR_0:
-		switch(eventType) {
-		case EXI_EVENT_ATTRIBUTE_GENERIC:
-			*resGrammarID = 0;
-			return 0;
-		case EXI_EVENT_START_ELEMENT_GENERIC:
-			*resGrammarID = 1;
-			return 0;
-		case EXI_EVENT_END_ELEMENT:
-			*resGrammarID = 2;
-			return 0;
-		case EXI_EVENT_CHARACTERS_GENERIC:
-			*resGrammarID = 3;
-			return 0;
-		default:
-			return 1; /* not found */
-		}
-		break;
-	case UR_TYPE_GRAMMAR_1:
-		switch(eventType) {
-		case EXI_EVENT_START_ELEMENT_GENERIC:
-			*resGrammarID = 0;
-			return 0;
-		case EXI_EVENT_END_ELEMENT:
-			*resGrammarID = 1;
-			return 0;
-		case EXI_EVENT_CHARACTERS_GENERIC:
-			*resGrammarID = 2;
-			return 0;
-		default:
-			return 1; /* not found */
-		}
-		break;
-	}
-
-	return 1; /* not found */
-}
-
-
-static int _exiGetEventCodeLength(exi_state_t* state, uint16_t* eventCodeLength) {
-	/* retrieve current grammar-rule ID */
-	uint16_t grammarID = state->grammarStack[ state->stackIndex ];
-
-	switch(grammarID) {
-	/* TODO OTHER IDs */
-	case DOCUMENT:
-		*eventCodeLength = 0;
-		return 0;
-	case DOC_CONTENT:
-		/* TODO other root elements */
-		*eventCodeLength = IS_STRICT ? 0 : 1;
-		return 0;
-	case DOC_END:
-		*eventCodeLength = IS_STRICT ? 0 : 1;
-		return 0;
-	case UR_TYPE_GRAMMAR_0:
-		*eventCodeLength = IS_STRICT ? 4 : 5;
-		return 0;
-	case UR_TYPE_GRAMMAR_1:
-		*eventCodeLength = IS_STRICT ? 3 : 4;
-		return 0;
-	}
-
-	return EXI_ERROR_UNEXPECTED_GRAMMAR_ID;
-}
-
 static int _encodeNBitIntegerValue(bitstream_t* stream, integer_t* iv, uint16_t nbits, int32_t lowerBound) {
 	int errn;
 	uint32_t val;
@@ -235,6 +134,8 @@ static int _encodeNBitIntegerValue(bitstream_t* stream, integer_t* iv, uint16_t 
 	case EXI_INTEGER_64:
 		val = iv->val.uint64 - lowerBound;
 		break;
+	default:
+		return -1;
 	}
 
 	errn = encodeNBitUnsignedInteger(stream, nbits, val);
@@ -304,53 +205,6 @@ static int _exiEncodeNamespaceUriID(bitstream_t* stream, exi_name_table_prepopul
 }
 
 
-#if EXI_DEBUG == EXI_DEBUG_ON
-static int _exiEncodeNamespaceUri(bitstream_t* stream, exi_name_table_prepopulated_t* nameTable, exi_name_table_runtime_t* runtimeTable,
-		char** uri, uint16_t* uriID) {
-	int errn;
-	uint16_t uriCodingLength;
-	uint16_t uriSize;
-
-	errn = exiGetUriSize(nameTable, runtimeTable, &uriSize);
-	if (errn) {
-		return errn;
-	}
-	/* URI Entries + 1 */
-	errn = exiGetCodingLength(uriSize + 1, &uriCodingLength);
-	if (errn) {
-		return errn;
-	}
-
-	errn = exiGetUriID(nameTable, runtimeTable, *uri, uriID);
-	if (errn < 0) {
-		return errn;
-	} else if (errn == 1) {
-		/* uri string value was not found */
-		/* ==> zero (0) as an n-nit unsigned integer */
-		/* followed by uri encoded as string */
-		errn = encodeNBitUnsignedInteger(stream, uriCodingLength, 0);
-		if (errn) {
-			return errn;
-		}
-		/* ASCII String */
-		errn = encodeASCII(stream, *uri);
-		if (errn) {
-			return errn;
-		}
-		/* after encoding string value is added to table */
-		/* in UCD Profile NOT */
-		*uriID = uriSize;
-	} else {
-		/* uri string value found */
-		/* ==> value(i+1) is encoded as n-bit unsigned integer */
-		errn = encodeNBitUnsignedInteger(stream, uriCodingLength, *uriID + 1);
-	}
-
-	return errn;
-}
-#endif /*EXI_DEBUG*/
-
-
 static int _exiEncodeLocalNameID(bitstream_t* stream, exi_name_table_prepopulated_t* nameTable, exi_name_table_runtime_t* runtimeTable,
 		uint16_t uriID, uint16_t localNameID) {
 	int errn;
@@ -380,77 +234,6 @@ static int _exiEncodeLocalNameID(bitstream_t* stream, exi_name_table_prepopulate
 }
 
 
-#if EXI_DEBUG == EXI_DEBUG_ON
-static int _exiEncodeLocalName(bitstream_t* stream, exi_name_table_prepopulated_t* nameTable, exi_name_table_runtime_t* runtimeTable,
-		char** localName,
-		uint16_t uriID) {
-	int errn;
-	uint16_t localNameID;
-	uint16_t localNameSize;
-	uint16_t localNameCodingLength;
-	uint32_t slen;
-
-	/* look for localNameID */
-	errn = exiGetLocalNameID(nameTable, runtimeTable, uriID, *localName, &localNameID);
-	if (errn < 0) {
-		return errn;
-	}
-
-	if (errn == 1) {
-		/* string value was not found in local partition */
-		/* ==> string literal is encoded as a String */
-		/* with the length of the string incremented by one */
-		slen = (uint32_t)strlen(*localName);
-		errn = encodeUnsignedInteger32(stream, slen + 1 );
-		if (errn >= 0) {
-			errn = encodeASCIICharacters(stream, *localName, slen);
-		}
-	} else {
-		/* string value found in local partition */
-		/* ==> string value is represented as zero (0) encoded as an */
-		errn = encodeUnsignedInteger32(stream, 0 );
-		if (errn < 0) {
-			return errn;
-		}
-		/* Unsigned Integer followed by an the compact identifier of the */
-		/* string value as an n-bit unsigned integer n is log2 m and m is */
-		/* the number of entries in the string table partition */
-		errn = exiGetLocalNameSize(nameTable, runtimeTable, uriID, &localNameSize);
-		if (errn < 0) {
-			return errn;
-		}
-		errn = exiGetCodingLength(localNameSize, &localNameCodingLength);
-		if (errn) {
-			return errn;
-		}
-		errn = encodeNBitUnsignedInteger(stream, localNameCodingLength, localNameID);
-	}
-
-	return errn;
-}
-#endif /*EXI_DEBUG*/
-
-
-#if EXI_DEBUG == EXI_DEBUG_ON
-static int _exiEncodeQName(bitstream_t* stream, exi_name_table_prepopulated_t* nameTable,  exi_name_table_runtime_t* runtimeTable,
-		char** uri, char** localName) {
-	uint16_t uriID;
-	/* uri */
-	int errn =_exiEncodeNamespaceUri(stream, nameTable, runtimeTable, uri, &uriID);
-	if (errn) {
-		return errn;
-	}
-	/* localName */
-	errn = _exiEncodeLocalName(stream, nameTable, runtimeTable, localName, uriID);
-	if (errn) {
-		return errn;
-	}
-
-	return 0 ;
-}
-#endif /*EXI_DEBUG*/
-
-
 static int _exiEncodeStartElement(bitstream_t* stream, uint16_t nbits,
 		uint32_t val, exi_state_t* state, eqname_t* se, uint16_t stackId,
 		uint16_t newState) {
@@ -464,36 +247,6 @@ static int _exiEncodeStartElement(bitstream_t* stream, uint16_t nbits,
 	/* push element on stack */
 	return exiPushStack(state, newState, se);
 }
-
-#if EXI_DEBUG == EXI_DEBUG_ON
-
-static eqname_t eqnGeneric = {65535, 65535}; /* UNSIGNED_INT16_MAX */
-
-static int _exiEncodeStartElementGeneric(bitstream_t* stream, uint16_t nbits,
-		uint32_t val, exi_state_t* state, char** uri, char** localName, uint16_t stackId,
-		uint16_t newState) {
-	uint16_t uriID;
-	/* event-code */
-	int errn = encodeNBitUnsignedInteger(stream, nbits, val);
-	if (errn) {
-		return errn;
-	}
-	/* qualified name */
-	errn = _exiEncodeNamespaceUri(stream, &(state->nameTablePrepopulated), &(state->nameTableRuntime), uri, &uriID);
-	if (errn) {
-		return errn;
-	}
-	errn = _exiEncodeLocalName(stream, &(state->nameTablePrepopulated), &(state->nameTableRuntime), localName, uriID);
-	if (errn) {
-		return errn;
-	}
-
-	/* move on */
-	state->grammarStack[state->stackIndex] = stackId;
-	/* push element on stack */
-	return exiPushStack(state, newState, &eqnGeneric);
-}
-#endif /*EXI_DEBUG*/
 
 int exiappHandEncodeStartElement(bitstream_t* stream, exi_state_t* state, eqname_t* se) {
 	switch (state->grammarStack[state->stackIndex]) {
@@ -758,120 +511,11 @@ int exiappHandEncodeStartElement(bitstream_t* stream, exi_state_t* state, eqname
 	return EXI_ERROR_UNEXPECTED_START_ELEMENT;
 }
 
-/* Qualified Name unknown!! */
-#if EXI_DEBUG == EXI_DEBUG_ON
-static int exiEncodeStartElementGenericUnknown(bitstream_t* stream, exi_state_t* state,
-		char** uri, char** localName) {
-	uint16_t grammarID;
-	uint16_t eventCodeLength;
-
-	int errn = _exiGet1stLevelEventCode(state, EXI_EVENT_START_ELEMENT_GENERIC, &grammarID);
-	if (errn < 0) {
-		return errn;
-	} else if (errn == 1) {
-		/* not found --> try undeclared SE */
-		errn = _exiGet1stLevelEventCode(state, EXI_EVENT_START_ELEMENT_GENERIC_UNDECLARED, &grammarID);
-		if (errn < 0) {
-			return errn;
-		} else if (errn == 1) {
-			/* Should never happen except in STRICT mode */
-			return EXI_ERROR_UNEXPECTED_EVENT_LEVEL1;
-		} else {
-			/* found START_ELEMENT_GENERIC_UNDECLARED */
-			errn = _exiGetEventCodeLength(state, &eventCodeLength);
-			if (errn < 0) {
-				return errn;
-			} else {
-				/* encode event code*/
-				errn = encodeNBitUnsignedInteger(stream, eventCodeLength, grammarID);
-				if (errn) {
-					return errn;
-				}
-			}
-		}
-	} else {
-		/* found START_ELEMENT_GENERIC */
-		errn = _exiGetEventCodeLength(state, &eventCodeLength);
-		if (errn < 0) {
-			return errn;
-		} else {
-			/* encode event code*/
-			errn = encodeNBitUnsignedInteger(stream, eventCodeLength, grammarID);
-			if (errn) {
-				return errn;
-			}
-		}
-	}
-
-	/* encode qualified name */
-	errn = _exiEncodeQName(stream, &(state->nameTablePrepopulated), &(state->nameTableRuntime), uri, localName);
-	if (errn) {
-		return errn;
-	}
-
-	/* learn event, not in UCD Profile */
-
-	/* move on */
-	/* push element on stack */
-
-	switch (state->grammarStack[state->stackIndex]) {
-	/* $EXI_ENCODE_START_ELEMENT_GENERIC$ */
-	case DOC_CONTENT:
-		/* move on to DocEnd */
-		state->grammarStack[state->stackIndex] = DOC_END;
-		/* push new ur-type grammar on stack */
-		return exiPushStack(state, UR_TYPE_GRAMMAR_0, NULL);
-		break;
-	case UR_TYPE_GRAMMAR_0:
-		/* move on to UR_TYPE_GRAMMAR_1 */
-		state->grammarStack[state->stackIndex] = UR_TYPE_GRAMMAR_1;
-		/* push new ur-type grammar on stack */
-		return exiPushStack(state, UR_TYPE_GRAMMAR_0, NULL);
-		break;
-	case UR_TYPE_GRAMMAR_1:
-		/* remain in UR_TYPE_GRAMMAR_1 */
-		/* push new ur-type grammar on stack */
-		return exiPushStack(state, UR_TYPE_GRAMMAR_0, NULL);
-		break;
-	default:
-		return EXI_ERROR_UNEXPECTED_START_ELEMENT_GENERIC;
-	}
-
-
-
-	return 0;
-}
-#endif /*EXI_DEBUG*/
-
 
 /* Look first for qualified name */
 int exiappHandEncodeStartElementGeneric(bitstream_t* stream, exi_state_t* state,
 		string_ascii_t* namespaceURI , string_ascii_t* localName) {
 	int errn = -1;
-
-#if EXI_DEBUG == EXI_DEBUG_ON
-	eqname_t se;
-	/* uri */
-	errn = exiGetUriID(&(state->nameTablePrepopulated), &(state->nameTableRuntime), namespaceURI->chars, &se.namespaceURI);
-	if (errn == -1) {
-		return errn;
-	} else if (errn == 1) {
-		/* No URI (and localNameID) found  */
-		exiEncodeStartElementGenericUnknown(stream, state, &(namespaceURI->chars), &(localName->chars));
-	} else {
-		/* localName */
-		errn = exiGetLocalNameID(&(state->nameTablePrepopulated), &(state->nameTableRuntime), se.namespaceURI, localName->chars, &se.localPart);
-		if (errn == -1) {
-			return errn;
-		} else if (errn == 1) {
-			/* No localName found, use generic StartElement(*) method */
-			exiEncodeStartElementGenericUnknown(stream, state, &(namespaceURI->chars), &(localName->chars));
-		} else {
-			/* Uri&LocalName found, use "efficient" StartElement method */
-			return exiappHandEncodeStartElement(stream, state, &se);
-		}
-	}
-#endif /*EXI_DEBUG*/
 
 	return errn;
 }
@@ -1904,63 +1548,6 @@ int exiappHandEncodeAttribute(bitstream_t* stream, exi_state_t* state, eqname_t*
 
 	/* return EXI_ERROR_UNEXPECTED_ATTRIBUTE; */
 }
-
-#if EXI_DEBUG == EXI_DEBUG_ON
-static int exiEncodeAttribute2(bitstream_t* stream, exi_state_t* state, qname_t* at,
-		exi_value_t* val) {
-	int errn;
-	eqname_t eat;
-
-	/* attribute generic undeclared */
-	uint16_t codeLength1, codeLength2;
-	uint32_t ec1, ec2;
-
-	errn = exiGetUriID(&state->nameTablePrepopulated,  &state->nameTableRuntime, at->namespaceURI.chars, &eat.namespaceURI);
-	if (errn < 0) {
-		return errn;
-	} else if (errn > 0) {
-		/* uri not found*/
-	} else {
-		/* uri found, try to find localname id */
-		errn = exiGetLocalNameID(&state->nameTablePrepopulated,  &state->nameTableRuntime, eat.namespaceURI,
-				at->localName.chars, &eat.localPart);
-		if (errn < 0) {
-			return errn;
-		} else if (errn > 0) {
-			/* local-name not found*/
-		} else {
-			/* found uri and local-name */
-			errn = exiappHandEncodeAttribute(stream, state, &eat, val);
-			if (errn < 0) {
-				return errn;
-			}
-			if (errn == 0) {
-				return errn;
-			}
-
-		}
-	}
-
-
-	/* event codes */
-	encodeNBitUnsignedInteger(stream, codeLength1, ec1);
-	encodeNBitUnsignedInteger(stream, codeLength2, ec2);
-
-	/* qname */
-	/*
-	errn = _exiEncodeQName(stream, state->nameTablePrepopulated,  state->nameTableRuntime,
-			char** uri, char** localName);
-	QName qname = qnameDatatype.encodeQName(uri, localName, null, channel);
-	*/
-	/* content as string */
-	/*
-	typeEncoder.isValid(BuiltIn.DEFAULT_DATATYPE, value);
-	typeEncoder.writeValue(qname, channel);
-	*/
-	return -1;
-
-}
-#endif /*EXI_DEBUG*/
 
 int exiappHandEncodeAttributeXsiNil(bitstream_t* stream, exi_state_t* state,
 		exi_value_t* val) {
