@@ -59,23 +59,27 @@
 #if EXI_STREAM == BYTE_ARRAY
 /* 64 kilobytes = 65 536 bytes */
 /* 1 megabyte = 1 048 576 bytes*/
-#define BUFFER_SIZE 1048576
+#define BUFFER_SIZE 256
 uint8_t bufferIn[BUFFER_SIZE];
 uint8_t bufferOut[BUFFER_SIZE];
 #endif /* EXI_STREAM == BYTE_ARRAY */
 
 /* avoids warning: initializer element is not computable at load time */
-#define ARRAY_SIZE_BYTES 300
+#define ARRAY_SIZE_BYTES 100
 uint8_t bytesData[ARRAY_SIZE_BYTES];
-#define ARRAY_SIZE_STRINGS 30000
+#define ARRAY_SIZE_STRINGS 100
 uint32_t codepoints[ARRAY_SIZE_STRINGS];
-#define ARRAY_SIZE_STRINGS_ASCII 150
+#define ARRAY_SIZE_STRINGS_ASCII 100
 char charsNamespaceURI[ARRAY_SIZE_STRINGS_ASCII];
 char charsLocalName[ARRAY_SIZE_STRINGS_ASCII];
 
 /* String table memory setup */
 uint16_t numberOfLocalStringsDecode[EXI_MAX_NUMBER_OF_QNAMES];
 uint16_t numberOfLocalStringsEncode[EXI_MAX_NUMBER_OF_QNAMES];
+
+#ifndef NULL
+#define NULL   ((void *) 0)
+#endif
 
 #if EXI_DEBUG == 1
 # define DEBUG_PRINTF(x) printf x

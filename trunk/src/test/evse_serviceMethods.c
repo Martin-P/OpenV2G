@@ -26,6 +26,7 @@
 #include "v2g_serviceMethods.h"
 #include "v2g_dataTypes.h"
 #include <stdio.h>
+#include <string.h>
 
 static void printBinaryArray(uint8_t* byte, uint32_t len);
 
@@ -337,7 +338,7 @@ int	chargeParameterDiscovery(struct MessageHeaderType* header, struct ChargePara
 int	powerDelivery(struct MessageHeaderType* header, struct PowerDeliveryReqType* param, struct PowerDeliveryResType* result)
 {
 
-	size_t i;
+	int i;
 
 	printf("EVSE side: powerDelivery called\n"  );
 	printf("\tReceived data:\n");
