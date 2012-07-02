@@ -17,28 +17,17 @@
 
 /*******************************************************************
  *
- * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch.EXT@siemens.com
- * @version 0.7
+ * @@version 0.7
  * @contact Joerg.Heuer@siemens.com
- *
- * <p>Switch for sample programs: EXI codec only or for entire V2G service</p>
  *
  ********************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef V2G_SERVER_H_
+#define V2G_SERVER_H_
 
-#include "main.h"
+#include "EXITypes.h"
 
-int main(int argc, char *argv[]) {
-#if CODE_VERSION == CODE_VERSION_EXI
-	/* EXI codec only */
-	return main_codec(argc, argv);
-#elif CODE_VERSION == CODE_VERSION_SERVICE
-	/* V2G client / service example scenario */
-	return main_service(argc, argv);
-#endif
+int testV2GService(uint8_t* inStream, uint16_t inStreamLength, uint8_t* outStream,uint32_t* outStreamLength);
 
-}
-
+#endif /* V2G_SERVER_H_ */
