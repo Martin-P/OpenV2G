@@ -8,13 +8,13 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include subdir.mk
 -include src/transport/subdir.mk
 -include src/test/subdir.mk
 -include src/service/subdir.mk
 -include src/codec/appHandCodec/subdir.mk
 -include src/codec/subdir.mk
 -include src/appHandshake/subdir.mk
+-include subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -34,7 +34,7 @@ all: OpenV2G.exe
 OpenV2G.exe: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MinGW C Linker'
-	gcc  -o"OpenV2G.exe" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc  -o "OpenV2G.exe" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
