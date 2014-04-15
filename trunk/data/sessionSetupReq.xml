@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<v2gci_d:V2G_Message xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+ xmlns:v2gci_t="urn:iso:15118:2:2013:MsgDataTypes"
+ xmlns:v2gci_d="urn:iso:15118:2:2013:MsgDef"
+ xmlns:v2gci_h="urn:iso:15118:2:2013:MsgHeader"
+ xmlns:v2gci_b="urn:iso:15118:2:2013:MsgBody"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <v2gci_d:Header>
+        <v2gci_h:SessionID>00</v2gci_h:SessionID>
+    </v2gci_d:Header>
+    <v2gci_d:Body>
+        <v2gci_b:SessionSetupReq>
+            <v2gci_b:EVCCID>01</v2gci_b:EVCCID>
+        </v2gci_b:SessionSetupReq>
+    </v2gci_d:Body>
+</v2gci_d:V2G_Message>
