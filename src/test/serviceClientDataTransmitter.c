@@ -17,8 +17,8 @@
 
 /*******************************************************************
  *
- * @author Sebastian.Kaebisch@siemens.com
- * @version 0.8
+ * @author Sebastian.Kaebisch.EXT@siemens.com
+ * @@version 0.7
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -29,15 +29,16 @@
 
 
 
-
 /*
  * Send EXI stream (outStream) to EVSE and receive a response stream (inStream)*/
-int serviceDataTransmitter(uint8_t* outStream, uint16_t outStreamLength, uint8_t* inStream)
+int serviceDataTransmitter(uint8_t* outStream, uint32_t outStreamLength, uint8_t* inStream)
 {
 	/* send output stream to the underlying network to the EVSE and wait for response
 	 * --> here provide data to the V2G server directly*/
-	uint16_t inStreamLength = 0;
-	uint16_t payloadLength = 0;
+
+	uint32_t inStreamLength = 0;
+	uint32_t payloadLength = 0;
+
 
 	/* setup v2gtp header information; outStreamLength==payloadLength*/
 	write_v2gtpHeader(outStream,&outStreamLength,V2GTP_EXI_TYPE);
@@ -46,8 +47,6 @@ int serviceDataTransmitter(uint8_t* outStream, uint16_t outStreamLength, uint8_t
 	testV2GService(outStream, outStreamLength, inStream, &inStreamLength);
 
 	read_v2gtpHeader(inStream,inStreamLength, &payloadLength);
-
-
 
 
 	return 0;

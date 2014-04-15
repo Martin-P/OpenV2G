@@ -17,8 +17,8 @@
 
 /*******************************************************************
  *
- * @author Sebastian.Kaebisch@siemens.com
- * @version 0.8
+ * @author Sebastian.Kaebisch.EXT@siemens.com
+ * @version 0.7
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -26,11 +26,14 @@
 #include "v2g_serviceMethods.h"
 #include "v2g_dataTypes.h"
 #include <stdio.h>
+#include <string.h>
 
 static void printBinaryArray(uint8_t* byte, uint32_t len);
 
 int	sessionSetup(struct MessageHeaderType* header, struct SessionSetupReqType* param, struct SessionSetupResType* result)
 {
+
+
 
 	printf("EVSE side: sessionSetup called\n"  );
 	printf("\tReceived data:\n");
@@ -38,24 +41,23 @@ int	sessionSetup(struct MessageHeaderType* header, struct SessionSetupReqType* p
 	printBinaryArray(header->SessionID.data,header->SessionID.arraylen.data );
 	printf("\t\t EVCCID=%d\n",param->EVCCID.data[0]);
 
-
 	/* generate an unique sessionID */
-	header->SessionID.data[0] = 1;
-	header->SessionID.data[1] = 2;
-	header->SessionID.data[2] = 3;
-	header->SessionID.data[3] = 4;
-	header->SessionID.data[4] = 5;
-	header->SessionID.data[5] = 6;
-	header->SessionID.data[6] = 7;
-	header->SessionID.data[7] = 8;
+	header->SessionID.data[0] = 12;
+	header->SessionID.data[1] = 3;
+	header->SessionID.data[2] = 12;
+	header->SessionID.data[3] = 42;
+	header->SessionID.data[4] = 12;
+	header->SessionID.data[5] = 1;
+	header->SessionID.data[6] = 2;
+	header->SessionID.data[7] = 10;
 	header->SessionID.arraylen.data=8;
 
 	/* Prepare data for EV */
 	result->ResponseCode = OK_responseCodeType;
-	result->EVSEID.data[1]=20;
-	result->EVSEID.arraylen.data=2;
-	result->EVSETimeStamp=123456789;
-	result->isused.EVSETimeStamp=1;
+	result->EVSEID.data[0]=1;
+	result->EVSEID.arraylen.data=1;
+	result->DateTimeNow=123456789;
+	result->isused.DateTimeNow=1;
 
 
 	return 0;
@@ -71,78 +73,59 @@ int	serviceDiscovery(struct MessageHeaderType* header, struct ServiceDiscoveryRe
 
 	printf("\t\t ServiceCategory=%d\n", param->ServiceCategory);
 
-
+	/* generate an unique sessionID */
+	header->SessionID.data[0] = 1;
+	header->SessionID.data[1] = 2;
+	header->SessionID.data[2] = 3;
+	header->SessionID.data[3] = 4;
+	header->SessionID.data[4] = 5;
+	header->SessionID.data[5] = 6;
+	header->SessionID.data[6] = 7;
+	header->SessionID.data[7] = 8;
+	header->SessionID.arraylen.data=8;
 
 	result->isused.ServiceList=0; /* we do not provide VAS */
 	result->ResponseCode= OK_responseCodeType;
 
 
-	/* result->ChargeService.SupportedEnergyTransferMode = AC_single_phase_core_EnergyTransferModeType; */
-	result->ChargeService.ServiceID=1; /* ID of the charge service */
-	result->ChargeService.ServiceName.data[0]='A';
-	result->ChargeService.ServiceName.data[1]='C';
-	result->ChargeService.ServiceName.data[2]='_';
-	result->ChargeService.ServiceName.data[3]='D';
-	result->ChargeService.ServiceName.data[4]='C';
-	result->ChargeService.ServiceName.arraylen.data=5;
-	result->ChargeService.isused.ServiceName=1;
-	result->ChargeService.isused.ServiceScope=1;
+	result->ChargeService.EnergyTransferType = AC_single_DC_core_EVSESupportedEnergyTransferType;
+	result->ChargeService.ServiceTag.ServiceID=1; /* ID of the charge service */
+	result->ChargeService.ServiceTag.ServiceName.data[0]='A';
+	result->ChargeService.ServiceTag.ServiceName.data[1]='C';
+	result->ChargeService.ServiceTag.ServiceName.data[2]='_';
+	result->ChargeService.ServiceTag.ServiceName.data[3]='D';
+	result->ChargeService.ServiceTag.ServiceName.data[4]='C';
+	result->ChargeService.ServiceTag.ServiceName.arraylen.data=5;
+	result->ChargeService.ServiceTag.isused.ServiceName=1;
+	result->ChargeService.ServiceTag.isused.ServiceScope=0;
 
 	result->ChargeService.FreeService = 1;
-	result->ChargeService.ServiceCategory = EVCharging_serviceCategoryType;
-	result->ChargeService.ServiceScope.data[0] = 100;
-	result->ChargeService.ServiceScope.arraylen.data = 1;
-
-	result->ChargeService.SupportedEnergyTransferMode.EnergyTransferMode[0] = DC_combo_core_EnergyTransferModeType;
-	result->ChargeService.SupportedEnergyTransferMode.EnergyTransferMode[1] = AC_single_phase_core_EnergyTransferModeType;
-	result->ChargeService.SupportedEnergyTransferMode.arraylen.EnergyTransferMode=2;
-
-	result->PaymentOptionList.PaymentOption[0] = ExternalPayment_paymentOptionType; /* EVSE handles the payment */
-	result->PaymentOptionList.PaymentOption[1] = Contract_paymentOptionType;
-	result->PaymentOptionList.arraylen.PaymentOption=2;
+	result->PaymentOptions.PaymentOption[0] = ExternalPayment_paymentOptionType; /* EVSE handles the payment */
+	result->PaymentOptions.arraylen.PaymentOption=1;
 
 	if(param->ServiceCategory==Internet_serviceCategoryType || param->ServiceCategory==OtherCustom_serviceCategoryType || param->isused.ServiceCategory==0)
 	{
+	result->ServiceList.Service[0].FreeService=1;
+	result->ServiceList.Service[0].ServiceTag.ServiceID=22; /* ID of the charge service */
+	result->ServiceList.Service[0].ServiceTag.ServiceName.data[0]='W';
+	result->ServiceList.Service[0].ServiceTag.ServiceName.data[1]='W';
+	result->ServiceList.Service[0].ServiceTag.ServiceName.data[2]='W';
+	result->ServiceList.Service[0].ServiceTag.ServiceName.arraylen.data=3;
+	result->ServiceList.Service[0].ServiceTag.ServiceCategory=Internet_serviceCategoryType;
+	result->ServiceList.Service[0].ServiceTag.isused.ServiceName=1;
+	result->ServiceList.Service[0].ServiceTag.isused.ServiceScope=0;
 
-		result->ServiceList.Service[0].FreeService=1;
-		result->ServiceList.Service[0].ServiceID=22; /* ID of the charge service */
-		result->ServiceList.Service[0].ServiceName.data[0]='W';
-		result->ServiceList.Service[0].ServiceName.data[1]='W';
-		result->ServiceList.Service[0].ServiceName.data[2]='W';
-		result->ServiceList.Service[0].ServiceName.arraylen.data=3;
-		result->ServiceList.Service[0].ServiceCategory=Internet_serviceCategoryType;
-		result->ServiceList.Service[0].isused.ServiceName=1;
-		result->ServiceList.Service[0].isused.ServiceScope=0;
-
-		result->ServiceList.Service[1].FreeService=0;
-		result->ServiceList.Service[1].ServiceID=33; /* ID of the charge service */
-		result->ServiceList.Service[1].ServiceName.data[0]='H';
-		result->ServiceList.Service[1].ServiceName.data[1]='T';
-		result->ServiceList.Service[1].ServiceName.data[2]='T';
-		result->ServiceList.Service[1].ServiceName.data[3]='P';
-		result->ServiceList.Service[1].ServiceName.data[4]='S';
-		result->ServiceList.Service[1].ServiceName.arraylen.data=5;
-		result->ServiceList.Service[1].ServiceCategory=Internet_serviceCategoryType;
-		result->ServiceList.Service[1].isused.ServiceName=1;
-		result->ServiceList.Service[1].isused.ServiceScope=0;
-
-
-
-	result->ServiceList.arraylen.Service=2;
+	result->ServiceList.arraylen.Service=1;
 	result->isused.ServiceList=1;
 
 	} else {
 		result->isused.ServiceList=0; /* no value added service requested */
 	}
-
-
 	return 0;
 }
 
-int	paymentServiceSelection(struct MessageHeaderType* header, struct PaymentServiceSelectionReqType* param, struct PaymentServiceSelectionResType* result)
+int	servicePaymentSelection(struct MessageHeaderType* header, struct ServicePaymentSelectionReqType* param, struct ServicePaymentSelectionResType* result)
 {
-	size_t i;
-
 	printf("EVSE side: servicePaymentSelection called\n"  );
 	printf("\tReceived data:\n");
 	printf("\tHeader SessionID=");
@@ -151,12 +134,8 @@ int	paymentServiceSelection(struct MessageHeaderType* header, struct PaymentServ
 	if(param->SelectedPaymentOption == ExternalPayment_paymentOptionType)
 		printf("\t\t SelectedPaymentOption=ExternalPayment\n");
 
-	for(i=0; i<param->SelectedServiceList.arraylen.SelectedService;i++)
-	{
-		printf("\t\t ServiceID=%d\n",param->SelectedServiceList.SelectedService[i].ServiceID);
-		if( param->SelectedServiceList.SelectedService[i].isused.ParameterSetID)
-				printf("\t\t ParameterSetID=%d\n",param->SelectedServiceList.SelectedService[i].ParameterSetID);
-	}
+	printf("\t\t ServiceID=%d\n",param->SelectedServiceList.SelectedService[0].ServiceID);
+
 	result->ResponseCode = OK_responseCodeType;
 
 	return 0;
@@ -164,22 +143,6 @@ int	paymentServiceSelection(struct MessageHeaderType* header, struct PaymentServ
 
 int	paymentDetails(struct MessageHeaderType* header, struct PaymentDetailsReqType* param, struct PaymentDetailsResType* result)
 {
-
-
-	printf("EVSE side: paymentDetails called\n"  );
-	printf("\tReceived data:\n");
-
-	printf("\t\t eMAID=%d\n", param->eMAID.data[0]);
-	printf("\t\t ID=%c%c\n", param->ContractSignatureCertChain.attr_Id.data[0], param->ContractSignatureCertChain.attr_Id.data[1]);
-	printf("\t\t Certificate=%c%c\n", param->ContractSignatureCertChain.Certificate.data[0],  param->ContractSignatureCertChain.Certificate.data[1]);
-	printf("\t\t SubCertificate 1=%c%c\n", param->ContractSignatureCertChain.SubCertificates.Certificate[0].data[0], param->ContractSignatureCertChain.SubCertificates.Certificate[0].data[1]);
-	printf("\t\t SubCertificate 2=%c%c%c\n", param->ContractSignatureCertChain.SubCertificates.Certificate[1].data[0], param->ContractSignatureCertChain.SubCertificates.Certificate[1].data[1], param->ContractSignatureCertChain.SubCertificates.Certificate[1].data[2]);
-
-	result->ResponseCode = OK_responseCodeType;
-	result->GenChallenge.data[0]=1;
-	result->GenChallenge.arraylen.data=1;
-	result->EVSETimeStamp=123456;
-
 	return 0;
 }
 
@@ -189,19 +152,20 @@ int	chargeParameterDiscovery(struct MessageHeaderType* header, struct ChargePara
 
 	printf("EVSE side: chargeParameterDiscovery called\n"  );
 	printf("\tReceived data:\n");
-	printf("\t\t EVRequestedEnergyTransferType=%d\n",param->RequestedEnergyTransferMode);
+	printf("\t\t EVRequestedEnergyTransferType=%d\n",param->EVRequestedEnergyTransferType);
 
 	/* check,if DC or AC is requested */
-	if(param->RequestedEnergyTransferMode==DC_core_EnergyTransferModeType || param->isused.DC_EVChargeParameter==1)
+	if(param->EVRequestedEnergyTransferType==DC_core_EVRequestedEnergyTransferType || param->isused.DC_EVChargeParameter==1)
 	{
-		printf("\t\t MaxEntriesSAScheduleTuple=%d\n", param->MaxEntriesSAScheduleTuple);
+
 		printf("\t\t EVStatus:\n");
 		printf("\t\t\t EVReady=%d\n", param->DC_EVChargeParameter->DC_EVStatus.EVReady);
 		printf("\t\t\t EVRESSSOC=%d\n", param->DC_EVChargeParameter->DC_EVStatus.EVRESSSOC);
 		printf("\t\t\t EVErrorCode=%d\n", param->DC_EVChargeParameter->DC_EVStatus.EVErrorCode);
+		printf("\t\t\t EVRESSConditioning=%d\n", param->DC_EVChargeParameter->DC_EVStatus.EVRESSConditioning);
+		printf("\t\t\t EVCabinConditioning=%d\n", param->DC_EVChargeParameter->DC_EVStatus.EVCabinConditioning);
 
 
-		printf("\t\t DepartureTime=%d\n", param->DC_EVChargeParameter->DepartureTime);
 		printf("\t\t EVMaximumCurrentLimit=%d\n", param->DC_EVChargeParameter->EVMaximumCurrentLimit.Value);
 		printf("\t\t EVMaximumPowerLimit=%d\n", param->DC_EVChargeParameter->EVMaximumPowerLimit.Value);
 		printf("\t\t EVMaximumVoltageLimit=%d\n", param->DC_EVChargeParameter->EVMaximumVoltageLimit.Value);
@@ -219,10 +183,11 @@ int	chargeParameterDiscovery(struct MessageHeaderType* header, struct ChargePara
 		result->DC_EVSEChargeParameter->DC_EVSEStatus.EVSEIsolationStatus = Valid_isolationLevelType;
 		result->DC_EVSEChargeParameter->DC_EVSEStatus.isused.EVSEIsolationStatus = 1;
 		result->DC_EVSEChargeParameter->DC_EVSEStatus.EVSENotification = None_EVSENotificationType;
-		result->DC_EVSEChargeParameter->DC_EVSEStatus.NotificationMaxDelay = 10;
+		result->DC_EVSEChargeParameter->DC_EVSEStatus.NotificationMaxDelay = 0;
 
 		f.Multiplier = 0;
 		f.Unit = A_unitSymbolType;
+		f.isused.Unit=1;
 		f.Value = 50;
 
 		result->DC_EVSEChargeParameter->EVSEMaximumCurrentLimit=f;
@@ -231,7 +196,7 @@ int	chargeParameterDiscovery(struct MessageHeaderType* header, struct ChargePara
 		f.Value = 20000;
 
 		result->DC_EVSEChargeParameter->EVSEMaximumPowerLimit=f;
-
+		result->DC_EVSEChargeParameter->isused.EVSEMaximumPowerLimit=1;
 
 		f.Unit = V_unitSymbolType;
 		f.Value = 400;
@@ -266,44 +231,32 @@ int	chargeParameterDiscovery(struct MessageHeaderType* header, struct ChargePara
 		result->DC_EVSEChargeParameter->isused.EVSEEnergyToBeDelivered=1;
 
 		/* set up a PMax schedule */
-		result->isused.SAScheduleList=1;
-		result->SAScheduleList->SAScheduleTuple[0].SAScheduleTupleID=10;
-		result->SAScheduleList->SAScheduleTuple[0].isused.SalesTariff=0; /* no tariffs */
+		result->SAScheduleList.SAScheduleTuple[0].SAScheduleTupleID=10;
+		result->SAScheduleList.SAScheduleTuple[0].isused.SalesTariff=0; /* no tariffs */
 
-		/* set up two PMax entries: #1 */
-		result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].PMax.Value=20000;
-		result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].PMax.Unit = W_unitSymbolType;
-		result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].PMax.Multiplier =0;
-		result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].RelativeTimeInterval.start=0;
-		result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].RelativeTimeInterval.isused.duration=0;
+		/* set up two PMax entries */
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.PMaxScheduleID=20;
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].PMax=20000;
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].RelativeTimeInterval.start=0;
 
-		result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].PMax.Value=0;
-		result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].PMax.Unit = W_unitSymbolType;
-		result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].PMax.Multiplier =0;
-		result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].RelativeTimeInterval.start=1200; /* 20 min */
-		result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].RelativeTimeInterval.isused.duration=0;
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].PMax=0;
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].RelativeTimeInterval.start=1200; /* 20 min */
 
-		result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.arraylen.PMaxScheduleEntry=2; /* we set up two time entries */
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.arraylen.PMaxScheduleEntry=2; /* we set up two time entries */
 
 
-		/* #2 */
-		result->SAScheduleList->SAScheduleTuple[1].SAScheduleTupleID=15;
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[0].PMax.Value=10000;
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[0].PMax.Unit = W_unitSymbolType;
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[0].PMax.Multiplier =0;
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[0].RelativeTimeInterval.start=0;
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[0].RelativeTimeInterval.isused.duration=0;
+		/* set up two PMax entries */
+		result->SAScheduleList.SAScheduleTuple[1].SAScheduleTupleID=15;
+		result->SAScheduleList.SAScheduleTuple[1].PMaxSchedule.PMaxScheduleID=30;
+		result->SAScheduleList.SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[0].PMax=10000;
+		result->SAScheduleList.SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[0].RelativeTimeInterval.start=0;
 
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[1].PMax.Value=0;
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[1].PMax.Unit = W_unitSymbolType;
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[1].PMax.Multiplier =1;
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[1].RelativeTimeInterval.start=1800; /* 30 min */
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[1].RelativeTimeInterval.duration=3600;
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[1].RelativeTimeInterval.isused.duration=1;
+		result->SAScheduleList.SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[1].PMax=0;
+		result->SAScheduleList.SAScheduleTuple[1].PMaxSchedule.PMaxScheduleEntry[1].RelativeTimeInterval.start=1800; /* 30 min */
 
-		result->SAScheduleList->SAScheduleTuple[1].PMaxSchedule.arraylen.PMaxScheduleEntry=2; /* we set up two time entries */
+		result->SAScheduleList.SAScheduleTuple[1].PMaxSchedule.arraylen.PMaxScheduleEntry=2; /* we set up two time entries */
 
-		result->SAScheduleList->arraylen.SAScheduleTuple=2; /* we used 2 tuple */
+		result->SAScheduleList.arraylen.SAScheduleTuple=2; /* we used 2 tuple */
 
 
 
@@ -323,84 +276,57 @@ int	chargeParameterDiscovery(struct MessageHeaderType* header, struct ChargePara
 		result->isused.AC_EVSEChargeParameter = 1;
 		result->isused.DC_EVSEChargeParameter = 0;
 
+		result->AC_EVSEChargeParameter->AC_EVSEStatus.PowerSwitchClosed=1;
 		result->AC_EVSEChargeParameter->AC_EVSEStatus.RCD=1;
 		result->AC_EVSEChargeParameter->AC_EVSEStatus.EVSENotification=None_EVSENotificationType;
 		result->AC_EVSEChargeParameter->AC_EVSEStatus.NotificationMaxDelay=123;
 
 
-
 		f.Multiplier = 0;
 		f.Unit = A_unitSymbolType;
+		f.isused.Unit=1;
 		f.Value = 100;
 
 		result->AC_EVSEChargeParameter->EVSEMaxCurrent=f;
 
-
 		f.Unit = V_unitSymbolType;
+		f.Value = 200;
+		result->AC_EVSEChargeParameter->EVSEMaxVoltage=f;
+
+		f.Unit = A_unitSymbolType;
 		f.Value = 300;
-		result->AC_EVSEChargeParameter->EVSENominalVoltage=f;
+		result->AC_EVSEChargeParameter->EVSEMinCurrent=f;
 
-		result->EVSEProcessing=1;
+		/* set up a sales schedule */
+		result->SAScheduleList.SAScheduleTuple[0].SAScheduleTupleID=10;
+		result->SAScheduleList.SAScheduleTuple[0].isused.SalesTariff=1;
 
+		/* set up PMax entries */
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.PMaxScheduleID=20;
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].PMax=20000;
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].RelativeTimeInterval.start=0;
 
-			/* set up a PMax schedule */
-			result->isused.SAScheduleList=1;
-			result->SAScheduleList->SAScheduleTuple[0].SAScheduleTupleID=10;
-			result->SAScheduleList->SAScheduleTuple[0].isused.SalesTariff=0; /* no tariffs */
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].PMax=0;
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].RelativeTimeInterval.start=1200; /* 20 min */
 
-			/* set up two PMax entries: #1 */
-			result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].PMax.Value=20000;
-			result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].PMax.Unit = W_unitSymbolType;
-			result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].PMax.Multiplier =0;
-			result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].RelativeTimeInterval.start=0;
-			result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[0].RelativeTimeInterval.isused.duration=0;
+		result->SAScheduleList.SAScheduleTuple[0].PMaxSchedule.arraylen.PMaxScheduleEntry=2; /* we set up two time entries */
 
-			result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].PMax.Value=0;
-			result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].PMax.Unit = W_unitSymbolType;
-			result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].PMax.Multiplier =0;
-			result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].RelativeTimeInterval.start=1200; /* 20 min */
-			result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.PMaxScheduleEntry[1].RelativeTimeInterval.isused.duration=0;
-
-			result->SAScheduleList->SAScheduleTuple[0].PMaxSchedule.arraylen.PMaxScheduleEntry=2; /* we set up two time entries */
-
-			result->SAScheduleList->arraylen.SAScheduleTuple=1;
-			result->isused.SAScheduleList=1;
-
-			result->SAScheduleList->SAScheduleTuple[0].isused.SalesTariff=1;
-
-
-			/* set up sale entries */
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->NumEPriceLevels=2;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->isused.NumEPriceLevels=1;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffID=20;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->attr_Id.data[0]=100;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->attr_Id.arraylen.data=1;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->isused.attr_Id=1;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].EPriceLevel=2;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].isused.EPriceLevel=1;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].isused.ConsumptionCost=0;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].RelativeTimeInterval.start=0;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].RelativeTimeInterval.duration=10;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].RelativeTimeInterval.isused.duration=1;
+		/* set up sale entries */
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->NumEPriceLevels=2;
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->SalesTariffID=20;
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->attr_Id.data[0]=100;
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->attr_Id.arraylen.data=1;
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].EPriceLevel=2;
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].RelativeTimeInterval.start=0;
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].RelativeTimeInterval.duration=10;
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].RelativeTimeInterval.isused.duration=1;
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].arraylen.ConsumptionCost=0;
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].isused.ConsumptionCost=0;
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->arraylen.SalesTariffEntry=1;
 
 
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].EPriceLevel=3;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].RelativeTimeInterval.start=11;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].RelativeTimeInterval.duration=10;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].RelativeTimeInterval.isused.duration=1;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].ConsumptionCost[0].Cost[0].amount=10;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].ConsumptionCost[0].Cost[0].amountMultiplier=1;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].ConsumptionCost[0].Cost[0].isused.amountMultiplier=1;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].ConsumptionCost[0].Cost[0].costKind=RenewableGenerationPercentage_costKindType;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].ConsumptionCost[0].startValue.Value=123;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].ConsumptionCost[0].arraylen.Cost=1;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].isused.EPriceLevel=1;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].isused.ConsumptionCost=1;
-
-
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->SalesTariffEntry[1].arraylen.ConsumptionCost=1;
-			result->SAScheduleList->SAScheduleTuple[0].SalesTariff->arraylen.SalesTariffEntry=2;
-			result->SAScheduleList->arraylen.SAScheduleTuple=1;
+		result->SAScheduleList.SAScheduleTuple[0].SalesTariff->isused.SalesTariffDescription=0;
+		result->SAScheduleList.arraylen.SAScheduleTuple=1;
 
 	}
 
@@ -412,13 +338,13 @@ int	chargeParameterDiscovery(struct MessageHeaderType* header, struct ChargePara
 int	powerDelivery(struct MessageHeaderType* header, struct PowerDeliveryReqType* param, struct PowerDeliveryResType* result)
 {
 
-	size_t i;
+	int i;
 
 	printf("EVSE side: powerDelivery called\n"  );
 	printf("\tReceived data:\n");
+	printf("\t\t\t ReadyToChargeState=%d\n", param->ReadyToChargeState);
 
-	printf("\t\t  ChargeProgress=%d\n", param->ChargeProgress);
-	printf("\t\t  SAScheduleTupleID=%d\n", param->SAScheduleTupleID);
+
 
 	if(param->isused.DC_EVPowerDeliveryParameter)
 	{
@@ -427,20 +353,19 @@ int	powerDelivery(struct MessageHeaderType* header, struct PowerDeliveryReqType*
 		printf("\t\t\t EVReady=%d\n", param->DC_EVPowerDeliveryParameter->DC_EVStatus.EVReady);
 		printf("\t\t\t EVRESSSOC=%d\n", param->DC_EVPowerDeliveryParameter->DC_EVStatus.EVRESSSOC);
 		printf("\t\t\t EVErrorCode=%d\n", param->DC_EVPowerDeliveryParameter->DC_EVStatus.EVErrorCode);
+		printf("\t\t\t EVRESSConditioning=%d\n", param->DC_EVPowerDeliveryParameter->DC_EVStatus.EVRESSConditioning);
+		printf("\t\t\t EVCabinConditioning=%d\n", param->DC_EVPowerDeliveryParameter->DC_EVStatus.EVCabinConditioning);
 
-		printf("\t\t BulkChargingComplete=%d\n", param->DC_EVPowerDeliveryParameter->BulkChargingComplete);
-		printf("\t\t ChargingComplete=%d\n", param->DC_EVPowerDeliveryParameter->ChargingComplete);
 
 		if(param->isused.ChargingProfile)
 		{
 			printf("\t\t\tChargingProfile:\n");
-			printf("\t\t\t SAScheduleTupleID=%d\n",param->SAScheduleTupleID );
+			printf("\t\t\t SAScheduleTupleID=%d\n",param->ChargingProfile.SAScheduleTupleID );
 			for(i=0;i<param->ChargingProfile.arraylen.ProfileEntry;i++)
 			{
 				printf("\t\t\t Entry#%d\n",i);
-				printf("\t\t\t\t ChargingProfileEntryMaxPower=%d (%d %d) \n", param->ChargingProfile.ProfileEntry[i].ChargingProfileEntryMaxPower.Value, param->ChargingProfile.ProfileEntry[i].ChargingProfileEntryMaxPower.Unit, param->ChargingProfile.ProfileEntry[i].ChargingProfileEntryMaxPower.Multiplier);
+				printf("\t\t\t\t ChargingProfileEntryMaxPower=%d\n", param->ChargingProfile.ProfileEntry[i].ChargingProfileEntryMaxPower);
 				printf("\t\t\t\t ChargingProfileEntryStart=%d\n", param->ChargingProfile.ProfileEntry[i].ChargingProfileEntryStart);
-				printf("\t\t\t\t ChargingProfileEntryMaxNumberOfPhasesInUse=%d\n", param->ChargingProfile.ProfileEntry[i].ChargingProfileEntryMaxNumberOfPhasesInUse);
 
 			}
 
@@ -449,7 +374,7 @@ int	powerDelivery(struct MessageHeaderType* header, struct PowerDeliveryReqType*
 
 
 		result->ResponseCode = OK_responseCodeType;
-		result->DC_EVSEStatus->EVSEIsolationStatus =0;
+		result->DC_EVSEStatus->EVSEIsolationStatus =1;
 		result->DC_EVSEStatus->isused.EVSEIsolationStatus = 1;
 		result->DC_EVSEStatus->EVSEStatusCode = EVSE_Ready_DC_EVSEStatusCodeType;
 		result->DC_EVSEStatus->EVSENotification=None_EVSENotificationType;
@@ -466,9 +391,10 @@ int	powerDelivery(struct MessageHeaderType* header, struct PowerDeliveryReqType*
 
 
 		result->ResponseCode = OK_responseCodeType;
-		result->AC_EVSEStatus->RCD=0;
-		result->AC_EVSEStatus->EVSENotification=3;
-		result->AC_EVSEStatus->NotificationMaxDelay=12;
+		result->AC_EVSEStatus->PowerSwitchClosed=1;
+		result->AC_EVSEStatus->RCD=1;
+		result->AC_EVSEStatus->EVSENotification=None_EVSENotificationType;
+		result->AC_EVSEStatus->NotificationMaxDelay=123;
 
 
 		result->isused.AC_EVSEStatus=1;
@@ -486,17 +412,16 @@ int	chargingStatus(struct MessageHeaderType* header, struct ChargingStatusReqTyp
 
 
 	result->ResponseCode=OK_responseCodeType;
-	result->EVSEID.data[0]=12;
+	result->EVSEID.data[0]=1;
 	result->EVSEID.arraylen.data=1;
-
+	result->AC_EVSEStatus.PowerSwitchClosed=1;
 	result->AC_EVSEStatus.RCD=1;
 	result->AC_EVSEStatus.EVSENotification=None_EVSENotificationType;
 	result->AC_EVSEStatus.NotificationMaxDelay=123;
-	result->ReceiptRequired=1;
-	result->isused.ReceiptRequired=1;
+	result->ReceiptRequired=0;
 	result->EVSEMaxCurrent.Multiplier = 2;
 	result->EVSEMaxCurrent.Unit = A_unitSymbolType;
-
+	result->EVSEMaxCurrent.isused.Unit=1;
 	result->EVSEMaxCurrent.Value = 400;
 	result->isused.EVSEMaxCurrent=1;
 	result->SAScheduleTupleID=10;
@@ -504,16 +429,15 @@ int	chargingStatus(struct MessageHeaderType* header, struct ChargingStatusReqTyp
 	result->isused.MeterInfo=1;
 	result->MeterInfo.MeterID.arraylen.data=1;
 	result->MeterInfo.MeterID.data[0]=2;
-
-	result->MeterInfo.MeterReading = 5000;
+	result->MeterInfo.MeterReading.Multiplier = 0;
+	result->MeterInfo.MeterReading.Unit = A_unitSymbolType;
+	result->MeterInfo.MeterReading.Value = 500;
 	result->MeterInfo.MeterStatus = 4321;
 	result->MeterInfo.TMeter =123456789;
-	result->MeterInfo.SigMeterReading.data[0]=123;
-	result->MeterInfo.SigMeterReading.arraylen.data=1;
 	result->MeterInfo.isused.MeterReading = 1;
 	result->MeterInfo.isused.MeterStatus=1;
 	result->MeterInfo.isused.TMeter=1;
-	result->MeterInfo.isused.SigMeterReading=1;
+	result->MeterInfo.isused.SigMeterReading=0;
 
 	return 0;
 }
@@ -524,21 +448,19 @@ int	meteringReceipt(struct MessageHeaderType* header, struct MeteringReceiptReqT
 	printf("EVSE side: meteringReceipt called\n"  );
 	printf("\tReceived data:\n");
 
-	printf("\t\t ID=%c%c%c\n", param->attr_Id.data[0],param->attr_Id.data[1],param->attr_Id.data[2]);
 	printf("\t\t SAScheduleTupleID=%d\n", param->SAScheduleTupleID);
-	printf("\t\t SessionID=%d\n", param->SessionID.data[1]);
 	printf("\t\t MeterInfo.MeterStatus=%d\n", param->MeterInfo.MeterStatus);
 	printf("\t\t MeterInfo.MeterID=%d\n",		param->MeterInfo.MeterID.data[0]);
 	printf("\t\t MeterInfo.isused.MeterReading=%d\n", param->MeterInfo.isused.MeterReading);
-	printf("\t\t MeterReading.Value=%d\n",		param->MeterInfo.MeterReading);
-	printf("\t\t MeterInfo.TMeter=%d\n",		param->MeterInfo.TMeter);
+	printf("\t\t MeterReading.Value=%d\n",		param->MeterInfo.MeterReading.Value);
+	printf("\t\t MeterInfo.TMeter=%lld\n",		param->MeterInfo.TMeter);
 
 	result->ResponseCode = OK_responseCodeType;
 
-
-	result->AC_EVSEStatus->RCD=1;
-	result->AC_EVSEStatus->EVSENotification=None_EVSENotificationType;
-	result->AC_EVSEStatus->NotificationMaxDelay=123;
+	result->AC_EVSEStatus.PowerSwitchClosed=1;
+	result->AC_EVSEStatus.RCD=1;
+	result->AC_EVSEStatus.EVSENotification=None_EVSENotificationType;
+	result->AC_EVSEStatus.NotificationMaxDelay=123;
 
 
 
@@ -555,15 +477,17 @@ int	cableCheck(struct MessageHeaderType* header, struct CableCheckReqType* param
 	printf("\t\t\t EVReady=%d\n", param->DC_EVStatus.EVReady);
 	printf("\t\t\t EVRESSSOC=%d\n", param->DC_EVStatus.EVRESSSOC);
 	printf("\t\t\t EVErrorCode=%d\n", param->DC_EVStatus.EVErrorCode);
+	printf("\t\t\t EVRESSConditioning=%d\n", param->DC_EVStatus.EVRESSConditioning);
+	printf("\t\t\t EVCabinConditioning=%d\n", param->DC_EVStatus.EVCabinConditioning);
 
 
 	result->ResponseCode = OK_responseCodeType;
-	result->EVSEProcessing = Finished_EVSEProcessingType;
+	result->EVSEProcessing = Ongoing_EVSEProcessingType;
 	result->DC_EVSEStatus.EVSEIsolationStatus= Valid_isolationLevelType;
 	result->DC_EVSEStatus.isused.EVSEIsolationStatus = 1;
 	result->DC_EVSEStatus.EVSEStatusCode = EVSE_Ready_DC_EVSEStatusCodeType;
 	result->DC_EVSEStatus.EVSENotification=None_EVSENotificationType;
-	result->DC_EVSEStatus.NotificationMaxDelay=1234;
+	result->DC_EVSEStatus.NotificationMaxDelay=123;
 
 	return 0;
 }
@@ -580,18 +504,19 @@ int	preCharge(struct MessageHeaderType* header, struct PreChargeReqType* param, 
 	printf("\t\t\t EVReady=%d\n", param->DC_EVStatus.EVReady);
 	printf("\t\t\t EVRESSSOC=%d\n", param->DC_EVStatus.EVRESSSOC);
 	printf("\t\t\t EVErrorCode=%d\n", param->DC_EVStatus.EVErrorCode);
-	printf("\t\t EVTargetCurrent=%d (%d %d)\n", param->EVTargetCurrent.Value,param->EVTargetCurrent.Unit, param->EVTargetCurrent.Multiplier);
-	printf("\t\t EVTargetVoltage=%d (%d %d)\n", param->EVTargetVoltage.Value, param->EVTargetVoltage.Unit, param->EVTargetVoltage.Multiplier);
+	printf("\t\t\t EVRESSConditioning=%d\n", param->DC_EVStatus.EVRESSConditioning);
+	printf("\t\t\t EVCabinConditioning=%d\n", param->DC_EVStatus.EVCabinConditioning);
 
 	result->ResponseCode = OK_responseCodeType;
 	result->DC_EVSEStatus.EVSEIsolationStatus= Valid_isolationLevelType;
 	result->DC_EVSEStatus.isused.EVSEIsolationStatus = 1;
 	result->DC_EVSEStatus.EVSEStatusCode = EVSE_Ready_DC_EVSEStatusCodeType;
 	result->DC_EVSEStatus.EVSENotification=None_EVSENotificationType;
-	result->DC_EVSEStatus.NotificationMaxDelay=1234;
+	result->DC_EVSEStatus.NotificationMaxDelay=123;
 
 	float_type.Multiplier = 0;
 	float_type.Unit = V_unitSymbolType;
+	float_type.isused.Unit=1;
 	float_type.Value = 100;
 	result->EVSEPresentVoltage = float_type;
 
@@ -614,7 +539,8 @@ int	currentDemand(struct MessageHeaderType* header, struct CurrentDemandReqType*
 	printf("\t\t\t EVReady=%d\n", param->DC_EVStatus.EVReady);
 	printf("\t\t\t EVRESSSOC=%d\n", param->DC_EVStatus.EVRESSSOC);
 	printf("\t\t\t EVErrorCode=%d\n", param->DC_EVStatus.EVErrorCode);
-
+	printf("\t\t\t EVRESSConditioning=%d\n", param->DC_EVStatus.EVRESSConditioning);
+	printf("\t\t\t EVCabinConditioning=%d\n", param->DC_EVStatus.EVCabinConditioning);
 
 	printf("\t\t EVTargetCurrent=%d\n", param->EVTargetCurrent.Value);
 	printf("\t\t EVMaximumVoltageLimit=%d\n", param->EVMaximumVoltageLimit.Value);
@@ -633,10 +559,11 @@ int	currentDemand(struct MessageHeaderType* header, struct CurrentDemandReqType*
 	result->DC_EVSEStatus.isused.EVSEIsolationStatus = 1;
 	result->DC_EVSEStatus.EVSEStatusCode = EVSE_Ready_DC_EVSEStatusCodeType;
 	result->DC_EVSEStatus.EVSENotification=None_EVSENotificationType;
-	result->DC_EVSEStatus.NotificationMaxDelay=1234;
+	result->DC_EVSEStatus.NotificationMaxDelay=123;
 
 	f.Multiplier = 0;
 	f.Unit = V_unitSymbolType;
+	f.isused.Unit=1;
 	f.Value = 400;
 
 	result->EVSEPresentVoltage=f;
@@ -670,27 +597,6 @@ int	currentDemand(struct MessageHeaderType* header, struct CurrentDemandReqType*
 	result->EVSEMaximumPowerLimit=f;
 	result->isused.EVSEMaximumPowerLimit=1;
 
-	result->EVSEID.data[0]=12;
-	result->EVSEID.arraylen.data=1;
-
-	result->SAScheduleTupleID = 123;
-
-
-	result->isused.MeterInfo=1;
-	result->MeterInfo.MeterID.arraylen.data=1;
-	result->MeterInfo.MeterID.data[0]=2;
-
-	result->MeterInfo.MeterReading = 500;
-	result->MeterInfo.MeterStatus = 4321;
-	result->MeterInfo.TMeter =123456789;
-	result->MeterInfo.isused.MeterReading = 1;
-	result->MeterInfo.isused.MeterStatus=1;
-	result->MeterInfo.isused.TMeter=1;
-	result->MeterInfo.isused.SigMeterReading=0;
-
-	result->ReceiptRequired = 1;
-	result->isused.ReceiptRequired=1;
-
 	return 0;
 }
 
@@ -703,30 +609,29 @@ int	weldingDetection(struct MessageHeaderType* header, struct WeldingDetectionRe
 	printf("\t\t\t EVReady=%d\n", param->DC_EVStatus.EVReady);
 	printf("\t\t\t EVRESSSOC=%d\n", param->DC_EVStatus.EVRESSSOC);
 	printf("\t\t\t EVErrorCode=%d\n", param->DC_EVStatus.EVErrorCode);
-
+	printf("\t\t\t EVRESSConditioning=%d\n", param->DC_EVStatus.EVRESSConditioning);
+	printf("\t\t\t EVCabinConditioning=%d\n", param->DC_EVStatus.EVCabinConditioning);
 
 	result->ResponseCode = OK_responseCodeType;
 	result->DC_EVSEStatus.EVSEIsolationStatus= Valid_isolationLevelType;
 	result->DC_EVSEStatus.isused.EVSEIsolationStatus = 1;
 	result->DC_EVSEStatus.EVSEStatusCode = EVSE_Ready_DC_EVSEStatusCodeType;
 	result->DC_EVSEStatus.EVSENotification=None_EVSENotificationType;
-	result->DC_EVSEStatus.NotificationMaxDelay=123;
-	result->EVSEPresentVoltage.Value = 1234;
+	result->DC_EVSEStatus.NotificationMaxDelay=1234;
+	result->EVSEPresentVoltage.Value = 123;
 	result->EVSEPresentVoltage.Unit = V_unitSymbolType;
 	result->EVSEPresentVoltage.Multiplier = 0;
 
 	return 0;
 }
 
-int	sessionStop(struct MessageHeaderType* header, struct SessionStopReqType* param, struct SessionStopResType* result)
+int	sessionStop(struct MessageHeaderType* header, struct SessionStopType* param, struct SessionStopResType* result)
 {
 
 
 	printf("EVSE side: sessionStop called\n"  );
-	printf("\tReceived data:\n");
-	printf("\tHeader SessionID=");
-	printBinaryArray(header->SessionID.data,header->SessionID.arraylen.data );
-	printf("\t\t ChargingSession=%d\n", param->ChargingSession);
+
+
 	result->ResponseCode = OK_responseCodeType;
 
 
@@ -737,68 +642,10 @@ int	sessionStop(struct MessageHeaderType* header, struct SessionStopReqType* par
 
 int	serviceDetail(struct MessageHeaderType* header, struct ServiceDetailReqType* param, struct ServiceDetailResType* result)
 {
-
-	printf("EVSE side: serviceDetail called\n"  );
-	printf("\tReceived data:\n");
-	printf("\tHeader SessionID=");
-		printBinaryArray(header->SessionID.data,header->SessionID.arraylen.data );
-	printf("\t\t ServiceDetailID=%d\n", param->ServiceID);
-
-	result->ServiceID = 1234;
-
-	/* Parameter Set 1*/
-	result->ServiceParameterList.ParameterSet[0].ParameterSetID = 1;
-	result->ServiceParameterList.ParameterSet[0].Parameter[0].attr_Name.data[0] = 'P';
-	result->ServiceParameterList.ParameterSet[0].Parameter[0].attr_Name.data[1] = 'r';
-	result->ServiceParameterList.ParameterSet[0].Parameter[0].attr_Name.data[2] = 'o';
-	result->ServiceParameterList.ParameterSet[0].Parameter[0].attr_Name.data[3] = 't';
-	result->ServiceParameterList.ParameterSet[0].Parameter[0].attr_Name.data[4] = 'o';
-	result->ServiceParameterList.ParameterSet[0].Parameter[0].attr_Name.data[5] = 'c';
-	result->ServiceParameterList.ParameterSet[0].Parameter[0].attr_Name.data[6] = 'o';
-	result->ServiceParameterList.ParameterSet[0].Parameter[0].attr_Name.data[7] = 'l';
-	result->ServiceParameterList.ParameterSet[0].Parameter[0].attr_Name.arraylen.data = 8;
-	result->ServiceParameterList.ParameterSet[0].Parameter[0].intValue=15119;
-	result->ServiceParameterList.ParameterSet[0].Parameter[0].isused.intValue=1;
-
-	result->ServiceParameterList.ParameterSet[0].Parameter[1].attr_Name.data[0] = 'N';
-	result->ServiceParameterList.ParameterSet[0].Parameter[1].attr_Name.data[1] = 'a';
-	result->ServiceParameterList.ParameterSet[0].Parameter[1].attr_Name.data[2] = 'm';
-	result->ServiceParameterList.ParameterSet[0].Parameter[1].attr_Name.data[3] = 'e';
-	result->ServiceParameterList.ParameterSet[0].Parameter[1].attr_Name.arraylen.data = 4;
-	result->ServiceParameterList.ParameterSet[0].Parameter[1].stringValue.data[0] = 'V';
-	result->ServiceParameterList.ParameterSet[0].Parameter[1].stringValue.data[1] = '2';
-	result->ServiceParameterList.ParameterSet[0].Parameter[1].stringValue.data[2] = 'G';
-	result->ServiceParameterList.ParameterSet[0].Parameter[1].stringValue.arraylen.data = 3;
-	result->ServiceParameterList.ParameterSet[0].Parameter[1].isused.stringValue=1;
-	result->ServiceParameterList.ParameterSet[0].arraylen.Parameter = 2;
-
-	/* Parameter Set 2 */
-	result->ServiceParameterList.ParameterSet[1].ParameterSetID = 2;
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].attr_Name.data[0] = 'C';
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].attr_Name.data[1] = 'h';
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].attr_Name.data[2] = 'a';
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].attr_Name.data[3] = 'n';
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].attr_Name.data[4] = 'n';
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].attr_Name.data[5] = 'e';
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].attr_Name.data[6] = 'l';
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].attr_Name.arraylen.data = 7;
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].physicalValue.Value=1234;
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].physicalValue.Unit=m_unitSymbolType;
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].physicalValue.Multiplier=0;
-	result->ServiceParameterList.ParameterSet[1].Parameter[0].isused.physicalValue=1;
-	result->ServiceParameterList.ParameterSet[1].arraylen.Parameter =1;
-
-	result->ServiceParameterList.arraylen.ParameterSet = 2;
-	result->isused.ServiceParameterList = 1;
-
-	result->ResponseCode = OK_responseCodeType;
-
-
-
 	return 0;
 }
 
-int	authorization(struct MessageHeaderType* header, struct AuthorizationReqType* param, struct AuthorizationResType* result)
+int	contractAuthentication(struct MessageHeaderType* header, struct ContractAuthenticationReqType* param, struct ContractAuthenticationResType* result)
 {
 
 	printf("EVSE: contractAuthentication called\n"  );
@@ -807,13 +654,8 @@ int	authorization(struct MessageHeaderType* header, struct AuthorizationReqType*
 	if(param->isused.GenChallenge)
 		printf("\t\t\t GenChallenge=%d\n", param->GenChallenge.data[0]);
 
-	if(param->isused.attr_Id)
-		printf("\t\t\t ID=%c%c%c\n", param->attr_Id.data[0],param->attr_Id.data[1],param->attr_Id.data[2]);
-
-
-
 	result->ResponseCode=OK_responseCodeType;
-	result->EVSEProcessing=Finished_EVSEProcessingType;
+	result->EVSEProcessing=Ongoing_EVSEProcessingType;
 
 
 	return 0;
@@ -827,7 +669,44 @@ int	certificateUpdate(struct MessageHeaderType* header, struct CertificateUpdate
 int	certificateInstallation(struct MessageHeaderType* header, struct CertificateInstallationReqType* param, struct CertificateInstallationResType* result)
 {
 
+	printf("EVSE: certificateInstallation called\n"  );
+	printf("\tReceived data:\n");
+	printf("\t\t\t OEMProvisioningCert=%d\n", param->OEMProvisioningCert.data[0]);
+	printf("\t\t\t RootCertificateID[0]=%d\n", param->ListOfRootCertificateIDs.RootCertificateID[0].data[0]);
+	printf("\t\t\t DHParams[0]=%d\n", param->DHParams.data[0]);
 
+
+
+
+/*	result->ContractEncryptionEncryptedPrivateKey.data[0]=200;
+	result->ContractEncryptionEncryptedPrivateKey.arraylen.data=1;
+*/
+
+	result->ContractID.data[0]=50;
+	result->ContractID.arraylen.data=1;
+
+	result->ContractSignatureEncryptedPrivateKey.data[0]=12;
+	result->ContractSignatureEncryptedPrivateKey.arraylen.data=1;
+
+
+
+	result->ContractSignatureCertChain.Certificate.data[0]=40;
+	result->ContractSignatureCertChain.Certificate.arraylen.data=1;
+
+	result->ContractSignatureCertChain.SubCertificates.arraylen.Certificate=2;
+	result->ContractSignatureCertChain.SubCertificates.Certificate[0].data[0]=20;
+	result->ContractSignatureCertChain.SubCertificates.Certificate[0].arraylen.data=1;
+	result->ContractSignatureCertChain.SubCertificates.Certificate[1].data[0]=80;
+	result->ContractSignatureCertChain.SubCertificates.Certificate[1].arraylen.data=1;
+	result->ContractSignatureCertChain.isused.SubCertificates=1;
+
+	result->DHParams.data[0]=99;
+	result->DHParams.arraylen.data=1;
+
+	result->attr_Id.data[0]=33;
+	result->attr_Id.arraylen.data=1;
+
+	result->ResponseCode = OK_responseCodeType;
 
 	return 0;
 }

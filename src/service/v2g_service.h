@@ -17,8 +17,8 @@
 
 /*******************************************************************
  *
- * @author Sebastian.Kaebisch@siemens.com
- * @version 0.8
+ * @author Sebastian.Kaebisch.EXT@siemens.com
+ * @version 0.7
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -66,13 +66,13 @@ struct EXIService
 	uint16_t transportHeaderOffset;
 };
 
-
-/* define error codes  */
+/* define error codes */
 #define EXI_NON_VALID_MESSAGE 0x01
 #define EXI_SERIALIZATION_FAILED 0x02
 #define EXI_DESERIALIZATION_FAILED 0x03
 #define EXI_DATATYPE_FAILED 0x04
 #define EXI_VALUE_RANGE_FAILED 0x05
+#define EXI_SERVICE_CALL_FAILED 0x06
 
 #define EXI_UNKNOWN_ERROR 0xFF
 

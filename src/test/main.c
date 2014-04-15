@@ -18,8 +18,8 @@
 /*******************************************************************
  *
  * @author Daniel.Peintner.EXT@siemens.com
- * @author Sebastian.Kaebisch@siemens.com
- * @version 0.8
+ * @author Sebastian.Kaebisch.EXT@siemens.com
+ * @version 0.7
  * @contact Joerg.Heuer@siemens.com
  *
  * <p>Switch for sample programs: EXI codec only or for entire V2G service</p>

@@ -18,8 +18,8 @@
 
 /*******************************************************************
  *
- * @author Sebastian.Kaebisch@siemens.com
- * @version 0.8
+ * @author Sebastian.Kaebisch.EXT@siemens.com
+ * @version 0.7
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -39,7 +39,7 @@
 #include "v2gtp.h"
 
 
-int write_v2gtpHeader(uint8_t* outStream, uint16_t* outStreamLength, uint16_t payloadType)
+int write_v2gtpHeader(uint8_t* outStream, uint32_t* outStreamLength, uint16_t payloadType)
 {
 
 	/* write v2gtp version number 1=byte */
@@ -65,13 +65,13 @@ int write_v2gtpHeader(uint8_t* outStream, uint16_t* outStreamLength, uint16_t pa
 	return 0;
 }
 
-int read_v2gtpHeader(uint8_t* inStream, uint16_t inStreamLength, uint16_t* payloadLength)
+int read_v2gtpHeader(uint8_t* inStream, uint32_t inStreamLength, uint32_t* payloadLength)
 {
 	uint16_t payloadType=0;
 
 
 	/* check, if we support this v2gtp version */
-	if(inStream[0]!=V2GTP_VERSION || inStream[1]!=V2GTP_VERSION_INV)
+	if(inStream[0]!=V2GTP_VERSION && inStream[1]!=V2GTP_VERSION_INV)
 		return -1;
 
 
@@ -86,8 +86,8 @@ int read_v2gtpHeader(uint8_t* inStream, uint16_t inStreamLength, uint16_t* paylo
 	/* determine payload length*/
 	*payloadLength = inStream[4];
 	*payloadLength = (*payloadLength << 8 | inStream[5]);
-	*payloadLength = (*payloadLength << 8 | inStream[6]);
-	*payloadLength = (*payloadLength << 8 | inStream[7]);
+	*payloadLength = (*payloadLength << 16 | inStream[6]);
+	*payloadLength = (*payloadLength << 24 | inStream[7]);
 
 	if((*payloadLength+V2GTP_HEADER_LENGTH)!=inStreamLength)
 		return -1;

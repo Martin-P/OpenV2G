@@ -1,13 +1,13 @@
 -------------------------------------------------------------------------
 OpenV2G - an open source project implementing the basic functionality of the ISO IEC 15118 vehicle to grid (V2G) communication interface 
-Version 0.8, released January, 2014
+Version 0.7, released July 2, 2012
 http://openv2g.sourceforge.net/
 
 Please report bugs via the SourceForge bug tracking system at http://sourceforge.net/tracker/?group_id=350113.
 Thank you.
 
 
-Copyright (C) 2007-2014 Siemens AG
+Copyright (C) 2007-2012 Siemens AG
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published
@@ -23,11 +23,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
--------------------------------------------------------------------------
-CHANGES from version 0.7:
--------------------------------------------------------------------------
-* adaption of V2G schema changes (reflects the ISO/IEC 15118-2 FDIS status)
-* bug-fixes
 
 -------------------------------------------------------------------------
 CHANGES from version 0.6:

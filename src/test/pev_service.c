@@ -17,8 +17,8 @@
 
 /*******************************************************************
  *
- * @author Sebastian.Kaebisch@siemens.com
- * @version 0.8
+ * @author Sebastian.Kaebisch.EXT@siemens.com
+ * @version 0.7
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -40,13 +40,15 @@
 #include "v2g_dataTypes.c"
 #include "v2g_serviceClientStubs.h"
 #include "EXITypes.h"
-/*#include "appHandQNameDefines.h" */
+
+
+
 
 #include <stdio.h>
 
 #define MAX_BYTE_SIZE 128
-#define MAX_STRING_SIZE 256
-#define MAX_STREAM_SIZE 256
+#define MAX_STRING_SIZE 128
+#define MAX_STREAM_SIZE 100
 
 
 static void printErrorMessage(struct EXIService* service);
@@ -57,16 +59,15 @@ static void printBinaryArray(uint8_t* byte, uint32_t len);
 static int writeStringToEXIString(char* string, uint32_t* exiString);
 
 
+uint8_t byte_array[MAX_BYTE_SIZE]; /* define MAX_BYTE_SIZE before*/
+uint32_t string_array[MAX_STRING_SIZE]; /* define MAX_STRING_SIZE before*/
 
+/* define in and out byte stream */
+uint8_t inStream[MAX_STREAM_SIZE]; /* define MAX_STREAM_SIZE before */
+uint8_t outStream[MAX_STREAM_SIZE]; /* define MAX_STREAM_SIZE before */
 
 static int appHandshake()
 {
-	static uint8_t byte_array[MAX_BYTE_SIZE]; /* define MAX_BYTE_SIZE before*/
-	static uint32_t string_array[MAX_STRING_SIZE]; /* define MAX_STRING_SIZE before*/
-
-	/* define in and out byte stream */
-	uint8_t inStream[MAX_STREAM_SIZE]; /* define MAX_STREAM_SIZE before */
-	uint8_t outStream[MAX_STREAM_SIZE]; /* define MAX_STREAM_SIZE before */
 
 	/* BINARY memory setup */
 	exi_bytes_t bytes = { MAX_BYTE_SIZE, byte_array, 0 };
@@ -76,9 +77,9 @@ static int appHandshake()
 
 	struct EXIDatabinder appHandService;
 	struct EXIDocumentType_appHand exiDoc;
-	struct SupportedAppProtocolReq handshake;
-	struct SupportedAppProtocolRes resultHandshake;
-	uint16_t length, payloadLength;
+	struct AnonType_supportedAppProtocolReq handshake;
+	struct AnonType_supportedAppProtocolRes resultHandshake;
+	uint32_t length, payloadLength;
 
 	/* init the app handshake serializer.
 	 * Important: also provide the offset of the V2GTP header length */
@@ -107,8 +108,8 @@ static int appHandshake()
 	handshake.arraylen.AppProtocol=2; /* we have only one protocol implemented */
 
 	/* assign handshake request structure to the exiDoc and signal it */
-	exiDoc.isused.supportedAppProtocolReq=1;
 	exiDoc.supportedAppProtocolReq = &handshake;
+	exiDoc.isused.supportedAppProtocolReq=1;
 
 	payloadLength=0;
 	if(serialize_appHand(&appHandService, outStream,&payloadLength, &exiDoc))
@@ -132,9 +133,8 @@ static int appHandshake()
 
 	/* setup the */
  	init_EXIDocumentType_appHand(&exiDoc);
+	exiDoc.supportedAppProtocolRes=&resultHandshake;
 	exiDoc.isused.supportedAppProtocolRes=1;
-
- 	exiDoc.supportedAppProtocolRes = &resultHandshake;
 
 	if(deserialize_appHand(&appHandService,inStream,100,&exiDoc))
 	{
@@ -153,25 +153,8 @@ static int appHandshake()
 
 }
 
-
-
-
-
-
-
-
 static int ac_charging()
 {
-
-
-	static uint8_t byte_array[MAX_BYTE_SIZE]; /* define MAX_BYTE_SIZE before*/
-	static uint32_t string_array[MAX_STRING_SIZE]; /* define MAX_STRING_SIZE before*/
-
-	/* define in and out byte stream */
-	uint8_t inStream[MAX_STREAM_SIZE]; /* define MAX_STREAM_SIZE before */
-	uint8_t outStream[MAX_STREAM_SIZE]; /* define MAX_STREAM_SIZE before */
-
-
 
 	/* define offset variable for transport header data */
 	uint16_t transportHeaderOffset;
@@ -184,14 +167,8 @@ static int ac_charging()
 	struct SessionSetupResType resultSessionSetup;
 	struct ServiceDiscoveryReqType serviceDiscovery;
 	struct ServiceDiscoveryResType resultServiceDiscovery;
-	struct ServiceDetailReqType serviceDetail;
-	struct ServiceDetailResType resultServiceDetail;
-	struct PaymentServiceSelectionReqType servicePayment;
-	struct PaymentServiceSelectionResType resultServicePayment;
-	struct PaymentDetailsReqType paymentDetails;
-	struct PaymentDetailsResType resultPaymentDetails;
-	struct AuthorizationReqType contractAuthentication;
-	struct AuthorizationResType resultContractAuthentication;
+	struct ServicePaymentSelectionReqType servicePayment;
+	struct ServicePaymentSelectionResType resultServicePayment;
 	struct ChargeParameterDiscoveryReqType powerDiscovery;
 	struct ChargeParameterDiscoveryResType resultPowerDiscovery;
 	struct PowerDeliveryReqType powerDelivery;
@@ -199,26 +176,18 @@ static int ac_charging()
 	struct ChargingStatusResType resultChargingStatus;
 	struct MeteringReceiptReqType meteringReceipt;
 	struct MeteringReceiptResType resultMeteringReceipt;
-	struct SessionStopReqType sessionStop;
 	struct SessionStopResType resultSessionStop;
-
+	struct AC_EVSEStatusType evseStatus;
 	struct AC_EVChargeParameterType EVChargeParameter;
 	struct AC_EVSEChargeParameterType evseChargeParameter;
+
 	struct SalesTariffType sales;
-	struct SAScheduleListType schedule;
-
-	struct AC_EVSEStatusType evseStatus;
-
-
-
 
 	struct PhysicalValueType float_type;
 
 	enum responseMessages resMsg;
 
 	uint32_t outPayloadLength;
-
-	size_t i,j;
 
 
 	/* BINARY memory setup */
@@ -261,6 +230,7 @@ static int ac_charging()
 	sessionSetup.EVCCID.data[0]=10;
 	sessionSetup.EVCCID.arraylen.data=1;
 
+
 	printf("EV side: prepare EVSE sessionSetup\n");
 
 	/************************
@@ -284,12 +254,11 @@ static int ac_charging()
 	serviceDataTransmitter(outStream, outPayloadLength, inStream);
 
 	/* this methods deserialize the response EXI stream */
-	if(	determineResponseMessage(&service, &resMsg))
+	if(	determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 		return 0;
 	}
-
 
 
 
@@ -301,12 +270,10 @@ static int ac_charging()
 		printf("\tHeader SessionID=");
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\tResponseCode=%d\n",resultSessionSetup.ResponseCode);
-		printf("\tEVSEID=%d\n",	resultSessionSetup.EVSEID.data[1]);
-		printf("\tEVSETimeStamp=%d\n",resultSessionSetup.EVSETimeStamp);
+		printf("\tEVSEID=%d\n",	resultSessionSetup.EVSEID.data[0]);
+		printf("\tDateTimeNow=%lld\n",resultSessionSetup.DateTimeNow);
 
 	}
-
-
 
 	/*******************************************
 	 * Setup data for serviceDiscovery *
@@ -336,7 +303,7 @@ static int ac_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 		return 0;
@@ -350,102 +317,21 @@ static int ac_charging()
 		printf("\tHeader SessionID=");
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\t ResponseCode=%d\n",resultServiceDiscovery.ResponseCode);
-		printf("\t ServiceID=%d\n",	resultServiceDiscovery.ChargeService.ServiceID);
+		printf("\t ServiceID=%d\n",	resultServiceDiscovery.ChargeService.ServiceTag.ServiceID);
 		printf("\t ServiceName=");
-		printASCIIString(resultServiceDiscovery.ChargeService.ServiceName.data,(uint32_t)resultServiceDiscovery.ChargeService.ServiceName.arraylen.data );
-
-		if(	resultServiceDiscovery.PaymentOptionList.PaymentOption[1]==Contract_paymentOptionType)
-			printf("\t PaymentOption=Contract_paymentOptionType\n");
-
-		if(	resultServiceDiscovery.ChargeService.FreeService==1)
-			printf("\t ChargeService.FreeService=True\n");
-
-		if(resultServiceDiscovery.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode[0]==DC_combo_core_EnergyTransferModeType)
-			printf("\t EnergyTransferMode=AC_single_DC_core\n");
-
-		if(resultServiceDiscovery.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode[1]==AC_single_phase_core_EnergyTransferModeType)
-			printf("\t EnergyTransferMode=AC_single_phase_core_EnergyTransferModeType\n");
-
+		printASCIIString(resultServiceDiscovery.ChargeService.ServiceTag.ServiceName.data,(uint32_t)resultServiceDiscovery.ChargeService.ServiceTag.ServiceName.arraylen.data );
+		if(	resultServiceDiscovery.PaymentOptions.PaymentOption[0]==ExternalPayment_paymentOptionType)
+		printf("\t PaymentOption=ExternalPayment\n");
+		if(resultServiceDiscovery.ChargeService.EnergyTransferType==AC_single_DC_core_EVSESupportedEnergyTransferType)
+		printf("\t EnergyTransferType=AC_single_DC_core\n");
 		printf("\t Value added service list:\n");
-		for(i=0;i<resultServiceDiscovery.ServiceList.arraylen.Service;i++)
-		{
-			printf("\n\t\t ServiceID=%d\n",	resultServiceDiscovery.ServiceList.Service[i].ServiceID);
-			printf("\t\t ServiceName=");
-			printASCIIString(resultServiceDiscovery.ServiceList.Service[i].ServiceName.data,(uint32_t)resultServiceDiscovery.ServiceList.Service[i].ServiceName.arraylen.data );
-			if(resultServiceDiscovery.ServiceList.Service[i].ServiceCategory==Internet_serviceCategoryType)
-				printf("\t\t ServiceCategory=Internet\n");
-			if(resultServiceDiscovery.ServiceList.Service[i].FreeService==1)
-				printf("\t\t FreeService=True\n");
-		}
-
-
+		printf("\t\t ServiceID=%d\n",	resultServiceDiscovery.ServiceList.Service[0].ServiceTag.ServiceID);
+		printf("\t\t ServiceName=");
+		printASCIIString(resultServiceDiscovery.ServiceList.Service[0].ServiceTag.ServiceName.data,(uint32_t)resultServiceDiscovery.ServiceList.Service[0].ServiceTag.ServiceName.arraylen.data );
+		if(resultServiceDiscovery.ServiceList.Service[0].ServiceTag.ServiceCategory==Internet_serviceCategoryType)
+		printf("\t\t ServiceCategory=Internet\n");
 
 	}
-
-	/*********************************
-	 * Setup data for ServiceDetails *
-	 *********************************/
-
-	serviceDetail.ServiceID=22; /* Value Added Server ID */
-
-
-	printf("\n\nEV side: prepare EVSE serviceDetail\n");
-
-	/*************************
-	 * Prepare ServiceDetail *
-	 *************************/
-
-	if(prepare_serviceDetail(&service,&v2gHeader, &serviceDetail, &resultServiceDetail)){
-		printErrorMessage(&service);
-		return 0;
-	}
-
-	printf("EV side: call EVSE ServiceDetail \n");
-
-	serviceDataTransmitter(outStream, outPayloadLength, inStream);
-
-	if(determineResponseMessage(&service, &resMsg)){
-		printErrorMessage(&service);
-		return 0;
-	}
-
-	if(resMsg==SERVICEDETAILRES){
-		printf("EV side: received response message from EVSE\n");
-		printf("\tHeader SessionID=");
-		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
-		printf("\tResponseCode=%d\n",   resultServiceDetail.ResponseCode);
-		printf("\tServiceID=%d\n",   resultServiceDetail.ServiceID);
-
-		printf("\t\tLength=%d\n",resultServiceDetail.ServiceParameterList.arraylen.ParameterSet);/*TEST*/
-
-		for(i=0; i<resultServiceDetail.ServiceParameterList.arraylen.ParameterSet; i++)
-		{
-			printf("\t\tServiceSetID=%d\n",   resultServiceDetail.ServiceParameterList.ParameterSet[i].ParameterSetID);
-			printf("\t\tParameters=%d\n",   resultServiceDetail.ServiceParameterList.ParameterSet[i].arraylen.Parameter);
-
-			for(j=0; j<resultServiceDetail.ServiceParameterList.ParameterSet[i].arraylen.Parameter; j++)
-			{
-				printf("\t\t\t %d: ParameterName=", j+1);
-				printASCIIString(resultServiceDetail.ServiceParameterList.ParameterSet[i].Parameter[j].attr_Name.data,resultServiceDetail.ServiceParameterList.ParameterSet[i].Parameter[j].attr_Name.arraylen.data );
-
-				if(resultServiceDetail.ServiceParameterList.ParameterSet[i].Parameter[j].isused.stringValue==1)
-				{
-					printf("\t\t\t %d: StringValue=", j+1);
-					printASCIIString(resultServiceDetail.ServiceParameterList.ParameterSet[i].Parameter[j].stringValue.data,resultServiceDetail.ServiceParameterList.ParameterSet[i].Parameter[j].stringValue.arraylen.data );
-				}
-				else if(resultServiceDetail.ServiceParameterList.ParameterSet[i].Parameter[j].isused.intValue==1)
-				{
-					printf("\t\t\t %d: IntValue=%d\n", j+1,  resultServiceDetail.ServiceParameterList.ParameterSet[i].Parameter[j].intValue);
-				} else if(resultServiceDetail.ServiceParameterList.ParameterSet[i].Parameter[j].isused.physicalValue==1)
-				{
-					printf("\t\t\t %d: PhysicalValue=%d (%d %d)\n",  j+1, resultServiceDetail.ServiceParameterList.ParameterSet[i].Parameter[j].physicalValue.Value, resultServiceDetail.ServiceParameterList.ParameterSet[i].Parameter[j].physicalValue.Unit, resultServiceDetail.ServiceParameterList.ParameterSet[i].Parameter[j].physicalValue.Multiplier);
-				}
-			}
-		}
-
-	}
-
-
 
 
 	/*******************************************
@@ -453,20 +339,17 @@ static int ac_charging()
 	 *******************************************/
 
 	servicePayment.SelectedPaymentOption = ExternalPayment_paymentOptionType;
-	servicePayment.SelectedServiceList.SelectedService[0].ServiceID=resultServiceDiscovery.ChargeService.ServiceID; /* charge server ID */
+	servicePayment.SelectedServiceList.SelectedService[0].ServiceID=1; /* charge server ID */
 	servicePayment.SelectedServiceList.SelectedService[0].isused.ParameterSetID=0; /* is not used */
-	servicePayment.SelectedServiceList.SelectedService[1].ServiceID = resultServiceDiscovery.ServiceList.Service[0].ServiceID;
-	servicePayment.SelectedServiceList.SelectedService[1].ParameterSetID=resultServiceDetail.ServiceParameterList.ParameterSet[0].ParameterSetID;
-	servicePayment.SelectedServiceList.SelectedService[1].isused.ParameterSetID=1;
-	servicePayment.SelectedServiceList.arraylen.SelectedService=2; /* only one service was selected */
+	servicePayment.SelectedServiceList.arraylen.SelectedService=1; /* only one service was selected */
 
 	printf("\n\nEV side: prepare EVSE servicePaymentSelection\n");
 
-	/**************************************
+	/***********************************
 	 * Prepare ServicePaymentSelection *
-	 **************************************/
+	 ***********************************/
 
-	if(prepare_paymentServiceSelection(&service,&v2gHeader, &servicePayment,&resultServicePayment))
+	if(prepare_servicePaymentSelection(&service,&v2gHeader, &servicePayment,&resultServicePayment))
 	{
 		printErrorMessage(&service);
 		return 0;
@@ -479,20 +362,24 @@ static int ac_charging()
 	 * the output stream.
 	 * */
 
+
 	serviceDataTransmitter(outStream, outPayloadLength, inStream);
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
+		return 0;
 	}
 
+
+
 	/* check, if this is the servicePaymentSelection response message */
-	if(resMsg==PAYMENTSERVICESELECTIONRES)
+	if(resMsg==SERVICEPAYMENTSELECTIONRES)
 	{
-		/* show result of the answer message of EVSE sessionSetup */
-		printf("EV: received response message from EVSE\n");
+		/* show result of the answer message of EVSE servicePaymentSelection */
+		printf("EV side: received response message from EVSE\n");
 		printf("\tHeader SessionID=");
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\t ResponseCode=%d\n",resultServicePayment.ResponseCode);
@@ -503,138 +390,19 @@ static int ac_charging()
 
 
 
-	/**********************************
-	 * Setup data for Payment Details *
-	 **********************************/
-
-	paymentDetails.eMAID.data[0]=1;
-	paymentDetails.eMAID.data[1]=123;
-	paymentDetails.eMAID.arraylen.data=2;
-
-	paymentDetails.ContractSignatureCertChain.Certificate.data[0]='C';
-	paymentDetails.ContractSignatureCertChain.Certificate.data[1]='e';
-	paymentDetails.ContractSignatureCertChain.Certificate.arraylen.data=2;
-	paymentDetails.ContractSignatureCertChain.SubCertificates.Certificate[0].data[0]='S';
-	paymentDetails.ContractSignatureCertChain.SubCertificates.Certificate[0].data[1]='u';
-	paymentDetails.ContractSignatureCertChain.SubCertificates.Certificate[0].arraylen.data=2;
-	paymentDetails.ContractSignatureCertChain.SubCertificates.Certificate[1].data[0]='S';
-	paymentDetails.ContractSignatureCertChain.SubCertificates.Certificate[1].data[1]='u';
-	paymentDetails.ContractSignatureCertChain.SubCertificates.Certificate[1].data[2]='2';
-	paymentDetails.ContractSignatureCertChain.SubCertificates.Certificate[1].arraylen.data=3;
-	paymentDetails.ContractSignatureCertChain.SubCertificates.arraylen.Certificate=2;
-	paymentDetails.ContractSignatureCertChain.attr_Id.data[0]='I';
-	paymentDetails.ContractSignatureCertChain.attr_Id.data[1]='d';
-	paymentDetails.ContractSignatureCertChain.attr_Id.arraylen.data=2;
-	paymentDetails.ContractSignatureCertChain.isused.SubCertificates=1;
-	paymentDetails.ContractSignatureCertChain.isused.attr_Id=1;
-
-
-	printf("\n\nEV side: prepare EVSE paymentDetails\n");
-
-	/***************************
-	 * Prepare Payment Details *
-	 ***************************/
-
-	if(prepare_paymentDetails(&service,&v2gHeader, &paymentDetails, &resultPaymentDetails)){
-		printErrorMessage(&service);
-		return 0;
-	}
-
-	printf("EV side: call EVSE ServiceDetail \n");
-
-	serviceDataTransmitter(outStream, outPayloadLength, inStream);
-
-	if(determineResponseMessage(&service, &resMsg)){
-		printErrorMessage(&service);
-		return 0;
-	}
-
-
-
-	if(resMsg==PAYMENTDETAILSRES){
-		printf("EV side: received response message from EVSE\n");
-				printf("\tHeader SessionID=");
-				printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
-				printf("\tResponseCode=%d\n",   resultPaymentDetails.ResponseCode);
-				printf("\tEVSETimeStamp=%d\n",   resultPaymentDetails.EVSETimeStamp);
-				printf("\tGenChallenge=%d\n",   resultPaymentDetails.GenChallenge.data[0]);
-	}
-
-
-
-
-
-	/*******************************************
-	 * Setup data for ContractAuthentification *
-	 *******************************************/
-
-	contractAuthentication.GenChallenge = resultPaymentDetails.GenChallenge;
-	contractAuthentication.attr_Id.data[0]='I';
-	contractAuthentication.attr_Id.data[1]='d';
-	contractAuthentication.attr_Id.data[2]='2';
-	contractAuthentication.attr_Id.arraylen.data=3;
-
-	contractAuthentication.isused.GenChallenge=1; /* no challenge needed here*/
-	contractAuthentication.isused.attr_Id=1; /* no signature needed here */
-
-
-	printf("\n\nEV side: prepare EVSE contractAuthentification\n");
-
-	/**************************************
-	 * Prepare ContractAuthentification   *
-	 **************************************/
-
-	if(prepare_authorization(&service,&v2gHeader, &contractAuthentication,&resultContractAuthentication))
-	{
-		printErrorMessage(&service);
-		return 0;
-	}
-
-	printf("EV side: call EVSE  Authentification \n");
-
-	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
-	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
-	 * the output stream.
-	 * */
-
-	serviceDataTransmitter(outStream, outPayloadLength, inStream);
-
-	/* this methods deserialize the response EXI stream and determines the kind of
-	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
-	{
-		printErrorMessage(&service);
-	}
-
-	/* check, if this is the servicePaymentSelection response message */
-	if(resMsg==AUTHORIZATIONRES)
-	{
-		/* show result of the answer message of EVSE sessionSetup */
-		printf("EV: received response message from EVSE\n");
-		printf("\tHeader SessionID=");
-		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
-		printf("\t ResponseCode=%d\n",resultContractAuthentication.ResponseCode);
-		if(resultContractAuthentication.EVSEProcessing==Finished_EVSEProcessingType)
-			printf("\t EVSEProcessing=Finished\n");
-
-
-	}
-
-
 
 	/*******************************************
 	 * Setup data for chargeParameterDiscovery *
 	 *******************************************/
 	printf("\n\nEV side: prepare EVSE chargeParameterDiscovery\n");
 
-	powerDiscovery.RequestedEnergyTransferMode = AC_single_phase_core_EnergyTransferModeType;
-	powerDiscovery.MaxEntriesSAScheduleTuple=1234;
+	powerDiscovery.EVRequestedEnergyTransferType = AC_three_phase_core_EVRequestedEnergyTransferType;
 
 	EVChargeParameter.DepartureTime = 12345;
-	EVChargeParameter.isused.DepartureTime=1;
 
 	float_type.Multiplier = 0;
 	float_type.Unit = W_unitSymbolType;
+	float_type.isused.Unit=1;
 	float_type.Value = 100;
 
 	EVChargeParameter.EAmount = float_type;
@@ -655,18 +423,13 @@ static int ac_charging()
 	EVChargeParameter.EVMinCurrent=float_type;
 
 	powerDiscovery.AC_EVChargeParameter = &EVChargeParameter;
-	powerDiscovery.isused.AC_EVChargeParameter = 1; /* we use here AC based charging parameters */
+	powerDiscovery.isused.AC_EVChargeParameter = 1; /* we use here DC based charging parameters */
 	powerDiscovery.isused.DC_EVChargeParameter = 0;
 
 	resultPowerDiscovery.AC_EVSEChargeParameter = &evseChargeParameter; /* we expect AC-based parameters from the evse*/
 
-
-	/* we expect 1 sale tariff schedule */
-	resultPowerDiscovery.SAScheduleList = &schedule;
-	resultPowerDiscovery.SAScheduleList->SAScheduleTuple[0].SalesTariff = &sales;
-
-	init_SalesTariffType(&sales); /* init sales structure */
-	init_SAScheduleListType(&schedule);
+	init_SalesTariffType(&sales);
+	resultPowerDiscovery.SAScheduleList.SAScheduleTuple[0].SalesTariff = &sales;
 
 	prepare_chargeParameterDiscovery(&service,&v2gHeader,&powerDiscovery,&resultPowerDiscovery);
 
@@ -682,7 +445,7 @@ static int ac_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -698,11 +461,25 @@ static int ac_charging()
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\tResponseCode=%d\n",resultPowerDiscovery.ResponseCode);
 		printACEVSEStatus(&(resultPowerDiscovery.AC_EVSEChargeParameter->AC_EVSEStatus));
-		printf("\t EVSEProcessing=%d\n",resultPowerDiscovery.EVSEProcessing);
-		printf("\t EVSEMaxCurrent=%d\n",resultPowerDiscovery.AC_EVSEChargeParameter->EVSEMaxCurrent.Value);
-		printf("\t EVSENominalVoltage=%d\n",resultPowerDiscovery.AC_EVSEChargeParameter->EVSENominalVoltage.Value);
-	}
 
+		if(resultPowerDiscovery.EVSEProcessing==Finished_EVSEProcessingType)
+			printf("\tEVSEProcessing=Finished\n");
+
+
+		printf("\t EVSEMaxCurrent=%d\n",resultPowerDiscovery.AC_EVSEChargeParameter->EVSEMaxCurrent.Value);
+		printf("\t EVSEMaxVoltage=%d\n",resultPowerDiscovery.AC_EVSEChargeParameter->EVSEMaxVoltage.Value);
+		printf("\t EVSEMinimumCurrentLimit=%d\n",resultPowerDiscovery.AC_EVSEChargeParameter->EVSEMinCurrent.Value);
+
+		printf("\t NumEPriceLevels=%d\n",	resultPowerDiscovery.SAScheduleList.SAScheduleTuple[0].SalesTariff->NumEPriceLevels);
+		printf("\t SalesTariffID=%d\n",	resultPowerDiscovery.SAScheduleList.SAScheduleTuple[0].SalesTariff->SalesTariffID);
+		printf("\t NumEPriceLevels=%d\n",	resultPowerDiscovery.SAScheduleList.SAScheduleTuple[0].SalesTariff->NumEPriceLevels);
+		printf("\t attr_Id=%d\n",	resultPowerDiscovery.SAScheduleList.SAScheduleTuple[0].SalesTariff->attr_Id.data[0]);
+		printf("\t EPriceLevel=%d\n",	resultPowerDiscovery.SAScheduleList.SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].EPriceLevel);
+		printf("\t start=%d\n",	resultPowerDiscovery.SAScheduleList.SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].RelativeTimeInterval.start);
+		printf("\t duration=%d\n",	resultPowerDiscovery.SAScheduleList.SAScheduleTuple[0].SalesTariff->SalesTariffEntry[0].RelativeTimeInterval.duration);
+
+
+	}
 
 
 	/*********************************
@@ -711,16 +488,10 @@ static int ac_charging()
 
 	printf("\n\nEV side: prepare EVSE powerDelivery\n");
 
-
+	powerDelivery.ReadyToChargeState = 1;
 	powerDelivery.isused.ChargingProfile= 0;
 	powerDelivery.isused.DC_EVPowerDeliveryParameter=0; /* only used for DC charging */
-
-	powerDelivery.ChargeProgress=Start_chargeProgressType;
-	powerDelivery.SAScheduleTupleID=resultPowerDiscovery.SAScheduleList->SAScheduleTuple[0].SAScheduleTupleID;
-
 	resultPowerDelivery.AC_EVSEStatus = &evseStatus; /* we expect an evse status */
-
-
 
 	prepare_powerDelivery(&service,&v2gHeader,&powerDelivery,&resultPowerDelivery);
 
@@ -735,7 +506,7 @@ static int ac_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -749,6 +520,11 @@ static int ac_charging()
 		printf("\tResponseCode=%d\n",resultPowerDelivery.ResponseCode);
 		printACEVSEStatus(&evseStatus);
 	}
+
+
+
+
+
 
 	/*********************************
 	 * Setup data for chargingStatus *
@@ -777,7 +553,7 @@ static int ac_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -792,15 +568,16 @@ static int ac_charging()
 		printACEVSEStatus(&resultChargingStatus.AC_EVSEStatus);
 		printf("\tReceiptRequired=%d\n",resultChargingStatus.ReceiptRequired);
 		printf("\tEVSEID=%d\n",resultChargingStatus.EVSEID.data[0]);
-		printf("\tSAScheduleTupleID=%d\n",resultChargingStatus.SAScheduleTupleID);
-		printf("\tEVSEMaxCurrent=%d (%d %d)\n",resultChargingStatus.EVSEMaxCurrent.Value, resultChargingStatus.EVSEMaxCurrent.Unit, resultChargingStatus.EVSEMaxCurrent.Multiplier);
+		printf("\tEVSEMaxCurrent=%d\n",resultChargingStatus.EVSEMaxCurrent.Value);
 		printf("\tisused.MeterInfo=%d\n",		resultChargingStatus.isused.MeterInfo);
 		printf("\t\tMeterInfo.MeterID=%d\n",		resultChargingStatus.MeterInfo.MeterID.data[0]);
-		printf("\t\tMeterInfo.MeterReading.Value=%d\n",		resultChargingStatus.MeterInfo.MeterReading);
+		printf("\t\tMeterInfo.MeterReading.Value=%d\n",		resultChargingStatus.MeterInfo.MeterReading.Value);
 		printf("\t\tMeterInfo.MeterStatus=%d\n",		resultChargingStatus.MeterInfo.MeterStatus);
-		printf("\t\tMeterInfo.TMeter=%d\n",		resultChargingStatus.MeterInfo.TMeter);
-		printf("\t\tMeterInfo.SigMeterReading.data=%d\n",		resultChargingStatus.MeterInfo.SigMeterReading.data[0]);
+		printf("\t\tMeterInfo.TMeter=%lld\n",		resultChargingStatus.MeterInfo.TMeter);
 	}
+
+
+
 
 
 
@@ -817,21 +594,16 @@ static int ac_charging()
 	meteringReceipt.MeterInfo.MeterID.arraylen.data=1;
 	meteringReceipt.MeterInfo.MeterID.data[0]=3;
 
-
-	meteringReceipt.MeterInfo.MeterReading = 100;
+	meteringReceipt.MeterInfo.MeterReading.Multiplier = 0;
+	meteringReceipt.MeterInfo.MeterReading.Unit = A_unitSymbolType;
+	meteringReceipt.MeterInfo.MeterReading.Value = 100;
 	meteringReceipt.MeterInfo.isused.MeterReading = 1;
 	meteringReceipt.MeterInfo.isused.SigMeterReading = 0;
 
 	meteringReceipt.MeterInfo.TMeter =123456789;
 	meteringReceipt.MeterInfo.isused.TMeter = 1;
 
-	meteringReceipt.attr_Id.data[0]='I';
-	meteringReceipt.attr_Id.data[1]='d';
-	meteringReceipt.attr_Id.data[2]='3';
-	meteringReceipt.attr_Id.arraylen.data=3;
-	meteringReceipt.isused.attr_Id=1; /* message is signed */
-
-	resultMeteringReceipt.AC_EVSEStatus = &evseStatus; /* we expect EVSE status */
+	meteringReceipt.isused.attr_Id=0; /* message is not signed */
 
 	printf("\n\nEV side: prepare EVSE meteringReceipt\n");
 
@@ -856,7 +628,7 @@ static int ac_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -868,9 +640,8 @@ static int ac_charging()
 		printf("EV side: received response message from EVSE\n");
 		/* show result of the answer message of EVSE powerDiscovery*/
 		printf("\tResponseCode=%d\n",resultMeteringReceipt.ResponseCode);
-		printACEVSEStatus(&evseStatus);
+		printACEVSEStatus(&resultMeteringReceipt.AC_EVSEStatus);
 	}
-
 
 
 	/***********************************
@@ -883,9 +654,7 @@ static int ac_charging()
 	 * Prepare stopSession  *
 	 ************************/
 
-	sessionStop.ChargingSession = 1;
-
-	if(prepare_sessionStop(&service,&v2gHeader,&sessionStop, &resultSessionStop))
+	if(prepare_sessionStop(&service,&v2gHeader,&resultSessionStop))
 	{
 		printErrorMessage(&service);
 		return 0; /* stop here */
@@ -902,12 +671,12 @@ static int ac_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
 
-	/* check, if this is the sessionSetup response message */
+	/* check, if this is the stopSession response message */
 	if(resMsg==SESSIONSTOPRES)
 	{
 		/* show result of the answer message of EVSE sessionSetup*/
@@ -916,25 +685,11 @@ static int ac_charging()
 		printf("\tResponseCode=%d\n",resultSessionStop.ResponseCode);
 	}
 
-
 	return 0;
-
 }
 
 static int dc_charging()
 {
-
-
-
-	static uint8_t byte_array[MAX_BYTE_SIZE]; /* define MAX_BYTE_SIZE before*/
-	static uint32_t string_array[MAX_STRING_SIZE]; /* define MAX_STRING_SIZE before*/
-
-	/* define in and out byte stream */
-	uint8_t inStream[MAX_STREAM_SIZE]; /* define MAX_STREAM_SIZE before */
-	uint8_t outStream[MAX_STREAM_SIZE]; /* define MAX_STREAM_SIZE before */
-
-
-
 	/* define offset variable for transport header data */
 	uint16_t transportHeaderOffset;
 
@@ -946,10 +701,10 @@ static int dc_charging()
 	struct SessionSetupResType resultSessionSetup;
 	struct ServiceDiscoveryReqType serviceDiscovery;
 	struct ServiceDiscoveryResType resultServiceDiscovery;
-	struct PaymentServiceSelectionReqType servicePayment;
-	struct PaymentServiceSelectionResType resultServicePayment;
-	struct AuthorizationReqType contractAuthentication;
-	struct AuthorizationResType resultContractAuthentication;
+	struct ServicePaymentSelectionReqType servicePayment;
+	struct ServicePaymentSelectionResType resultServicePayment;
+	struct ContractAuthenticationReqType contractAuthentication;
+	struct ContractAuthenticationResType resultContractAuthentication;
 	struct ChargeParameterDiscoveryReqType powerDiscovery;
 	struct ChargeParameterDiscoveryResType resultPowerDiscovery;
 	struct CableCheckReqType cableCheck;
@@ -962,7 +717,6 @@ static int dc_charging()
 	struct CurrentDemandResType resultCurrentDemand;
 	struct WeldingDetectionReqType weldingDetection;
 	struct WeldingDetectionResType resultWeldingDetection;
-	struct SessionStopReqType sessionStop;
 	struct SessionStopResType resultSessionStop;
 
 	struct DC_EVStatusType EVStatus;
@@ -970,7 +724,6 @@ static int dc_charging()
 	struct DC_EVChargeParameterType EVChargeParameter;
 	struct DC_EVSEChargeParameterType evseChargeParameter;
 	struct DC_EVPowerDeliveryParameterType EVPowerDelivery;
-	struct SAScheduleListType SAScheduleList;
 
 	enum responseMessages resMsg;
 
@@ -981,6 +734,7 @@ static int dc_charging()
 
 	size_t i, j;
 
+
 	/* BINARY memory setup */
 	exi_bytes_t bytes = { MAX_BYTE_SIZE, byte_array, 0 };
 
@@ -990,6 +744,7 @@ static int dc_charging()
 	/* setup offset for DoIP header (otherwise set
 	 * transportHeaderOffset=0 if no transfer protocol is used)*/
 	transportHeaderOffset = V2GTP_HEADER_LENGTH;
+
 
 
 	/*******************
@@ -1018,7 +773,7 @@ static int dc_charging()
 	v2gHeader.isused.Signature=0; /* no security */
 
 	/* setup sessionSetup parameter */
-	sessionSetup.EVCCID.data[0]=20;
+	sessionSetup.EVCCID.data[0]=10;
 	sessionSetup.EVCCID.arraylen.data=1;
 
 	printf("EV side: prepare EVSE sessionSetup\n");
@@ -1027,10 +782,7 @@ static int dc_charging()
 	 * Prepare sessionSetup *
 	 ************************/
 
-	if(prepare_sessionSetup(&service,&v2gHeader, &sessionSetup,&resultSessionSetup))
-	{
-		printf("Error!\n");
-	}
+	prepare_sessionSetup(&service,&v2gHeader, &sessionSetup,&resultSessionSetup);
 
 	printf("EV side: call EVSE sessionSetup\n");
 
@@ -1042,7 +794,7 @@ static int dc_charging()
 	serviceDataTransmitter(outStream, outPayloadLength, inStream);
 
 	/* this methods deserialize the response EXI stream */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -1055,19 +807,12 @@ static int dc_charging()
 		printf("\tHeader SessionID=");
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\tResponseCode=%d\n",resultSessionSetup.ResponseCode);
-		printf("\tEVSEID=%d\n",	resultSessionSetup.EVSEID.data[1]);
-		printf("\tDateTimeNow=%d\n",resultSessionSetup.EVSETimeStamp);
-	}
-
-
-
-	/* else if(resMsg==NOTIFICATION) {
-
-		printf("Received a notification: %d", v2gHeader.Notification.FaultCode );
+		printf("\tEVSEID=%d\n",	resultSessionSetup.EVSEID.data[0]);
+		printf("\tDateTimeNow=%lld\n",resultSessionSetup.DateTimeNow);
 
 	}
 
-*/
+
 	/*******************************************
 	 * Setup data for serviceDiscovery *
 	 *******************************************/
@@ -1096,7 +841,7 @@ static int dc_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -1109,17 +854,12 @@ static int dc_charging()
 		printf("\tHeader SessionID=");
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\t ResponseCode=%d\n",resultServiceDiscovery.ResponseCode);
-		printf("\t ChargeServiceID=%d\n",	resultServiceDiscovery.ChargeService.ServiceID);
+		printf("\t ChargeServiceID=%d\n",	resultServiceDiscovery.ChargeService.ServiceTag.ServiceID);
 		printf("\t ServiceName=");
-		printASCIIString(resultServiceDiscovery.ChargeService.ServiceName.data,(uint32_t)resultServiceDiscovery.ChargeService.ServiceName.arraylen.data );
-		printf("\t PaymentOption=%d\n",	resultServiceDiscovery.PaymentOptionList.PaymentOption[1]);
-		printf("\t EnergyTransferType=%d\n",	resultServiceDiscovery.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode[1]);
-		printf("\t FreeService=%d\n",	resultServiceDiscovery.ChargeService.FreeService);
-		printf("\t ServiceCategory=%d\n",	resultServiceDiscovery.ChargeService.ServiceCategory);
-		printf("\t ServiceScope=%d\n",	resultServiceDiscovery.ChargeService.ServiceScope.data[0]);
+		printASCIIString(resultServiceDiscovery.ChargeService.ServiceTag.ServiceName.data,(uint32_t)resultServiceDiscovery.ChargeService.ServiceTag.ServiceName.arraylen.data );
+		printf("\t PaymentOption=%d\n",	resultServiceDiscovery.PaymentOptions.PaymentOption[0]);
+		printf("\t EnergyTransferType=%d\n",	resultServiceDiscovery.ChargeService.EnergyTransferType);
 	}
-
-
 
 
 	/*******************************************
@@ -1127,7 +867,7 @@ static int dc_charging()
 	 *******************************************/
 
 	servicePayment.SelectedPaymentOption = ExternalPayment_paymentOptionType;
-	servicePayment.SelectedServiceList.SelectedService[0].ServiceID=resultServiceDiscovery.ChargeService.ServiceID; /* charge server ID */
+	servicePayment.SelectedServiceList.SelectedService[0].ServiceID=resultServiceDiscovery.ChargeService.ServiceTag.ServiceID; /* charge server ID */
 	servicePayment.SelectedServiceList.SelectedService[0].isused.ParameterSetID=0; /* is not used */
 	servicePayment.SelectedServiceList.arraylen.SelectedService=1; /* only one service was selected */
 
@@ -1137,7 +877,7 @@ static int dc_charging()
 	 * Prepare ServicePaymentSelection *
 	 **************************************/
 
-	if(prepare_paymentServiceSelection(&service,&v2gHeader, &servicePayment,&resultServicePayment))
+	if(prepare_servicePaymentSelection(&service,&v2gHeader, &servicePayment,&resultServicePayment))
 	{
 		printErrorMessage(&service);
 		return 0;
@@ -1154,13 +894,13 @@ static int dc_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
 
 	/* check, if this is the servicePaymentSelection response message */
-	if(resMsg==PAYMENTSERVICESELECTIONRES)
+	if(resMsg==SERVICEPAYMENTSELECTIONRES)
 	{
 		/* show result of the answer message of EVSE sessionSetup */
 		printf("EV: received response message from EVSE\n");
@@ -1168,8 +908,6 @@ static int dc_charging()
 		printBinaryArray(v2gHeader.SessionID.data,v2gHeader.SessionID.arraylen.data );
 		printf("\t ResponseCode=%d\n",resultServicePayment.ResponseCode);
 	}
-
-
 
 
 
@@ -1187,13 +925,13 @@ static int dc_charging()
 	 * Prepare ContractAuthentification   *
 	 **************************************/
 
-	if(prepare_authorization(&service,&v2gHeader, &contractAuthentication,&resultContractAuthentication))
+	if(prepare_contractAuthentication(&service,&v2gHeader, &contractAuthentication,&resultContractAuthentication))
 	{
 		printErrorMessage(&service);
 		return 0;
 	}
 
-	printf("EV side: call EVSE  Authentification \n");
+	printf("EV side: call EVSE ContractAuthentification \n");
 
 	/* Use here your sending / receiving mechanism to / from the EVSE. The following serviceDataTransmitter method
 	 * is only an exemplary implementation which also shows how to add the V2GTP header information to
@@ -1204,13 +942,13 @@ static int dc_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
 
 	/* check, if this is the servicePaymentSelection response message */
-	if(resMsg==AUTHORIZATIONRES)
+	if(resMsg==CONTRACTAUTHENTICATIONRES)
 	{
 		/* show result of the answer message of EVSE sessionSetup */
 		printf("EV: received response message from EVSE\n");
@@ -1232,19 +970,18 @@ static int dc_charging()
 
 	EVStatus.EVRESSSOC = 89;
 	EVStatus.EVReady = 1;
-
+	EVStatus.EVCabinConditioning = 1;
+	EVStatus.EVRESSConditioning = 1;
+	EVStatus.isused.EVCabinConditioning=1;
+	EVStatus.isused.EVRESSConditioning=1;
 	EVStatus.EVErrorCode = NO_ERROR_DC_EVErrorCodeType;
 
 	EVChargeParameter.DC_EVStatus = EVStatus;
 
-	EVChargeParameter.DepartureTime=123456789;
-	EVChargeParameter.isused.DepartureTime=1;
-
-	powerDiscovery.MaxEntriesSAScheduleTuple = 10;
-	powerDiscovery.isused.MaxEntriesSAScheduleTuple=1;
 
 	float_type.Multiplier = 0;
 	float_type.Unit = A_unitSymbolType;
+	float_type.isused.Unit=1;
 	float_type.Value = 60;
 
 	EVChargeParameter.EVMaximumCurrentLimit = float_type;
@@ -1260,13 +997,13 @@ static int dc_charging()
 
 	EVChargeParameter.EVMaximumVoltageLimit= float_type;
 
-	float_type.Unit = W_unitSymbolType;
+	float_type.Unit = W_s_unitSymbolType;
 	float_type.Value = 15000;
 
 	EVChargeParameter.EVEnergyCapacity= float_type;
 	EVChargeParameter.isused.EVEnergyCapacity = 1;
 
-	float_type.Unit = W_unitSymbolType;
+	float_type.Unit = W_s_unitSymbolType;
 	float_type.Value = 5000;
 
 	EVChargeParameter.EVEnergyRequest= float_type;
@@ -1278,19 +1015,13 @@ static int dc_charging()
 	EVChargeParameter.BulkSOC=80;
 	EVChargeParameter.isused.BulkSOC = 1;
 
-	powerDiscovery.RequestedEnergyTransferMode = DC_combo_core_EnergyTransferModeType;
+	powerDiscovery.EVRequestedEnergyTransferType = DC_combo_core_EVRequestedEnergyTransferType;
 
 	powerDiscovery.DC_EVChargeParameter = &EVChargeParameter;
 	powerDiscovery.isused.DC_EVChargeParameter = 1; /* we use here DC based charging parameters */
 	powerDiscovery.isused.AC_EVChargeParameter = 0;
 
 	resultPowerDiscovery.DC_EVSEChargeParameter = &evseChargeParameter; /* we expect DC-based parameters from the evse*/
-
-	if(powerDiscovery.MaxEntriesSAScheduleTuple>0)
-	{
-		init_SAScheduleListType(&SAScheduleList);
-		resultPowerDiscovery.SAScheduleList = &SAScheduleList;
-	}
 
 	printf("\n\nEV side: prepare EVSE chargeParameterDiscovery\n");
 
@@ -1315,7 +1046,7 @@ static int dc_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -1343,21 +1074,24 @@ static int dc_charging()
 		/* show PMax schedule, if there one provided  */
 			printf("\tSAScheduleList: \n");
 
-			for(i=0; i< resultPowerDiscovery.SAScheduleList->arraylen.SAScheduleTuple;i++)
+			for(i=0; i< resultPowerDiscovery.SAScheduleList.arraylen.SAScheduleTuple;i++)
 			{
 				printf("\t\t Tuple#%d: \n",(i+1));
-				printf("\t\t SAScheduleTupleID=%d: \n", resultPowerDiscovery.SAScheduleList->SAScheduleTuple[i].SAScheduleTupleID);
+				printf("\t\t SAScheduleTupleID=%d: \n", resultPowerDiscovery.SAScheduleList.SAScheduleTuple[i].SAScheduleTupleID);
+				printf("\t\t PMaxScheduleID=%d: \n",resultPowerDiscovery.SAScheduleList.SAScheduleTuple[i].PMaxSchedule.PMaxScheduleID);
 
-				for(j=0; j< resultPowerDiscovery.SAScheduleList->SAScheduleTuple[i].PMaxSchedule.arraylen.PMaxScheduleEntry;j++)
+				for(j=0; j< resultPowerDiscovery.SAScheduleList.SAScheduleTuple[i].PMaxSchedule.arraylen.PMaxScheduleEntry;j++)
 				{
 					printf("\t\t\t Entry#%d: \n",(j+1));
-					printf("\t\t\t\t PMax=%d (%d %d) \n",resultPowerDiscovery.SAScheduleList->SAScheduleTuple[i].PMaxSchedule.PMaxScheduleEntry[j].PMax.Value, resultPowerDiscovery.SAScheduleList->SAScheduleTuple[i].PMaxSchedule.PMaxScheduleEntry[j].PMax.Unit, resultPowerDiscovery.SAScheduleList->SAScheduleTuple[i].PMaxSchedule.PMaxScheduleEntry[j].PMax.Multiplier);
-					printf("\t\t\t\t Start=%d \n",resultPowerDiscovery.SAScheduleList->SAScheduleTuple[i].PMaxSchedule.PMaxScheduleEntry[j].RelativeTimeInterval.start);
-					if(resultPowerDiscovery.SAScheduleList->SAScheduleTuple[i].PMaxSchedule.PMaxScheduleEntry[j].RelativeTimeInterval.isused.duration)
-						printf("\t\t\t\t Duration=%d \n",resultPowerDiscovery.SAScheduleList->SAScheduleTuple[i].PMaxSchedule.PMaxScheduleEntry[j].RelativeTimeInterval.duration);
+					printf("\t\t\t\t PMax=%d \n",resultPowerDiscovery.SAScheduleList.SAScheduleTuple[i].PMaxSchedule.PMaxScheduleEntry[j].PMax);
+					printf("\t\t\t\t Start=%d \n",resultPowerDiscovery.SAScheduleList.SAScheduleTuple[i].PMaxSchedule.PMaxScheduleEntry[j].RelativeTimeInterval.start);
+					if(resultPowerDiscovery.SAScheduleList.SAScheduleTuple[i].PMaxSchedule.PMaxScheduleEntry[j].RelativeTimeInterval.isused.duration)
+						printf("\t\t\t\t Duration=%d \n",resultPowerDiscovery.SAScheduleList.SAScheduleTuple[i].PMaxSchedule.PMaxScheduleEntry[j].RelativeTimeInterval.duration);
 				}
-		}
+			}
+
 	}
+
 
 
 
@@ -1366,9 +1100,6 @@ static int dc_charging()
 	 *****************************/
 
 	/* setup EVStatus */
-	EVStatus.EVRESSSOC = 12;
-	EVStatus.EVReady = 1;
-	EVStatus.EVErrorCode = 1;
 	cableCheck.DC_EVStatus =EVStatus;
 
 
@@ -1395,7 +1126,7 @@ static int dc_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -1407,14 +1138,11 @@ static int dc_charging()
 		printf("EV side: received response message from EVSE\n");
 		printf("\t\t Header SessionID=%d\n",v2gHeader.SessionID.data[0]);
 		printf("\tResponseCode=%d\n",resultCableCheck.ResponseCode);
-		if(resultCableCheck.EVSEProcessing==Finished_EVSEProcessingType)
-			printf("\tEVSEProcessing=Finished\n");
+		if(resultCableCheck.EVSEProcessing==Ongoing_EVSEProcessingType)
+			printf("\tEVSEProcessing=Ongoing\n");
+
 		printDCEVSEStatus(&(resultCableCheck.DC_EVSEStatus));
 	}
-
-
-
-
 
 
 	/*****************************
@@ -1424,7 +1152,7 @@ static int dc_charging()
 	/* setup EVStatus */
 	preCharge.DC_EVStatus =EVStatus;
 
-	float_type.Unit = A_unitSymbolType;
+	float_type.Unit = V_unitSymbolType;
 	float_type.Value = 100;
 	preCharge.EVTargetCurrent = float_type;
 
@@ -1455,7 +1183,7 @@ static int dc_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -1468,7 +1196,7 @@ static int dc_charging()
 		/* show result of the answer message of EVSE powerDiscovery*/
 		printf("\tResponseCode=%d\n",resultPreCharge.ResponseCode);
 		printDCEVSEStatus(&resultPreCharge.DC_EVSEStatus);
-		printf("\tEVSEPresentVoltage=%d (%d %d)\n",resultPreCharge.EVSEPresentVoltage.Value, resultPreCharge.EVSEPresentVoltage.Unit, resultPreCharge.EVSEPresentVoltage.Multiplier);
+		printf("\tEVSEPresentVoltage=%d\n",resultPreCharge.EVSEPresentVoltage.Value);
 	}
 
 
@@ -1477,42 +1205,28 @@ static int dc_charging()
 	 * Setup data for powerDelivery *
 	 *********************************/
 
-	powerDelivery.ChargeProgress = 1;
+	powerDelivery.ReadyToChargeState = 1;
 
 	EVPowerDelivery.DC_EVStatus = EVStatus;
-	EVPowerDelivery.BulkChargingComplete = 0;
+	EVPowerDelivery.BulkChargingComplete = 1;
 	EVPowerDelivery.isused.BulkChargingComplete = 1;
-	EVPowerDelivery.ChargingComplete = 1;
+	EVPowerDelivery.ChargingComplete = 0;
 
 	powerDelivery.DC_EVPowerDeliveryParameter = &EVPowerDelivery;
 	powerDelivery.isused.DC_EVPowerDeliveryParameter = 1; /* DC parameters are send */
 
-	powerDelivery.ChargeProgress = Start_chargeProgressType;
-
-
 
 	/* we are using a charging profile */
 	powerDelivery.isused.ChargingProfile=1;
-
-	powerDelivery.SAScheduleTupleID  = resultPowerDiscovery.SAScheduleList->SAScheduleTuple[0].SAScheduleTupleID;
+	powerDelivery.ChargingProfile.SAScheduleTupleID = resultPowerDiscovery.SAScheduleList.SAScheduleTuple[0].SAScheduleTupleID;
 
 	/* set up 3 entries */
-	powerDelivery.ChargingProfile.ProfileEntry[0].ChargingProfileEntryMaxPower.Value=0;
-	powerDelivery.ChargingProfile.ProfileEntry[0].ChargingProfileEntryMaxPower.Unit=W_unitSymbolType;
-	powerDelivery.ChargingProfile.ProfileEntry[0].ChargingProfileEntryMaxPower.Multiplier=2;
+	powerDelivery.ChargingProfile.ProfileEntry[0].ChargingProfileEntryMaxPower=0;
 	powerDelivery.ChargingProfile.ProfileEntry[0].ChargingProfileEntryStart=0;
-	powerDelivery.ChargingProfile.ProfileEntry[0].ChargingProfileEntryMaxNumberOfPhasesInUse=1;
-	powerDelivery.ChargingProfile.ProfileEntry[0].isused.ChargingProfileEntryMaxNumberOfPhasesInUse=1;
-	powerDelivery.ChargingProfile.ProfileEntry[1].ChargingProfileEntryMaxPower.Value=20000;
-	powerDelivery.ChargingProfile.ProfileEntry[1].ChargingProfileEntryMaxPower.Unit = W_unitSymbolType;
-	powerDelivery.ChargingProfile.ProfileEntry[1].ChargingProfileEntryMaxPower.Multiplier = 1;
-	powerDelivery.ChargingProfile.ProfileEntry[1].ChargingProfileEntryMaxNumberOfPhasesInUse=3;
-	powerDelivery.ChargingProfile.ProfileEntry[1].isused.ChargingProfileEntryMaxNumberOfPhasesInUse=1;
+	powerDelivery.ChargingProfile.ProfileEntry[1].ChargingProfileEntryMaxPower=20000;
 	powerDelivery.ChargingProfile.ProfileEntry[1].ChargingProfileEntryStart=300; /* 5min */
-	powerDelivery.ChargingProfile.ProfileEntry[2].ChargingProfileEntryMaxPower.Value=0;
+	powerDelivery.ChargingProfile.ProfileEntry[2].ChargingProfileEntryMaxPower=0;
 	powerDelivery.ChargingProfile.ProfileEntry[2].ChargingProfileEntryStart=1200; /* 20min */
-	powerDelivery.ChargingProfile.ProfileEntry[2].ChargingProfileEntryMaxNumberOfPhasesInUse=3;
-	powerDelivery.ChargingProfile.ProfileEntry[2].isused.ChargingProfileEntryMaxNumberOfPhasesInUse=1;
 	powerDelivery.ChargingProfile.arraylen.ProfileEntry=3;
 
 
@@ -1543,7 +1257,7 @@ static int dc_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -1554,10 +1268,9 @@ static int dc_charging()
 		/* show result of the answer message of EVSE sessionSetup*/
 		printf("\nEV side: received response message from EVSE\n");
 		/* show result of the answer message of EVSE powerDiscovery*/
-		printf("\tResponseCode=%d\n",resultPowerDelivery.ResponseCode);
-		printDCEVSEStatus(resultPowerDelivery.DC_EVSEStatus);
+		printf("\tResponseCode=%d\n",resultPreCharge.ResponseCode);
+		printDCEVSEStatus(&resultPreCharge.DC_EVSEStatus);
 	}
-
 
 
 
@@ -1570,7 +1283,7 @@ static int dc_charging()
 	currentDemand.DC_EVStatus = EVStatus;
 
 	float_type.Unit = A_unitSymbolType;
-	float_type.Value = 100;
+	float_type.Value = 4;
 
 	currentDemand.EVTargetCurrent = float_type;
 
@@ -1595,7 +1308,7 @@ static int dc_charging()
 	currentDemand.BulkChargingComplete = 0;
 	currentDemand.isused.BulkChargingComplete = 1;
 
-	currentDemand.ChargingComplete = 1;
+	currentDemand.ChargingComplete = 0;
 
 	float_type.Unit = s_unitSymbolType;
 	float_type.Value = 300; /* 5 min*/
@@ -1611,7 +1324,7 @@ static int dc_charging()
 
 
 	float_type.Unit = V_unitSymbolType;
-	float_type.Value = 400;
+	float_type.Value = 360;
 
 	currentDemand.EVTargetVoltage = float_type;
 
@@ -1639,7 +1352,7 @@ static int dc_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -1659,17 +1372,10 @@ static int dc_charging()
 
 		printf("\t EVSEPowerLimitAchieved=%d\n",resultCurrentDemand.EVSEPowerLimitAchieved);
 		printf("\t EVSEMaximumVoltageLimit=%d\n",resultCurrentDemand.EVSEMaximumVoltageLimit.Value);
-		printf("\t EVSEMaximumCurrentLimit=%d (%d %d) \n",resultCurrentDemand.EVSEMaximumCurrentLimit.Value, resultCurrentDemand.EVSEMaximumCurrentLimit.Unit, resultCurrentDemand.EVSEMaximumCurrentLimit.Multiplier);
+		printf("\t EVSEMaximumCurrentLimit=%d\n",resultCurrentDemand.EVSEMaximumCurrentLimit.Value);
 		printf("\t EVSEMaximumPowerLimit=%d\n",resultCurrentDemand.EVSEMaximumPowerLimit.Value);
-
-		printf("\tReceiptRequired=%d\n",resultCurrentDemand.ReceiptRequired);
-		printf("\tEVSEID=%d\n",resultCurrentDemand.EVSEID.data[0]);
-		printf("\tisused.MeterInfo=%d\n",		resultCurrentDemand.isused.MeterInfo);
-		printf("\t\tMeterInfo.MeterID=%d\n",		resultCurrentDemand.MeterInfo.MeterID.data[0]);
-		printf("\t\tMeterInfo.MeterReading.Value=%d\n",		resultCurrentDemand.MeterInfo.MeterReading);
-		printf("\t\tMeterInfo.MeterStatus=%d\n",		resultCurrentDemand.MeterInfo.MeterStatus);
-		printf("\t\tMeterInfo.TMeter=%d\n",		resultCurrentDemand.MeterInfo.TMeter);
 	}
+
 
 
 
@@ -1679,7 +1385,6 @@ static int dc_charging()
 	 * Setup data for weldingDetection *
 	 ***********************************/
 
-	EVStatus.EVRESSSOC=100;
 	weldingDetection.DC_EVStatus =EVStatus;
 
 
@@ -1707,7 +1412,7 @@ static int dc_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -1720,9 +1425,8 @@ static int dc_charging()
 		/* show result of the answer message of EVSE powerDiscovery*/
 		printf("\tResponseCode=%d\n",resultWeldingDetection.ResponseCode);
 		printDCEVSEStatus(&resultWeldingDetection.DC_EVSEStatus);
-		printf("\tEVSEPresentVoltage=%d (%d %d)\n",resultWeldingDetection.EVSEPresentVoltage.Value,resultWeldingDetection.EVSEPresentVoltage.Unit ,resultWeldingDetection.EVSEPresentVoltage.Multiplier);
+		printf("\tEVSEPresentVoltage=%d\n",resultWeldingDetection.EVSEPresentVoltage.Value);
 	}
-
 
 
 
@@ -1738,9 +1442,7 @@ static int dc_charging()
 	 * Prepare stopSession  *
 	 ************************/
 
-	sessionStop.ChargingSession = 0;
-
-	if(prepare_sessionStop(&service,&v2gHeader,&sessionStop, &resultSessionStop))
+	if(prepare_sessionStop(&service,&v2gHeader,&resultSessionStop))
 	{
 		printErrorMessage(&service);
 		return 0; /* stop here */
@@ -1757,7 +1459,7 @@ static int dc_charging()
 
 	/* this methods deserialize the response EXI stream and determines the kind of
 	 * the response message */
-	if(determineResponseMessage(&service, &resMsg))
+	if(determineResponseMesssage(&service, &resMsg))
 	{
 		printErrorMessage(&service);
 	}
@@ -1771,14 +1473,16 @@ static int dc_charging()
 		printf("\tResponseCode=%d\n",resultSessionStop.ResponseCode);
 	}
 
-
 	return 0;
+
 }
 
 
 
-int main_service(argc, argv)
+int main_service()
 {
+
+
 	printf("+++ Start application handshake protocol example +++\n\n");
 
 	appHandshake();
@@ -1809,6 +1513,7 @@ int main_service(argc, argv)
 static void printACEVSEStatus(struct AC_EVSEStatusType* status)
 {
 	printf("\tEVSEStatus:\n");
+	printf("\t\tPowerSwitchClosed=%d\n",status->PowerSwitchClosed);
 	printf("\t\tRCD=%d\n",status->RCD);
 	printf("\t\tEVSENotification=%d\n",status->EVSENotification);
 	printf("\t\tNotificationMaxDelay=%d\n",status->NotificationMaxDelay);
@@ -1830,7 +1535,6 @@ static void printDCEVSEStatus(struct DC_EVSEStatusType* status)
 
 static void printErrorMessage(struct EXIService* service)
 {
-
 	if(service->errorCode==EXI_NON_VALID_MESSAGE)
 	{
 		printf("EV did not send a valid V2G message!\n");
@@ -1851,7 +1555,6 @@ static void printErrorMessage(struct EXIService* service)
 	{
 		printf("Error: Could not deserialize the response message because of VALUE_RANGE\n");
 	}
-
 }
 
 static void printASCIIString(uint32_t* string, uint32_t len) {
