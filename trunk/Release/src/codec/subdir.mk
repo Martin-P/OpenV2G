@@ -13,19 +13,13 @@ C_SRCS += \
 ../src/codec/ByteDecoderChannel.c \
 ../src/codec/ByteEncoderChannel.c \
 ../src/codec/ByteStream.c \
-../src/codec/DynamicMemory.c \
 ../src/codec/EXIHeaderDecoder.c \
 ../src/codec/EXIHeaderEncoder.c \
 ../src/codec/MethodsBag.c \
-../src/codec/StringNameTable.c \
 ../src/codec/StringValueTable.c \
-../src/codec/UCSString.c \
-../src/codec/main_codec.c \
-../src/codec/v2gEXICoder.c \
-../src/codec/v2gEXIDecoder.c \
-../src/codec/v2gEXIEncoder.c \
-../src/codec/v2gNameTableEntries.c \
-../src/codec/v2gQNames.c 
+../src/codec/v2gEXIDatatypes.c \
+../src/codec/v2gEXIDatatypesDecoder.c \
+../src/codec/v2gEXIDatatypesEncoder.c 
 
 OBJS += \
 ./src/codec/AbstractDecoderChannel.o \
@@ -37,19 +31,13 @@ OBJS += \
 ./src/codec/ByteDecoderChannel.o \
 ./src/codec/ByteEncoderChannel.o \
 ./src/codec/ByteStream.o \
-./src/codec/DynamicMemory.o \
 ./src/codec/EXIHeaderDecoder.o \
 ./src/codec/EXIHeaderEncoder.o \
 ./src/codec/MethodsBag.o \
-./src/codec/StringNameTable.o \
 ./src/codec/StringValueTable.o \
-./src/codec/UCSString.o \
-./src/codec/main_codec.o \
-./src/codec/v2gEXICoder.o \
-./src/codec/v2gEXIDecoder.o \
-./src/codec/v2gEXIEncoder.o \
-./src/codec/v2gNameTableEntries.o \
-./src/codec/v2gQNames.o 
+./src/codec/v2gEXIDatatypes.o \
+./src/codec/v2gEXIDatatypesDecoder.o \
+./src/codec/v2gEXIDatatypesEncoder.o 
 
 C_DEPS += \
 ./src/codec/AbstractDecoderChannel.d \
@@ -61,26 +49,20 @@ C_DEPS += \
 ./src/codec/ByteDecoderChannel.d \
 ./src/codec/ByteEncoderChannel.d \
 ./src/codec/ByteStream.d \
-./src/codec/DynamicMemory.d \
 ./src/codec/EXIHeaderDecoder.d \
 ./src/codec/EXIHeaderEncoder.d \
 ./src/codec/MethodsBag.d \
-./src/codec/StringNameTable.d \
 ./src/codec/StringValueTable.d \
-./src/codec/UCSString.d \
-./src/codec/main_codec.d \
-./src/codec/v2gEXICoder.d \
-./src/codec/v2gEXIDecoder.d \
-./src/codec/v2gEXIEncoder.d \
-./src/codec/v2gNameTableEntries.d \
-./src/codec/v2gQNames.d 
+./src/codec/v2gEXIDatatypes.d \
+./src/codec/v2gEXIDatatypesDecoder.d \
+./src/codec/v2gEXIDatatypesEncoder.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 src/codec/%.o: ../src/codec/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -I"../src/codec" -I"../src/codec/appHandCodec" -I"../src/appHandshake" -I"../src/transport" -I"../src/service" -I"../src/test" -O3 -Os -g3 -pedantic -pedantic-errors -Wall -c -fmessage-length=0 -ansi -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	gcc -I"../src/codec" -I"../src/appHandshake" -I"../src/transport" -I"../src/test" -Os -pedantic -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

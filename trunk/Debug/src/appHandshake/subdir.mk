@@ -4,26 +4,26 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../src/appHandshake/appHand_dataDeserialization.c \
-../src/appHandshake/appHand_dataSerialization.c \
-../src/appHandshake/appHand_dataTypes.c 
+../src/appHandshake/appHandEXIDatatypes.c \
+../src/appHandshake/appHandEXIDatatypesDecoder.c \
+../src/appHandshake/appHandEXIDatatypesEncoder.c 
 
 OBJS += \
-./src/appHandshake/appHand_dataDeserialization.o \
-./src/appHandshake/appHand_dataSerialization.o \
-./src/appHandshake/appHand_dataTypes.o 
+./src/appHandshake/appHandEXIDatatypes.o \
+./src/appHandshake/appHandEXIDatatypesDecoder.o \
+./src/appHandshake/appHandEXIDatatypesEncoder.o 
 
 C_DEPS += \
-./src/appHandshake/appHand_dataDeserialization.d \
-./src/appHandshake/appHand_dataSerialization.d \
-./src/appHandshake/appHand_dataTypes.d 
+./src/appHandshake/appHandEXIDatatypes.d \
+./src/appHandshake/appHandEXIDatatypesDecoder.d \
+./src/appHandshake/appHandEXIDatatypesEncoder.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 src/appHandshake/%.o: ../src/appHandshake/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -I"../src/codec" -I"../src/codec/appHandCodec" -I"../src/appHandshake" -I"../src/transport" -I"../src/service" -I"../src/test" -O0 -g3 -pedantic -pedantic-errors -Wall -c -fmessage-length=0 -ansi -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	gcc -I"../src/codec" -I"../src/appHandshake" -I"../src/transport" -I"../src/test" -O0 -g3 -pedantic -Wall -c -fmessage-length=0 -ansi -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

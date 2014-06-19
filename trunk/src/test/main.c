@@ -19,10 +19,10 @@
  *
  * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch@siemens.com
- * @version 0.8
+ * @version 0.9
  * @contact Joerg.Heuer@siemens.com
  *
- * <p>Switch for sample programs: EXI codec only or for entire V2G service</p>
+ * <p>Switch for sample programs: EXI codec only or for entire V2G example</p>
  *
  ********************************************************************/
 
@@ -34,10 +34,10 @@
 int main(int argc, char *argv[]) {
 #if CODE_VERSION == CODE_VERSION_EXI
 	/* EXI codec only */
-	return main_codec(argc, argv);
-#elif CODE_VERSION == CODE_VERSION_SERVICE
-	/* V2G client / service example scenario */
-	return main_service(argc, argv);
+	return main_databinder(argc, argv);
+#elif CODE_VERSION == CODE_VERSION_SAMPLE
+	/* V2G client / service example  */
+	return main_example(argc, argv);
 #endif
 
 }
