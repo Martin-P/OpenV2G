@@ -5,12 +5,12 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.181718907" moduleId="org.eclipse.cdt.core.settings" name="Debug">
 				<externalSettings/>
 				<extensions>
-					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -36,7 +36,7 @@
 								</option>
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.1880660058" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.890071608" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.warnings.pedantic.1983095151" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.warnings.pedantic.1983095151" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.misc.ansi.1916749690" name="Support ANSI programs (-ansi)" superClass="gnu.c.compiler.option.misc.ansi" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.warnings.toerrors.990186240" name="Warnings as errors (-Werror)" superClass="gnu.c.compiler.option.warnings.toerrors" value="false" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.warnings.pedantic.error.145905553" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.c.compiler.option.warnings.pedantic.error" value="false" valueType="boolean"/>
@@ -64,12 +64,12 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.release.681614450" moduleId="org.eclipse.cdt.core.settings" name="Release">
 				<externalSettings/>
 				<extensions>
-					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -96,7 +96,7 @@
 								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.option.optimization.level.899621054" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.size" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.1251127335" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.misc.ansi.496561434" name="Support ANSI programs (-ansi)" superClass="gnu.c.compiler.option.misc.ansi" value="false" valueType="boolean"/>
-								<option id="gnu.c.compiler.option.warnings.pedantic.289278524" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.warnings.pedantic.289278524" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.warnings.pedantic.error.822372173" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.c.compiler.option.warnings.pedantic.error" value="false" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.optimization.flags.1051939537" name="Other optimization flags" superClass="gnu.c.compiler.option.optimization.flags" value="" valueType="string"/>
 								<option id="gnu.c.compiler.option.misc.other.1470884128" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0" valueType="string"/>

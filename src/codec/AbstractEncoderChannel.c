@@ -37,8 +37,6 @@
 #include "MethodsBag.h"
 /*#include "v2gEXICoder.h"*/
 
-#include "StringValueTable.h"
-
 #ifndef ABSTRACT_ENCODER_CHANNEL_C
 #define ABSTRACT_ENCODER_CHANNEL_C
 

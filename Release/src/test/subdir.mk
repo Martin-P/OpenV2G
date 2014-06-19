@@ -23,7 +23,7 @@ C_DEPS += \
 src/test/%.o: ../src/test/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -I"../src/codec" -I"../src/appHandshake" -I"../src/transport" -I"../src/test" -Os -pedantic -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	gcc -I"../src/codec" -I"../src/appHandshake" -I"../src/transport" -I"../src/test" -Os -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
