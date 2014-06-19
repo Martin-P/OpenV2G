@@ -19,7 +19,8 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch@siemens.com
- * @version 0.8
+ * @author Daniel.Peintner.EXT@siemens.com
+ * @version 0.9
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -39,7 +40,7 @@
 #include "v2gtp.h"
 
 
-int write_v2gtpHeader(uint8_t* outStream, uint16_t* outStreamLength, uint16_t payloadType)
+int write_v2gtpHeader(uint8_t* outStream, uint16_t outStreamLength, uint16_t payloadType)
 {
 
 	/* write v2gtp version number 1=byte */
@@ -54,18 +55,18 @@ int write_v2gtpHeader(uint8_t* outStream, uint16_t* outStreamLength, uint16_t pa
 	outStream[2] = (uint8_t)(payloadType >> 8 & 0xFF);
 
 	/* write payload length */
-	outStream[7] = (uint8_t)(*outStreamLength & 0xFF);
-	outStream[6] = (uint8_t)(*outStreamLength>>8 & 0xFF);
-	outStream[5] = (uint8_t)(*outStreamLength>>16 & 0xFF);
-	outStream[4] = (uint8_t)(*outStreamLength>>24 & 0xFF);
+	outStream[7] = (uint8_t)(outStreamLength & 0xFF);
+	outStream[6] = (uint8_t)(outStreamLength>>8 & 0xFF);
+	outStream[5] = (uint8_t)(outStreamLength>>16 & 0xFF);
+	outStream[4] = (uint8_t)(outStreamLength>>24 & 0xFF);
 
 	/* here, the outStream length have to be resized by the v2gtp offset*/
-	*outStreamLength += V2GTP_HEADER_LENGTH;
+	/**outStreamLength += V2GTP_HEADER_LENGTH;*/
 
 	return 0;
 }
 
-int read_v2gtpHeader(uint8_t* inStream, uint16_t inStreamLength, uint16_t* payloadLength)
+int read_v2gtpHeader(uint8_t* inStream, uint16_t* payloadLength)
 {
 	uint16_t payloadType=0;
 
@@ -89,8 +90,8 @@ int read_v2gtpHeader(uint8_t* inStream, uint16_t inStreamLength, uint16_t* paylo
 	*payloadLength = (*payloadLength << 8 | inStream[6]);
 	*payloadLength = (*payloadLength << 8 | inStream[7]);
 
-	if((*payloadLength+V2GTP_HEADER_LENGTH)!=inStreamLength)
-		return -1;
+	/* if((*payloadLength+V2GTP_HEADER_LENGTH)!=inStreamLength)
+		return -1; */
 
 	return 0;
 }
