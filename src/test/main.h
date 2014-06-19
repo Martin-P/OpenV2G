@@ -19,7 +19,7 @@
  *
  * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch@siemens.com
- * @version 0.8
+ * @version 0.9
  * @contact Joerg.Heuer@siemens.com
  *
  *
@@ -27,17 +27,16 @@
 
 
 #define CODE_VERSION_EXI 1
-#define CODE_VERSION_SERVICE 2
-#define CODE_VERSION CODE_VERSION_SERVICE
-/* #define CODE_VERSION CODE_VERSION_EXI */
+#define CODE_VERSION_SAMPLE 2
+#define CODE_VERSION CODE_VERSION_SAMPLE
 
 #ifndef MAIN_H_
 #define MAIN_H_
 
 #if CODE_VERSION == CODE_VERSION_EXI
 int main_codec(int argc, char *argv[]);
-#elif CODE_VERSION == CODE_VERSION_SERVICE
-int main_service(int argc, char *argv[]);
+#elif CODE_VERSION == CODE_VERSION_SAMPLE
+int main_example(int argc, char *argv[]);
 #endif
 
 #endif

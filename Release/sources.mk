@@ -15,8 +15,6 @@ EXECUTABLES :=
 SUBDIRS := \
 src/transport \
 src/test \
-src/service \
 src/codec \
-src/codec/appHandCodec \
 src/appHandshake \
 
