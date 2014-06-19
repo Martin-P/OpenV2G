@@ -39,8 +39,6 @@
 /*#include "v2gEXICoder.h"*/
 #include "ErrorCodes.h"
 
-#include "StringValueTable.h"
-
 #if MEMORY_ALLOCATION == DYNAMIC_ALLOCATION
 #include "DynamicMemory.h"
 #endif /* DYNAMIC_ALLOCATION */

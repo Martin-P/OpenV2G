@@ -16,7 +16,6 @@ C_SRCS += \
 ../src/codec/EXIHeaderDecoder.c \
 ../src/codec/EXIHeaderEncoder.c \
 ../src/codec/MethodsBag.c \
-../src/codec/StringValueTable.c \
 ../src/codec/v2gEXIDatatypes.c \
 ../src/codec/v2gEXIDatatypesDecoder.c \
 ../src/codec/v2gEXIDatatypesEncoder.c 
@@ -34,7 +33,6 @@ OBJS += \
 ./src/codec/EXIHeaderDecoder.o \
 ./src/codec/EXIHeaderEncoder.o \
 ./src/codec/MethodsBag.o \
-./src/codec/StringValueTable.o \
 ./src/codec/v2gEXIDatatypes.o \
 ./src/codec/v2gEXIDatatypesDecoder.o \
 ./src/codec/v2gEXIDatatypesEncoder.o 
@@ -52,7 +50,6 @@ C_DEPS += \
 ./src/codec/EXIHeaderDecoder.d \
 ./src/codec/EXIHeaderEncoder.d \
 ./src/codec/MethodsBag.d \
-./src/codec/StringValueTable.d \
 ./src/codec/v2gEXIDatatypes.d \
 ./src/codec/v2gEXIDatatypesDecoder.d \
 ./src/codec/v2gEXIDatatypesEncoder.d 
@@ -62,7 +59,7 @@ C_DEPS += \
 src/codec/%.o: ../src/codec/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -I"../src/codec" -I"../src/appHandshake" -I"../src/transport" -I"../src/test" -Os -pedantic -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	gcc -I"../src/codec" -I"../src/appHandshake" -I"../src/transport" -I"../src/test" -Os -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
