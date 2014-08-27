@@ -10,6 +10,7 @@ RM := rm -rf
 -include sources.mk
 -include src/transport/subdir.mk
 -include src/test/subdir.mk
+-include src/din/subdir.mk
 -include src/codec/subdir.mk
 -include src/appHandshake/subdir.mk
 -include subdir.mk
