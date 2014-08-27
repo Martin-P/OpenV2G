@@ -20,7 +20,7 @@
  *
  * @author Sebastian.Kaebisch@siemens.com
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.9
+ * @version 0.9.1
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/
@@ -57,8 +57,8 @@ int write_v2gtpHeader(uint8_t* outStream, uint16_t outStreamLength, uint16_t pay
 	/* write payload length */
 	outStream[7] = (uint8_t)(outStreamLength & 0xFF);
 	outStream[6] = (uint8_t)(outStreamLength>>8 & 0xFF);
-	outStream[5] = (uint8_t)(outStreamLength>>16 & 0xFF);
-	outStream[4] = (uint8_t)(outStreamLength>>24 & 0xFF);
+	outStream[5] = (uint8_t) 0; /* uint16 only, no need for (outStreamLength>>16 & 0xFF); */
+	outStream[4] = (uint8_t) 0; /* uint16 only, no need for (outStreamLength>>24 & 0xFF); */
 
 	/* here, the outStream length have to be resized by the v2gtp offset*/
 	/**outStreamLength += V2GTP_HEADER_LENGTH;*/
