@@ -19,7 +19,7 @@
  *
  * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch@siemens.com
- * @version 0.9 
+ * @version 0.9.1
  * @contact Joerg.Heuer@siemens.com
  *
  *
@@ -147,9 +147,8 @@ static int deserializeStream2EXI(bitstream_t* streamIn, struct v2gEXIDocument* e
 	return errn;
 }
 
-
 /** Example implementation of the app handshake protocol for the EVSE side  */
-static int appHandshakeHandler(bitstream_t iStream, bitstream_t oStream) {
+static int appHandshakeHandler(bitstream_t* iStream, bitstream_t* oStream) {
 	struct appHandEXIDocument appHandResp;
 	int i;
 	struct appHandEXIDocument exiDoc;
@@ -157,9 +156,9 @@ static int appHandshakeHandler(bitstream_t iStream, bitstream_t oStream) {
 	uint16_t payloadLengthDec;
 
 
-	if ( (errn = read_v2gtpHeader(iStream.data, &payloadLengthDec)) == 0) {
-		*iStream.pos = V2GTP_HEADER_LENGTH;
-		if( (errn = decode_appHandExiDocument(&iStream, &exiDoc)) ) {
+	if ( (errn = read_v2gtpHeader(iStream->data, &payloadLengthDec)) == 0) {
+		*iStream->pos = V2GTP_HEADER_LENGTH;
+		if( (errn = decode_appHandExiDocument(iStream, &exiDoc)) ) {
 			/* an error occured */
 			return errn;
 		}
@@ -188,9 +187,9 @@ static int appHandshakeHandler(bitstream_t iStream, bitstream_t oStream) {
 	appHandResp.supportedAppProtocolRes.SchemaID = exiDoc.supportedAppProtocolReq.AppProtocol.array[0].SchemaID; /* signal the protocol by the provided schema id*/
 	appHandResp.supportedAppProtocolRes.SchemaID_isUsed = 1u;
 
-	*oStream.pos = V2GTP_HEADER_LENGTH;
-	if( (errn = encode_appHandExiDocument(&oStream, &appHandResp)) == 0) {
-		errn = write_v2gtpHeader(oStream.data, (*oStream.pos)-V2GTP_HEADER_LENGTH, V2GTP_EXI_TYPE);
+	*oStream->pos = V2GTP_HEADER_LENGTH;
+	if( (errn = encode_appHandExiDocument(oStream, &appHandResp)) == 0) {
+		errn = write_v2gtpHeader(oStream->data, (*oStream->pos)-V2GTP_HEADER_LENGTH, V2GTP_EXI_TYPE);
 	}
 
 
@@ -205,7 +204,7 @@ static int appHandshake()
 
 	uint16_t payloadLengthDec;
 	uint16_t pos1 = V2GTP_HEADER_LENGTH; /* v2gtp header */
-	uint16_t pos2;
+	uint16_t pos2 = 0;
 
 	struct appHandEXIDocument handshake;
 	struct appHandEXIDocument handshakeResp;
@@ -254,7 +253,7 @@ static int appHandshake()
 
 	if (errn == 0) {
 		/* read app handshake request & generate response */
-		errn = appHandshakeHandler(stream1, stream2);
+		errn = appHandshakeHandler(&stream1, &stream2);
 	}
 
 	if (errn == 0) {

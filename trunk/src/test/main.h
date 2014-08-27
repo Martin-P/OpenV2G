@@ -19,7 +19,7 @@
  *
  * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch@siemens.com
- * @version 0.9
+ * @version 0.9.1
  * @contact Joerg.Heuer@siemens.com
  *
  *
