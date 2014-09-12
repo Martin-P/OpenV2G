@@ -19,7 +19,7 @@
  *
  * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch@siemens.com
- * @version 0.9.1
+ * @version 0.9.2
  * @contact Joerg.Heuer@siemens.com
  *
  *
@@ -36,6 +36,12 @@
 #include "appHandEXIDatatypes.h"
 #include "appHandEXIDatatypesEncoder.h"
 #include "appHandEXIDatatypesDecoder.h"
+
+#if DEPLOY_DIN_CODEC == SUPPORT_YES
+#include "dinEXIDatatypes.h"
+#include "dinEXIDatatypesEncoder.h"
+#include "dinEXIDatatypesDecoder.h"
+#endif /* DEPLOY_DIN_CODEC == SUPPORT_YES */
 
 #include "v2gEXIDatatypes.h"
 #include "v2gEXIDatatypesEncoder.h"
@@ -99,7 +105,7 @@ static void printDCEVSEStatus(struct v2gDC_EVSEStatusType* status)
 	}
 	printf("\t\tEVSEStatusCode=%d\n", status->EVSEStatusCode);
 
-	if(status->EVSENotification==EVSENotificationType_None) {
+	if(status->EVSENotification==v2gEVSENotificationType_None) {
 		printf("\t\tEVSENotification=None_EVSENotificationType\n");
 	}
 	printf("\t\tNotificationMaxDelay=%d\n",status->NotificationMaxDelay);
@@ -182,8 +188,9 @@ static int appHandshakeHandler(bitstream_t* iStream, bitstream_t* oStream) {
 
 	/* prepare response handshake response:
 	 * it is assumed, we support the 15118 1.0 version :-) */
+	init_appHandEXIDocument(&appHandResp);
 	appHandResp.supportedAppProtocolRes_isUsed = 1u;
-	appHandResp.supportedAppProtocolRes.ResponseCode = responseCodeType_OK_SuccessfulNegotiation;
+	appHandResp.supportedAppProtocolRes.ResponseCode = appHandresponseCodeType_OK_SuccessfulNegotiation;
 	appHandResp.supportedAppProtocolRes.SchemaID = exiDoc.supportedAppProtocolReq.AppProtocol.array[0].SchemaID; /* signal the protocol by the provided schema id*/
 	appHandResp.supportedAppProtocolRes.SchemaID_isUsed = 1u;
 
@@ -263,7 +270,7 @@ static int appHandshake()
 
 			if(decode_appHandExiDocument(&stream2, &handshakeResp) == 0) {
 				printf("EV side: Response of the EVSE \n");
-				if(handshakeResp.supportedAppProtocolRes.ResponseCode == responseCodeType_OK_SuccessfulNegotiation) {
+				if(handshakeResp.supportedAppProtocolRes.ResponseCode == appHandresponseCodeType_OK_SuccessfulNegotiation) {
 					printf("\t\tResponseCode=OK_SuccessfulNegotiation\n");
 					printf("\t\tSchemaID=%d\n",handshakeResp.supportedAppProtocolRes.SchemaID);
 				}
@@ -307,7 +314,7 @@ static int sessionSetup(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exi
 	init_v2gBodyType(&exiOut->V2G_Message.Body);
 	exiOut->V2G_Message.Body.SessionSetupRes_isUsed = 1u;
 	init_v2gSessionSetupResType(&exiOut->V2G_Message.Body.SessionSetupRes);
-	exiOut->V2G_Message.Body.SessionSetupRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.SessionSetupRes.ResponseCode = v2gresponseCodeType_OK;
 	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[0] = 0;
 	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[1] = 20;
 	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.charactersLen = 2;
@@ -333,7 +340,7 @@ static int serviceDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument*
 
 
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList_isUsed = 0u; /* we do not provide VAS */
-	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ResponseCode = v2gresponseCodeType_OK;
 
 
 	/* result->ChargeService.SupportedEnergyTransferMode = AC_single_phase_core_EnergyTransferModeType; */
@@ -348,21 +355,21 @@ static int serviceDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument*
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceName.charactersLen = 5;
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceScope_isUsed = 1u;
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.FreeService = 1;
-	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceCategory = serviceCategoryType_EVCharging;
+	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceCategory = v2gserviceCategoryType_EVCharging;
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceScope_isUsed = 1u;
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceScope.characters[0] = 100;
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceScope.characters[1] = '\0';
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceScope.charactersLen = 1;
 
-	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode.array[0] = EnergyTransferModeType_DC_combo_core;
-	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode.array[1] = EnergyTransferModeType_AC_single_phase_core;
+	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode.array[0] = v2gEnergyTransferModeType_DC_combo_core;
+	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode.array[1] = v2gEnergyTransferModeType_AC_single_phase_core;
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode.arrayLen = 2;
 
-	exiOut->V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.array[0] = paymentOptionType_ExternalPayment; /* EVSE handles the payment */
-	exiOut->V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.array[1] = paymentOptionType_Contract;
+	exiOut->V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.array[0] = v2gpaymentOptionType_ExternalPayment; /* EVSE handles the payment */
+	exiOut->V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.array[1] = v2gpaymentOptionType_Contract;
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.arrayLen = 2;
 
-	if(exiIn->V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory==serviceCategoryType_Internet || exiIn->V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory==serviceCategoryType_OtherCustom || exiIn->V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory_isUsed == 0u) {
+	if(exiIn->V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory==v2gserviceCategoryType_Internet || exiIn->V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory==v2gserviceCategoryType_OtherCustom || exiIn->V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory_isUsed == 0u) {
 
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.arrayLen = 2;
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[0].FreeService=1;
@@ -372,7 +379,7 @@ static int serviceDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument*
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[0].ServiceName.characters[1]='W';
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[0].ServiceName.characters[2]='W';
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[0].ServiceName.charactersLen = 3;
-		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[0].ServiceCategory= serviceCategoryType_Internet;
+		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[0].ServiceCategory= v2gserviceCategoryType_Internet;
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[0].ServiceScope_isUsed = 0u;
 
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[1].FreeService=0;
@@ -384,7 +391,7 @@ static int serviceDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument*
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[1].ServiceName.characters[3]='P';
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[1].ServiceName.characters[4]='S';
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[1].ServiceName.charactersLen = 5;
-		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[1].ServiceCategory=serviceCategoryType_Internet;
+		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[1].ServiceCategory=v2gserviceCategoryType_Internet;
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[1].ServiceScope_isUsed = 0u;
 
 		exiOut->V2G_Message.Body.ServiceDiscoveryRes.ServiceList_isUsed = 1u;
@@ -457,10 +464,10 @@ static int serviceDetail(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* ex
 	exiOut->V2G_Message.Body.ServiceDetailRes.ServiceParameterList.ParameterSet.array[1].Parameter.array[0].Name.characters[6] = 'l';
 	exiOut->V2G_Message.Body.ServiceDetailRes.ServiceParameterList.ParameterSet.array[1].Parameter.array[0].physicalValue_isUsed = 1u;
 	exiOut->V2G_Message.Body.ServiceDetailRes.ServiceParameterList.ParameterSet.array[1].Parameter.array[0].physicalValue.Value = 1234;
-	exiOut->V2G_Message.Body.ServiceDetailRes.ServiceParameterList.ParameterSet.array[1].Parameter.array[0].physicalValue.Unit = unitSymbolType_m;
+	exiOut->V2G_Message.Body.ServiceDetailRes.ServiceParameterList.ParameterSet.array[1].Parameter.array[0].physicalValue.Unit = v2gunitSymbolType_m;
 	exiOut->V2G_Message.Body.ServiceDetailRes.ServiceParameterList.ParameterSet.array[1].Parameter.array[0].physicalValue.Multiplier = 0;
 
-	exiOut->V2G_Message.Body.ServiceDetailRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.ServiceDetailRes.ResponseCode = v2gresponseCodeType_OK;
 
 	return 0;
 }
@@ -474,7 +481,7 @@ static int paymentServiceSelection(struct v2gEXIDocument* exiIn, struct v2gEXIDo
 	printf("\tHeader SessionID=");
 	printBinaryArray(exiIn->V2G_Message.Header.SessionID.bytes, exiIn->V2G_Message.Header.SessionID.bytesLen);
 
-	if(exiIn->V2G_Message.Body.PaymentServiceSelectionReq.SelectedPaymentOption == paymentOptionType_ExternalPayment)  {
+	if(exiIn->V2G_Message.Body.PaymentServiceSelectionReq.SelectedPaymentOption == v2gpaymentOptionType_ExternalPayment)  {
 		printf("\t\t SelectedPaymentOption=ExternalPayment\n");
 	}
 
@@ -492,7 +499,7 @@ static int paymentServiceSelection(struct v2gEXIDocument* exiIn, struct v2gEXIDo
 	exiOut->V2G_Message.Body.PaymentServiceSelectionRes_isUsed= 1u;
 	init_v2gPaymentServiceSelectionResType(&exiOut->V2G_Message.Body.PaymentServiceSelectionRes);
 
-	exiOut->V2G_Message.Body.ServiceDetailRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.ServiceDetailRes.ResponseCode = v2gresponseCodeType_OK;
 
 	return 0;
 }
@@ -514,7 +521,7 @@ static int paymentDetails(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* e
 	init_v2gBodyType(&exiOut->V2G_Message.Body);
 	exiOut->V2G_Message.Body.PaymentDetailsRes_isUsed = 1u;
 
-	exiOut->V2G_Message.Body.PaymentDetailsRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.PaymentDetailsRes.ResponseCode = v2gresponseCodeType_OK;
 	exiOut->V2G_Message.Body.PaymentDetailsRes.GenChallenge.bytesLen = 1;
 	exiOut->V2G_Message.Body.PaymentDetailsRes.GenChallenge.bytes[0] = 1;
 	exiOut->V2G_Message.Body.PaymentDetailsRes.EVSETimeStamp = 123456;
@@ -541,8 +548,8 @@ static int authorization(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* ex
 	init_v2gBodyType(&exiOut->V2G_Message.Body);
 	exiOut->V2G_Message.Body.AuthorizationRes_isUsed = 1u;
 
-	exiOut->V2G_Message.Body.AuthorizationRes.ResponseCode = responseCodeType_OK;
-	exiOut->V2G_Message.Body.AuthorizationRes.EVSEProcessing = EVSEProcessingType_Finished;
+	exiOut->V2G_Message.Body.AuthorizationRes.ResponseCode = v2gresponseCodeType_OK;
+	exiOut->V2G_Message.Body.AuthorizationRes.EVSEProcessing = v2gEVSEProcessingType_Finished;
 
 	return 0;
 }
@@ -555,7 +562,7 @@ static int chargeParameterDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXID
 	printf("\t\t EVRequestedEnergyTransferType=%d\n", exiIn->V2G_Message.Body.ChargeParameterDiscoveryReq.RequestedEnergyTransferMode);
 
 	/* check,if DC or AC is requested */
-	if(exiIn->V2G_Message.Body.ChargeParameterDiscoveryReq.RequestedEnergyTransferMode == EnergyTransferModeType_DC_core || exiIn->V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter_isUsed == 1) {
+	if(exiIn->V2G_Message.Body.ChargeParameterDiscoveryReq.RequestedEnergyTransferMode == v2gEnergyTransferModeType_DC_core || exiIn->V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter_isUsed == 1) {
 		printf("\t\t MaxEntriesSAScheduleTuple=%d\n", exiIn->V2G_Message.Body.ChargeParameterDiscoveryReq.MaxEntriesSAScheduleTuple);
 		printf("\t\t EVStatus:\n");
 		printf("\t\t\t EVReady=%d\n", exiIn->V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.DC_EVStatus.EVReady);
@@ -578,50 +585,50 @@ static int chargeParameterDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXID
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes_isUsed = 1u;
 
 
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.ResponseCode = responseCodeType_OK;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEProcessing = EVSEProcessingType_Finished;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.ResponseCode = v2gresponseCodeType_OK;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEProcessing = v2gEVSEProcessingType_Finished;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter_isUsed = 1u;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter_isUsed = 0u;
 
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.DC_EVSEStatus.EVSEStatusCode = DC_EVSEStatusCodeType_EVSE_Ready;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.DC_EVSEStatus.EVSEIsolationStatus = isolationLevelType_Valid;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.DC_EVSEStatus.EVSEStatusCode = v2gDC_EVSEStatusCodeType_EVSE_Ready;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.DC_EVSEStatus.EVSEIsolationStatus = v2gisolationLevelType_Valid;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.DC_EVSEStatus.EVSENotification = EVSENotificationType_None;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.DC_EVSEStatus.EVSENotification = v2gEVSENotificationType_None;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.DC_EVSEStatus.NotificationMaxDelay = 10;
 
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumCurrentLimit.Multiplier = 0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumCurrentLimit.Unit = unitSymbolType_A;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumCurrentLimit.Unit = v2gunitSymbolType_A;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumCurrentLimit.Value = 50;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMaximumPowerLimit.Multiplier = 0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMaximumPowerLimit.Unit = unitSymbolType_W;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMaximumPowerLimit.Unit = v2gunitSymbolType_W;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMaximumPowerLimit.Value = 20000;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMaximumVoltageLimit.Multiplier = 0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMaximumVoltageLimit.Unit = unitSymbolType_V;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMaximumVoltageLimit.Unit = v2gunitSymbolType_V;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMaximumVoltageLimit.Value = 400;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumCurrentLimit.Multiplier = 0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumCurrentLimit.Unit = unitSymbolType_A;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumCurrentLimit.Unit = v2gunitSymbolType_A;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumCurrentLimit.Value = 5;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumVoltageLimit.Multiplier = 0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumVoltageLimit.Unit = unitSymbolType_V;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumVoltageLimit.Unit = v2gunitSymbolType_V;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEMinimumVoltageLimit.Value = 200;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSECurrentRegulationTolerance.Multiplier = 0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSECurrentRegulationTolerance.Unit = unitSymbolType_A;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSECurrentRegulationTolerance.Unit = v2gunitSymbolType_A;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSECurrentRegulationTolerance.Value = 2;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSECurrentRegulationTolerance_isUsed = 1u;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEPeakCurrentRipple.Multiplier = 0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEPeakCurrentRipple.Unit = unitSymbolType_A;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEPeakCurrentRipple.Unit = v2gunitSymbolType_A;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEPeakCurrentRipple.Value = 1;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEEnergyToBeDelivered.Multiplier = 0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEEnergyToBeDelivered.Unit = unitSymbolType_W;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEEnergyToBeDelivered.Unit = v2gunitSymbolType_W;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEEnergyToBeDelivered.Value = 5000;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter.EVSEEnergyToBeDelivered_isUsed = 1u;
 
@@ -634,14 +641,14 @@ static int chargeParameterDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXID
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.arrayLen = 2;
 		/* set up two PMax entries: #1 */
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Value=20000;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Unit = unitSymbolType_W;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Unit = v2gunitSymbolType_W;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Multiplier =0;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval_isUsed = 1u;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.start=0;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.duration_isUsed = 0;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Value=0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Unit = unitSymbolType_W;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Unit = v2gunitSymbolType_W;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Multiplier =0;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].RelativeTimeInterval_isUsed = 1u;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].RelativeTimeInterval.start=1200; /* 20 min */
@@ -653,14 +660,14 @@ static int chargeParameterDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXID
 		/* #2 */
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].SAScheduleTupleID = 15;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Value = 10000;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Unit = unitSymbolType_W;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Unit = v2gunitSymbolType_W;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Multiplier =0;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.start=0;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval_isUsed = 1;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.duration_isUsed = 0u;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Value=0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Unit = unitSymbolType_W;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Unit = v2gunitSymbolType_W;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Multiplier =1;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[1].RelativeTimeInterval.start=1800; /* 30 min */
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].PMaxSchedule.PMaxScheduleEntry.array[1].RelativeTimeInterval_isUsed = 1u;
@@ -687,8 +694,8 @@ static int chargeParameterDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXID
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes_isUsed = 1u;
 
 
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.ResponseCode = responseCodeType_OK;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEProcessing = EVSEProcessingType_Finished;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.ResponseCode = v2gresponseCodeType_OK;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEProcessing = v2gEVSEProcessingType_Finished;
 
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter_isUsed = 1u;
@@ -696,15 +703,15 @@ static int chargeParameterDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXID
 
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.AC_EVSEStatus.RCD =1;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.AC_EVSEStatus.EVSENotification = EVSENotificationType_None;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.AC_EVSEStatus.EVSENotification = v2gEVSENotificationType_None;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.AC_EVSEStatus.NotificationMaxDelay=123;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.EVSEMaxCurrent.Multiplier = 0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.EVSEMaxCurrent.Unit = unitSymbolType_A;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.EVSEMaxCurrent.Unit = v2gunitSymbolType_A;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.EVSEMaxCurrent.Value = 100;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.EVSENominalVoltage.Multiplier = 0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.EVSENominalVoltage.Unit = unitSymbolType_V;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.EVSENominalVoltage.Unit = v2gunitSymbolType_V;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter.EVSENominalVoltage.Value = 300;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEProcessing = 1;
@@ -717,14 +724,14 @@ static int chargeParameterDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXID
 
 		/* set up two PMax entries: #1 */
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Value=20000;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Unit = unitSymbolType_W;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Unit = v2gunitSymbolType_W;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Multiplier =0;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.start=0;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval_isUsed = 1u;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.duration_isUsed =0;
 
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Value=0;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Unit = unitSymbolType_W;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Unit = v2gunitSymbolType_W;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].PMax.Multiplier =0;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].RelativeTimeInterval.start=1200; /* 20 min */
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].PMaxSchedule.PMaxScheduleEntry.array[1].RelativeTimeInterval_isUsed = 1u;
@@ -757,7 +764,7 @@ static int chargeParameterDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXID
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].SalesTariff.SalesTariffEntry.array[1].ConsumptionCost.array[0].Cost.array[0].amount=10;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].SalesTariff.SalesTariffEntry.array[1].ConsumptionCost.array[0].Cost.array[0].amountMultiplier=1;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].SalesTariff.SalesTariffEntry.array[1].ConsumptionCost.array[0].Cost.array[0].amountMultiplier_isUsed =1;
-		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].SalesTariff.SalesTariffEntry.array[1].ConsumptionCost.array[0].Cost.array[0].costKind= costKindType_RenewableGenerationPercentage;
+		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].SalesTariff.SalesTariffEntry.array[1].ConsumptionCost.array[0].Cost.array[0].costKind= v2gcostKindType_RenewableGenerationPercentage;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].SalesTariff.SalesTariffEntry.array[1].ConsumptionCost.array[0].startValue.Value=123;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].SalesTariff.SalesTariffEntry.array[1].ConsumptionCost.array[0].Cost.arrayLen = 1;
 		exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[1].SalesTariff.SalesTariffEntry.array[1].EPriceLevel_isUsed =1;
@@ -815,11 +822,11 @@ static int powerDelivery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* ex
 			}
 		}
 
-		exiOut->V2G_Message.Body.PowerDeliveryRes.ResponseCode = responseCodeType_OK;
+		exiOut->V2G_Message.Body.PowerDeliveryRes.ResponseCode = v2gresponseCodeType_OK;
 		exiOut->V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSEIsolationStatus =0;
 		exiOut->V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
-		exiOut->V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSEStatusCode = DC_EVSEStatusCodeType_EVSE_Ready;
-		exiOut->V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSENotification = EVSENotificationType_None;
+		exiOut->V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSEStatusCode = v2gDC_EVSEStatusCodeType_EVSE_Ready;
+		exiOut->V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSENotification = v2gEVSENotificationType_None;
 		exiOut->V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.NotificationMaxDelay = 123;
 
 		exiOut->V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus_isUsed = 1;
@@ -827,7 +834,7 @@ static int powerDelivery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* ex
 
 
 	} else {
-		exiOut->V2G_Message.Body.PowerDeliveryRes.ResponseCode = responseCodeType_OK;
+		exiOut->V2G_Message.Body.PowerDeliveryRes.ResponseCode = v2gresponseCodeType_OK;
 		exiOut->V2G_Message.Body.PowerDeliveryRes.AC_EVSEStatus.RCD=0;
 		exiOut->V2G_Message.Body.PowerDeliveryRes.AC_EVSEStatus.EVSENotification=3;
 		exiOut->V2G_Message.Body.PowerDeliveryRes.AC_EVSEStatus.NotificationMaxDelay=12;
@@ -849,17 +856,17 @@ static int chargingStatus(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* e
 	init_v2gBodyType(&exiOut->V2G_Message.Body);
 	exiOut->V2G_Message.Body.ChargingStatusRes_isUsed = 1u;
 
-	exiOut->V2G_Message.Body.ChargingStatusRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.ChargingStatusRes.ResponseCode = v2gresponseCodeType_OK;
 	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEID.characters[0]=12;
 	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEID.charactersLen =1;
 
 	exiOut->V2G_Message.Body.ChargingStatusRes.AC_EVSEStatus.RCD=1;
-	exiOut->V2G_Message.Body.ChargingStatusRes.AC_EVSEStatus.EVSENotification = EVSENotificationType_None;
+	exiOut->V2G_Message.Body.ChargingStatusRes.AC_EVSEStatus.EVSENotification = v2gEVSENotificationType_None;
 	exiOut->V2G_Message.Body.ChargingStatusRes.AC_EVSEStatus.NotificationMaxDelay=123;
 	exiOut->V2G_Message.Body.ChargingStatusRes.ReceiptRequired=1;
 	exiOut->V2G_Message.Body.ChargingStatusRes.ReceiptRequired_isUsed =1;
 	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEMaxCurrent.Multiplier = 2;
-	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEMaxCurrent.Unit = unitSymbolType_A;
+	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEMaxCurrent.Unit = v2gunitSymbolType_A;
 
 	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEMaxCurrent.Value = 400;
 	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEMaxCurrent_isUsed =1;
@@ -902,10 +909,10 @@ static int meteringReceipt(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* 
 	init_v2gBodyType(&exiOut->V2G_Message.Body);
 	exiOut->V2G_Message.Body.MeteringReceiptRes_isUsed = 1u;
 
-	exiOut->V2G_Message.Body.MeteringReceiptRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.MeteringReceiptRes.ResponseCode = v2gresponseCodeType_OK;
 
 	exiOut->V2G_Message.Body.MeteringReceiptRes.AC_EVSEStatus.RCD=1;
-	exiOut->V2G_Message.Body.MeteringReceiptRes.AC_EVSEStatus.EVSENotification= EVSENotificationType_None;
+	exiOut->V2G_Message.Body.MeteringReceiptRes.AC_EVSEStatus.EVSENotification= v2gEVSENotificationType_None;
 	exiOut->V2G_Message.Body.MeteringReceiptRes.AC_EVSEStatus.NotificationMaxDelay=123;
 
 	return 0;
@@ -924,7 +931,7 @@ static int sessionStop(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiO
 	init_v2gBodyType(&exiOut->V2G_Message.Body);
 	exiOut->V2G_Message.Body.SessionStopRes_isUsed = 1u;
 
-	exiOut->V2G_Message.Body.SessionStopRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.SessionStopRes.ResponseCode = v2gresponseCodeType_OK;
 
 	return 0;
 }
@@ -944,13 +951,13 @@ static int cableCheck(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOu
 	init_v2gBodyType(&exiOut->V2G_Message.Body);
 	exiOut->V2G_Message.Body.CableCheckRes_isUsed = 1u;
 
-	exiOut->V2G_Message.Body.CableCheckRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.CableCheckRes.ResponseCode = v2gresponseCodeType_OK;
 
-	exiOut->V2G_Message.Body.CableCheckRes.EVSEProcessing = EVSEProcessingType_Finished;
-	exiOut->V2G_Message.Body.CableCheckRes.DC_EVSEStatus.EVSEIsolationStatus= isolationLevelType_Valid;
+	exiOut->V2G_Message.Body.CableCheckRes.EVSEProcessing = v2gEVSEProcessingType_Finished;
+	exiOut->V2G_Message.Body.CableCheckRes.DC_EVSEStatus.EVSEIsolationStatus= v2gisolationLevelType_Valid;
 	exiOut->V2G_Message.Body.CableCheckRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1u;
-	exiOut->V2G_Message.Body.CableCheckRes.DC_EVSEStatus.EVSEStatusCode = DC_EVSEStatusCodeType_EVSE_Ready;
-	exiOut->V2G_Message.Body.CableCheckRes.DC_EVSEStatus.EVSENotification= EVSENotificationType_None;
+	exiOut->V2G_Message.Body.CableCheckRes.DC_EVSEStatus.EVSEStatusCode = v2gDC_EVSEStatusCodeType_EVSE_Ready;
+	exiOut->V2G_Message.Body.CableCheckRes.DC_EVSEStatus.EVSENotification= v2gEVSENotificationType_None;
 	exiOut->V2G_Message.Body.CableCheckRes.DC_EVSEStatus.NotificationMaxDelay = 1234;
 
 	return 0;
@@ -974,17 +981,17 @@ static int preCharge(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut
 	init_v2gBodyType(&exiOut->V2G_Message.Body);
 	exiOut->V2G_Message.Body.PreChargeRes_isUsed = 1u;
 
-	exiOut->V2G_Message.Body.PreChargeRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.PreChargeRes.ResponseCode = v2gresponseCodeType_OK;
 
 
-	exiOut->V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus= isolationLevelType_Valid;
+	exiOut->V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus= v2gisolationLevelType_Valid;
 	exiOut->V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1u;
-	exiOut->V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEStatusCode = DC_EVSEStatusCodeType_EVSE_Ready;
-	exiOut->V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSENotification = EVSENotificationType_None;
+	exiOut->V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEStatusCode = v2gDC_EVSEStatusCodeType_EVSE_Ready;
+	exiOut->V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSENotification = v2gEVSENotificationType_None;
 	exiOut->V2G_Message.Body.PreChargeRes.DC_EVSEStatus.NotificationMaxDelay= 1234;
 
 	exiOut->V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Multiplier = 0;
-	exiOut->V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Unit = unitSymbolType_V;
+	exiOut->V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Unit = v2gunitSymbolType_V;
 	exiOut->V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Value= 100;
 
 	return 0;
@@ -1017,21 +1024,21 @@ static int currentDemand(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* ex
 	init_v2gBodyType(&exiOut->V2G_Message.Body);
 	exiOut->V2G_Message.Body.CurrentDemandRes_isUsed = 1u;
 
-	exiOut->V2G_Message.Body.CurrentDemandRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.CurrentDemandRes.ResponseCode = v2gresponseCodeType_OK;
 
-	exiOut->V2G_Message.Body.CurrentDemandRes.DC_EVSEStatus.EVSEIsolationStatus= isolationLevelType_Valid;
+	exiOut->V2G_Message.Body.CurrentDemandRes.DC_EVSEStatus.EVSEIsolationStatus= v2gisolationLevelType_Valid;
 	exiOut->V2G_Message.Body.CurrentDemandRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
-	exiOut->V2G_Message.Body.CurrentDemandRes.DC_EVSEStatus.EVSEStatusCode = DC_EVSEStatusCodeType_EVSE_Ready;
-	exiOut->V2G_Message.Body.CurrentDemandRes.DC_EVSEStatus.EVSENotification= EVSENotificationType_None;
+	exiOut->V2G_Message.Body.CurrentDemandRes.DC_EVSEStatus.EVSEStatusCode = v2gDC_EVSEStatusCodeType_EVSE_Ready;
+	exiOut->V2G_Message.Body.CurrentDemandRes.DC_EVSEStatus.EVSENotification= v2gEVSENotificationType_None;
 	exiOut->V2G_Message.Body.CurrentDemandRes.DC_EVSEStatus.NotificationMaxDelay=1234;
 
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEPresentVoltage.Multiplier = 0;
-	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEPresentVoltage.Unit = unitSymbolType_V;
+	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEPresentVoltage.Unit = v2gunitSymbolType_V;
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEPresentVoltage.Value = 400;
 
 
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEPresentCurrent.Multiplier = 0;
-	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEPresentCurrent.Unit = unitSymbolType_A;
+	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEPresentCurrent.Unit = v2gunitSymbolType_A;
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEPresentCurrent.Value = 45;
 
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSECurrentLimitAchieved=0;
@@ -1039,17 +1046,17 @@ static int currentDemand(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* ex
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEPowerLimitAchieved=0;
 
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumVoltageLimit.Multiplier = 0;
-	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumVoltageLimit.Unit = unitSymbolType_V;
+	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumVoltageLimit.Unit = v2gunitSymbolType_V;
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumVoltageLimit.Value = 400;
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumVoltageLimit_isUsed = 1u;
 
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumCurrentLimit.Multiplier = 0;
-	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumCurrentLimit.Unit = unitSymbolType_A;
+	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumCurrentLimit.Unit = v2gunitSymbolType_A;
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumCurrentLimit.Value = 50;
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumCurrentLimit_isUsed = 1u;
 
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumPowerLimit.Multiplier = 0;
-	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumPowerLimit.Unit = unitSymbolType_W;
+	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumPowerLimit.Unit = v2gunitSymbolType_W;
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumPowerLimit.Value = 20000;
 	exiOut->V2G_Message.Body.CurrentDemandRes.EVSEMaximumPowerLimit_isUsed = 1u;
 
@@ -1093,15 +1100,15 @@ static int weldingDetection(struct v2gEXIDocument* exiIn, struct v2gEXIDocument*
 	init_v2gBodyType(&exiOut->V2G_Message.Body);
 	exiOut->V2G_Message.Body.WeldingDetectionRes_isUsed = 1u;
 
-	exiOut->V2G_Message.Body.WeldingDetectionRes.ResponseCode = responseCodeType_OK;
+	exiOut->V2G_Message.Body.WeldingDetectionRes.ResponseCode = v2gresponseCodeType_OK;
 
-	exiOut->V2G_Message.Body.WeldingDetectionRes.DC_EVSEStatus.EVSEIsolationStatus= isolationLevelType_Valid;
+	exiOut->V2G_Message.Body.WeldingDetectionRes.DC_EVSEStatus.EVSEIsolationStatus= v2gisolationLevelType_Valid;
 	exiOut->V2G_Message.Body.WeldingDetectionRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
-	exiOut->V2G_Message.Body.WeldingDetectionRes.DC_EVSEStatus.EVSEStatusCode = DC_EVSEStatusCodeType_EVSE_Ready;
-	exiOut->V2G_Message.Body.WeldingDetectionRes.DC_EVSEStatus.EVSENotification= EVSENotificationType_None;
+	exiOut->V2G_Message.Body.WeldingDetectionRes.DC_EVSEStatus.EVSEStatusCode = v2gDC_EVSEStatusCodeType_EVSE_Ready;
+	exiOut->V2G_Message.Body.WeldingDetectionRes.DC_EVSEStatus.EVSENotification= v2gEVSENotificationType_None;
 	exiOut->V2G_Message.Body.WeldingDetectionRes.DC_EVSEStatus.NotificationMaxDelay=123;
 	exiOut->V2G_Message.Body.WeldingDetectionRes.EVSEPresentVoltage.Value = 1234;
-	exiOut->V2G_Message.Body.WeldingDetectionRes.EVSEPresentVoltage.Unit = unitSymbolType_V;
+	exiOut->V2G_Message.Body.WeldingDetectionRes.EVSEPresentVoltage.Unit = v2gunitSymbolType_V;
 	exiOut->V2G_Message.Body.WeldingDetectionRes.EVSEPresentVoltage.Multiplier = 0;
 
 	return 0;
@@ -1270,7 +1277,7 @@ static int ac_charging()
 	init_v2gServiceDiscoveryReqType(&exiIn.V2G_Message.Body.ServiceDiscoveryReq);
 
 	exiIn.V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory_isUsed = 1u;
-	exiIn.V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory = serviceCategoryType_Internet;
+	exiIn.V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory = v2gserviceCategoryType_Internet;
 	exiIn.V2G_Message.Body.ServiceDiscoveryReq.ServiceScope_isUsed = 0u;
 
 	printf("EV side: call EVSE serviceDiscovery");
@@ -1289,16 +1296,16 @@ static int ac_charging()
 			printf("\t ServiceID=%d\n",	exiOut.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceID);
 			printf("\t ServiceName=");
 			printASCIIString(serviceDiscoveryRes.ChargeService.ServiceName.characters, serviceDiscoveryRes.ChargeService.ServiceName.charactersLen);
-			if(serviceDiscoveryRes.PaymentOptionList.PaymentOption.array[1] == paymentOptionType_Contract) {
+			if(serviceDiscoveryRes.PaymentOptionList.PaymentOption.array[1] == v2gpaymentOptionType_Contract) {
 				printf("\t PaymentOption=Contract_paymentOptionType\n");
 			}
 			if(serviceDiscoveryRes.ChargeService.FreeService==1) {
 				printf("\t ChargeService.FreeService=True\n");
 			}
-			if(serviceDiscoveryRes.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode.array[0] == EnergyTransferModeType_DC_combo_core) {
+			if(serviceDiscoveryRes.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode.array[0] == v2gEnergyTransferModeType_DC_combo_core) {
 				printf("\t EnergyTransferMode=AC_single_DC_core\n");
 			}
-			if(serviceDiscoveryRes.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode.array[1] == EnergyTransferModeType_AC_single_phase_core) {
+			if(serviceDiscoveryRes.ChargeService.SupportedEnergyTransferMode.EnergyTransferMode.array[1] == v2gEnergyTransferModeType_AC_single_phase_core) {
 				printf("\t EnergyTransferMode=AC_single_phase_core_EnergyTransferModeType\n");
 			}
 			printf("\t Value added service list:\n");
@@ -1307,7 +1314,7 @@ static int ac_charging()
 				printf("\n\t\t ServiceID=%d\n",	serviceDiscoveryRes.ServiceList.Service.array[i].ServiceID);
 				printf("\t\t ServiceName=");
 				printASCIIString(serviceDiscoveryRes.ServiceList.Service.array[i].ServiceName.characters, exiOut.V2G_Message.Body.ServiceDiscoveryRes.ServiceList.Service.array[i].ServiceName.charactersLen );
-				if(serviceDiscoveryRes.ServiceList.Service.array[i].ServiceCategory == serviceCategoryType_Internet) {
+				if(serviceDiscoveryRes.ServiceList.Service.array[i].ServiceCategory == v2gserviceCategoryType_Internet) {
 					printf("\t\t ServiceCategory=Internet\n");
 				}
 				if(serviceDiscoveryRes.ServiceList.Service.array[i].FreeService==1) {
@@ -1386,7 +1393,7 @@ static int ac_charging()
 
 	init_v2gPaymentServiceSelectionReqType(&exiIn.V2G_Message.Body.PaymentServiceSelectionReq);
 
-	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedPaymentOption = paymentOptionType_ExternalPayment;
+	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedPaymentOption = v2gpaymentOptionType_ExternalPayment;
 	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedServiceList.SelectedService.arrayLen = 2;
 	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedServiceList.SelectedService.array[0].ServiceID = serviceDiscoveryRes.ChargeService.ServiceID; /* charge server ID */
 	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedServiceList.SelectedService.array[0].ParameterSetID_isUsed = 0u; /* is not used */
@@ -1504,7 +1511,7 @@ static int ac_charging()
 			printBinaryArray(exiOut.V2G_Message.Header.SessionID.bytes, exiOut.V2G_Message.Header.SessionID.bytesLen);
 			printf("\t ResponseCode=%d\n",  exiOut.V2G_Message.Body.AuthorizationRes.ResponseCode);
 
-			if(exiOut.V2G_Message.Body.AuthorizationRes.EVSEProcessing == EVSEProcessingType_Finished) {
+			if(exiOut.V2G_Message.Body.AuthorizationRes.EVSEProcessing == v2gEVSEProcessingType_Finished) {
 				printf("\t EVSEProcessing=Finished\n");
 			}
 		} else {
@@ -1525,26 +1532,26 @@ static int ac_charging()
 	init_v2gChargeParameterDiscoveryReqType(&exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq);
 
 	/* we use here AC based charging parameters */
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.RequestedEnergyTransferMode = EnergyTransferModeType_AC_single_phase_core;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.RequestedEnergyTransferMode = v2gEnergyTransferModeType_AC_single_phase_core;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.MaxEntriesSAScheduleTuple = 1234;
 
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter_isUsed = 1u;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.DepartureTime = 12345;
 
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EAmount.Multiplier = 0;
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EAmount.Unit = unitSymbolType_W;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EAmount.Unit = v2gunitSymbolType_W;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EAmount.Value = 100;
 
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMaxCurrent.Multiplier = 0;
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMaxCurrent.Unit = unitSymbolType_A;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMaxCurrent.Unit = v2gunitSymbolType_A;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMaxCurrent.Value = 200;
 
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMaxVoltage.Multiplier = 0;
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMaxVoltage.Unit = unitSymbolType_V;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMaxVoltage.Unit = v2gunitSymbolType_V;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMaxVoltage.Value = 400;
 
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMinCurrent.Multiplier = 0;
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMinCurrent.Unit = unitSymbolType_A;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMinCurrent.Unit = v2gunitSymbolType_A;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.AC_EVChargeParameter.EVMinCurrent.Value = 500;
 
 	printf("EV side: call EVSE chargeParameterDiscovery");
@@ -1585,7 +1592,7 @@ static int ac_charging()
 	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile_isUsed = 0;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter_isUsed = 0; /* only used for DC charging */
 
-	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargeProgress = chargeProgressType_Start;
+	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargeProgress = v2gchargeProgressType_Start;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.SAScheduleTupleID = exiOut.V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].SAScheduleTupleID;
 
 	printf("EV side: call EVSE powerDelivery \n");
@@ -1823,7 +1830,7 @@ static int dc_charging() {
 	init_v2gServiceDiscoveryReqType(&exiIn.V2G_Message.Body.ServiceDiscoveryReq);
 
 	exiIn.V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory_isUsed = 1u;
-	exiIn.V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory = serviceCategoryType_EVCharging;
+	exiIn.V2G_Message.Body.ServiceDiscoveryReq.ServiceCategory = v2gserviceCategoryType_EVCharging;
 
 
 	printf("EV side: call EVSE serviceDiscovery");
@@ -1864,7 +1871,7 @@ static int dc_charging() {
 
 	init_v2gPaymentServiceSelectionReqType(&exiIn.V2G_Message.Body.PaymentServiceSelectionReq);
 
-	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedPaymentOption = paymentOptionType_ExternalPayment;
+	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedPaymentOption = v2gpaymentOptionType_ExternalPayment;
 	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedServiceList.SelectedService.arrayLen = 1; /* only one service was selected */
 	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedServiceList.SelectedService.array[0].ServiceID = serviceDiscoveryRes.ChargeService.ServiceID; /* charge server ID */
 	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedServiceList.SelectedService.array[0].ParameterSetID_isUsed = 0u; /* is not used */
@@ -1916,7 +1923,7 @@ static int dc_charging() {
 			printBinaryArray(exiOut.V2G_Message.Header.SessionID.bytes, exiOut.V2G_Message.Header.SessionID.bytesLen);
 			printf("\t ResponseCode=%d\n",  exiOut.V2G_Message.Body.AuthorizationRes.ResponseCode);
 
-			if(exiOut.V2G_Message.Body.AuthorizationRes.EVSEProcessing == EVSEProcessingType_Finished) {
+			if(exiOut.V2G_Message.Body.AuthorizationRes.EVSEProcessing == v2gEVSEProcessingType_Finished) {
 				printf("\t EVSEProcessing=Finished\n");
 			}
 		} else {
@@ -1940,32 +1947,32 @@ static int dc_charging() {
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter_isUsed = 1u;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.DC_EVStatus.EVRESSSOC = 89;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.DC_EVStatus.EVReady = 1;
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.DC_EVStatus.EVErrorCode = DC_EVErrorCodeType_NO_ERROR;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.DC_EVStatus.EVErrorCode = v2gDC_EVErrorCodeType_NO_ERROR;
 
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.DepartureTime_isUsed = 1u;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.DepartureTime = 123456789;
 
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumCurrentLimit.Multiplier = 0;
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumCurrentLimit.Unit = unitSymbolType_A;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumCurrentLimit.Unit = v2gunitSymbolType_A;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumCurrentLimit.Value = 60;
 
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumPowerLimit_isUsed = 1u;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumPowerLimit.Multiplier = 0;
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumPowerLimit.Unit = unitSymbolType_W;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumPowerLimit.Unit = v2gunitSymbolType_W;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumPowerLimit.Value = 20000;
 
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumVoltageLimit.Multiplier = 0;
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumVoltageLimit.Unit = unitSymbolType_V;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumVoltageLimit.Unit = v2gunitSymbolType_V;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVMaximumVoltageLimit.Value = 420;
 
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVEnergyCapacity_isUsed = 1u;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVEnergyCapacity.Multiplier = 0;
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVEnergyCapacity.Unit = unitSymbolType_W;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVEnergyCapacity.Unit = v2gunitSymbolType_W;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVEnergyCapacity.Value = 15000;
 
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVEnergyRequest_isUsed = 1u;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVEnergyRequest.Multiplier = 0;
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVEnergyRequest.Unit = unitSymbolType_W;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVEnergyRequest.Unit = v2gunitSymbolType_W;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.EVEnergyRequest.Value = 5000;
 
 
@@ -1976,7 +1983,7 @@ static int dc_charging() {
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter.BulkSOC = 80;
 
 
-	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.RequestedEnergyTransferMode = EnergyTransferModeType_DC_core;
+	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.RequestedEnergyTransferMode = v2gEnergyTransferModeType_DC_core;
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter_isUsed = 1u;
 
 
@@ -2057,7 +2064,7 @@ static int dc_charging() {
 			printBinaryArray(exiOut.V2G_Message.Header.SessionID.bytes, exiOut.V2G_Message.Header.SessionID.bytesLen);
 			printf("\t ResponseCode=%d\n", exiOut.V2G_Message.Body.CableCheckRes.ResponseCode);
 
-			if(exiOut.V2G_Message.Body.CableCheckRes.EVSEProcessing==EVSEProcessingType_Finished) {
+			if(exiOut.V2G_Message.Body.CableCheckRes.EVSEProcessing==v2gEVSEProcessingType_Finished) {
 				printf("\tEVSEProcessing=Finished\n");
 			}
 
@@ -2084,11 +2091,11 @@ static int dc_charging() {
 	exiIn.V2G_Message.Body.PreChargeReq.DC_EVStatus.EVRESSSOC = 12;
 
 	exiIn.V2G_Message.Body.PreChargeReq.EVTargetCurrent.Multiplier = 0;
-	exiIn.V2G_Message.Body.PreChargeReq.EVTargetCurrent.Unit = unitSymbolType_A;
+	exiIn.V2G_Message.Body.PreChargeReq.EVTargetCurrent.Unit = v2gunitSymbolType_A;
 	exiIn.V2G_Message.Body.PreChargeReq.EVTargetCurrent.Value = 100;
 
 	exiIn.V2G_Message.Body.PreChargeReq.EVTargetVoltage.Multiplier = 0;
-	exiIn.V2G_Message.Body.PreChargeReq.EVTargetVoltage.Unit = unitSymbolType_V;
+	exiIn.V2G_Message.Body.PreChargeReq.EVTargetVoltage.Unit = v2gunitSymbolType_V;
 	exiIn.V2G_Message.Body.PreChargeReq.EVTargetVoltage.Value = 200;
 
 	printf("EV side: call EVSE preCharge \n");
@@ -2130,7 +2137,7 @@ static int dc_charging() {
 	exiIn.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.ChargingComplete = 1;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter_isUsed = 1u; /* DC parameters are send */
 
-	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargeProgress = chargeProgressType_Start;
+	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargeProgress = v2gchargeProgressType_Start;
 
 
 	/* we are using a charging profile */
@@ -2141,13 +2148,13 @@ static int dc_charging() {
 	/* set up 3 entries */
 	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.arrayLen=3;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[0].ChargingProfileEntryMaxPower.Value=0;
-	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[0].ChargingProfileEntryMaxPower.Unit = unitSymbolType_W;
+	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[0].ChargingProfileEntryMaxPower.Unit = v2gunitSymbolType_W;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[0].ChargingProfileEntryMaxPower.Multiplier=2;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[0].ChargingProfileEntryStart=0;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[0].ChargingProfileEntryMaxNumberOfPhasesInUse=1;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[0].ChargingProfileEntryMaxNumberOfPhasesInUse_isUsed=1;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[1].ChargingProfileEntryMaxPower.Value=20000;
-	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[1].ChargingProfileEntryMaxPower.Unit = unitSymbolType_W;
+	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[1].ChargingProfileEntryMaxPower.Unit = v2gunitSymbolType_W;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[1].ChargingProfileEntryMaxPower.Multiplier = 1;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[1].ChargingProfileEntryMaxNumberOfPhasesInUse=3;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargingProfile.ProfileEntry.array[1].ChargingProfileEntryMaxNumberOfPhasesInUse_isUsed=1;
@@ -2195,21 +2202,21 @@ static int dc_charging() {
 	exiIn.V2G_Message.Body.CurrentDemandReq.DC_EVStatus.EVErrorCode = 1;
 
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVTargetVoltage.Multiplier = 0;
-	exiIn.V2G_Message.Body.CurrentDemandReq.EVTargetVoltage.Unit = unitSymbolType_A;
+	exiIn.V2G_Message.Body.CurrentDemandReq.EVTargetVoltage.Unit = v2gunitSymbolType_A;
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVTargetVoltage.Value = 100;
 
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumVoltageLimit.Multiplier = 0;
-	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumVoltageLimit.Unit = unitSymbolType_V;
+	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumVoltageLimit.Unit = v2gunitSymbolType_V;
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumVoltageLimit.Value = 420;
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumVoltageLimit_isUsed = 1u;
 
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumPowerLimit.Multiplier = 0;
-	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumPowerLimit.Unit = unitSymbolType_W;
+	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumPowerLimit.Unit = v2gunitSymbolType_W;
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumPowerLimit.Value = 20000;
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumPowerLimit_isUsed = 1u;
 
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumCurrentLimit.Multiplier = 0;
-	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumCurrentLimit.Unit = unitSymbolType_A;
+	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumCurrentLimit.Unit = v2gunitSymbolType_A;
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumCurrentLimit.Value = 60;
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVMaximumCurrentLimit_isUsed = 1u;
 
@@ -2219,18 +2226,18 @@ static int dc_charging() {
 	exiIn.V2G_Message.Body.CurrentDemandReq.ChargingComplete = 1;
 
 	exiIn.V2G_Message.Body.CurrentDemandReq.RemainingTimeToFullSoC.Multiplier = 0;
-	exiIn.V2G_Message.Body.CurrentDemandReq.RemainingTimeToFullSoC.Unit = unitSymbolType_s;
+	exiIn.V2G_Message.Body.CurrentDemandReq.RemainingTimeToFullSoC.Unit = v2gunitSymbolType_s;
 	exiIn.V2G_Message.Body.CurrentDemandReq.RemainingTimeToFullSoC.Value = 300; /* 5 min*/
 	exiIn.V2G_Message.Body.CurrentDemandReq.RemainingTimeToFullSoC_isUsed = 1u;
 
 	exiIn.V2G_Message.Body.CurrentDemandReq.RemainingTimeToBulkSoC.Multiplier = 0;
-	exiIn.V2G_Message.Body.CurrentDemandReq.RemainingTimeToBulkSoC.Unit = unitSymbolType_s;
+	exiIn.V2G_Message.Body.CurrentDemandReq.RemainingTimeToBulkSoC.Unit = v2gunitSymbolType_s;
 	exiIn.V2G_Message.Body.CurrentDemandReq.RemainingTimeToBulkSoC.Value = 120; /* 3 min */
 	exiIn.V2G_Message.Body.CurrentDemandReq.RemainingTimeToBulkSoC_isUsed = 1u;
 
 
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVTargetVoltage.Multiplier = 0;
-	exiIn.V2G_Message.Body.CurrentDemandReq.EVTargetVoltage.Unit = unitSymbolType_V;
+	exiIn.V2G_Message.Body.CurrentDemandReq.EVTargetVoltage.Unit = v2gunitSymbolType_V;
 	exiIn.V2G_Message.Body.CurrentDemandReq.EVTargetVoltage.Value = 400;
 
 
@@ -2309,10 +2316,119 @@ static int dc_charging() {
 }
 
 
+
+#if DEPLOY_DIN_CODEC == SUPPORT_YES
+
+static int din_test() {
+	int errn = 0;
+
+	struct dinEXIDocument exiDin1;
+	struct dinEXIDocument exiDin2;
+
+	bitstream_t stream1;
+	bitstream_t stream2;
+	uint16_t pos1 = 0;
+	uint16_t pos2 = 0;
+
+	stream1.size = BUFFER_SIZE;
+	stream1.data = buffer1;
+	stream1.pos = &pos1;
+
+	stream2.size = BUFFER_SIZE;
+	stream2.data = buffer2;
+	stream2.pos = &pos2;
+
+	/* SetupSessionReq  */
+	/* BMW: 80 9A 00 11 D0 20 00 03 C1 FC 30 00 43 F8 00 */
+	buffer1[0] = 0x80;
+	buffer1[1] = 0x9A;
+	buffer1[2] = 0x00;
+	buffer1[3] = 0x11;
+	buffer1[4] = 0xD0;
+	buffer1[5] = 0x20;
+	buffer1[6] = 0x00;
+	buffer1[7] = 0x03;
+	buffer1[8] = 0xC1;
+	buffer1[9] = 0xFC;
+	buffer1[10] = 0x30;
+	buffer1[11] = 0x00;
+	buffer1[12] = 0x43;
+	buffer1[13] = 0xF8;
+	buffer1[14] = 0x00;
+
+	errn =  decode_dinExiDocument(&stream1, &exiDin1);
+
+	if(errn != 0) {
+		printf("\n\nDIN test error %d!\n", errn);
+		return errn;
+	} else if (pos1 != 15) {
+		printf("\n\nDIN warning. not all bytes read!\n");
+		errn = -1;
+		return errn;
+	}
+
+
+	/* SetupSessionReq  */
+	/* Chevy: 80 9A 02 00 00 00 00 00 00 00 00 11 D0 18 00 60 8C 44 09 94 00 */
+	buffer2[0] = 0x80;
+	buffer2[1] = 0x9A;
+	buffer2[2] = 0x02;
+	buffer2[3] = 0x00;
+	buffer2[4] = 0x00;
+	buffer2[5] = 0x00;
+	buffer2[6] = 0x00;
+	buffer2[7] = 0x00;
+	buffer2[8] = 0x00;
+	buffer2[9] = 0x00;
+	buffer2[10] = 0x00;
+	buffer2[11] = 0x11;
+	buffer2[12] = 0xD0;
+	buffer2[13] = 0x18;
+	buffer2[14] = 0x00;
+	buffer2[15] = 0x60;
+	buffer2[16] = 0x8C;
+	buffer2[17] = 0x44;
+	buffer2[18] = 0x09;
+	buffer2[19] = 0x94;
+	buffer2[20] = 0x00;
+
+	errn =  decode_dinExiDocument(&stream2, &exiDin2);
+
+	if(errn != 0) {
+		printf("\n\nDIN test error %d!\n", errn);
+		return errn;
+	} else if (pos2 != 21) {
+		printf("\n\nDIN warning. not all bytes read!\n");
+		errn = -1;
+		return errn;
+	}
+
+
+	if(errn == 0) {
+		printf("DIN test passed\n");
+	} else {
+		printf("DIN test error %d!\n", errn);
+	}
+
+	return errn;
+}
+#endif /* DEPLOY_DIN_CODEC == SUPPORT_YES */
+
+
 #define ASK_FOR_USER_INPUT 0
 
 int main_example(int argc, char *argv[]) {
 	int errn = 0;
+
+#if DEPLOY_DIN_CODEC == SUPPORT_YES
+	printf("+++ Start simple DIN test +++\n");
+	errn = din_test();
+	printf("+++ Terminate simple DIN test +++\n\n");
+	if(errn != 0) {
+		printf("\nDIN test error %d!\n", errn);
+		return errn;
+	}
+#endif /* DEPLOY_DIN_CODEC == SUPPORT_YES */
 
 	printf("+++ Start application handshake protocol example +++\n\n");
 	errn = appHandshake();
