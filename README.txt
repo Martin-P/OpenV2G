@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------
 OpenV2G - an open source project implementing the basic functionality of the ISO IEC 15118 vehicle to grid (V2G) communication interface 
-Version 0.9.1, released August 28, 2014
+Version 0.9.2, released September 12, 2014
 http://openv2g.sourceforge.net/
 
 Please report bugs via the SourceForge bug tracking system at http://sourceforge.net/tracker/?group_id=350113.
@@ -20,6 +20,13 @@ GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-------------------------------------------------------------------------
+CHANGES from version 0.9.1:
+-------------------------------------------------------------------------
+* resolves bug with name clashes w.r.t. iso and din track
+* fixes issue with test code for init handshake 
+* Note: OpenV2G 0.9.2 is essentially just a bug fixed version of OpenV2G 0.9.1
 
 -------------------------------------------------------------------------
 CHANGES from version 0.9:
