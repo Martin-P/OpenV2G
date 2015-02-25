@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2014 Siemens AG
+ * Copyright (C) 2007-2015 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,7 +19,7 @@
  *
  * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch@siemens.com
- * @version 0.9.2
+ * @version 0.9.3
  * @contact Joerg.Heuer@siemens.com
  *
  *
@@ -31,17 +31,29 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
+#include <string.h>
+
 #include "EXITypes.h"
 
 #include "appHandEXIDatatypes.h"
 #include "appHandEXIDatatypesEncoder.h"
 #include "appHandEXIDatatypesDecoder.h"
 
-#if DEPLOY_DIN_CODEC == SUPPORT_YES
+/* Activate support for DIN */
 #include "dinEXIDatatypes.h"
+#if DEPLOY_DIN_CODEC == SUPPORT_YES
 #include "dinEXIDatatypesEncoder.h"
 #include "dinEXIDatatypesDecoder.h"
 #endif /* DEPLOY_DIN_CODEC == SUPPORT_YES */
+
+/* Activate support for XMLDSIG */
+#include "xmldsigEXIDatatypes.h"
+#if DEPLOY_XMLDSIG_CODEC == SUPPORT_YES
+#include "xmldsigEXIDatatypesEncoder.h"
+#include "xmldsigEXIDatatypesDecoder.h"
+#endif /* DEPLOY_XMLDSIG_CODEC == SUPPORT_YES */
+
+
 
 #include "v2gEXIDatatypes.h"
 #include "v2gEXIDatatypesEncoder.h"
@@ -2318,7 +2330,6 @@ static int dc_charging() {
 
 
 #if DEPLOY_DIN_CODEC == SUPPORT_YES
-
 static int din_test() {
 	int errn = 0;
 
@@ -2404,6 +2415,40 @@ static int din_test() {
 	}
 
 
+	/* sessionStopReq  */
+	pos2 = 0; /* reset position */
+
+	/* V: 0x80, 0x9a, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x91, 0xf0  */
+	buffer2[0] = 0x80;
+	buffer2[1] = 0x9a;
+	buffer2[2] = 0x02;
+	buffer2[3] = 0x00;
+	buffer2[4] = 0x00;
+	buffer2[5] = 0x00;
+	buffer2[6] = 0x00;
+	buffer2[7] = 0x00;
+	buffer2[8] = 0x00;
+	buffer2[9] = 0x00;
+	buffer2[10] = 0x03;
+	buffer2[11] = 0x91;
+	buffer2[12] = 0xf0;
+
+	errn =  decode_dinExiDocument(&stream2, &exiDin2);
+
+	if(errn != 0) {
+		printf("\n\nDIN test error %d!\n", errn);
+		return errn;
+	} else if (pos2 != 13) {
+		printf("\n\nDIN warning. not all bytes read!\n");
+		errn = -1;
+		return errn;
+	} else if(exiDin2.V2G_Message_isUsed == 0 || exiDin2.V2G_Message.Body.SessionStopReq_isUsed == 0) {
+		printf("\n\nDIN warning. no sessionStopReq message!\n");
+		errn = -1;
+		return errn;
+	}
+
+
 	if(errn == 0) {
 		printf("DIN test passed\n");
 	} else {
@@ -2413,6 +2458,177 @@ static int din_test() {
 	return errn;
 }
 #endif /* DEPLOY_DIN_CODEC == SUPPORT_YES */
+
+
+
+#if DEPLOY_XMLDSIG_CODEC == SUPPORT_YES
+#if DEPLOY_ISO_CODEC_FRAGMENT == SUPPORT_YES
+static int xmldsig_test() {
+	int errn = 0, i;
+
+	bitstream_t stream1;
+	uint16_t pos1 = 0;
+	stream1.size = BUFFER_SIZE;
+	stream1.data = buffer1;
+	stream1.pos = &pos1;
+
+	bitstream_t stream2;
+	uint16_t pos2 = 0;
+	stream2.size = BUFFER_SIZE;
+	stream2.data = buffer2;
+	stream2.pos = &pos2;
+
+	struct v2gEXIFragment exiV2G_AR;
+	struct xmldsigEXIFragment exiXMLDSIG_SI;
+
+	int sizeIsoStream1 = 25;
+	int isoStream1[] = {0x80, 0x04, 0x01, 0x52, 0x51, 0x0C, 0x40, 0x82, 0x9B, 0x7B, 0x6B, 0x29, 0x02, 0x93, 0x0B, 0x73, 0x23, 0x7B, 0x69, 0x02, 0x23, 0x0B, 0xA3, 0x09, 0xE8};
+
+	int sizeIsoStream2 = 209;
+	int isoStream2[] = {0x80, 0x81, 0x12, 0xB4, 0x3A, 0x3A, 0x38, 0x1D, 0x17, 0x97, 0xBB, 0xBB, 0xBB, 0x97, 0x3B, 0x99, 0x97, 0x37, 0xB9, 0x33, 0x97, 0xAA, 0x29, 0x17, 0xB1, 0xB0, 0xB7, 0x37, 0xB7, 0x34, 0xB1, 0xB0, 0xB6, 0x16, 0xB2, 0xBC, 0x34, 0x97, 0xA1, 0xAB, 0x43, 0xA3, 0xA3, 0x81, 0xD1, 0x79, 0x7B, 0xBB, 0xBB, 0xB9, 0x73, 0xB9, 0x99, 0x73, 0x7B, 0x93, 0x39, 0x79, 0x91, 0x81, 0x81, 0x89, 0x79, 0x81, 0xA1, 0x7B, 0xC3, 0x6B, 0x63, 0x23, 0x9B, 0x4B, 0x39, 0x6B, 0x6B, 0x7B, 0x93, 0x29, 0x1B, 0x2B, 0x1B, 0x23, 0x9B, 0x09, 0x6B, 0x9B, 0x43, 0x09, 0x91, 0xA9, 0xB2, 0x20, 0x62, 0x34, 0x94, 0x43, 0x10, 0x25, 0x68, 0x74, 0x74, 0x70, 0x3A, 0x2F, 0x2F, 0x77, 0x77, 0x77, 0x2E, 0x77, 0x33, 0x2E, 0x6F, 0x72, 0x67, 0x2F, 0x54, 0x52, 0x2F, 0x63, 0x61, 0x6E, 0x6F, 0x6E, 0x69, 0x63, 0x61, 0x6C, 0x2D, 0x65, 0x78, 0x69, 0x2F, 0x48, 0x52, 0xD0, 0xE8, 0xE8, 0xE0, 0x74, 0x5E, 0x5E, 0xEE, 0xEE, 0xEE, 0x5C, 0xEE, 0x66, 0x5C, 0xDE, 0xE4, 0xCE, 0x5E, 0x64, 0x60, 0x60, 0x62, 0x5E, 0x60, 0x68, 0x5E, 0xF0, 0xDA, 0xD8, 0xCA, 0xDC, 0xC6, 0x46, 0xE6, 0xD0, 0xC2, 0x64, 0x6A, 0x6C, 0x84, 0x1A, 0x36, 0xBC, 0x07, 0xA0, 0x0C, 0xB7, 0xDC, 0xAD, 0x66, 0x2F, 0x30, 0x88, 0xA6, 0x0A, 0x3D, 0x6A, 0x99, 0x43, 0x1F, 0x81, 0xC1, 0x22, 0xC2, 0xE9, 0xF1, 0x67, 0x8E, 0xF5, 0x31, 0xE9, 0x55, 0x23, 0x70};
+
+
+	uint8_t digestValue[] = {0xD1, 0xB5, 0xE0, 0x3D, 0x00, 0x65, 0xBE, 0xE5, 0x6B, 0x31, 0x79, 0x84, 0x45, 0x30, 0x51, 0xEB, 0x54, 0xCA, 0x18, 0xFC, 0x0E, 0x09, 0x16, 0x17, 0x4F, 0x8B, 0x3C, 0x77, 0xA9, 0x8F, 0x4A, 0xA9}; /* 32 Bytes */
+
+
+	/*
+	<v2gci_b:AuthorizationReq xmlns:v2gci_b="urn:iso:15118:2:2013:MsgBody" v2gci_b:Id="ID1">
+	    <v2gci_b:GenChallenge>U29tZSBSYW5kb20gRGF0YQ==</v2gci_b:GenChallenge>
+	</v2gci_b:AuthorizationReq>
+	*/
+
+	init_v2gEXIFragment(&exiV2G_AR);
+	exiV2G_AR.AuthorizationReq_isUsed = 1u;
+	init_v2gAuthorizationReqType(&exiV2G_AR.AuthorizationReq);
+	exiV2G_AR.AuthorizationReq.Id_isUsed = 1;
+	exiV2G_AR.AuthorizationReq.Id.charactersLen = 3;
+	exiV2G_AR.AuthorizationReq.Id.characters[0] = 'I';
+	exiV2G_AR.AuthorizationReq.Id.characters[1] = 'D';
+	exiV2G_AR.AuthorizationReq.Id.characters[2] = '1';
+	exiV2G_AR.AuthorizationReq.GenChallenge_isUsed = 1;
+	/* base64 U29tZSBSYW5kb20gRGF0YQ== */
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytesLen = 16;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[0] = 0x53;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[1] = 0x6F;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[2] = 0x6D;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[3] = 0x65;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[4] = 0x20;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[5] = 0x52;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[6] = 0x61;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[7] = 0x6E;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[8] = 0x64;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[9] = 0x6F;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[10] = 0x6D;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[11] = 0x20;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[12] = 0x44;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[13] = 0x61;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[14] = 0x74;
+	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[15] = 0x61;
+
+	/* encode fragment with ISO schema */
+	errn = encode_v2gExiFragment(&stream1, &exiV2G_AR);
+
+	if((*stream1.pos) != sizeIsoStream1) {
+		errn = -1;
+		printf("EXI1 stream length does not match !\n");
+		return errn;
+	} else {
+		for(i=0; i<sizeIsoStream1; i++) {
+			if(stream1.data[i] != isoStream1[i]) {
+				errn = -1;
+				printf("EXI1 stream does not match at position %d !\n", i);
+				return errn;
+			}
+		}
+	}
+
+	/* TODO Create Hash for stream 1 etc ... */
+	/* SHA-256 is "0bXgPQBlvuVrMXmERTBR61TKGPwOCRYXT4s8d6mPSqk=" */
+
+	/*
+	<xmlsig:SignedInfo xmlns:xmlsig="http://www.w3.org/2000/09/xmldsig#" >
+	    <xmlsig:CanonicalizationMethod Algorithm="http://www.w3.org/TR/canonical-exi/"/>
+	    <xmlsig:SignatureMethod
+	        Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/>
+	    <xmlsig:Reference URI="#ID1">
+	        <xmlsig:Transforms>
+	            <xmlsig:Transform Algorithm="http://www.w3.org/TR/canonical-exi/"/>
+	        </xmlsig:Transforms>
+	        <xmlsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+	        <xmlsig:DigestValue>0bXgPQBlvuVrMXmERTBR61TK
+	            GPwOCRYXT4s8d6mPSqk=</xmlsig:DigestValue>
+	    </xmlsig:Reference>
+	</xmlsig:SignedInfo>
+	*/
+
+	/* encode SignedInfo element with xmldsig schema */
+
+	char arrayCanonicalEXI[35] = {"http://www.w3.org/TR/canonical-exi/"};
+	char arrayxmldsigSHA256[51] = {"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"};
+	char arrayxmlencSHA256[39] = {"http://www.w3.org/2001/04/xmlenc#sha256"};
+
+	init_xmldsigEXIFragment(&exiXMLDSIG_SI);
+	exiXMLDSIG_SI.SignedInfo_isUsed = 1;
+	init_xmldsigSignedInfoType(&exiXMLDSIG_SI.SignedInfo);
+	{
+		init_xmldsigCanonicalizationMethodType(&exiXMLDSIG_SI.SignedInfo.CanonicalizationMethod);
+		exiXMLDSIG_SI.SignedInfo.CanonicalizationMethod.Algorithm.charactersLen = 35;
+		strncpy(exiXMLDSIG_SI.SignedInfo.CanonicalizationMethod.Algorithm.characters, arrayCanonicalEXI, 35);
+
+		exiXMLDSIG_SI.SignedInfo.SignatureMethod.HMACOutputLength_isUsed = 0;
+		exiXMLDSIG_SI.SignedInfo.SignatureMethod.Algorithm.charactersLen = 51;
+		strncpy(exiXMLDSIG_SI.SignedInfo.SignatureMethod.Algorithm.characters, arrayxmldsigSHA256, 51);
+
+		exiXMLDSIG_SI.SignedInfo.Reference.arrayLen = 1;
+		 /* "#ID1" */
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].URI_isUsed = 1;
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].URI.charactersLen = 4;
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].URI.characters[0] = '#';
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].URI.characters[1] = 'I';
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].URI.characters[2] = 'D';
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].URI.characters[3] = '1';
+		/* "http://www.w3.org/TR/canonical-exi/" */
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].Transforms_isUsed = 1;
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].Transforms.Transform.arrayLen = 1;
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].Transforms.Transform.array[0].Algorithm.charactersLen = 35;
+		strncpy(exiXMLDSIG_SI.SignedInfo.Reference.array[0].Transforms.Transform.array[0].Algorithm.characters, arrayCanonicalEXI, 35); /* Will copy 35 characters from arrayCanonicalEXI to characters */
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].Transforms.Transform.array[0].XPath.arrayLen = 0;
+
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].DigestMethod.Algorithm.charactersLen = 39;
+		strncpy(exiXMLDSIG_SI.SignedInfo.Reference.array[0].DigestMethod.Algorithm.characters, arrayxmlencSHA256, 39);
+
+		/* "0bXgPQBlvuVrMXmERTBR61TKGPwOCRYXT4s8d6mPSqk=" --> 16 Bytes 536F6D652052616E646F6D2044617461 */
+		exiXMLDSIG_SI.SignedInfo.Reference.array[0].DigestValue.bytesLen = 32;
+		memcpy(exiXMLDSIG_SI.SignedInfo.Reference.array[0].DigestValue.bytes, digestValue, 32);
+	}
+
+	errn = encode_xmldsigExiFragment(&stream2, &exiXMLDSIG_SI);
+
+	if((*stream2.pos) != sizeIsoStream2) {
+		errn = -1;
+		printf("EXI2 stream length does not match !\n");
+		return errn;
+	} else {
+		for(i=0; i<sizeIsoStream2; i++) {
+			if(stream2.data[i] != isoStream2[i]) {
+				errn = -1;
+				printf("EXI2 stream does not match at position %d !\n", i);
+				return errn;
+			}
+		}
+	}
+
+
+	if(errn == 0) {
+		printf("XMLDSIG test passed\n");
+	} else {
+		printf("XMLDSIG test error %d!\n", errn);
+	}
+
+	return errn;
+}
+#endif /* DEPLOY_ISO_CODEC_FRAGMENT */
+#endif /* DEPLOY_XMLDSIG_CODEC == SUPPORT_YES */
 
 
 #define ASK_FOR_USER_INPUT 0
@@ -2429,6 +2645,19 @@ int main_example(int argc, char *argv[]) {
 		return errn;
 	}
 #endif /* DEPLOY_DIN_CODEC == SUPPORT_YES */
+
+#if DEPLOY_XMLDSIG_CODEC == SUPPORT_YES
+#if DEPLOY_ISO_CODEC_FRAGMENT == SUPPORT_YES
+	printf("+++ Start simple XMLDSIG test +++\n");
+	errn = xmldsig_test();
+	printf("+++ Terminate simple XMLDSIG test +++\n\n");
+	if(errn != 0) {
+		printf("\nXMLDSIG test error %d!\n", errn);
+		return errn;
+	}
+#endif /* DEPLOY_ISO_CODEC_FRAGMENT */
+#endif /* DEPLOY_XMLDSIG_CODEC == SUPPORT_YES */
+
 
 	printf("+++ Start application handshake protocol example +++\n\n");
 	errn = appHandshake();
