@@ -1,6 +1,6 @@
 
 /*
- * Copyright (C) 2007-2012 Siemens AG
+ * Copyright (C) 2007-2015 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -20,7 +20,7 @@
  *
  * @author Sebastian.Kaebisch@siemens.com
  * @author Daniel.Peintner.EXT@siemens.com
- * @version 0.9.2
+ * @version 0.9.3
  * @contact Joerg.Heuer@siemens.com
  *
  ********************************************************************/

@@ -8,6 +8,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include src/xmldsig/subdir.mk
 -include src/transport/subdir.mk
 -include src/test/subdir.mk
 -include src/din/subdir.mk
@@ -39,7 +40,7 @@ OpenV2G.exe: $(OBJS) $(USER_OBJS)
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C_DEPS)$(EXECUTABLES) OpenV2G.exe
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) OpenV2G.exe
 	-@echo ' '
 
 .PHONY: all clean dependents
