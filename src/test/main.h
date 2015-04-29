@@ -34,7 +34,7 @@
 #define MAIN_H_
 
 #if CODE_VERSION == CODE_VERSION_EXI
-int main_codec(int argc, char *argv[]);
+int main_databinder(int argc, char *argv[]);
 #elif CODE_VERSION == CODE_VERSION_SAMPLE
 int main_example(int argc, char *argv[]);
 #endif
