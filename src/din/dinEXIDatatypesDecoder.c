@@ -471,12 +471,9 @@ static int decode_dinCanonicalizationMethodType(bitstream_t* stream, struct dinC
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinCanonicalizationMethodType->Algorithm.charactersLen);
 					if (errn == 0) {
-						errn =  (dinCanonicalizationMethodType->Algorithm.charactersLen - 2) <= dinCanonicalizationMethodType_Algorithm_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinCanonicalizationMethodType->Algorithm.charactersLen >= 2) {
 							dinCanonicalizationMethodType->Algorithm.charactersLen = (uint16_t)(dinCanonicalizationMethodType->Algorithm.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinCanonicalizationMethodType->Algorithm.charactersLen, dinCanonicalizationMethodType->Algorithm.characters);
+							errn = decodeCharacters(stream, dinCanonicalizationMethodType->Algorithm.charactersLen, dinCanonicalizationMethodType->Algorithm.characters, dinCanonicalizationMethodType_Algorithm_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -1520,12 +1517,9 @@ static int decode_dinManifestType(bitstream_t* stream, struct dinManifestType* d
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinManifestType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinManifestType->Id.charactersLen - 2) <= dinManifestType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinManifestType->Id.charactersLen >= 2) {
 							dinManifestType->Id.charactersLen = (uint16_t)(dinManifestType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinManifestType->Id.charactersLen, dinManifestType->Id.characters);
+							errn = decodeCharacters(stream, dinManifestType->Id.charactersLen, dinManifestType->Id.characters, dinManifestType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -1966,12 +1960,9 @@ static int decode_dinDigestMethodType(bitstream_t* stream, struct dinDigestMetho
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinDigestMethodType->Algorithm.charactersLen);
 					if (errn == 0) {
-						errn =  (dinDigestMethodType->Algorithm.charactersLen - 2) <= dinDigestMethodType_Algorithm_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinDigestMethodType->Algorithm.charactersLen >= 2) {
 							dinDigestMethodType->Algorithm.charactersLen = (uint16_t)(dinDigestMethodType->Algorithm.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinDigestMethodType->Algorithm.charactersLen, dinDigestMethodType->Algorithm.characters);
+							errn = decodeCharacters(stream, dinDigestMethodType->Algorithm.charactersLen, dinDigestMethodType->Algorithm.characters, dinDigestMethodType_Algorithm_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -2059,12 +2050,9 @@ static int decode_dinSalesTariffType(bitstream_t* stream, struct dinSalesTariffT
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinSalesTariffType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinSalesTariffType->Id.charactersLen - 2) <= dinSalesTariffType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinSalesTariffType->Id.charactersLen >= 2) {
 							dinSalesTariffType->Id.charactersLen = (uint16_t)(dinSalesTariffType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinSalesTariffType->Id.charactersLen, dinSalesTariffType->Id.characters);
+							errn = decodeCharacters(stream, dinSalesTariffType->Id.charactersLen, dinSalesTariffType->Id.characters, dinSalesTariffType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -2122,12 +2110,9 @@ static int decode_dinSalesTariffType(bitstream_t* stream, struct dinSalesTariffT
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinSalesTariffType->SalesTariffDescription.charactersLen);
 							if (errn == 0) {
-								errn =  (dinSalesTariffType->SalesTariffDescription.charactersLen - 2) <= dinSalesTariffType_SalesTariffDescription_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinSalesTariffType->SalesTariffDescription.charactersLen >= 2) {
 									dinSalesTariffType->SalesTariffDescription.charactersLen = (uint16_t)(dinSalesTariffType->SalesTariffDescription.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinSalesTariffType->SalesTariffDescription.charactersLen, dinSalesTariffType->SalesTariffDescription.characters);
+									errn = decodeCharacters(stream, dinSalesTariffType->SalesTariffDescription.charactersLen, dinSalesTariffType->SalesTariffDescription.characters, dinSalesTariffType_SalesTariffDescription_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -2583,12 +2568,9 @@ static int decode_dinSignaturePropertiesType(bitstream_t* stream, struct dinSign
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinSignaturePropertiesType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinSignaturePropertiesType->Id.charactersLen - 2) <= dinSignaturePropertiesType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinSignaturePropertiesType->Id.charactersLen >= 2) {
 							dinSignaturePropertiesType->Id.charactersLen = (uint16_t)(dinSignaturePropertiesType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinSignaturePropertiesType->Id.charactersLen, dinSignaturePropertiesType->Id.characters);
+							errn = decodeCharacters(stream, dinSignaturePropertiesType->Id.charactersLen, dinSignaturePropertiesType->Id.characters, dinSignaturePropertiesType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -3017,12 +2999,9 @@ static int decode_dinNotificationType(bitstream_t* stream, struct dinNotificatio
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinNotificationType->FaultMsg.charactersLen);
 							if (errn == 0) {
-								errn =  (dinNotificationType->FaultMsg.charactersLen - 2) <= dinNotificationType_FaultMsg_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinNotificationType->FaultMsg.charactersLen >= 2) {
 									dinNotificationType->FaultMsg.charactersLen = (uint16_t)(dinNotificationType->FaultMsg.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinNotificationType->FaultMsg.charactersLen, dinNotificationType->FaultMsg.characters);
+									errn = decodeCharacters(stream, dinNotificationType->FaultMsg.charactersLen, dinNotificationType->FaultMsg.characters, dinNotificationType_FaultMsg_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -3097,12 +3076,9 @@ static int decode_dinContractAuthenticationReqType(bitstream_t* stream, struct d
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinContractAuthenticationReqType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinContractAuthenticationReqType->Id.charactersLen - 2) <= dinContractAuthenticationReqType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinContractAuthenticationReqType->Id.charactersLen >= 2) {
 							dinContractAuthenticationReqType->Id.charactersLen = (uint16_t)(dinContractAuthenticationReqType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinContractAuthenticationReqType->Id.charactersLen, dinContractAuthenticationReqType->Id.characters);
+							errn = decodeCharacters(stream, dinContractAuthenticationReqType->Id.charactersLen, dinContractAuthenticationReqType->Id.characters, dinContractAuthenticationReqType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -3118,12 +3094,9 @@ static int decode_dinContractAuthenticationReqType(bitstream_t* stream, struct d
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinContractAuthenticationReqType->GenChallenge.charactersLen);
 							if (errn == 0) {
-								errn =  (dinContractAuthenticationReqType->GenChallenge.charactersLen - 2) <= dinContractAuthenticationReqType_GenChallenge_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinContractAuthenticationReqType->GenChallenge.charactersLen >= 2) {
 									dinContractAuthenticationReqType->GenChallenge.charactersLen = (uint16_t)(dinContractAuthenticationReqType->GenChallenge.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinContractAuthenticationReqType->GenChallenge.charactersLen, dinContractAuthenticationReqType->GenChallenge.characters);
+									errn = decodeCharacters(stream, dinContractAuthenticationReqType->GenChallenge.charactersLen, dinContractAuthenticationReqType->GenChallenge.characters, dinContractAuthenticationReqType_GenChallenge_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -3167,12 +3140,9 @@ static int decode_dinContractAuthenticationReqType(bitstream_t* stream, struct d
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinContractAuthenticationReqType->GenChallenge.charactersLen);
 							if (errn == 0) {
-								errn =  (dinContractAuthenticationReqType->GenChallenge.charactersLen - 2) <= dinContractAuthenticationReqType_GenChallenge_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinContractAuthenticationReqType->GenChallenge.charactersLen >= 2) {
 									dinContractAuthenticationReqType->GenChallenge.charactersLen = (uint16_t)(dinContractAuthenticationReqType->GenChallenge.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinContractAuthenticationReqType->GenChallenge.charactersLen, dinContractAuthenticationReqType->GenChallenge.characters);
+									errn = decodeCharacters(stream, dinContractAuthenticationReqType->GenChallenge.charactersLen, dinContractAuthenticationReqType->GenChallenge.characters, dinContractAuthenticationReqType_GenChallenge_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -4167,12 +4137,9 @@ static int decode_dinSignatureType(bitstream_t* stream, struct dinSignatureType*
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinSignatureType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinSignatureType->Id.charactersLen - 2) <= dinSignatureType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinSignatureType->Id.charactersLen >= 2) {
 							dinSignatureType->Id.charactersLen = (uint16_t)(dinSignatureType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinSignatureType->Id.charactersLen, dinSignatureType->Id.characters);
+							errn = decodeCharacters(stream, dinSignatureType->Id.charactersLen, dinSignatureType->Id.characters, dinSignatureType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -4400,12 +4367,9 @@ static int decode_dinParameterType(bitstream_t* stream, struct dinParameterType*
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinParameterType->Name.charactersLen);
 					if (errn == 0) {
-						errn =  (dinParameterType->Name.charactersLen - 2) <= dinParameterType_Name_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinParameterType->Name.charactersLen >= 2) {
 							dinParameterType->Name.charactersLen = (uint16_t)(dinParameterType->Name.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinParameterType->Name.charactersLen, dinParameterType->Name.characters);
+							errn = decodeCharacters(stream, dinParameterType->Name.charactersLen, dinParameterType->Name.characters, dinParameterType_Name_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -4541,12 +4505,9 @@ static int decode_dinParameterType(bitstream_t* stream, struct dinParameterType*
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinParameterType->stringValue.charactersLen);
 							if (errn == 0) {
-								errn =  (dinParameterType->stringValue.charactersLen - 2) <= dinParameterType_stringValue_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinParameterType->stringValue.charactersLen >= 2) {
 									dinParameterType->stringValue.charactersLen = (uint16_t)(dinParameterType->stringValue.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinParameterType->stringValue.charactersLen, dinParameterType->stringValue.characters);
+									errn = decodeCharacters(stream, dinParameterType->stringValue.charactersLen, dinParameterType->stringValue.characters, dinParameterType_stringValue_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -4617,12 +4578,9 @@ static int decode_dinSignaturePropertyType(bitstream_t* stream, struct dinSignat
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinSignaturePropertyType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinSignaturePropertyType->Id.charactersLen - 2) <= dinSignaturePropertyType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinSignaturePropertyType->Id.charactersLen >= 2) {
 							dinSignaturePropertyType->Id.charactersLen = (uint16_t)(dinSignaturePropertyType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinSignaturePropertyType->Id.charactersLen, dinSignaturePropertyType->Id.characters);
+							errn = decodeCharacters(stream, dinSignaturePropertyType->Id.charactersLen, dinSignaturePropertyType->Id.characters, dinSignaturePropertyType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -4634,12 +4592,9 @@ static int decode_dinSignaturePropertyType(bitstream_t* stream, struct dinSignat
 				case 1:
 					errn = decodeUnsignedInteger16(stream, &dinSignaturePropertyType->Target.charactersLen);
 					if (errn == 0) {
-						errn =  (dinSignaturePropertyType->Target.charactersLen - 2) <= dinSignaturePropertyType_Target_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinSignaturePropertyType->Target.charactersLen >= 2) {
 							dinSignaturePropertyType->Target.charactersLen = (uint16_t)(dinSignaturePropertyType->Target.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinSignaturePropertyType->Target.charactersLen, dinSignaturePropertyType->Target.characters);
+							errn = decodeCharacters(stream, dinSignaturePropertyType->Target.charactersLen, dinSignaturePropertyType->Target.characters, dinSignaturePropertyType_Target_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -4661,12 +4616,9 @@ static int decode_dinSignaturePropertyType(bitstream_t* stream, struct dinSignat
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinSignaturePropertyType->Target.charactersLen);
 					if (errn == 0) {
-						errn =  (dinSignaturePropertyType->Target.charactersLen - 2) <= dinSignaturePropertyType_Target_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinSignaturePropertyType->Target.charactersLen >= 2) {
 							dinSignaturePropertyType->Target.charactersLen = (uint16_t)(dinSignaturePropertyType->Target.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinSignaturePropertyType->Target.charactersLen, dinSignaturePropertyType->Target.characters);
+							errn = decodeCharacters(stream, dinSignaturePropertyType->Target.charactersLen, dinSignaturePropertyType->Target.characters, dinSignaturePropertyType_Target_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -5809,12 +5761,9 @@ static int decode_dinCertificateInstallationReqType(bitstream_t* stream, struct 
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinCertificateInstallationReqType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinCertificateInstallationReqType->Id.charactersLen - 2) <= dinCertificateInstallationReqType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinCertificateInstallationReqType->Id.charactersLen >= 2) {
 							dinCertificateInstallationReqType->Id.charactersLen = (uint16_t)(dinCertificateInstallationReqType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinCertificateInstallationReqType->Id.charactersLen, dinCertificateInstallationReqType->Id.characters);
+							errn = decodeCharacters(stream, dinCertificateInstallationReqType->Id.charactersLen, dinCertificateInstallationReqType->Id.characters, dinCertificateInstallationReqType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -5990,12 +5939,9 @@ static int decode_dinTransformType(bitstream_t* stream, struct dinTransformType*
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinTransformType->Algorithm.charactersLen);
 					if (errn == 0) {
-						errn =  (dinTransformType->Algorithm.charactersLen - 2) <= dinTransformType_Algorithm_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinTransformType->Algorithm.charactersLen >= 2) {
 							dinTransformType->Algorithm.charactersLen = (uint16_t)(dinTransformType->Algorithm.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinTransformType->Algorithm.charactersLen, dinTransformType->Algorithm.characters);
+							errn = decodeCharacters(stream, dinTransformType->Algorithm.charactersLen, dinTransformType->Algorithm.characters, dinTransformType_Algorithm_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6022,12 +5968,9 @@ static int decode_dinTransformType(bitstream_t* stream, struct dinTransformType*
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen - 2) <= dinTransformType_XPath_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen >= 2) {
 										dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen = (uint16_t)(dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen, dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].characters);
+										errn = decodeCharacters(stream, dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen, dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].characters, dinTransformType_XPath_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6083,12 +6026,9 @@ static int decode_dinTransformType(bitstream_t* stream, struct dinTransformType*
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen - 2) <= dinTransformType_XPath_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen >= 2) {
 										dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen = (uint16_t)(dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen, dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].characters);
+										errn = decodeCharacters(stream, dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].charactersLen, dinTransformType->XPath.array[dinTransformType->XPath.arrayLen].characters, dinTransformType_XPath_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6255,12 +6195,9 @@ static int decode_dinRetrievalMethodType(bitstream_t* stream, struct dinRetrieva
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinRetrievalMethodType->Type.charactersLen);
 					if (errn == 0) {
-						errn =  (dinRetrievalMethodType->Type.charactersLen - 2) <= dinRetrievalMethodType_Type_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinRetrievalMethodType->Type.charactersLen >= 2) {
 							dinRetrievalMethodType->Type.charactersLen = (uint16_t)(dinRetrievalMethodType->Type.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinRetrievalMethodType->Type.charactersLen, dinRetrievalMethodType->Type.characters);
+							errn = decodeCharacters(stream, dinRetrievalMethodType->Type.charactersLen, dinRetrievalMethodType->Type.characters, dinRetrievalMethodType_Type_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6272,12 +6209,9 @@ static int decode_dinRetrievalMethodType(bitstream_t* stream, struct dinRetrieva
 				case 1:
 					errn = decodeUnsignedInteger16(stream, &dinRetrievalMethodType->URI.charactersLen);
 					if (errn == 0) {
-						errn =  (dinRetrievalMethodType->URI.charactersLen - 2) <= dinRetrievalMethodType_URI_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinRetrievalMethodType->URI.charactersLen >= 2) {
 							dinRetrievalMethodType->URI.charactersLen = (uint16_t)(dinRetrievalMethodType->URI.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinRetrievalMethodType->URI.charactersLen, dinRetrievalMethodType->URI.characters);
+							errn = decodeCharacters(stream, dinRetrievalMethodType->URI.charactersLen, dinRetrievalMethodType->URI.characters, dinRetrievalMethodType_URI_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6309,12 +6243,9 @@ static int decode_dinRetrievalMethodType(bitstream_t* stream, struct dinRetrieva
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinRetrievalMethodType->URI.charactersLen);
 					if (errn == 0) {
-						errn =  (dinRetrievalMethodType->URI.charactersLen - 2) <= dinRetrievalMethodType_URI_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinRetrievalMethodType->URI.charactersLen >= 2) {
 							dinRetrievalMethodType->URI.charactersLen = (uint16_t)(dinRetrievalMethodType->URI.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinRetrievalMethodType->URI.charactersLen, dinRetrievalMethodType->URI.characters);
+							errn = decodeCharacters(stream, dinRetrievalMethodType->URI.charactersLen, dinRetrievalMethodType->URI.characters, dinRetrievalMethodType_URI_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6645,12 +6576,9 @@ static int decode_dinReferenceType(bitstream_t* stream, struct dinReferenceType*
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinReferenceType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinReferenceType->Id.charactersLen - 2) <= dinReferenceType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinReferenceType->Id.charactersLen >= 2) {
 							dinReferenceType->Id.charactersLen = (uint16_t)(dinReferenceType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinReferenceType->Id.charactersLen, dinReferenceType->Id.characters);
+							errn = decodeCharacters(stream, dinReferenceType->Id.charactersLen, dinReferenceType->Id.characters, dinReferenceType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6662,12 +6590,9 @@ static int decode_dinReferenceType(bitstream_t* stream, struct dinReferenceType*
 				case 1:
 					errn = decodeUnsignedInteger16(stream, &dinReferenceType->Type.charactersLen);
 					if (errn == 0) {
-						errn =  (dinReferenceType->Type.charactersLen - 2) <= dinReferenceType_Type_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinReferenceType->Type.charactersLen >= 2) {
 							dinReferenceType->Type.charactersLen = (uint16_t)(dinReferenceType->Type.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinReferenceType->Type.charactersLen, dinReferenceType->Type.characters);
+							errn = decodeCharacters(stream, dinReferenceType->Type.charactersLen, dinReferenceType->Type.characters, dinReferenceType_Type_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6679,12 +6604,9 @@ static int decode_dinReferenceType(bitstream_t* stream, struct dinReferenceType*
 				case 2:
 					errn = decodeUnsignedInteger16(stream, &dinReferenceType->URI.charactersLen);
 					if (errn == 0) {
-						errn =  (dinReferenceType->URI.charactersLen - 2) <= dinReferenceType_URI_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinReferenceType->URI.charactersLen >= 2) {
 							dinReferenceType->URI.charactersLen = (uint16_t)(dinReferenceType->URI.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinReferenceType->URI.charactersLen, dinReferenceType->URI.characters);
+							errn = decodeCharacters(stream, dinReferenceType->URI.charactersLen, dinReferenceType->URI.characters, dinReferenceType_URI_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6716,12 +6638,9 @@ static int decode_dinReferenceType(bitstream_t* stream, struct dinReferenceType*
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinReferenceType->Type.charactersLen);
 					if (errn == 0) {
-						errn =  (dinReferenceType->Type.charactersLen - 2) <= dinReferenceType_Type_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinReferenceType->Type.charactersLen >= 2) {
 							dinReferenceType->Type.charactersLen = (uint16_t)(dinReferenceType->Type.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinReferenceType->Type.charactersLen, dinReferenceType->Type.characters);
+							errn = decodeCharacters(stream, dinReferenceType->Type.charactersLen, dinReferenceType->Type.characters, dinReferenceType_Type_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6733,12 +6652,9 @@ static int decode_dinReferenceType(bitstream_t* stream, struct dinReferenceType*
 				case 1:
 					errn = decodeUnsignedInteger16(stream, &dinReferenceType->URI.charactersLen);
 					if (errn == 0) {
-						errn =  (dinReferenceType->URI.charactersLen - 2) <= dinReferenceType_URI_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinReferenceType->URI.charactersLen >= 2) {
 							dinReferenceType->URI.charactersLen = (uint16_t)(dinReferenceType->URI.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinReferenceType->URI.charactersLen, dinReferenceType->URI.characters);
+							errn = decodeCharacters(stream, dinReferenceType->URI.charactersLen, dinReferenceType->URI.characters, dinReferenceType_URI_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6770,12 +6686,9 @@ static int decode_dinReferenceType(bitstream_t* stream, struct dinReferenceType*
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinReferenceType->URI.charactersLen);
 					if (errn == 0) {
-						errn =  (dinReferenceType->URI.charactersLen - 2) <= dinReferenceType_URI_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinReferenceType->URI.charactersLen >= 2) {
 							dinReferenceType->URI.charactersLen = (uint16_t)(dinReferenceType->URI.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinReferenceType->URI.charactersLen, dinReferenceType->URI.characters);
+							errn = decodeCharacters(stream, dinReferenceType->URI.charactersLen, dinReferenceType->URI.characters, dinReferenceType_URI_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -6983,12 +6896,9 @@ static int decode_dinObjectType(bitstream_t* stream, struct dinObjectType* dinOb
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinObjectType->Encoding.charactersLen);
 					if (errn == 0) {
-						errn =  (dinObjectType->Encoding.charactersLen - 2) <= dinObjectType_Encoding_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinObjectType->Encoding.charactersLen >= 2) {
 							dinObjectType->Encoding.charactersLen = (uint16_t)(dinObjectType->Encoding.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinObjectType->Encoding.charactersLen, dinObjectType->Encoding.characters);
+							errn = decodeCharacters(stream, dinObjectType->Encoding.charactersLen, dinObjectType->Encoding.characters, dinObjectType_Encoding_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -7000,12 +6910,9 @@ static int decode_dinObjectType(bitstream_t* stream, struct dinObjectType* dinOb
 				case 1:
 					errn = decodeUnsignedInteger16(stream, &dinObjectType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinObjectType->Id.charactersLen - 2) <= dinObjectType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinObjectType->Id.charactersLen >= 2) {
 							dinObjectType->Id.charactersLen = (uint16_t)(dinObjectType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinObjectType->Id.charactersLen, dinObjectType->Id.characters);
+							errn = decodeCharacters(stream, dinObjectType->Id.charactersLen, dinObjectType->Id.characters, dinObjectType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -7017,12 +6924,9 @@ static int decode_dinObjectType(bitstream_t* stream, struct dinObjectType* dinOb
 				case 2:
 					errn = decodeUnsignedInteger16(stream, &dinObjectType->MimeType.charactersLen);
 					if (errn == 0) {
-						errn =  (dinObjectType->MimeType.charactersLen - 2) <= dinObjectType_MimeType_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinObjectType->MimeType.charactersLen >= 2) {
 							dinObjectType->MimeType.charactersLen = (uint16_t)(dinObjectType->MimeType.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinObjectType->MimeType.charactersLen, dinObjectType->MimeType.characters);
+							errn = decodeCharacters(stream, dinObjectType->MimeType.charactersLen, dinObjectType->MimeType.characters, dinObjectType_MimeType_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -7057,12 +6961,9 @@ static int decode_dinObjectType(bitstream_t* stream, struct dinObjectType* dinOb
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinObjectType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinObjectType->Id.charactersLen - 2) <= dinObjectType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinObjectType->Id.charactersLen >= 2) {
 							dinObjectType->Id.charactersLen = (uint16_t)(dinObjectType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinObjectType->Id.charactersLen, dinObjectType->Id.characters);
+							errn = decodeCharacters(stream, dinObjectType->Id.charactersLen, dinObjectType->Id.characters, dinObjectType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -7074,12 +6975,9 @@ static int decode_dinObjectType(bitstream_t* stream, struct dinObjectType* dinOb
 				case 1:
 					errn = decodeUnsignedInteger16(stream, &dinObjectType->MimeType.charactersLen);
 					if (errn == 0) {
-						errn =  (dinObjectType->MimeType.charactersLen - 2) <= dinObjectType_MimeType_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinObjectType->MimeType.charactersLen >= 2) {
 							dinObjectType->MimeType.charactersLen = (uint16_t)(dinObjectType->MimeType.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinObjectType->MimeType.charactersLen, dinObjectType->MimeType.characters);
+							errn = decodeCharacters(stream, dinObjectType->MimeType.charactersLen, dinObjectType->MimeType.characters, dinObjectType_MimeType_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -7114,12 +7012,9 @@ static int decode_dinObjectType(bitstream_t* stream, struct dinObjectType* dinOb
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinObjectType->MimeType.charactersLen);
 					if (errn == 0) {
-						errn =  (dinObjectType->MimeType.charactersLen - 2) <= dinObjectType_MimeType_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinObjectType->MimeType.charactersLen >= 2) {
 							dinObjectType->MimeType.charactersLen = (uint16_t)(dinObjectType->MimeType.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinObjectType->MimeType.charactersLen, dinObjectType->MimeType.characters);
+							errn = decodeCharacters(stream, dinObjectType->MimeType.charactersLen, dinObjectType->MimeType.characters, dinObjectType_MimeType_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -7220,12 +7115,9 @@ static int decode_dinSignatureValueType(bitstream_t* stream, struct dinSignature
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinSignatureValueType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinSignatureValueType->Id.charactersLen - 2) <= dinSignatureValueType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinSignatureValueType->Id.charactersLen >= 2) {
 							dinSignatureValueType->Id.charactersLen = (uint16_t)(dinSignatureValueType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinSignatureValueType->Id.charactersLen, dinSignatureValueType->Id.characters);
+							errn = decodeCharacters(stream, dinSignatureValueType->Id.charactersLen, dinSignatureValueType->Id.characters, dinSignatureValueType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -7659,12 +7551,9 @@ static int decode_dinMeteringReceiptReqType(bitstream_t* stream, struct dinMeter
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinMeteringReceiptReqType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinMeteringReceiptReqType->Id.charactersLen - 2) <= dinMeteringReceiptReqType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinMeteringReceiptReqType->Id.charactersLen >= 2) {
 							dinMeteringReceiptReqType->Id.charactersLen = (uint16_t)(dinMeteringReceiptReqType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinMeteringReceiptReqType->Id.charactersLen, dinMeteringReceiptReqType->Id.characters);
+							errn = decodeCharacters(stream, dinMeteringReceiptReqType->Id.charactersLen, dinMeteringReceiptReqType->Id.characters, dinMeteringReceiptReqType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -8542,12 +8431,9 @@ static int decode_dinKeyInfoType(bitstream_t* stream, struct dinKeyInfoType* din
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinKeyInfoType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinKeyInfoType->Id.charactersLen - 2) <= dinKeyInfoType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinKeyInfoType->Id.charactersLen >= 2) {
 							dinKeyInfoType->Id.charactersLen = (uint16_t)(dinKeyInfoType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinKeyInfoType->Id.charactersLen, dinKeyInfoType->Id.characters);
+							errn = decodeCharacters(stream, dinKeyInfoType->Id.charactersLen, dinKeyInfoType->Id.characters, dinKeyInfoType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -8564,12 +8450,9 @@ static int decode_dinKeyInfoType(bitstream_t* stream, struct dinKeyInfoType* din
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen - 2) <= dinKeyInfoType_KeyName_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen >= 2) {
 										dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen = (uint16_t)(dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].characters);
+										errn = decodeCharacters(stream, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].characters, dinKeyInfoType_KeyName_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -8642,12 +8525,9 @@ static int decode_dinKeyInfoType(bitstream_t* stream, struct dinKeyInfoType* din
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen - 2) <= dinKeyInfoType_MgmtData_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen >= 2) {
 										dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen = (uint16_t)(dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].characters);
+										errn = decodeCharacters(stream, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].characters, dinKeyInfoType_MgmtData_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -8699,12 +8579,9 @@ static int decode_dinKeyInfoType(bitstream_t* stream, struct dinKeyInfoType* din
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen - 2) <= dinKeyInfoType_KeyName_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen >= 2) {
 										dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen = (uint16_t)(dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].characters);
+										errn = decodeCharacters(stream, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].characters, dinKeyInfoType_KeyName_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -8777,12 +8654,9 @@ static int decode_dinKeyInfoType(bitstream_t* stream, struct dinKeyInfoType* din
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen - 2) <= dinKeyInfoType_MgmtData_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen >= 2) {
 										dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen = (uint16_t)(dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].characters);
+										errn = decodeCharacters(stream, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].characters, dinKeyInfoType_MgmtData_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -8834,12 +8708,9 @@ static int decode_dinKeyInfoType(bitstream_t* stream, struct dinKeyInfoType* din
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen - 2) <= dinKeyInfoType_KeyName_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen >= 2) {
 										dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen = (uint16_t)(dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].characters);
+										errn = decodeCharacters(stream, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].characters, dinKeyInfoType_KeyName_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -8912,12 +8783,9 @@ static int decode_dinKeyInfoType(bitstream_t* stream, struct dinKeyInfoType* din
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen - 2) <= dinKeyInfoType_MgmtData_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen >= 2) {
 										dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen = (uint16_t)(dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].characters);
+										errn = decodeCharacters(stream, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].characters, dinKeyInfoType_MgmtData_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -8973,12 +8841,9 @@ static int decode_dinKeyInfoType(bitstream_t* stream, struct dinKeyInfoType* din
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen - 2) <= dinKeyInfoType_KeyName_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen >= 2) {
 										dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen = (uint16_t)(dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].characters);
+										errn = decodeCharacters(stream, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].charactersLen, dinKeyInfoType->KeyName.array[dinKeyInfoType->KeyName.arrayLen].characters, dinKeyInfoType_KeyName_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -9051,12 +8916,9 @@ static int decode_dinKeyInfoType(bitstream_t* stream, struct dinKeyInfoType* din
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen - 2) <= dinKeyInfoType_MgmtData_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen >= 2) {
 										dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen = (uint16_t)(dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].characters);
+										errn = decodeCharacters(stream, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].charactersLen, dinKeyInfoType->MgmtData.array[dinKeyInfoType->MgmtData.arrayLen].characters, dinKeyInfoType_MgmtData_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -9379,12 +9241,9 @@ static int decode_dinPaymentDetailsResType(bitstream_t* stream, struct dinPaymen
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinPaymentDetailsResType->GenChallenge.charactersLen);
 							if (errn == 0) {
-								errn =  (dinPaymentDetailsResType->GenChallenge.charactersLen - 2) <= dinPaymentDetailsResType_GenChallenge_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinPaymentDetailsResType->GenChallenge.charactersLen >= 2) {
 									dinPaymentDetailsResType->GenChallenge.charactersLen = (uint16_t)(dinPaymentDetailsResType->GenChallenge.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinPaymentDetailsResType->GenChallenge.charactersLen, dinPaymentDetailsResType->GenChallenge.characters);
+									errn = decodeCharacters(stream, dinPaymentDetailsResType->GenChallenge.charactersLen, dinPaymentDetailsResType->GenChallenge.characters, dinPaymentDetailsResType_GenChallenge_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -9525,12 +9384,9 @@ static int decode_dinPaymentDetailsReqType(bitstream_t* stream, struct dinPaymen
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinPaymentDetailsReqType->ContractID.charactersLen);
 							if (errn == 0) {
-								errn =  (dinPaymentDetailsReqType->ContractID.charactersLen - 2) <= dinPaymentDetailsReqType_ContractID_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinPaymentDetailsReqType->ContractID.charactersLen >= 2) {
 									dinPaymentDetailsReqType->ContractID.charactersLen = (uint16_t)(dinPaymentDetailsReqType->ContractID.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinPaymentDetailsReqType->ContractID.charactersLen, dinPaymentDetailsReqType->ContractID.characters);
+									errn = decodeCharacters(stream, dinPaymentDetailsReqType->ContractID.charactersLen, dinPaymentDetailsReqType->ContractID.characters, dinPaymentDetailsReqType_ContractID_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -9651,12 +9507,9 @@ static int decode_dinServiceTagType(bitstream_t* stream, struct dinServiceTagTyp
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinServiceTagType->ServiceName.charactersLen);
 							if (errn == 0) {
-								errn =  (dinServiceTagType->ServiceName.charactersLen - 2) <= dinServiceTagType_ServiceName_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinServiceTagType->ServiceName.charactersLen >= 2) {
 									dinServiceTagType->ServiceName.charactersLen = (uint16_t)(dinServiceTagType->ServiceName.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinServiceTagType->ServiceName.charactersLen, dinServiceTagType->ServiceName.characters);
+									errn = decodeCharacters(stream, dinServiceTagType->ServiceName.charactersLen, dinServiceTagType->ServiceName.characters, dinServiceTagType_ServiceName_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -9751,12 +9604,9 @@ static int decode_dinServiceTagType(bitstream_t* stream, struct dinServiceTagTyp
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinServiceTagType->ServiceScope.charactersLen);
 							if (errn == 0) {
-								errn =  (dinServiceTagType->ServiceScope.charactersLen - 2) <= dinServiceTagType_ServiceScope_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinServiceTagType->ServiceScope.charactersLen >= 2) {
 									dinServiceTagType->ServiceScope.charactersLen = (uint16_t)(dinServiceTagType->ServiceScope.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinServiceTagType->ServiceScope.charactersLen, dinServiceTagType->ServiceScope.characters);
+									errn = decodeCharacters(stream, dinServiceTagType->ServiceScope.charactersLen, dinServiceTagType->ServiceScope.characters, dinServiceTagType_ServiceScope_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -10026,12 +9876,9 @@ static int decode_dinServiceDiscoveryReqType(bitstream_t* stream, struct dinServ
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinServiceDiscoveryReqType->ServiceScope.charactersLen);
 							if (errn == 0) {
-								errn =  (dinServiceDiscoveryReqType->ServiceScope.charactersLen - 2) <= dinServiceDiscoveryReqType_ServiceScope_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinServiceDiscoveryReqType->ServiceScope.charactersLen >= 2) {
 									dinServiceDiscoveryReqType->ServiceScope.charactersLen = (uint16_t)(dinServiceDiscoveryReqType->ServiceScope.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinServiceDiscoveryReqType->ServiceScope.charactersLen, dinServiceDiscoveryReqType->ServiceScope.characters);
+									errn = decodeCharacters(stream, dinServiceDiscoveryReqType->ServiceScope.charactersLen, dinServiceDiscoveryReqType->ServiceScope.characters, dinServiceDiscoveryReqType_ServiceScope_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -10265,12 +10112,9 @@ static int decode_dinCertificateUpdateReqType(bitstream_t* stream, struct dinCer
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinCertificateUpdateReqType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinCertificateUpdateReqType->Id.charactersLen - 2) <= dinCertificateUpdateReqType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinCertificateUpdateReqType->Id.charactersLen >= 2) {
 							dinCertificateUpdateReqType->Id.charactersLen = (uint16_t)(dinCertificateUpdateReqType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinCertificateUpdateReqType->Id.charactersLen, dinCertificateUpdateReqType->Id.characters);
+							errn = decodeCharacters(stream, dinCertificateUpdateReqType->Id.charactersLen, dinCertificateUpdateReqType->Id.characters, dinCertificateUpdateReqType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -10316,12 +10160,9 @@ static int decode_dinCertificateUpdateReqType(bitstream_t* stream, struct dinCer
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinCertificateUpdateReqType->ContractID.charactersLen);
 							if (errn == 0) {
-								errn =  (dinCertificateUpdateReqType->ContractID.charactersLen - 2) <= dinCertificateUpdateReqType_ContractID_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinCertificateUpdateReqType->ContractID.charactersLen >= 2) {
 									dinCertificateUpdateReqType->ContractID.charactersLen = (uint16_t)(dinCertificateUpdateReqType->ContractID.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinCertificateUpdateReqType->ContractID.charactersLen, dinCertificateUpdateReqType->ContractID.characters);
+									errn = decodeCharacters(stream, dinCertificateUpdateReqType->ContractID.charactersLen, dinCertificateUpdateReqType->ContractID.characters, dinCertificateUpdateReqType_ContractID_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -10506,12 +10347,9 @@ static int decode_dinSignedInfoType(bitstream_t* stream, struct dinSignedInfoTyp
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinSignedInfoType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinSignedInfoType->Id.charactersLen - 2) <= dinSignedInfoType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinSignedInfoType->Id.charactersLen >= 2) {
 							dinSignedInfoType->Id.charactersLen = (uint16_t)(dinSignedInfoType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinSignedInfoType->Id.charactersLen, dinSignedInfoType->Id.characters);
+							errn = decodeCharacters(stream, dinSignedInfoType->Id.charactersLen, dinSignedInfoType->Id.characters, dinSignedInfoType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -11478,12 +11316,9 @@ static int decode_dinMeterInfoType(bitstream_t* stream, struct dinMeterInfoType*
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinMeterInfoType->MeterID.charactersLen);
 							if (errn == 0) {
-								errn =  (dinMeterInfoType->MeterID.charactersLen - 2) <= dinMeterInfoType_MeterID_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinMeterInfoType->MeterID.charactersLen >= 2) {
 									dinMeterInfoType->MeterID.charactersLen = (uint16_t)(dinMeterInfoType->MeterID.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinMeterInfoType->MeterID.charactersLen, dinMeterInfoType->MeterID.characters);
+									errn = decodeCharacters(stream, dinMeterInfoType->MeterID.charactersLen, dinMeterInfoType->MeterID.characters, dinMeterInfoType_MeterID_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -11828,12 +11663,9 @@ static int decode_dinCertificateInstallationResType(bitstream_t* stream, struct 
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinCertificateInstallationResType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinCertificateInstallationResType->Id.charactersLen - 2) <= dinCertificateInstallationResType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinCertificateInstallationResType->Id.charactersLen >= 2) {
 							dinCertificateInstallationResType->Id.charactersLen = (uint16_t)(dinCertificateInstallationResType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinCertificateInstallationResType->Id.charactersLen, dinCertificateInstallationResType->Id.characters);
+							errn = decodeCharacters(stream, dinCertificateInstallationResType->Id.charactersLen, dinCertificateInstallationResType->Id.characters, dinCertificateInstallationResType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -11983,12 +11815,9 @@ static int decode_dinCertificateInstallationResType(bitstream_t* stream, struct 
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinCertificateInstallationResType->ContractID.charactersLen);
 							if (errn == 0) {
-								errn =  (dinCertificateInstallationResType->ContractID.charactersLen - 2) <= dinCertificateInstallationResType_ContractID_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinCertificateInstallationResType->ContractID.charactersLen >= 2) {
 									dinCertificateInstallationResType->ContractID.charactersLen = (uint16_t)(dinCertificateInstallationResType->ContractID.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinCertificateInstallationResType->ContractID.charactersLen, dinCertificateInstallationResType->ContractID.characters);
+									errn = decodeCharacters(stream, dinCertificateInstallationResType->ContractID.charactersLen, dinCertificateInstallationResType->ContractID.characters, dinCertificateInstallationResType_ContractID_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -12182,12 +12011,9 @@ static int decode_dinX509IssuerSerialType(bitstream_t* stream, struct dinX509Iss
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinX509IssuerSerialType->X509IssuerName.charactersLen);
 							if (errn == 0) {
-								errn =  (dinX509IssuerSerialType->X509IssuerName.charactersLen - 2) <= dinX509IssuerSerialType_X509IssuerName_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinX509IssuerSerialType->X509IssuerName.charactersLen >= 2) {
 									dinX509IssuerSerialType->X509IssuerName.charactersLen = (uint16_t)(dinX509IssuerSerialType->X509IssuerName.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinX509IssuerSerialType->X509IssuerName.charactersLen, dinX509IssuerSerialType->X509IssuerName.characters);
+									errn = decodeCharacters(stream, dinX509IssuerSerialType->X509IssuerName.charactersLen, dinX509IssuerSerialType->X509IssuerName.characters, dinX509IssuerSerialType_X509IssuerName_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -12554,12 +12380,9 @@ static int decode_dinX509DataType(bitstream_t* stream, struct dinX509DataType* d
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen - 2) <= dinX509DataType_X509SubjectName_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen >= 2) {
 										dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen = (uint16_t)(dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen, dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].characters);
+										errn = decodeCharacters(stream, dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen, dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].characters, dinX509DataType_X509SubjectName_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -12712,12 +12535,9 @@ static int decode_dinX509DataType(bitstream_t* stream, struct dinX509DataType* d
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen - 2) <= dinX509DataType_X509SubjectName_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen >= 2) {
 										dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen = (uint16_t)(dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen, dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].characters);
+										errn = decodeCharacters(stream, dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].charactersLen, dinX509DataType->X509SubjectName.array[dinX509DataType->X509SubjectName.arrayLen].characters, dinX509DataType_X509SubjectName_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -13368,12 +13188,9 @@ static int decode_dinCertificateUpdateResType(bitstream_t* stream, struct dinCer
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinCertificateUpdateResType->Id.charactersLen);
 					if (errn == 0) {
-						errn =  (dinCertificateUpdateResType->Id.charactersLen - 2) <= dinCertificateUpdateResType_Id_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinCertificateUpdateResType->Id.charactersLen >= 2) {
 							dinCertificateUpdateResType->Id.charactersLen = (uint16_t)(dinCertificateUpdateResType->Id.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinCertificateUpdateResType->Id.charactersLen, dinCertificateUpdateResType->Id.characters);
+							errn = decodeCharacters(stream, dinCertificateUpdateResType->Id.charactersLen, dinCertificateUpdateResType->Id.characters, dinCertificateUpdateResType_Id_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -13523,12 +13340,9 @@ static int decode_dinCertificateUpdateResType(bitstream_t* stream, struct dinCer
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &dinCertificateUpdateResType->ContractID.charactersLen);
 							if (errn == 0) {
-								errn =  (dinCertificateUpdateResType->ContractID.charactersLen - 2) <= dinCertificateUpdateResType_ContractID_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (dinCertificateUpdateResType->ContractID.charactersLen >= 2) {
 									dinCertificateUpdateResType->ContractID.charactersLen = (uint16_t)(dinCertificateUpdateResType->ContractID.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, dinCertificateUpdateResType->ContractID.charactersLen, dinCertificateUpdateResType->ContractID.characters);
+									errn = decodeCharacters(stream, dinCertificateUpdateResType->ContractID.charactersLen, dinCertificateUpdateResType->ContractID.characters, dinCertificateUpdateResType_ContractID_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -13761,12 +13575,9 @@ static int decode_dinListOfRootCertificateIDsType(bitstream_t* stream, struct di
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen - 2) <= dinListOfRootCertificateIDsType_RootCertificateID_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen >= 2) {
 										dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen = (uint16_t)(dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen, dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].characters);
+										errn = decodeCharacters(stream, dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen, dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].characters, dinListOfRootCertificateIDsType_RootCertificateID_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -13810,12 +13621,9 @@ static int decode_dinListOfRootCertificateIDsType(bitstream_t* stream, struct di
 							if(eventCode == 0) {
 								errn = decodeUnsignedInteger16(stream, &dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen);
 								if (errn == 0) {
-									errn =  (dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen - 2) <= dinListOfRootCertificateIDsType_RootCertificateID_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-								}
-								if (errn == 0) {
 									if (dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen >= 2) {
 										dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen = (uint16_t)(dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen - 2); /* string table miss */
-										errn = decodeCharacters(stream, dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen, dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].characters);
+										errn = decodeCharacters(stream, dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].charactersLen, dinListOfRootCertificateIDsType->RootCertificateID.array[dinListOfRootCertificateIDsType->RootCertificateID.arrayLen].characters, dinListOfRootCertificateIDsType_RootCertificateID_CHARACTERS_SIZE);
 									} else {
 										/* string table hit */
 										errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -13878,12 +13686,9 @@ static int decode_dinSignatureMethodType(bitstream_t* stream, struct dinSignatur
 				case 0:
 					errn = decodeUnsignedInteger16(stream, &dinSignatureMethodType->Algorithm.charactersLen);
 					if (errn == 0) {
-						errn =  (dinSignatureMethodType->Algorithm.charactersLen - 2) <= dinSignatureMethodType_Algorithm_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-					}
-					if (errn == 0) {
 						if (dinSignatureMethodType->Algorithm.charactersLen >= 2) {
 							dinSignatureMethodType->Algorithm.charactersLen = (uint16_t)(dinSignatureMethodType->Algorithm.charactersLen - 2); /* string table miss */
-							errn = decodeCharacters(stream, dinSignatureMethodType->Algorithm.charactersLen, dinSignatureMethodType->Algorithm.characters);
+							errn = decodeCharacters(stream, dinSignatureMethodType->Algorithm.charactersLen, dinSignatureMethodType->Algorithm.characters, dinSignatureMethodType_Algorithm_CHARACTERS_SIZE);
 						} else {
 							/* string table hit */
 							errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -14226,12 +14031,9 @@ int decode_dinExiDocument(bitstream_t* stream, struct dinEXIDocument* exiDoc) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiDoc->KeyName.charactersLen);
 						if (errn == 0) {
-							errn =  (exiDoc->KeyName.charactersLen - 2) <= EXIDocument_KeyName_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-						}
-						if (errn == 0) {
 							if (exiDoc->KeyName.charactersLen >= 2) {
 								exiDoc->KeyName.charactersLen = (uint16_t)(exiDoc->KeyName.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiDoc->KeyName.charactersLen, exiDoc->KeyName.characters);
+								errn = decodeCharacters(stream, exiDoc->KeyName.charactersLen, exiDoc->KeyName.characters, EXIDocument_KeyName_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -14272,12 +14074,9 @@ int decode_dinExiDocument(bitstream_t* stream, struct dinEXIDocument* exiDoc) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiDoc->MgmtData.charactersLen);
 						if (errn == 0) {
-							errn =  (exiDoc->MgmtData.charactersLen - 2) <= EXIDocument_MgmtData_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-						}
-						if (errn == 0) {
 							if (exiDoc->MgmtData.charactersLen >= 2) {
 								exiDoc->MgmtData.charactersLen = (uint16_t)(exiDoc->MgmtData.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiDoc->MgmtData.charactersLen, exiDoc->MgmtData.characters);
+								errn = decodeCharacters(stream, exiDoc->MgmtData.charactersLen, exiDoc->MgmtData.characters, EXIDocument_MgmtData_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;

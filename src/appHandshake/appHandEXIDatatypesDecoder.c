@@ -76,12 +76,9 @@ static int decode_appHandAppProtocolType(bitstream_t* stream, struct appHandAppP
 						if(eventCode == 0) {
 							errn = decodeUnsignedInteger16(stream, &appHandAppProtocolType->ProtocolNamespace.charactersLen);
 							if (errn == 0) {
-								errn =  (appHandAppProtocolType->ProtocolNamespace.charactersLen - 2) <= appHandAppProtocolType_ProtocolNamespace_CHARACTERS_SIZE ? 0 : EXI_ERROR_STRINGVALUES_OUT_OF_BOUND;
-							}
-							if (errn == 0) {
 								if (appHandAppProtocolType->ProtocolNamespace.charactersLen >= 2) {
 									appHandAppProtocolType->ProtocolNamespace.charactersLen = (uint16_t)(appHandAppProtocolType->ProtocolNamespace.charactersLen - 2); /* string table miss */
-									errn = decodeCharacters(stream, appHandAppProtocolType->ProtocolNamespace.charactersLen, appHandAppProtocolType->ProtocolNamespace.characters);
+									errn = decodeCharacters(stream, appHandAppProtocolType->ProtocolNamespace.charactersLen, appHandAppProtocolType->ProtocolNamespace.characters, appHandAppProtocolType_ProtocolNamespace_CHARACTERS_SIZE);
 								} else {
 									/* string table hit */
 									errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
