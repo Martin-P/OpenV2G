@@ -53,11 +53,12 @@
 #include "xmldsigEXIDatatypesDecoder.h"
 #endif /* DEPLOY_XMLDSIG_CODEC == SUPPORT_YES */
 
-
-
-#include "v2gEXIDatatypes.h"
-#include "v2gEXIDatatypesEncoder.h"
-#include "v2gEXIDatatypesDecoder.h"
+/* Activate support for ISO2 */
+#include "iso2EXIDatatypes.h"
+#if DEPLOY_ISO2_CODEC == SUPPORT_YES
+#include "iso2EXIDatatypesEncoder.h"
+#include "iso2EXIDatatypesDecoder.h"
+#endif /* DEPLOY_ISO2_CODEC == SUPPORT_YES */
 
 #include "v2gtp.h"
 
@@ -102,7 +103,7 @@ static void printASCIIString(exi_string_character_t* string, uint16_t len) {
 	printf("\n");
 }
 
-static void printEVSEStatus(struct v2gEVSEStatusType* status)
+static void printEVSEStatus(struct iso2EVSEStatusType* status)
 {
 	printf("\tEVSEStatus:\n");
 	printf("\t\tEVSENotification=%d\n", status->EVSENotification);
@@ -126,10 +127,10 @@ static void copyBytes(uint8_t* from, uint16_t len, uint8_t* to) {
 
 
 /* serializes EXI stream and adds V2G TP header */
-static int serializeEXI2Stream(struct v2gEXIDocument* exiIn, bitstream_t* stream) {
+static int serializeEXI2Stream(struct iso2EXIDocument* exiIn, bitstream_t* stream) {
 	int errn;
 	*stream->pos = V2GTP_HEADER_LENGTH;  /* v2gtp header */
-	if( (errn = encode_v2gExiDocument(stream, exiIn)) == 0) {
+	if( (errn = encode_iso2ExiDocument(stream, exiIn)) == 0) {
 		errn = write_v2gtpHeader(stream->data, (*stream->pos)-V2GTP_HEADER_LENGTH, V2GTP_EXI_TYPE);
 	}
 	return errn;
@@ -137,7 +138,7 @@ static int serializeEXI2Stream(struct v2gEXIDocument* exiIn, bitstream_t* stream
 
 
 /* deserializes V2G TP header and decodes right away EXI stream */
-static int deserializeStream2EXI(bitstream_t* streamIn, struct v2gEXIDocument* exi) {
+static int deserializeStream2EXI(bitstream_t* streamIn, struct iso2EXIDocument* exi) {
 	int errn;
 	uint16_t payloadLength;
 
@@ -145,7 +146,7 @@ static int deserializeStream2EXI(bitstream_t* streamIn, struct v2gEXIDocument* e
 	if ( (errn = read_v2gtpHeader(streamIn->data, &payloadLength)) == 0) {
 		*streamIn->pos += V2GTP_HEADER_LENGTH;
 
-		errn = decode_v2gExiDocument(streamIn, exi);
+		errn = decode_iso2ExiDocument(streamIn, exi);
 	}
 	return errn;
 }
@@ -286,7 +287,7 @@ static int appHandshake()
 }
 
 
-static int sessionSetup(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int sessionSetup(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 	printf("EVSE side: sessionSetup called\n"  );
 	printf("\tReceived data:\n");
 	printf("\tHeader SessionID=");
@@ -296,7 +297,7 @@ static int sessionSetup(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exi
 	exiOut->V2G_Message_isUsed = 1u;
 
 	/* generate an unique sessionID */
-	init_v2gMessageHeaderType(&exiOut->V2G_Message.Header);
+	init_iso2MessageHeaderType(&exiOut->V2G_Message.Header);
 	exiOut->V2G_Message.Header.SessionID.bytes[0] = 1;
 	exiOut->V2G_Message.Header.SessionID.bytes[1] = 2;
 	exiOut->V2G_Message.Header.SessionID.bytes[2] = 3;
@@ -308,12 +309,12 @@ static int sessionSetup(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exi
 	exiOut->V2G_Message.Header.SessionID.bytesLen = 8;
 
 	/* Prepare data for EV */
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.SessionSetupRes_isUsed = 1u;
-	init_v2gSessionSetupResType(&exiOut->V2G_Message.Body.SessionSetupRes);
+	init_iso2SessionSetupResType(&exiOut->V2G_Message.Body.SessionSetupRes);
 
-	exiOut->V2G_Message.Body.SessionSetupRes.ResponseCode = v2gresponseCodeType_OK;
+	exiOut->V2G_Message.Body.SessionSetupRes.ResponseCode = iso2responseCodeType_OK;
 	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[0] = 0;
 	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[1] = 20;
 	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.charactersLen = 2;
@@ -323,7 +324,7 @@ static int sessionSetup(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exi
 	return 0;
 }
 
-static int serviceDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int serviceDiscovery(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 	int i;
 
 	printf("EVSE side: serviceDiscovery called\n"  );
@@ -338,17 +339,17 @@ static int serviceDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument*
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes_isUsed = 1u;
-	init_v2gServiceDiscoveryResType(&exiOut->V2G_Message.Body.ServiceDiscoveryRes);
+	init_iso2ServiceDiscoveryResType(&exiOut->V2G_Message.Body.ServiceDiscoveryRes);
 
 
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.VASList_isUsed = 0u;  /* we do not provide VAS */
-	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ResponseCode = v2gresponseCodeType_OK;
+	exiOut->V2G_Message.Body.ServiceDiscoveryRes.ResponseCode = iso2responseCodeType_OK;
 
-	exiOut->V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.array[0] = v2gpaymentOptionType_ExternalPayment; /* EVSE handles the payment */
-	exiOut->V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.array[1] = v2gpaymentOptionType_Contract;
+	exiOut->V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.array[0] = iso2paymentOptionType_ExternalPayment; /* EVSE handles the payment */
+	exiOut->V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.array[1] = iso2paymentOptionType_Contract;
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.arrayLen = 2;
 
 	exiOut->V2G_Message.Body.ServiceDiscoveryRes.EnergyTransferServiceList.Service.arrayLen = 1;
@@ -361,7 +362,7 @@ static int serviceDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument*
 }
 
 
-static int serviceDetail(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int serviceDetail(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 
 	printf("EVSE side: serviceDetail called\n"  );
 	printf("\tReceived data:\n");
@@ -372,10 +373,10 @@ static int serviceDetail(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* ex
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.ServiceDetailRes_isUsed= 1u;
-	init_v2gServiceDetailResType(&exiOut->V2G_Message.Body.ServiceDetailRes);
+	init_iso2ServiceDetailResType(&exiOut->V2G_Message.Body.ServiceDetailRes);
 
 	exiOut->V2G_Message.Body.ServiceDetailRes.ServiceID = 1234;
 
@@ -426,13 +427,13 @@ static int serviceDetail(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* ex
 	exiOut->V2G_Message.Body.ServiceDetailRes.ServiceParameterList.ParameterSet.array[1].Parameter.array[0].physicalValue.Exponent = 1;
 	exiOut->V2G_Message.Body.ServiceDetailRes.ServiceParameterList.ParameterSet.array[1].Parameter.array[0].physicalValue.Value = 2;
 
-	exiOut->V2G_Message.Body.ServiceDetailRes.ResponseCode = v2gresponseCodeType_OK;
+	exiOut->V2G_Message.Body.ServiceDetailRes.ResponseCode = iso2responseCodeType_OK;
 
 	return 0;
 }
 
 
-static int paymentServiceSelection(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int paymentServiceSelection(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 	int i;
 
 	printf("EVSE side: paymentServiceSelection called\n"  );
@@ -440,7 +441,7 @@ static int paymentServiceSelection(struct v2gEXIDocument* exiIn, struct v2gEXIDo
 	printf("\tHeader SessionID=");
 	printBinaryArray(exiIn->V2G_Message.Header.SessionID.bytes, exiIn->V2G_Message.Header.SessionID.bytesLen);
 
-	if(exiIn->V2G_Message.Body.PaymentServiceSelectionReq.SelectedPaymentOption == v2gpaymentOptionType_ExternalPayment)  {
+	if(exiIn->V2G_Message.Body.PaymentServiceSelectionReq.SelectedPaymentOption == iso2paymentOptionType_ExternalPayment)  {
 		printf("\t\t SelectedPaymentOption=ExternalPayment\n");
 	}
 
@@ -454,18 +455,18 @@ static int paymentServiceSelection(struct v2gEXIDocument* exiIn, struct v2gEXIDo
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.PaymentServiceSelectionRes_isUsed= 1u;
-	init_v2gV2GResponseType(&exiOut->V2G_Message.Body.PaymentServiceSelectionRes);
+	init_iso2PaymentServiceSelectionResType(&exiOut->V2G_Message.Body.PaymentServiceSelectionRes);
 
-	exiOut->V2G_Message.Body.ServiceDetailRes.ResponseCode = v2gresponseCodeType_OK;
+	exiOut->V2G_Message.Body.ServiceDetailRes.ResponseCode = iso2responseCodeType_OK;
 
 	return 0;
 }
 
 
-static int paymentDetails(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int paymentDetails(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 
 	printf("EVSE side: paymentDetails called\n"  );
 	printf("\tReceived data:\n");
@@ -478,12 +479,12 @@ static int paymentDetails(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* e
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.PaymentDetailsRes_isUsed = 1u;
-	init_v2gPaymentDetailsResType(&exiOut->V2G_Message.Body.PaymentDetailsRes);
+	init_iso2PaymentDetailsResType(&exiOut->V2G_Message.Body.PaymentDetailsRes);
 
-	exiOut->V2G_Message.Body.PaymentDetailsRes.ResponseCode = v2gresponseCodeType_OK;
+	exiOut->V2G_Message.Body.PaymentDetailsRes.ResponseCode = iso2responseCodeType_OK;
 	exiOut->V2G_Message.Body.PaymentDetailsRes.GenChallenge.bytesLen = 1;
 	exiOut->V2G_Message.Body.PaymentDetailsRes.GenChallenge.bytes[0] = 1;
 	exiOut->V2G_Message.Body.PaymentDetailsRes.EVSETimeStamp = 123456;
@@ -492,7 +493,7 @@ static int paymentDetails(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* e
 }
 
 
-static int authorization(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int authorization(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 
 	printf("EVSE: Authorization called\n"  );
 	printf("\tReceived data:\n");
@@ -507,19 +508,19 @@ static int authorization(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* ex
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.AuthorizationRes_isUsed = 1u;
-	init_v2gAuthorizationResType(&exiOut->V2G_Message.Body.AuthorizationRes);
+	init_iso2AuthorizationResType(&exiOut->V2G_Message.Body.AuthorizationRes);
 
-	exiOut->V2G_Message.Body.AuthorizationRes.ResponseCode = v2gresponseCodeType_OK;
-	exiOut->V2G_Message.Body.AuthorizationRes.EVSEProcessing = v2gEVSEProcessingType_Finished;
+	exiOut->V2G_Message.Body.AuthorizationRes.ResponseCode = iso2responseCodeType_OK;
+	exiOut->V2G_Message.Body.AuthorizationRes.EVSEProcessing = iso2EVSEProcessingType_Finished;
 
 	return 0;
 }
 
 
-static int chargeParameterDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int chargeParameterDiscovery(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 
 	printf("EVSE side: chargeParameterDiscovery called\n"  );
 	printf("\tReceived data:\n");
@@ -531,20 +532,20 @@ static int chargeParameterDiscovery(struct v2gEXIDocument* exiIn, struct v2gEXID
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes_isUsed = 1u;
-	init_v2gChargeParameterDiscoveryResType(&exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes);
+	init_iso2ChargeParameterDiscoveryResType(&exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes);
 
-	exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.ResponseCode = v2gresponseCodeType_OK_CertificateExpiresSoon;
-	exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEProcessing = v2gEVSEProcessingType_Ongoing;
+	exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.ResponseCode = iso2responseCodeType_OK_CertificateExpiresSoon;
+	exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEProcessing = iso2EVSEProcessingType_Ongoing;
 	exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEEnergyTransferParameter_isUsed = 1u;
 	/*exiOut->V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEEnergyTransferParameter = 0;*/
 	return 0;
 }
 
 
-static int powerDelivery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int powerDelivery(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 	printf("EVSE side: powerDelivery called\n"  );
 	printf("\tReceived data:\n");
 
@@ -553,40 +554,40 @@ static int powerDelivery(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* ex
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.PowerDeliveryRes_isUsed = 1u;
-	init_v2gPowerDeliveryResType(&exiOut->V2G_Message.Body.PowerDeliveryRes);
+	init_iso2PowerDeliveryResType(&exiOut->V2G_Message.Body.PowerDeliveryRes);
 
-	exiOut->V2G_Message.Body.PowerDeliveryRes.ResponseCode = v2gresponseCodeType_OK;
+	exiOut->V2G_Message.Body.PowerDeliveryRes.ResponseCode = iso2responseCodeType_OK;
 
 	exiOut->V2G_Message.Body.PowerDeliveryRes.EVSEStatus_isUsed = 1;
-	exiOut->V2G_Message.Body.PowerDeliveryRes.EVSEStatus.EVSENotification = v2gEVSENotificationType_StopCharging;
+	exiOut->V2G_Message.Body.PowerDeliveryRes.EVSEStatus.EVSENotification = iso2EVSENotificationType_StopCharging;
 	exiOut->V2G_Message.Body.PowerDeliveryRes.EVSEStatus.NotificationMaxDelay=12;
 
-	exiOut->V2G_Message.Body.PowerDeliveryRes.EVSEProcessing = v2gEVSEProcessingType_Ongoing_WaitingForCustomerInteraction;
+	exiOut->V2G_Message.Body.PowerDeliveryRes.EVSEProcessing = iso2EVSEProcessingType_Ongoing_WaitingForCustomerInteraction;
 
 	return 0;
 }
 
 
-static int chargingStatus(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int chargingStatus(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 
 	printf("EVSE side: chargingStatus called\n"  );
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.ChargingStatusRes_isUsed = 1u;
-	init_v2gChargingStatusResType(&exiOut->V2G_Message.Body.ChargingStatusRes);
+	init_iso2ChargingStatusResType(&exiOut->V2G_Message.Body.ChargingStatusRes);
 
 
-	exiOut->V2G_Message.Body.ChargingStatusRes.ResponseCode = v2gresponseCodeType_OK;
+	exiOut->V2G_Message.Body.ChargingStatusRes.ResponseCode = iso2responseCodeType_OK;
 	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEID.characters[0]= 'A';
 	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEID.charactersLen =1;
 
-	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEStatus.EVSENotification = v2gEVSENotificationType_ReNegotiation;
+	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEStatus.EVSENotification = iso2EVSENotificationType_ReNegotiation;
 	exiOut->V2G_Message.Body.ChargingStatusRes.EVSEStatus.NotificationMaxDelay=123;
 	exiOut->V2G_Message.Body.ChargingStatusRes.ReceiptRequired = 1;
 	exiOut->V2G_Message.Body.ChargingStatusRes.ReceiptRequired_isUsed = 1;
@@ -595,7 +596,7 @@ static int chargingStatus(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* e
 }
 
 
-static int meteringReceipt(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int meteringReceipt(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 
 	printf("EVSE side: meteringReceipt called\n"  );
 	printf("\tReceived data:\n");
@@ -608,17 +609,17 @@ static int meteringReceipt(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* 
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.MeteringReceiptRes_isUsed = 1u;
-	init_v2gV2GResponseType(&exiOut->V2G_Message.Body.MeteringReceiptRes);
+	init_iso2MeteringReceiptResType(&exiOut->V2G_Message.Body.MeteringReceiptRes);
 
-	exiOut->V2G_Message.Body.MeteringReceiptRes.ResponseCode = v2gresponseCodeType_FAILED;
+	exiOut->V2G_Message.Body.MeteringReceiptRes.ResponseCode = iso2responseCodeType_FAILED;
 
 	return 0;
 }
 
-static int sessionStop(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int sessionStop(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 
 	printf("EVSE side: sessionStop called\n"  );
 	printf("\tReceived data:\n");
@@ -628,38 +629,38 @@ static int sessionStop(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiO
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.SessionStopRes_isUsed = 1u;
-	init_v2gV2GResponseType(&exiOut->V2G_Message.Body.SessionStopRes);
+	init_iso2SessionStopResType(&exiOut->V2G_Message.Body.SessionStopRes);
 
-	exiOut->V2G_Message.Body.SessionStopRes.ResponseCode = v2gresponseCodeType_OK;
+	exiOut->V2G_Message.Body.SessionStopRes.ResponseCode = iso2responseCodeType_OK;
 
 	return 0;
 }
 
-static int cableCheck(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int cableCheck(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 
 	printf("EVSE side: cableCheck called\n"  );
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.CableCheckRes_isUsed = 1u;
-	init_v2gCableCheckResType(&exiOut->V2G_Message.Body.CableCheckRes);
+	init_iso2CableCheckResType(&exiOut->V2G_Message.Body.CableCheckRes);
 
-	exiOut->V2G_Message.Body.CableCheckRes.ResponseCode = v2gresponseCodeType_OK;
+	exiOut->V2G_Message.Body.CableCheckRes.ResponseCode = iso2responseCodeType_OK;
 
 	exiOut->V2G_Message.Body.CableCheckRes.EVSEStatus.NotificationMaxDelay = 1234;
-	exiOut->V2G_Message.Body.CableCheckRes.EVSEStatus.EVSENotification= v2gEVSENotificationType_ReNegotiation;
+	exiOut->V2G_Message.Body.CableCheckRes.EVSEStatus.EVSENotification= iso2EVSENotificationType_ReNegotiation;
 
-	exiOut->V2G_Message.Body.CableCheckRes.EVSEProcessing = v2gEVSEProcessingType_Finished;
+	exiOut->V2G_Message.Body.CableCheckRes.EVSEProcessing = iso2EVSEProcessingType_Finished;
 
 	return 0;
 }
 
-static int preCharge(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int preCharge(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 
 	printf("EVSE side: preCharge called\n"  );
 	printf("\tReceived data:\n");
@@ -669,14 +670,14 @@ static int preCharge(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut
 
 	/* Prepare data for EV */
 	exiOut->V2G_Message_isUsed = 1u;
-	init_v2gBodyType(&exiOut->V2G_Message.Body);
+	init_iso2BodyType(&exiOut->V2G_Message.Body);
 
 	exiOut->V2G_Message.Body.PreChargeRes_isUsed = 1u;
-	init_v2gPreChargeResType(&exiOut->V2G_Message.Body.PreChargeRes);
+	init_iso2PreChargeResType(&exiOut->V2G_Message.Body.PreChargeRes);
 
-	exiOut->V2G_Message.Body.PreChargeRes.ResponseCode = v2gresponseCodeType_OK;
+	exiOut->V2G_Message.Body.PreChargeRes.ResponseCode = iso2responseCodeType_OK;
 
-	exiOut->V2G_Message.Body.PreChargeRes.EVSEStatus.EVSENotification = v2gEVSENotificationType_StopCharging;
+	exiOut->V2G_Message.Body.PreChargeRes.EVSEStatus.EVSENotification = iso2EVSENotificationType_StopCharging;
 	exiOut->V2G_Message.Body.PreChargeRes.EVSEStatus.NotificationMaxDelay= 1234;
 
 	exiOut->V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Exponent = 3;
@@ -687,12 +688,12 @@ static int preCharge(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut
 
 
 
-static int create_response_message(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int create_response_message(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 	int errn = ERROR_UNEXPECTED_REQUEST_MESSAGE;
 
 	/* create response message as EXI document */
 	if(exiIn->V2G_Message_isUsed) {
-		init_v2gEXIDocument(exiOut);
+		init_iso2EXIDocument(exiOut);
 		if (exiIn->V2G_Message.Body.SessionSetupReq_isUsed) {
 			errn = sessionSetup(exiIn, exiOut);
 		} else if (exiIn->V2G_Message.Body.ServiceDiscoveryReq_isUsed) {
@@ -727,7 +728,7 @@ static int create_response_message(struct v2gEXIDocument* exiIn, struct v2gEXIDo
 
 /* Adapt this to your system setup! */
 /* In this situation EV and EVSE is the same party */
-static int request_response(struct v2gEXIDocument* exiIn, struct v2gEXIDocument* exiOut) {
+static int request_response(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* exiOut) {
 	int errn;
 
 	bitstream_t stream1;
@@ -779,17 +780,17 @@ static int charging()
 	int errn = 0;
 	int i, j;
 
-	struct v2gEXIDocument exiIn;
-	struct v2gEXIDocument exiOut;
+	struct iso2EXIDocument exiIn;
+	struct iso2EXIDocument exiOut;
 
-	struct v2gServiceDetailResType serviceDetailRes;
-	struct v2gV2GResponseType paymentServiceSelectionRes;
-	struct v2gPaymentDetailsResType paymentDetailsRes;
+	struct iso2ServiceDetailResType serviceDetailRes;
+	struct iso2PaymentServiceSelectionResType paymentServiceSelectionRes;
+	struct iso2PaymentDetailsResType paymentDetailsRes;
 
 	/* setup header information */
-	init_v2gEXIDocument(&exiIn);
+	init_iso2EXIDocument(&exiIn);
 	exiIn.V2G_Message_isUsed = 1u;
-	init_v2gMessageHeaderType(&exiIn.V2G_Message.Header);
+	init_iso2MessageHeaderType(&exiIn.V2G_Message.Header);
 	exiIn.V2G_Message.Header.SessionID.bytes[0] = 0; /* sessionID is always '0' at the beginning (the response contains the valid sessionID)*/
 	exiIn.V2G_Message.Header.SessionID.bytes[1] = 0;
 	exiIn.V2G_Message.Header.SessionID.bytes[2] = 0;
@@ -805,10 +806,10 @@ static int charging()
 	/************************
 	 * sessionSetup *
 	 ************************/
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.SessionSetupReq_isUsed = 1u;
 
-	init_v2gSessionSetupReqType(&exiIn.V2G_Message.Body.SessionSetupReq);
+	init_iso2SessionSetupReqType(&exiIn.V2G_Message.Body.SessionSetupReq);
 
 	exiIn.V2G_Message.Body.SessionSetupReq.EVCCID.bytesLen = 1;
 	exiIn.V2G_Message.Body.SessionSetupReq.EVCCID.bytes[0] = 10;
@@ -839,14 +840,14 @@ static int charging()
 	/*******************************************
 	 * serviceDiscovery *
 	 *******************************************/
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.ServiceDiscoveryReq_isUsed = 1u;
 
-	init_v2gServiceDiscoveryReqType(&exiIn.V2G_Message.Body.ServiceDiscoveryReq);
+	init_iso2ServiceDiscoveryReqType(&exiIn.V2G_Message.Body.ServiceDiscoveryReq);
 
 	exiIn.V2G_Message.Body.ServiceDiscoveryReq.SupportedServiceIDs_isUsed = 1u;
 	exiIn.V2G_Message.Body.ServiceDiscoveryReq.SupportedServiceIDs.ServiceID.arrayLen = 1;
-	exiIn.V2G_Message.Body.ServiceDiscoveryReq.SupportedServiceIDs.ServiceID.array[0] = v2gserviceCategoryType_Internet;
+	exiIn.V2G_Message.Body.ServiceDiscoveryReq.SupportedServiceIDs.ServiceID.array[0] = iso2serviceCategoryType_Internet;
 
 	printf("EV side: call EVSE serviceDiscovery");
 
@@ -904,10 +905,10 @@ static int charging()
 	/*********************************
 	 * ServiceDetails *
 	 *********************************/
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.ServiceDetailReq_isUsed = 1u;
 
-	init_v2gServiceDetailReqType(&exiIn.V2G_Message.Body.ServiceDetailReq);
+	init_iso2ServiceDetailReqType(&exiIn.V2G_Message.Body.ServiceDetailReq);
 
 	exiIn.V2G_Message.Body.ServiceDetailReq.ServiceID = 22; /* Value Added Server ID */
 
@@ -962,12 +963,12 @@ static int charging()
 	/*******************************************
 	 * ServicePaymentSelection *
 	 *******************************************/
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.PaymentServiceSelectionReq_isUsed = 1u;
 
-	init_v2gPaymentServiceSelectionReqType(&exiIn.V2G_Message.Body.PaymentServiceSelectionReq);
+	init_iso2PaymentServiceSelectionReqType(&exiIn.V2G_Message.Body.PaymentServiceSelectionReq);
 
-	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedPaymentOption = v2gpaymentOptionType_ExternalPayment;
+	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedPaymentOption = iso2paymentOptionType_ExternalPayment;
 	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedVASList_isUsed = 0u;
 	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedEnergyTransferService.ServiceID = 1;
 	exiIn.V2G_Message.Body.PaymentServiceSelectionReq.SelectedEnergyTransferService.ParameterSetID = 4;
@@ -1001,10 +1002,10 @@ static int charging()
 	/**********************************
 	 * PaymentDetails *
 	 **********************************/
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.PaymentDetailsReq_isUsed = 1u;
 
-	init_v2gPaymentDetailsReqType(&exiIn.V2G_Message.Body.PaymentDetailsReq);
+	init_iso2PaymentDetailsReqType(&exiIn.V2G_Message.Body.PaymentDetailsReq);
 
 	exiIn.V2G_Message.Body.PaymentDetailsReq.eMAID.characters[0] = 1;
 	exiIn.V2G_Message.Body.PaymentDetailsReq.eMAID.characters[1] = 123;
@@ -1059,10 +1060,10 @@ static int charging()
 	/*******************************************
 	 * Authorization *
 	 *******************************************/
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.AuthorizationReq_isUsed = 1u;
 
-	init_v2gAuthorizationReqType(&exiIn.V2G_Message.Body.AuthorizationReq);
+	init_iso2AuthorizationReqType(&exiIn.V2G_Message.Body.AuthorizationReq);
 
 	copyBytes(paymentDetailsRes.GenChallenge.bytes, paymentDetailsRes.GenChallenge.bytesLen, exiIn.V2G_Message.Body.AuthorizationReq.GenChallenge.bytes);
 	exiIn.V2G_Message.Body.AuthorizationReq.GenChallenge.bytesLen = paymentDetailsRes.GenChallenge.bytesLen;
@@ -1088,7 +1089,7 @@ static int charging()
 			printBinaryArray(exiOut.V2G_Message.Header.SessionID.bytes, exiOut.V2G_Message.Header.SessionID.bytesLen);
 			printf("\t ResponseCode=%d\n",  exiOut.V2G_Message.Body.AuthorizationRes.ResponseCode);
 
-			if(exiOut.V2G_Message.Body.AuthorizationRes.EVSEProcessing == v2gEVSEProcessingType_Finished) {
+			if(exiOut.V2G_Message.Body.AuthorizationRes.EVSEProcessing == iso2EVSEProcessingType_Finished) {
 				printf("\t EVSEProcessing=Finished\n");
 			}
 		} else {
@@ -1105,10 +1106,10 @@ static int charging()
 	/*******************************************
 	 * chargeParameterDiscovery *
 	 *******************************************/
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq_isUsed = 1u;
 
-	init_v2gChargeParameterDiscoveryReqType(&exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq);
+	init_iso2ChargeParameterDiscoveryReqType(&exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq);
 
 	/* we use here AC based charging parameters */
 	exiIn.V2G_Message.Body.ChargeParameterDiscoveryReq.MaxSupportingPoints_isUsed = 1u;
@@ -1171,7 +1172,7 @@ static int charging()
 	/*****************************
 	 * cableCheck *
 	 *****************************/
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.CableCheckReq_isUsed = 1u;
 
 	/*init_v2gCableCheckReqType(&exiIn.V2G_Message.Body.CableCheckReq);*/
@@ -1190,7 +1191,7 @@ static int charging()
 			printBinaryArray(exiOut.V2G_Message.Header.SessionID.bytes, exiOut.V2G_Message.Header.SessionID.bytesLen);
 			printf("\t ResponseCode=%d\n", exiOut.V2G_Message.Body.CableCheckRes.ResponseCode);
 
-			if(exiOut.V2G_Message.Body.CableCheckRes.EVSEProcessing==v2gEVSEProcessingType_Finished) {
+			if(exiOut.V2G_Message.Body.CableCheckRes.EVSEProcessing==iso2EVSEProcessingType_Finished) {
 				printf("\tEVSEProcessing=Finished\n");
 			}
 
@@ -1208,10 +1209,10 @@ static int charging()
 	/*****************************
 	 * preCharge *
 	 *****************************/
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.PreChargeReq_isUsed = 1u;
 
-	init_v2gPreChargeReqType(&exiIn.V2G_Message.Body.PreChargeReq);
+	init_iso2PreChargeReqType(&exiIn.V2G_Message.Body.PreChargeReq);
 
 	exiIn.V2G_Message.Body.PreChargeReq.EVTargetCurrent.Exponent = 1;
 	exiIn.V2G_Message.Body.PreChargeReq.EVTargetCurrent.Value = 234;
@@ -1250,12 +1251,12 @@ static int charging()
 	 * PowerDelivery *
 	 *********************************/
 
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.PowerDeliveryReq_isUsed = 1u;
 
-	init_v2gPowerDeliveryReqType(&exiIn.V2G_Message.Body.PowerDeliveryReq);
+	init_iso2PowerDeliveryReqType(&exiIn.V2G_Message.Body.PowerDeliveryReq);
 
-	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargeProgress = v2gchargeProgressType_Start;
+	exiIn.V2G_Message.Body.PowerDeliveryReq.ChargeProgress = iso2chargeProgressType_Start;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.SAScheduleTupleID_isUsed = 1u;
 	exiIn.V2G_Message.Body.PowerDeliveryReq.SAScheduleTupleID = exiOut.V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0].SAScheduleTupleID;
 
@@ -1288,10 +1289,10 @@ static int charging()
 	 * Setup data for chargingStatus *
 	 *********************************/
 
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.ChargingStatusReq_isUsed = 1u;
 
-	init_v2gChargingStatusReqType(&exiIn.V2G_Message.Body.ChargingStatusReq);
+	init_iso2ChargingStatusReqType(&exiIn.V2G_Message.Body.ChargingStatusReq);
 	exiIn.V2G_Message.Body.ChargingStatusReq.EVTargetEnergyRequest.Exponent = 2;
 	exiIn.V2G_Message.Body.ChargingStatusReq.EVTargetEnergyRequest.Value = 100;
 
@@ -1336,10 +1337,10 @@ static int charging()
 	 * MeteringReceipt *
 	 ***********************************/
 
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.MeteringReceiptReq_isUsed = 1u;
 
-	init_v2gMeteringReceiptReqType(&exiIn.V2G_Message.Body.MeteringReceiptReq);
+	init_iso2MeteringReceiptReqType(&exiIn.V2G_Message.Body.MeteringReceiptReq);
 
 
 	exiIn.V2G_Message.Body.MeteringReceiptReq.Id.characters[0]='I';
@@ -1350,7 +1351,7 @@ static int charging()
 	exiIn.V2G_Message.Body.MeteringReceiptReq.SessionID.bytes[0] = 22;
 	exiIn.V2G_Message.Body.MeteringReceiptReq.SessionID.bytesLen = 1;
 
-	init_v2gMeterInfoType(&exiIn.V2G_Message.Body.MeteringReceiptReq.MeterInfo);
+	init_iso2MeterInfoType(&exiIn.V2G_Message.Body.MeteringReceiptReq.MeterInfo);
 	exiIn.V2G_Message.Body.MeteringReceiptReq.MeterInfo.MeterID.characters[0] = 'M';
 	exiIn.V2G_Message.Body.MeteringReceiptReq.MeterInfo.MeterID.characters[1] = 'i';
 	exiIn.V2G_Message.Body.MeteringReceiptReq.MeterInfo.MeterID.characters[2] = 'd';
@@ -1385,11 +1386,11 @@ static int charging()
 	 ***********************************/
 
 
-	init_v2gBodyType(&exiIn.V2G_Message.Body);
+	init_iso2BodyType(&exiIn.V2G_Message.Body);
 	exiIn.V2G_Message.Body.SessionStopReq_isUsed = 1u;
 
-	init_v2gSessionStopReqType(&exiIn.V2G_Message.Body.SessionStopReq);
-	exiIn.V2G_Message.Body.SessionStopReq.ChargingSession = v2gchargingSessionType_Pause;
+	init_iso2SessionStopReqType(&exiIn.V2G_Message.Body.SessionStopReq);
+	exiIn.V2G_Message.Body.SessionStopReq.ChargingSession = iso2chargingSessionType_Pause;
 
 	printf("EV side: call EVSE stopSession \n");
 
@@ -1571,7 +1572,7 @@ static int xmldsig_test() {
 	stream2.data = buffer2;
 	stream2.pos = &pos2;
 
-	struct v2gEXIFragment exiV2G_AR;
+	struct iso2EXIFragment exiV2G_AR;
 	struct xmldsigEXIFragment exiXMLDSIG_SI;
 
 	int sizeIsoStream1 = 25;
@@ -1590,9 +1591,9 @@ static int xmldsig_test() {
 	</v2gci_b:AuthorizationReq>
 	*/
 
-	init_v2gEXIFragment(&exiV2G_AR);
+	init_iso2EXIFragment(&exiV2G_AR);
 	exiV2G_AR.AuthorizationReq_isUsed = 1u;
-	init_v2gAuthorizationReqType(&exiV2G_AR.AuthorizationReq);
+	init_iso2AuthorizationReqType(&exiV2G_AR.AuthorizationReq);
 	exiV2G_AR.AuthorizationReq.Id_isUsed = 1;
 	exiV2G_AR.AuthorizationReq.Id.charactersLen = 3;
 	exiV2G_AR.AuthorizationReq.Id.characters[0] = 'I';
@@ -1619,7 +1620,7 @@ static int xmldsig_test() {
 	exiV2G_AR.AuthorizationReq.GenChallenge.bytes[15] = 0x61;
 
 	/* encode fragment with ISO schema */
-	errn = encode_v2gExiFragment(&stream1, &exiV2G_AR);
+	errn = encode_iso2ExiFragment(&stream1, &exiV2G_AR);
 
 	if((*stream1.pos) != sizeIsoStream1) {
 		errn = -1;

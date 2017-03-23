@@ -11,6 +11,8 @@ RM := rm -rf
 -include src/xmldsig/subdir.mk
 -include src/transport/subdir.mk
 -include src/test/subdir.mk
+-include src/iso2/subdir.mk
+-include src/iso1/subdir.mk
 -include src/din/subdir.mk
 -include src/codec/subdir.mk
 -include src/appHandshake/subdir.mk
