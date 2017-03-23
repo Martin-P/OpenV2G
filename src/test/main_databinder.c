@@ -42,9 +42,9 @@
 #include <stdlib.h>
 
 /* schema-dependent */
-#include "v2gEXIDatatypes.h"
-#include "v2gEXIDatatypesEncoder.h"
-#include "v2gEXIDatatypesDecoder.h"
+#include "iso2EXIDatatypes.h"
+#include "iso2EXIDatatypesEncoder.h"
+#include "iso2EXIDatatypesDecoder.h"
 
 
 #include "ByteStream.h"
@@ -66,7 +66,7 @@ uint8_t bufferOut[BUFFER_SIZE];
 
 int main_databinder(int argc, char *argv[]) {
 
-	struct v2gEXIDocument exiDoc;
+	struct iso2EXIDocument exiDoc;
 	int errn = 0;
 
 	bitstream_t iStream, oStream;
@@ -112,7 +112,7 @@ int main_databinder(int argc, char *argv[]) {
 
 
 	printf("Start decoding EXI stream to databinding layer \n");
-	errn = decode_v2gExiDocument(&iStream, &exiDoc);
+	errn = decode_iso2ExiDocument(&iStream, &exiDoc);
 	if (errn != 0) {
 		printf("Problems while decoding EXI stream, err==%d\n", errn);
 		return errn;
@@ -130,7 +130,7 @@ int main_databinder(int argc, char *argv[]) {
 	oStream.capacity = 8;
 
 	printf("Start encoding databinding layer to EXI \n");
-	errn = encode_v2gExiDocument(&oStream, &exiDoc);
+	errn = encode_iso2ExiDocument(&oStream, &exiDoc);
 	if (errn != 0) {
 		printf("Problems while encoding databinding layer, err==%d\n", errn);
 		return errn;

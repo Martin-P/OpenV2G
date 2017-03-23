@@ -31,6 +31,8 @@
 								<option id="gnu.c.compiler.option.include.paths.229245493" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../src/codec&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/din&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/iso1&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/iso2&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/xmldsig&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/appHandshake&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/transport&quot;"/>
@@ -92,6 +94,8 @@
 								<option id="gnu.c.compiler.option.include.paths.289860304" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../src/codec&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/din&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/iso1&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/iso2&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/xmldsig&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/appHandshake&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/transport&quot;"/>

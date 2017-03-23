@@ -16,6 +16,8 @@ SUBDIRS := \
 src/xmldsig \
 src/transport \
 src/test \
+src/iso2 \
+src/iso1 \
 src/din \
 src/codec \
 src/appHandshake \
