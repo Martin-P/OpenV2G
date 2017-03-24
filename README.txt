@@ -25,8 +25,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------
 CHANGES from version 0.9.3:
 -------------------------------------------------------------------------
-* Support for 15118-2-2016 XML schema
-* internal coding updates  
+* Support for 15118-2-2016 (ISO2) besides 15118-2-2013 (ISO1) and DIN added
+* internal coding updates
+* bug-fixes
 
 -------------------------------------------------------------------------
 CHANGES from version 0.9.2:
