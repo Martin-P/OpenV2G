@@ -551,7 +551,7 @@ typedef enum {
 	iso1responseCodeType_FAILED_NoChargeServiceSelected = 21,
 	iso1responseCodeType_FAILED_WrongEnergyTransferMode = 22,
 	iso1responseCodeType_FAILED_ContactorError = 23,
-	iso1responseCodeType__FAILED_CertificateNotAllowedAtThisEVSE = 24,
+	iso1responseCodeType_FAILED_CertificateNotAllowedAtThisEVSE = 24,
 	iso1responseCodeType_FAILED_CertificateRevoked = 25
 } iso1responseCodeType;
 
