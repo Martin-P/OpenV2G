@@ -41,7 +41,7 @@
 #ifndef EXI_iso1_DATATYPES_DECODER_C
 #define EXI_iso1_DATATYPES_DECODER_C
 
-#if DEPLOY_ISO2_CODEC == SUPPORT_YES
+#if DEPLOY_ISO1_CODEC == SUPPORT_YES
 
 /** event-code */
 static uint32_t eventCode;
@@ -15684,7 +15684,7 @@ int decode_iso1ExiDocument(bitstream_t* stream, struct iso1EXIDocument* exiDoc) 
 	return errn;
 }
 
-#if DEPLOY_ISO2_CODEC_FRAGMENT == SUPPORT_YES
+#if DEPLOY_ISO1_CODEC_FRAGMENT == SUPPORT_YES
 int decode_iso1ExiFragment(bitstream_t* stream, struct iso1EXIFragment* exiFrag) {
 	errn = readEXIHeader(stream);
 
@@ -17762,10 +17762,10 @@ int decode_iso1ExiFragment(bitstream_t* stream, struct iso1EXIFragment* exiFrag)
 
 	return errn;
 }
-#endif /* DEPLOY_ISO2_CODEC_FRAGMENT */
+#endif /* DEPLOY_ISO1_CODEC_FRAGMENT */
 
 
-#endif /* DEPLOY_ISO2_CODEC */
+#endif /* DEPLOY_ISO1_CODEC */
 
 #endif
 

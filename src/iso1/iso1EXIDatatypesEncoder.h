@@ -42,7 +42,7 @@
 extern "C" {
 #endif
 
-#if DEPLOY_ISO2_CODEC == SUPPORT_YES
+#if DEPLOY_ISO1_CODEC == SUPPORT_YES
 
 #include <stdint.h>
 
@@ -52,12 +52,12 @@ extern "C" {
 
 int encode_iso1ExiDocument(bitstream_t* stream, struct iso1EXIDocument* exiDoc);
 
-#if DEPLOY_ISO2_CODEC_FRAGMENT == SUPPORT_YES
+#if DEPLOY_ISO1_CODEC_FRAGMENT == SUPPORT_YES
 int encode_iso1ExiFragment(bitstream_t* stream, struct iso1EXIFragment* exiFrag);
-#endif /* DEPLOY_ISO2_CODEC_FRAGMENT */
+#endif /* DEPLOY_ISO1_CODEC_FRAGMENT */
 
 
-#endif /* DEPLOY_ISO2_CODEC */
+#endif /* DEPLOY_ISO1_CODEC */
 
 #ifdef __cplusplus
 }

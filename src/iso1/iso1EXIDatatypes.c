@@ -38,7 +38,7 @@
 #ifndef EXI_iso1_DATATYPES_C
 #define EXI_iso1_DATATYPES_C
 
-#if DEPLOY_ISO2_CODEC == SUPPORT_YES
+#if DEPLOY_ISO1_CODEC == SUPPORT_YES
 
 
 void init_iso1EXIDocument(struct iso1EXIDocument* exiDoc) {
@@ -982,7 +982,7 @@ void init_iso1PhysicalValueType(struct iso1PhysicalValueType* iso1PhysicalValueT
 
 
 
-#endif /* DEPLOY_ISO2_CODEC */
+#endif /* DEPLOY_ISO1_CODEC */
 
 #endif
 
