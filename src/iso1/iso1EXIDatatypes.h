@@ -44,10 +44,10 @@ extern "C" {
 
 #define SUPPORT_YES 1
 #define SUPPORT_NO 2
-#define DEPLOY_ISO2_CODEC SUPPORT_NO
-#define DEPLOY_ISO2_CODEC_FRAGMENT SUPPORT_YES
+#define DEPLOY_ISO1_CODEC SUPPORT_NO
+#define DEPLOY_ISO1_CODEC_FRAGMENT SUPPORT_YES
 
-#if DEPLOY_ISO2_CODEC == SUPPORT_YES
+#if DEPLOY_ISO1_CODEC == SUPPORT_YES
 
 #include <stdint.h>
 
@@ -2922,7 +2922,7 @@ void init_iso1TransformType(struct iso1TransformType* iso1TransformType);
 void init_iso1PhysicalValueType(struct iso1PhysicalValueType* iso1PhysicalValueType);
 
 
-#endif /* DEPLOY_ISO2_CODEC */
+#endif /* DEPLOY_ISO1_CODEC */
 
 #ifdef __cplusplus
 }

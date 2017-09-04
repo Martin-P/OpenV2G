@@ -41,7 +41,7 @@
 #ifndef EXI_iso1_DATATYPES_ENCODER_C
 #define EXI_iso1_DATATYPES_ENCODER_C
 
-#if DEPLOY_ISO2_CODEC == SUPPORT_YES
+#if DEPLOY_ISO1_CODEC == SUPPORT_YES
 
 static int errn;
 
@@ -11383,7 +11383,7 @@ int encode_iso1ExiDocument(bitstream_t* stream, struct iso1EXIDocument* exiDoc) 
 	return errn;
 }
 
-#if DEPLOY_ISO2_CODEC_FRAGMENT == SUPPORT_YES
+#if DEPLOY_ISO1_CODEC_FRAGMENT == SUPPORT_YES
 int encode_iso1ExiFragment(bitstream_t* stream, struct iso1EXIFragment* exiFrag) {
 	errn = writeEXIHeader(stream);
 
@@ -13243,10 +13243,10 @@ int encode_iso1ExiFragment(bitstream_t* stream, struct iso1EXIFragment* exiFrag)
 
 	return errn;
 }
-#endif /* DEPLOY_ISO2_CODEC_FRAGMENT */
+#endif /* DEPLOY_ISO1_CODEC_FRAGMENT */
 
 
-#endif /* DEPLOY_ISO2_CODEC */
+#endif /* DEPLOY_ISO1_CODEC */
 
 #endif
 
