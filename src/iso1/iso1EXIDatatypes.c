@@ -125,7 +125,7 @@ void init_iso1EXIDocument(struct iso1EXIDocument* exiDoc) {
 }
 
 
-#if DEPLOY_ISO2_CODEC_FRAGMENT == SUPPORT_YES
+#if DEPLOY_ISO1_CODEC_FRAGMENT == SUPPORT_YES
 void init_iso1EXIFragment(struct iso1EXIFragment* exiFrag) {
 	exiFrag->ChargingComplete_isUsed = 0u;
 	exiFrag->EVMaxVoltage_isUsed = 0u;
@@ -428,7 +428,7 @@ void init_iso1EXIFragment(struct iso1EXIFragment* exiFrag) {
 	exiFrag->RequestedEnergyTransferMode_isUsed = 0u;
 	exiFrag->SessionID_isUsed = 0u;
 }
-#endif /* DEPLOY_ISO2_CODEC_FRAGMENT */
+#endif /* DEPLOY_ISO1_CODEC_FRAGMENT */
 
 void init_iso1IntervalType(struct iso1IntervalType* iso1IntervalType) {
 	(void)iso1IntervalType; /* avoid unused warning */

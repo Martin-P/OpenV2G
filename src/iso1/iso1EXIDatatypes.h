@@ -45,7 +45,7 @@ extern "C" {
 #define SUPPORT_YES 1
 #define SUPPORT_NO 2
 #define DEPLOY_ISO1_CODEC SUPPORT_NO
-#define DEPLOY_ISO1_CODEC_FRAGMENT SUPPORT_YES
+#define DEPLOY_ISO1_CODEC_FRAGMENT SUPPORT_NO
 
 #if DEPLOY_ISO1_CODEC == SUPPORT_YES
 
@@ -2238,7 +2238,7 @@ struct iso1EXIDocument {
 };
 
 
-#if DEPLOY_ISO2_CODEC_FRAGMENT == SUPPORT_YES
+#if DEPLOY_ISO1_CODEC_FRAGMENT == SUPPORT_YES
 /* Possible elements of EXI Fragment */
 struct iso1EXIFragment {
 #if SAVE_MEMORY_WITH_UNNAMED_UNION == UNION_YES
@@ -2805,15 +2805,15 @@ struct iso1EXIFragment {
 
 	int _warning_;
 };
-#endif /* DEPLOY_ISO2_CODEC_FRAGMENT */
+#endif /* DEPLOY_ISO1_CODEC_FRAGMENT */
 
 
 /* Initialization methods for structs */
 
 void init_iso1EXIDocument(struct iso1EXIDocument* exiDoc);
-#if DEPLOY_ISO2_CODEC_FRAGMENT == SUPPORT_YES
+#if DEPLOY_ISO1_CODEC_FRAGMENT == SUPPORT_YES
 void init_iso1EXIFragment(struct iso1EXIFragment* exiFrag);
-#endif /* DEPLOY_ISO2_CODEC_FRAGMENT */
+#endif /* DEPLOY_ISO1_CODEC_FRAGMENT */
 void init_iso1IntervalType(struct iso1IntervalType* iso1IntervalType);
 void init_iso1SASchedulesType(struct iso1SASchedulesType* iso1SASchedulesType);
 void init_iso1PaymentOptionListType(struct iso1PaymentOptionListType* iso1PaymentOptionListType);
