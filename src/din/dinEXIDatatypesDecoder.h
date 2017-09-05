@@ -42,12 +42,14 @@
 extern "C" {
 #endif
 
+
+#include "dinEXIDatatypes.h"
+
 #if DEPLOY_DIN_CODEC == SUPPORT_YES
 
 #include <stdint.h>
 
 #include "EXITypes.h"
-#include "dinEXIDatatypes.h"
 
 int decode_dinExiDocument(bitstream_t* stream, struct dinEXIDocument* exiDoc);
 

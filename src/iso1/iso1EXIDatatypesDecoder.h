@@ -42,12 +42,14 @@
 extern "C" {
 #endif
 
+
+#include "iso1EXIDatatypes.h"
+
 #if DEPLOY_ISO1_CODEC == SUPPORT_YES
 
 #include <stdint.h>
 
 #include "EXITypes.h"
-#include "iso1EXIDatatypes.h"
 
 int decode_iso1ExiDocument(bitstream_t* stream, struct iso1EXIDocument* exiDoc);
 
