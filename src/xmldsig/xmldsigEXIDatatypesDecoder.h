@@ -42,12 +42,13 @@
 extern "C" {
 #endif
 
+#include "xmldsigEXIDatatypes.h"
+
 #if DEPLOY_XMLDSIG_CODEC == SUPPORT_YES
 
 #include <stdint.h>
 
 #include "EXITypes.h"
-#include "xmldsigEXIDatatypes.h"
 
 int decode_xmldsigExiDocument(bitstream_t* stream, struct xmldsigEXIDocument* exiDoc);
 
