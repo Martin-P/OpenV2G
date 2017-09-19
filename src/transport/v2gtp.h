@@ -19,8 +19,9 @@
 /*******************************************************************
  *
  * @author Sebastian.Kaebisch@siemens.com
+ * @author Daniel.Peintner.EXT@siemens.com
  * @version 1.0.0alpha
- * @contact Joerg.Heuer@siemens.com
+ * @contact Richard.Kuntschke@siemens.com
  *
  ********************************************************************/
 
@@ -43,9 +44,9 @@ extern "C" {
 /* define V2GTP payload types*/
 #define V2GTP_EXI_TYPE 0x8001
 
-int write_v2gtpHeader(uint8_t* outStream, uint16_t outStreamLength, uint16_t payloadType);
+int write_v2gtpHeader(uint8_t* outStream, uint32_t outStreamLength, uint16_t payloadType);
 
-int read_v2gtpHeader(uint8_t* inStream, uint16_t* payloadLength);
+int read_v2gtpHeader(uint8_t* inStream, uint32_t* payloadLength);
 
 #endif /* V2GTP_H_ */
 
