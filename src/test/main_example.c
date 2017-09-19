@@ -20,7 +20,7 @@
  * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch@siemens.com
  * @version 1.0.0alpha
- * @contact Joerg.Heuer@siemens.com
+ * @contact Richard.Kuntschke@siemens.com
  *
  *
  ********************************************************************/
@@ -140,7 +140,7 @@ static int serializeEXI2Stream(struct iso2EXIDocument* exiIn, bitstream_t* strea
 /* deserializes V2G TP header and decodes right away EXI stream */
 static int deserializeStream2EXI(bitstream_t* streamIn, struct iso2EXIDocument* exi) {
 	int errn;
-	uint16_t payloadLength;
+	uint32_t payloadLength;
 
 	*streamIn->pos = 0;
 	if ( (errn = read_v2gtpHeader(streamIn->data, &payloadLength)) == 0) {
@@ -157,7 +157,7 @@ static int appHandshakeHandler(bitstream_t* iStream, bitstream_t* oStream) {
 	int i;
 	struct appHandEXIDocument exiDoc;
 	int errn = 0;
-	uint16_t payloadLengthDec;
+	uint32_t payloadLengthDec;
 
 
 	if ( (errn = read_v2gtpHeader(iStream->data, &payloadLengthDec)) == 0) {
@@ -207,7 +207,7 @@ static int appHandshake()
 	bitstream_t stream1;
 	bitstream_t stream2;
 
-	uint16_t payloadLengthDec;
+	uint32_t payloadLengthDec;
 	size_t pos1 = V2GTP_HEADER_LENGTH; /* v2gtp header */
 	size_t pos2 = 0;
 

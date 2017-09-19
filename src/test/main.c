@@ -20,7 +20,7 @@
  * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch@siemens.com
  * @version 1.0.0alpha
- * @contact Joerg.Heuer@siemens.com
+ * @contact Richard.Kuntschke@siemens.com
  *
  * <p>Switch for sample programs: EXI codec only or for entire V2G example</p>
  *
