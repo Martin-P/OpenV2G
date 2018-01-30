@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2017 Siemens AG
+ * Copyright (C) 2007-2018 Siemens AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,7 +19,7 @@
  *
  * @author Daniel.Peintner.EXT@siemens.com
  * @author Sebastian.Kaebisch@siemens.com
- * @version 1.0.0alpha
+ * @version 0.9.4
  * @contact Richard.Kuntschke@siemens.com
  *
  * <p>Switch for sample programs: EXI codec only or for entire V2G example</p>
