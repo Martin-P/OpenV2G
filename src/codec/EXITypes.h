@@ -437,12 +437,7 @@ typedef struct {
 	exi_name_entry_t localName;
 } exi_qname_t;
 
-
 /*TODO Doxygen Documentation */
-
-
-
-
 
 
 /* ==================================== */

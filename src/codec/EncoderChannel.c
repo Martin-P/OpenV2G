@@ -205,6 +205,69 @@ int encodeUnsignedInteger64(bitstream_t* stream, uint64_t n) {
 	return errn;
 }
 
+void _shiftRight7(uint8_t* buf, int len) {
+	const int shift = 7;
+    unsigned char tmp = 0x00, tmp2 = 0x00;
+    for (int k = 0; k <= len; k++) {
+        if (k == 0) {
+            tmp = buf[k];
+            buf[k] >>= shift;
+        } else {
+            tmp2 = buf[k];
+            buf[k] >>= shift;
+            buf[k] |= ((tmp & 0x7F) << (8 - shift));
+
+            if (k != len) {
+                tmp = tmp2;
+            }
+        }
+    }
+}
+
+/**
+ * Encode an arbitrary precision non negative integer using a sequence of
+ * octets. The most significant bit of the last octet is set to zero to
+ * indicate sequence termination. Only seven bits per octet are used to
+ * store the integer's value.
+ */
+int encodeUnsignedIntegerBig(bitstream_t* stream, size_t size, uint8_t* data, size_t len) {
+	int errn = 0;
+	int i;
+	int lenM1 = len - 1;
+	const int MAX_BIGINT_ARRAY = 25;
+	uint8_t lastEncode = 0;
+	uint8_t bytesToShift[MAX_BIGINT_ARRAY]; // MAXIMUM
+	size_t bitsToEncode = len * 8;
+
+	if(MAX_BIGINT_ARRAY <= len) {
+		return -1;
+	}
+
+	/* init */
+	for(i=0; i<MAX_BIGINT_ARRAY; i++) {
+		bytesToShift[i] = 0;
+	}
+
+	/* copy bytes first in same order for shifting */
+	for(i=0; i < len; i++) {
+		bytesToShift[i] = data[i];
+	}
+
+	while(bitsToEncode > 7) {
+		lastEncode = bytesToShift[lenM1];
+		lastEncode = lastEncode | 128;
+		errn = encode(stream, lastEncode);
+		_shiftRight7(bytesToShift, len);
+		bitsToEncode -= 7;
+	}
+
+	if (errn == 0) {
+		errn = encode(stream, bytesToShift[lenM1]);
+	}
+
+	return errn;
+}
+
 int encodeInteger(bitstream_t* stream, exi_integer_t* iv) {
 	int errn = 0;
 	switch (iv->type) {
@@ -310,6 +373,30 @@ int encodeInteger64(bitstream_t* stream, int64_t n) {
 	}
 	if (errn == 0) {
 		errn = encodeUnsignedInteger64(stream, (uint64_t)n);
+	}
+	return errn;
+}
+
+
+/**
+ * Encode an arbitrary precision integer using a sign bit followed by a
+ * sequence of octets. The most significant bit of the last octet is set to
+ * zero to indicate sequence termination. Only seven bits per octet are used
+ * to store the integer's value.
+ */
+int encodeIntegerBig(bitstream_t* stream, int negative, size_t size, uint8_t* data, size_t len) {
+	int errn;
+	/* signalize sign */
+	if (negative) {
+		errn = encodeBoolean(stream, 1);
+		/* For negative values, the Unsigned Integer holds the
+		 * magnitude of the value minus 1 */
+		/* n = (-n) - 1; */
+	} else {
+		errn = encodeBoolean(stream, 0);
+	}
+	if (errn == 0) {
+		errn = encodeUnsignedIntegerBig(stream, size, data, len);
 	}
 	return errn;
 }

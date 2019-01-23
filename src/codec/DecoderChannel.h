@@ -163,6 +163,23 @@ int decodeUnsignedIntegerSizeT(bitstream_t* stream, size_t* sizeT);
  */
 int decodeUnsignedInteger64(bitstream_t* stream, uint64_t* uint64);
 
+/**
+ * \brief 		Decode unsigned integer
+ *
+ * 				Decode an arbitrary precision non negative integer using
+ * 				a sequence of octets. The most significant bit of the last
+ * 				octet is set to zero to indicate sequence termination.
+ * 				Only seven bits per octet are used to store the integer's value.
+ *
+ * \param       stream   		Input Stream
+ * \param       size		   	size array
+ * \param       data		   	data array
+ * \param       len		   		length array
+ * \return                  	Error-Code <> 0
+ *
+ */
+int decodeUnsignedIntegerBig(bitstream_t* stream, size_t size, uint8_t* data, size_t* len);
+
 
 /**
  * \brief 		Decode integer
@@ -227,6 +244,23 @@ int decodeInteger32(bitstream_t* stream, int32_t* int32);
  */
 int decodeInteger64(bitstream_t* stream, int64_t* int64);
 
+/**
+ * \brief 		Decode integer
+ *
+ * 				Decode an arbitrary precision integer using a sign bit
+ * 				followed by a sequence of octets. The most significant bit
+ * 				of the last octet is set to zero to indicate sequence termination.
+ * 				Only seven bits per octet are used to store the integer's value.
+ *
+ * \param       stream   		Input Stream
+ * \param       negative		negative integer
+ * \param       size		   	size array
+ * \param       data		   	data array
+ * \param       len		   		length array
+ * \return                  	Error-Code <> 0
+ *
+ */
+int decodeIntegerBig(bitstream_t* stream, int* negative, size_t size, uint8_t* data, size_t* len);
 
 /**
  * \brief 		Decode float

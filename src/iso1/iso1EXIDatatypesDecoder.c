@@ -8060,7 +8060,7 @@ static int decode_iso1X509IssuerSerialType(bitstream_t* stream, struct iso1X509I
 					errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 					if(errn == 0) {
 						if(eventCode == 0) {
-							errn = decodeInteger64(stream, &iso1X509IssuerSerialType->X509SerialNumber);
+							errn = decodeIntegerBig(stream, &iso1X509IssuerSerialType->X509SerialNumber.negative, iso1X509IssuerSerialType->X509SerialNumber.size, iso1X509IssuerSerialType->X509SerialNumber.data, &iso1X509IssuerSerialType->X509SerialNumber.len);
 						} else {
 							/* Second level event (e.g., xsi:type, xsi:nil, ...) */
 							errn = EXI_UNSUPPORTED_EVENT_CODE_CHARACTERISTICS;
