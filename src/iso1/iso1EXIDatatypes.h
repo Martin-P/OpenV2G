@@ -464,6 +464,7 @@ struct iso1KeyValueType {
 
 /* Complex type name='http://www.w3.org/2000/09/xmldsig#,X509IssuerSerialType',  base type name='anyType',  content type='ELEMENT',  isAbstract='false',  hasTypeId='false',  final='0',  block='0',  particle='("http://www.w3.org/2000/09/xmldsig#":X509IssuerName,"http://www.w3.org/2000/09/xmldsig#":X509SerialNumber)',  derivedBy='RESTRICTION'.  */
 #define iso1X509IssuerSerialType_X509IssuerName_CHARACTERS_SIZE 50 + EXTRA_CHAR 
+#define iso1X509IssuerSerialType_X509SerialNumber_BYTES_SIZE 20
 uint8_t characters[20];
 struct iso1X509IssuerSerialType {
 	/* element: "http://www.w3.org/2000/09/xmldsig#":X509IssuerName, http://www.w3.org/2001/XMLSchema,string */
@@ -477,11 +478,11 @@ struct iso1X509IssuerSerialType {
 		/** a sign value */
 		int negative;
 		/* container size */
-		size_t size;
+		/* size_t size; iso1X509IssuerSerialType_X509SerialNumber_BYTES_SIZE */
 		/** array data container */
 		/* For negative values, the Unsigned Integer holds the
 		 * magnitude of the value minus 1 */
-		uint8_t* data;
+		uint8_t data[iso1X509IssuerSerialType_X509SerialNumber_BYTES_SIZE];
 		/** array length (len <= size) */
 		size_t len;
 	} X509SerialNumber;

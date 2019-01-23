@@ -5815,7 +5815,7 @@ static int encode_iso1X509IssuerSerialType(bitstream_t* stream, struct iso1X509I
 					errn = encodeNBitUnsignedInteger(stream, 1, 0);
 					if(errn == 0) {
 						/* errn = encodeInteger64(stream, iso1X509IssuerSerialType->X509SerialNumber); */
-						errn = encodeIntegerBig(stream, iso1X509IssuerSerialType->X509SerialNumber.negative, iso1X509IssuerSerialType->X509SerialNumber.size, iso1X509IssuerSerialType->X509SerialNumber.data, iso1X509IssuerSerialType->X509SerialNumber.len);
+						errn = encodeIntegerBig(stream, iso1X509IssuerSerialType->X509SerialNumber.negative, iso1X509IssuerSerialType_X509SerialNumber_BYTES_SIZE, iso1X509IssuerSerialType->X509SerialNumber.data, iso1X509IssuerSerialType->X509SerialNumber.len);
 						/* valid EE */
 						errn = encodeNBitUnsignedInteger(stream, 1, 0);
 					}
