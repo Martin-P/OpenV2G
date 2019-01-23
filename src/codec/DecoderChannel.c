@@ -167,7 +167,7 @@ int decodeUnsignedInteger(bitstream_t* stream, exi_integer_t* iv) {
 int decodeUnsignedInteger16(bitstream_t* stream, uint16_t* uint16) {
 	unsigned int mShift = 0;
 	int errn = 0;
-	uint8_t b;
+	uint8_t b = 0;
 	*uint16 = 0;
 
 	do {
@@ -190,7 +190,7 @@ int decodeUnsignedInteger32(bitstream_t* stream, uint32_t* uint32) {
 	/* 0XXXXXXX ... 1XXXXXXX 1XXXXXXX */
 	unsigned int mShift = 0;
 	int errn = 0;
-	uint8_t b;
+	uint8_t b = 0;
 	*uint32 = 0;
 
 	do {
@@ -262,6 +262,182 @@ int decodeUnsignedInteger64(bitstream_t* stream, uint64_t* uint64) {
 	return errn;
 }
 
+
+void _reverseArray(uint8_t *array, int number) {
+    int x, t;
+    number--;
+
+    for(x = 0; x < number; x ++, number --) {
+        t = array[x];
+        array[x] = array[number];
+        array[number] = t;
+    }
+}
+
+/**
+ * Decode an arbitrary precision non negative integer using a sequence of
+ * octets. The most significant bit of the last octet is set to zero to
+ * indicate sequence termination. Only seven bits per octet are used to
+ * store the integer's value.
+ */
+int decodeUnsignedIntegerBig(bitstream_t* stream, size_t size, uint8_t* data, size_t* len) {
+	int errn = 0;
+	uint8_t b = 0;
+	unsigned int mShift1 = 0;
+	unsigned int mShift2 = 0;
+	unsigned int mShift3 = 0;
+	unsigned int mShift4 = 0;
+	unsigned int nBytesRead = 0;
+	unsigned int nBitsAvailable = 0;
+	uint64_t uint64_1 = 0;
+	uint64_t uint64_2 = 0;
+	uint64_t uint64_3 = 0;
+	uint64_t uint64_4 = 0;
+
+	*len = 0;
+
+	do {
+		errn = decode(stream, &b);
+		nBytesRead++;
+		nBitsAvailable += 7;
+
+		if(nBytesRead <= 8) {
+			uint64_1 += ((uint64_t) (b & 127)) << mShift1;
+			mShift1 += 7;
+		} else if(nBytesRead <= 16) {
+			uint64_2 += ((uint64_t) (b & 127)) << mShift2;
+			mShift2 += 7;
+		} else if(nBytesRead <= 24) {
+			uint64_3 += ((uint64_t) (b & 127)) << mShift3;
+			mShift3 += 7;
+		} else if(nBytesRead <= 32) {
+			uint64_4 += ((uint64_t) (b & 127)) << mShift4;
+			mShift4 += 7;
+		} else {
+			return -1; // too large
+		}
+	} while (errn == 0 && (b >> 7) == 1);
+
+	// shift actual data into array
+	if(uint64_4 != 0) {
+		// 7 octets for uint64_1
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 1
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 2
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 3
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 4
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 5
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 6
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 7
+
+		// 7 octets for uint64_2
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 1
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 2
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 3
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 4
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 5
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 6
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 7
+
+		// 7 octets for uint64_3
+		data[(*len)++] = (uint8_t)(uint64_3 & 0xFF); // 1
+		uint64_3 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_3 & 0xFF); // 2
+		uint64_3 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_3 & 0xFF); // 3
+		uint64_3 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_3 & 0xFF); // 4
+		uint64_3 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_3 & 0xFF); // 5
+		uint64_3 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_3 & 0xFF); // 6
+		uint64_3 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_3 & 0xFF); // 7
+
+		// remaining octets of uint64_4
+		while (uint64_4 != 0 && errn == 0) {
+			data[(*len)++] = uint64_4 & 0xFF;
+			uint64_4 >>= 8;
+		}
+	} else if(uint64_3 != 0) {
+		// 7 octets for uint64_1
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 1
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 2
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 3
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 4
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 5
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 6
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 7
+
+		// 7 octets for uint64_2
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 1
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 2
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 3
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 4
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 5
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 6
+		uint64_2 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_2 & 0xFF); // 7
+
+		// remaining octets of uint64_3
+		while (uint64_3 != 0 && errn == 0) {
+			data[(*len)++] = uint64_3 & 0xFF;
+			uint64_3 >>= 8;
+		}
+
+	} else if(uint64_2 != 0) {
+		// 7 octets for uint64_1
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 1
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 2
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 3
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 4
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 5
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 6
+		uint64_1 >>= 8;
+		data[(*len)++] = (uint8_t)(uint64_1 & 0xFF); // 7
+		// remaining octets of uint64_2
+		while (uint64_2 != 0 && errn == 0) {
+			data[(*len)++] = uint64_2 & 0xFF;
+			uint64_2 >>= 8;
+		}
+	} else if(uint64_1 != 0) {
+		while (uint64_1 != 0 && errn == 0) {
+			data[(*len)++] = uint64_1 & 0xFF;
+			uint64_1 >>= 8;
+		}
+	}
+
+	_reverseArray(data, *len);
+
+	return errn;
+}
 
 int decodeInteger(bitstream_t* stream, exi_integer_t* iv) {
 	int b;
@@ -350,6 +526,28 @@ int decodeInteger64(bitstream_t* stream, int64_t* int64) {
 			errn = decodeUnsignedInteger64(stream, &uint64);
 			*int64 = (int64_t)(uint64);
 		}
+	}
+
+	return errn;
+}
+
+/**
+ * Decode an arbitrary precision integer using a sign bit followed by a
+ * sequence of octets. The most significant bit of the last octet is set to
+ * zero to indicate sequence termination. Only seven bits per octet are used
+ * to store the integer's value.
+ */
+int decodeIntegerBig(bitstream_t* stream, int* negative, size_t size, uint8_t* data, size_t* len) {
+	int errn = decodeBoolean(stream, negative);
+
+	if (errn == 0) {
+		if (*negative) {
+			/* For negative values, the Unsigned Integer holds the
+			 * magnitude of the value minus 1 */
+		} else {
+			/* positive */
+		}
+		errn = decodeUnsignedIntegerBig(stream, size, data, len);
 	}
 
 	return errn;
@@ -554,7 +752,7 @@ int decodeBinary(bitstream_t* stream, exi_bytes_t* bytes) {
 int decodeBytes(bitstream_t* stream, size_t len, uint8_t* data) {
 	unsigned int i;
 	int errn = 0;
-	uint8_t b;
+	uint8_t b = 0;
 
 	for (i = 0; i < len && errn == 0; i++) {
 		errn = decode(stream, &b);

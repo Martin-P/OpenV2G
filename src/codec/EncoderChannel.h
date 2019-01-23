@@ -148,6 +148,23 @@ int encodeUnsignedInteger32(bitstream_t* stream, uint32_t n);
  */
 int encodeUnsignedInteger64(bitstream_t* stream, uint64_t n);
 
+/**
+ * \brief 		Encode unsigned integer
+ *
+ * 				Encode an arbitrary precision non negative integer using
+ * 				a sequence of octets. The most significant bit of the last
+ * 				octet is set to zero to indicate sequence termination.
+ * 				Only seven bits per octet are used to store the integer's value.
+ *
+ * \param       stream   		Output Stream
+ * \param       size		   	size array
+ * \param       data		   	data array
+ * \param       len		   		length array
+ * \return                  	Error-Code <> 0
+ *
+ */
+int encodeUnsignedIntegerBig(bitstream_t* stream, size_t size, uint8_t* data, size_t len);
+
 
 /**
  * \brief 		Encode integer
@@ -211,6 +228,23 @@ int encodeInteger32(bitstream_t* stream, int32_t n);
  */
 int encodeInteger64(bitstream_t* stream, int64_t n);
 
+/**
+ * \brief 		Encode integer
+ *
+ * 				Encode an arbitrary precision integer using a sign boolean
+ * 				followed by a sequence of octets. The most significant bit
+ * 				of the last octet is set to zero to indicate sequence termination.
+ * 				Only seven bits per octet are used to store the integer's value.
+ *
+ * \param       stream   		Output Stream
+ * \param       negative		negative integer
+ * \param       size		   	size array
+ * \param       data		   	data array
+ * \param       len		   		length array
+ * \return                  	Error-Code <> 0
+ *
+ */
+int encodeIntegerBig(bitstream_t* stream, int negative, size_t size, uint8_t* data, size_t len);
 
 /**
  * \brief 		Encode float
