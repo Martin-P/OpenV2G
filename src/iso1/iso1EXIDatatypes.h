@@ -465,7 +465,6 @@ struct iso1KeyValueType {
 /* Complex type name='http://www.w3.org/2000/09/xmldsig#,X509IssuerSerialType',  base type name='anyType',  content type='ELEMENT',  isAbstract='false',  hasTypeId='false',  final='0',  block='0',  particle='("http://www.w3.org/2000/09/xmldsig#":X509IssuerName,"http://www.w3.org/2000/09/xmldsig#":X509SerialNumber)',  derivedBy='RESTRICTION'.  */
 #define iso1X509IssuerSerialType_X509IssuerName_CHARACTERS_SIZE 50 + EXTRA_CHAR 
 #define iso1X509IssuerSerialType_X509SerialNumber_BYTES_SIZE 20
-uint8_t characters[20];
 struct iso1X509IssuerSerialType {
 	/* element: "http://www.w3.org/2000/09/xmldsig#":X509IssuerName, http://www.w3.org/2001/XMLSchema,string */
 	struct {
