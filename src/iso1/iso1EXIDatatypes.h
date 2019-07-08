@@ -2055,45 +2055,45 @@ struct iso1AnonType_V2G_Message {
 
 
 
-#define EXIDocument_MgmtData_CHARACTERS_SIZE 50 + EXTRA_CHAR 
-#define EXIDocument_KeyName_CHARACTERS_SIZE 50 + EXTRA_CHAR 
-#define EXIDocument_DigestValue_BYTES_SIZE 350 
-#define EXIFragment_Exponent_BYTES_SIZE 350 
-#define EXIFragment_PgenCounter_BYTES_SIZE 350 
-#define EXIFragment_SessionID_BYTES_SIZE 8 /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,sessionIDType is 8 */
-#define EXIFragment_PGPKeyPacket_BYTES_SIZE 350 
-#define EXIFragment_Seed_BYTES_SIZE 350 
-#define EXIFragment_XPath_CHARACTERS_SIZE 50 + EXTRA_CHAR 
-#define EXIFragment_OEMProvisioningCert_BYTES_SIZE 800 /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,certificateType is 800 */
-#define EXIFragment_SalesTariffDescription_CHARACTERS_SIZE 32 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,tariffDescriptionType is 32 */
-#define EXIFragment_EVCCID_BYTES_SIZE 6 /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,evccIDType is 6 */
-#define EXIFragment_MgmtData_CHARACTERS_SIZE 50 + EXTRA_CHAR 
-#define EXIFragment_P_BYTES_SIZE 350 
-#define EXIFragment_Q_BYTES_SIZE 350 
-#define EXIFragment_X509SubjectName_CHARACTERS_SIZE 50 + EXTRA_CHAR 
-#define EXIFragment_G_BYTES_SIZE 350 
-#define EXIFragment_J_BYTES_SIZE 350 
-#define EXIFragment_ServiceScope_CHARACTERS_SIZE 64 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,serviceScopeType is 64 */
-#define EXIFragment_ServiceName_CHARACTERS_SIZE 32 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,serviceNameType is 32 */
-#define EXIFragment_X509CRL_BYTES_SIZE 350 
-#define EXIFragment_Y_BYTES_SIZE 350 
-#define EXIFragment_DigestValue_BYTES_SIZE 350 
-#define EXIFragment_SPKISexp_BYTES_SIZE 350 
-#define EXIFragment_stringValue_CHARACTERS_SIZE 50 + EXTRA_CHAR 
-#define EXIFragment_PGPKeyID_BYTES_SIZE 350 
-#define EXIFragment_X509Certificate_BYTES_SIZE 350 
-#define EXIFragment_FaultMsg_CHARACTERS_SIZE 64 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,faultMsgType is 64 */
-#define EXIFragment_EVSEID_CHARACTERS_SIZE 37 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,evseIDType is 37 */
-#define EXIFragment_SigMeterReading_BYTES_SIZE 64 /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,sigMeterReadingType is 64 */
-#define EXIFragment_MeterID_CHARACTERS_SIZE 32 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,meterIDType is 32 */
-#define EXIFragment_KeyName_CHARACTERS_SIZE 50 + EXTRA_CHAR 
-#define EXIFragment_GenChallenge_BYTES_SIZE 16 /* XML schema facet length for urn:iso:15118:2:2013:MsgDataTypes,genChallengeType is 16 */
-#define EXIFragment_X509SKI_BYTES_SIZE 350 
-#define EXIFragment_Certificate_BYTES_SIZE 800 /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,certificateType is 800 */
-#define EXIFragment_X509IssuerName_CHARACTERS_SIZE 50 + EXTRA_CHAR 
-#define EXIFragment_Modulus_BYTES_SIZE 350 
-#define exiElementFrag_Id_CHARACTERS_SIZE 50 + EXTRA_CHAR 
-#define exiElementFrag_CHARACTERS_GENERIC_CHARACTERS_SIZE 50 + EXTRA_CHAR 
+#define iso1EXIDocument_MgmtData_CHARACTERS_SIZE 50 + EXTRA_CHAR
+#define iso1EXIDocument_KeyName_CHARACTERS_SIZE 50 + EXTRA_CHAR
+#define iso1EXIDocument_DigestValue_BYTES_SIZE 350
+#define iso1EXIFragment_Exponent_BYTES_SIZE 350
+#define iso1EXIFragment_PgenCounter_BYTES_SIZE 350
+#define iso1EXIFragment_SessionID_BYTES_SIZE 8 /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,sessionIDType is 8 */
+#define iso1EXIFragment_PGPKeyPacket_BYTES_SIZE 350
+#define iso1EXIFragment_Seed_BYTES_SIZE 350
+#define iso1EXIFragment_XPath_CHARACTERS_SIZE 50 + EXTRA_CHAR
+#define iso1EXIFragment_OEMProvisioningCert_BYTES_SIZE 800 /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,certificateType is 800 */
+#define iso1EXIFragment_SalesTariffDescription_CHARACTERS_SIZE 32 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,tariffDescriptionType is 32 */
+#define iso1EXIFragment_EVCCID_BYTES_SIZE 6 /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,evccIDType is 6 */
+#define iso1EXIFragment_MgmtData_CHARACTERS_SIZE 50 + EXTRA_CHAR
+#define iso1EXIFragment_P_BYTES_SIZE 350
+#define iso1EXIFragment_Q_BYTES_SIZE 350
+#define iso1EXIFragment_X509SubjectName_CHARACTERS_SIZE 50 + EXTRA_CHAR
+#define iso1EXIFragment_G_BYTES_SIZE 350
+#define iso1EXIFragment_J_BYTES_SIZE 350
+#define iso1EXIFragment_ServiceScope_CHARACTERS_SIZE 64 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,serviceScopeType is 64 */
+#define iso1EXIFragment_ServiceName_CHARACTERS_SIZE 32 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,serviceNameType is 32 */
+#define iso1EXIFragment_X509CRL_BYTES_SIZE 350
+#define iso1EXIFragment_Y_BYTES_SIZE 350
+#define iso1EXIFragment_DigestValue_BYTES_SIZE 350
+#define iso1EXIFragment_SPKISexp_BYTES_SIZE 350
+#define iso1EXIFragment_stringValue_CHARACTERS_SIZE 50 + EXTRA_CHAR
+#define iso1EXIFragment_PGPKeyID_BYTES_SIZE 350
+#define iso1EXIFragment_X509Certificate_BYTES_SIZE 350
+#define iso1EXIFragment_FaultMsg_CHARACTERS_SIZE 64 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,faultMsgType is 64 */
+#define iso1EXIFragment_EVSEID_CHARACTERS_SIZE 37 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,evseIDType is 37 */
+#define iso1EXIFragment_SigMeterReading_BYTES_SIZE 64 /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,sigMeterReadingType is 64 */
+#define iso1EXIFragment_MeterID_CHARACTERS_SIZE 32 + EXTRA_CHAR /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,meterIDType is 32 */
+#define iso1EXIFragment_KeyName_CHARACTERS_SIZE 50 + EXTRA_CHAR
+#define iso1EXIFragment_GenChallenge_BYTES_SIZE 16 /* XML schema facet length for urn:iso:15118:2:2013:MsgDataTypes,genChallengeType is 16 */
+#define iso1EXIFragment_X509SKI_BYTES_SIZE 350
+#define iso1EXIFragment_Certificate_BYTES_SIZE 800 /* XML schema facet maxLength for urn:iso:15118:2:2013:MsgDataTypes,certificateType is 800 */
+#define iso1EXIFragment_X509IssuerName_CHARACTERS_SIZE 50 + EXTRA_CHAR
+#define iso1EXIFragment_Modulus_BYTES_SIZE 350
+#define iso1exiElementFrag_Id_CHARACTERS_SIZE 50 + EXTRA_CHAR
+#define iso1exiElementFrag_CHARACTERS_GENERIC_CHARACTERS_SIZE 50 + EXTRA_CHAR
 
 
 /* Global elements of EXI Document */
@@ -2172,7 +2172,7 @@ struct iso1EXIDocument {
 	struct iso1TransformType Transform ;
 	struct iso1PGPDataType PGPData ;
 	struct {
-		exi_string_character_t characters[EXIDocument_MgmtData_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIDocument_MgmtData_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  MgmtData ;
 	struct iso1SignatureMethodType SignatureMethod ;
@@ -2181,11 +2181,11 @@ struct iso1EXIDocument {
 	struct iso1X509DataType X509Data ;
 	struct iso1SignatureValueType SignatureValue ;
 	struct {
-		exi_string_character_t characters[EXIDocument_KeyName_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIDocument_KeyName_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  KeyName ;
 	struct {
-		uint8_t bytes[EXIDocument_DigestValue_BYTES_SIZE];
+		uint8_t bytes[iso1EXIDocument_DigestValue_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  DigestValue ;
 	struct iso1SignedInfoType SignedInfo ;
@@ -2285,13 +2285,13 @@ struct iso1EXISchemaInformedElementFragmentGrammar {
 	/* 4 ATTRIBUTE[STRING]({urn:iso:15118:2:2013:MsgDataTypes}Id) */
 	unsigned int Id_isUsed:1;
 	struct {
-		exi_string_character_t characters[exiElementFrag_Id_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1exiElementFrag_Id_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	} Id ;
 	/* 247 START_ELEMENT({urn:iso:15118:2:2013:MsgBody}eMAID) */
 	unsigned int CHARACTERS_GENERIC_isUsed:1;
 	struct {
-		exi_string_character_t characters[exiElementFrag_CHARACTERS_GENERIC_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1exiElementFrag_CHARACTERS_GENERIC_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	} CHARACTERS_GENERIC ;
 
@@ -2335,7 +2335,7 @@ struct iso1EXIFragment {
 	struct iso1X509IssuerSerialType RootCertificateID ;
 	int64_t HMACOutputLength ;
 	struct {
-		uint8_t bytes[EXIFragment_Exponent_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_Exponent_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  Exponent ;
 	struct iso1X509IssuerSerialType X509IssuerSerial ;
@@ -2348,7 +2348,7 @@ struct iso1EXIFragment {
 	struct iso1PhysicalValueType EVSEMaximumCurrentLimit ;
 	struct iso1SalesTariffType SalesTariff ;
 	struct {
-		uint8_t bytes[EXIFragment_PgenCounter_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_PgenCounter_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  PgenCounter ;
 	struct iso1X509DataType X509Data ;
@@ -2377,23 +2377,23 @@ struct iso1EXIFragment {
 	struct iso1SessionStopReqType SessionStopReq ;
 	struct iso1SignaturePropertyType SignatureProperty ;
 	struct {
-		uint8_t bytes[EXIFragment_SessionID_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_SessionID_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  SessionID ;
 	struct {
-		uint8_t bytes[EXIFragment_PGPKeyPacket_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_PGPKeyPacket_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  PGPKeyPacket ;
 	struct iso1MessageHeaderType Header ;
 	struct {
-		uint8_t bytes[EXIFragment_Seed_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_Seed_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  Seed ;
 	struct iso1RSAKeyValueType RSAKeyValue ;
 	int FreeService ;
 	struct iso1PhysicalValueType EVSENominalVoltage ;
 	struct {
-		exi_string_character_t characters[EXIFragment_XPath_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_XPath_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  XPath ;
 	struct iso1MeteringReceiptResType MeteringReceiptRes ;
@@ -2401,7 +2401,7 @@ struct iso1EXIFragment {
 	struct iso1MeteringReceiptReqType MeteringReceiptReq ;
 	struct iso1PreChargeResType PreChargeRes ;
 	struct {
-		uint8_t bytes[EXIFragment_OEMProvisioningCert_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_OEMProvisioningCert_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  OEMProvisioningCert ;
 	struct iso1PhysicalValueType EVEnergyCapacity ;
@@ -2412,20 +2412,20 @@ struct iso1EXIFragment {
 	uint16_t NotificationMaxDelay ;
 	struct iso1CableCheckReqType CableCheckReq ;
 	struct {
-		exi_string_character_t characters[EXIFragment_SalesTariffDescription_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_SalesTariffDescription_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  SalesTariffDescription ;
 	int EVSEVoltageLimitAchieved ;
 	int boolValue ;
 	struct {
-		uint8_t bytes[EXIFragment_EVCCID_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_EVCCID_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  EVCCID ;
 	struct iso1DC_EVChargeParameterType DC_EVChargeParameter ;
 	struct iso1ChargingStatusReqType ChargingStatusReq ;
 	struct iso1CableCheckResType CableCheckRes ;
 	struct {
-		exi_string_character_t characters[EXIFragment_MgmtData_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_MgmtData_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  MgmtData ;
 	struct iso1MeterInfoType MeterInfo ;
@@ -2435,34 +2435,34 @@ struct iso1EXIFragment {
 	struct iso1ManifestType Manifest ;
 	struct iso1PhysicalValueType EVMaximumVoltageLimit ;
 	struct {
-		uint8_t bytes[EXIFragment_P_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_P_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  P ;
 	struct {
-		uint8_t bytes[EXIFragment_Q_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_Q_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  Q ;
 	struct {
-		exi_string_character_t characters[EXIFragment_X509SubjectName_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_X509SubjectName_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  X509SubjectName ;
 	int32_t intValue ;
 	struct iso1ChargingProfileType ChargingProfile ;
 	struct {
-		uint8_t bytes[EXIFragment_G_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_G_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  G ;
 	struct {
-		uint8_t bytes[EXIFragment_J_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_J_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  J ;
 	struct {
-		exi_string_character_t characters[EXIFragment_ServiceScope_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_ServiceScope_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  ServiceScope ;
 	int ReceiptRequired ;
 	struct {
-		exi_string_character_t characters[EXIFragment_ServiceName_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_ServiceName_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  ServiceName ;
 	int16_t MeterStatus ;
@@ -2471,16 +2471,16 @@ struct iso1EXIFragment {
 	iso1serviceCategoryType ServiceCategory ;
 	struct iso1NotificationType Notification ;
 	struct {
-		uint8_t bytes[EXIFragment_X509CRL_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_X509CRL_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  X509CRL ;
 	struct {
-		uint8_t bytes[EXIFragment_Y_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_Y_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  Y ;
 	struct iso1PhysicalValueType EVSEPresentVoltage ;
 	struct {
-		uint8_t bytes[EXIFragment_DigestValue_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_DigestValue_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  DigestValue ;
 	struct iso1PhysicalValueType EVSEMaximumPowerLimit ;
@@ -2490,7 +2490,7 @@ struct iso1EXIFragment {
 	struct iso1ConsumptionCostType ConsumptionCost ;
 	struct iso1DigestMethodType DigestMethod ;
 	struct {
-		uint8_t bytes[EXIFragment_SPKISexp_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_SPKISexp_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  SPKISexp ;
 	struct iso1SessionSetupResType SessionSetupRes ;
@@ -2503,14 +2503,14 @@ struct iso1EXIFragment {
 	struct iso1PhysicalValueType EVTargetCurrent ;
 	struct iso1PhysicalValueType RemainingTimeToBulkSoC ;
 	struct {
-		exi_string_character_t characters[EXIFragment_stringValue_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_stringValue_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  stringValue ;
 	struct iso1SessionSetupReqType SessionSetupReq ;
 	int8_t Multiplier ;
 	struct iso1CertificateUpdateResType CertificateUpdateRes ;
 	struct {
-		uint8_t bytes[EXIFragment_PGPKeyID_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_PGPKeyID_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  PGPKeyID ;
 	struct iso1PhysicalValueType EVTargetVoltage ;
@@ -2519,7 +2519,7 @@ struct iso1EXIFragment {
 	struct iso1PhysicalValueType EVMaximumCurrentLimit ;
 	struct iso1CanonicalizationMethodType CanonicalizationMethod ;
 	struct {
-		uint8_t bytes[EXIFragment_X509Certificate_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_X509Certificate_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  X509Certificate ;
 	struct iso1CertificateInstallationReqType CertificateInstallationReq ;
@@ -2542,20 +2542,20 @@ struct iso1EXIFragment {
 	struct iso1ContractSignatureEncryptedPrivateKeyType ContractSignatureEncryptedPrivateKey ;
 	struct iso1WeldingDetectionReqType WeldingDetectionReq ;
 	struct {
-		exi_string_character_t characters[EXIFragment_FaultMsg_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_FaultMsg_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  FaultMsg ;
 	struct iso1WeldingDetectionResType WeldingDetectionRes ;
 	iso1chargeProgressType ChargeProgress ;
 	iso1paymentOptionType SelectedPaymentOption ;
 	struct {
-		exi_string_character_t characters[EXIFragment_EVSEID_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_EVSEID_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  EVSEID ;
 	struct iso1ParameterSetType ParameterSet ;
 	struct iso1EVSEChargeParameterType EVSEChargeParameter ;
 	struct {
-		uint8_t bytes[EXIFragment_SigMeterReading_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_SigMeterReading_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  SigMeterReading ;
 	struct iso1SignatureValueType SignatureValue ;
@@ -2565,7 +2565,7 @@ struct iso1EXIFragment {
 	struct iso1ServiceParameterListType ServiceParameterList ;
 	struct iso1ListOfRootCertificateIDsType ListOfRootCertificateIDs ;
 	struct {
-		exi_string_character_t characters[EXIFragment_MeterID_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_MeterID_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  MeterID ;
 	struct iso1ChargeServiceType ChargeService ;
@@ -2574,7 +2574,7 @@ struct iso1EXIFragment {
 	struct iso1PhysicalValueType startValue ;
 	struct iso1CurrentDemandReqType CurrentDemandReq ;
 	struct {
-		exi_string_character_t characters[EXIFragment_KeyName_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_KeyName_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  KeyName ;
 	struct iso1DC_EVPowerDeliveryParameterType DC_EVPowerDeliveryParameter ;
@@ -2583,21 +2583,21 @@ struct iso1EXIFragment {
 	int16_t Value ;
 	struct iso1KeyInfoType KeyInfo ;
 	struct {
-		uint8_t bytes[EXIFragment_GenChallenge_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_GenChallenge_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  GenChallenge ;
 	struct iso1AC_EVChargeParameterType AC_EVChargeParameter ;
 	struct iso1PMaxScheduleEntryType PMaxScheduleEntry ;
 	struct iso1ParameterType Parameter ;
 	struct {
-		uint8_t bytes[EXIFragment_X509SKI_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_X509SKI_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  X509SKI ;
 	struct iso1SelectedServiceType SelectedService ;
 	struct iso1PaymentServiceSelectionReqType PaymentServiceSelectionReq ;
 	struct iso1PaymentServiceSelectionResType PaymentServiceSelectionRes ;
 	struct {
-		uint8_t bytes[EXIFragment_Certificate_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_Certificate_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  Certificate ;
 	struct iso1CurrentDemandResType CurrentDemandRes ;
@@ -2606,7 +2606,7 @@ struct iso1EXIFragment {
 	struct iso1PMaxScheduleType PMaxSchedule ;
 	iso1unitSymbolType Unit ;
 	struct {
-		exi_string_character_t characters[EXIFragment_X509IssuerName_CHARACTERS_SIZE];
+		exi_string_character_t characters[iso1EXIFragment_X509IssuerName_CHARACTERS_SIZE];
 		uint16_t charactersLen;
 	}  X509IssuerName ;
 	struct iso1ReferenceType Reference ;
@@ -2627,7 +2627,7 @@ struct iso1EXIFragment {
 	struct iso1ObjectType Object ;
 	struct iso1PhysicalValueType EVEnergyRequest ;
 	struct {
-		uint8_t bytes[EXIFragment_Modulus_BYTES_SIZE];
+		uint8_t bytes[iso1EXIFragment_Modulus_BYTES_SIZE];
 		uint16_t bytesLen;
 	}  Modulus ;
 	iso1chargingSessionType ChargingSession ;
