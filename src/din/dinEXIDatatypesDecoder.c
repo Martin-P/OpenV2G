@@ -14225,7 +14225,7 @@ int decode_dinExiDocument(bitstream_t* stream, struct dinEXIDocument* exiDoc) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiDoc->DigestValue.bytesLen);
 						if (errn == 0) {
-							errn =  (exiDoc->DigestValue.bytesLen) <= EXIDocument_DigestValue_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiDoc->DigestValue.bytesLen) <= dinEXIDocument_DigestValue_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiDoc->DigestValue.bytesLen, exiDoc->DigestValue.bytes);
@@ -14282,7 +14282,7 @@ int decode_dinExiDocument(bitstream_t* stream, struct dinEXIDocument* exiDoc) {
 						if (errn == 0) {
 							if (exiDoc->KeyName.charactersLen >= 2) {
 								exiDoc->KeyName.charactersLen = (uint16_t)(exiDoc->KeyName.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiDoc->KeyName.charactersLen, exiDoc->KeyName.characters, EXIDocument_KeyName_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiDoc->KeyName.charactersLen, exiDoc->KeyName.characters, dinEXIDocument_KeyName_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -14325,7 +14325,7 @@ int decode_dinExiDocument(bitstream_t* stream, struct dinEXIDocument* exiDoc) {
 						if (errn == 0) {
 							if (exiDoc->MgmtData.charactersLen >= 2) {
 								exiDoc->MgmtData.charactersLen = (uint16_t)(exiDoc->MgmtData.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiDoc->MgmtData.charactersLen, exiDoc->MgmtData.characters, EXIDocument_MgmtData_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiDoc->MgmtData.charactersLen, exiDoc->MgmtData.characters, dinEXIDocument_MgmtData_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -14664,7 +14664,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->Certificate.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->Certificate.bytesLen) <= EXIFragment_Certificate_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->Certificate.bytesLen) <= dinEXIFragment_Certificate_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->Certificate.bytesLen, exiFrag->Certificate.bytes);
@@ -14807,7 +14807,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->ContractID.charactersLen >= 2) {
 								exiFrag->ContractID.charactersLen = (uint16_t)(exiFrag->ContractID.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->ContractID.charactersLen, exiFrag->ContractID.characters, EXIFragment_ContractID_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->ContractID.charactersLen, exiFrag->ContractID.characters, dinEXIFragment_ContractID_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -14833,7 +14833,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->ContractSignatureEncryptedPrivateKey.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->ContractSignatureEncryptedPrivateKey.bytesLen) <= EXIFragment_ContractSignatureEncryptedPrivateKey_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->ContractSignatureEncryptedPrivateKey.bytesLen) <= dinEXIFragment_ContractSignatureEncryptedPrivateKey_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->ContractSignatureEncryptedPrivateKey.bytesLen, exiFrag->ContractSignatureEncryptedPrivateKey.bytes);
@@ -14903,7 +14903,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->DHParams.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->DHParams.bytesLen) <= EXIFragment_DHParams_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->DHParams.bytesLen) <= dinEXIFragment_DHParams_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->DHParams.bytesLen, exiFrag->DHParams.bytes);
@@ -14961,7 +14961,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->DigestValue.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->DigestValue.bytesLen) <= EXIFragment_DigestValue_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->DigestValue.bytesLen) <= dinEXIFragment_DigestValue_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->DigestValue.bytesLen, exiFrag->DigestValue.bytes);
@@ -15001,7 +15001,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->EVCCID.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->EVCCID.bytesLen) <= EXIFragment_EVCCID_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->EVCCID.bytesLen) <= dinEXIFragment_EVCCID_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->EVCCID.bytesLen, exiFrag->EVCCID.bytes);
@@ -15202,7 +15202,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->EVSEID.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->EVSEID.bytesLen) <= EXIFragment_EVSEID_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->EVSEID.bytesLen) <= dinEXIFragment_EVSEID_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->EVSEID.bytesLen, exiFrag->EVSEID.bytes);
@@ -15425,7 +15425,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->Exponent.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->Exponent.bytesLen) <= EXIFragment_Exponent_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->Exponent.bytesLen) <= dinEXIFragment_Exponent_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->Exponent.bytesLen, exiFrag->Exponent.bytes);
@@ -15462,7 +15462,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->FaultMsg.charactersLen >= 2) {
 								exiFrag->FaultMsg.charactersLen = (uint16_t)(exiFrag->FaultMsg.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->FaultMsg.charactersLen, exiFrag->FaultMsg.characters, EXIFragment_FaultMsg_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->FaultMsg.charactersLen, exiFrag->FaultMsg.characters, dinEXIFragment_FaultMsg_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -15512,7 +15512,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->G.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->G.bytesLen) <= EXIFragment_G_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->G.bytesLen) <= dinEXIFragment_G_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->G.bytesLen, exiFrag->G.bytes);
@@ -15534,7 +15534,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->GenChallenge.charactersLen >= 2) {
 								exiFrag->GenChallenge.charactersLen = (uint16_t)(exiFrag->GenChallenge.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->GenChallenge.charactersLen, exiFrag->GenChallenge.characters, EXIFragment_GenChallenge_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->GenChallenge.charactersLen, exiFrag->GenChallenge.characters, dinEXIFragment_GenChallenge_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -15574,7 +15574,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->J.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->J.bytesLen) <= EXIFragment_J_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->J.bytesLen) <= dinEXIFragment_J_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->J.bytesLen, exiFrag->J.bytes);
@@ -15601,7 +15601,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->KeyName.charactersLen >= 2) {
 								exiFrag->KeyName.charactersLen = (uint16_t)(exiFrag->KeyName.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->KeyName.charactersLen, exiFrag->KeyName.characters, EXIFragment_KeyName_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->KeyName.charactersLen, exiFrag->KeyName.characters, dinEXIFragment_KeyName_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -15639,7 +15639,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->MeterID.charactersLen >= 2) {
 								exiFrag->MeterID.charactersLen = (uint16_t)(exiFrag->MeterID.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->MeterID.charactersLen, exiFrag->MeterID.characters, EXIFragment_MeterID_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->MeterID.charactersLen, exiFrag->MeterID.characters, dinEXIFragment_MeterID_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -15696,7 +15696,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->MgmtData.charactersLen >= 2) {
 								exiFrag->MgmtData.charactersLen = (uint16_t)(exiFrag->MgmtData.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->MgmtData.charactersLen, exiFrag->MgmtData.characters, EXIFragment_MgmtData_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->MgmtData.charactersLen, exiFrag->MgmtData.characters, dinEXIFragment_MgmtData_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -15717,7 +15717,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->Modulus.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->Modulus.bytesLen) <= EXIFragment_Modulus_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->Modulus.bytesLen) <= dinEXIFragment_Modulus_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->Modulus.bytesLen, exiFrag->Modulus.bytes);
@@ -15786,7 +15786,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->OEMProvisioningCert.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->OEMProvisioningCert.bytesLen) <= EXIFragment_OEMProvisioningCert_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->OEMProvisioningCert.bytesLen) <= dinEXIFragment_OEMProvisioningCert_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->OEMProvisioningCert.bytesLen, exiFrag->OEMProvisioningCert.bytes);
@@ -15811,7 +15811,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->P.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->P.bytesLen) <= EXIFragment_P_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->P.bytesLen) <= dinEXIFragment_P_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->P.bytesLen, exiFrag->P.bytes);
@@ -15836,7 +15836,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->PGPKeyID.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->PGPKeyID.bytesLen) <= EXIFragment_PGPKeyID_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->PGPKeyID.bytesLen) <= dinEXIFragment_PGPKeyID_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->PGPKeyID.bytesLen, exiFrag->PGPKeyID.bytes);
@@ -15856,7 +15856,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->PGPKeyPacket.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->PGPKeyPacket.bytesLen) <= EXIFragment_PGPKeyPacket_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->PGPKeyPacket.bytesLen) <= dinEXIFragment_PGPKeyPacket_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->PGPKeyPacket.bytesLen, exiFrag->PGPKeyPacket.bytes);
@@ -15968,7 +15968,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->PgenCounter.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->PgenCounter.bytesLen) <= EXIFragment_PgenCounter_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->PgenCounter.bytesLen) <= dinEXIFragment_PgenCounter_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->PgenCounter.bytesLen, exiFrag->PgenCounter.bytes);
@@ -16027,7 +16027,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->Q.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->Q.bytesLen) <= EXIFragment_Q_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->Q.bytesLen) <= dinEXIFragment_Q_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->Q.bytesLen, exiFrag->Q.bytes);
@@ -16150,7 +16150,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->RootCertificateID.charactersLen >= 2) {
 								exiFrag->RootCertificateID.charactersLen = (uint16_t)(exiFrag->RootCertificateID.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->RootCertificateID.charactersLen, exiFrag->RootCertificateID.characters, EXIFragment_RootCertificateID_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->RootCertificateID.charactersLen, exiFrag->RootCertificateID.characters, dinEXIFragment_RootCertificateID_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -16219,7 +16219,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->SPKISexp.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->SPKISexp.bytesLen) <= EXIFragment_SPKISexp_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->SPKISexp.bytesLen) <= dinEXIFragment_SPKISexp_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->SPKISexp.bytesLen, exiFrag->SPKISexp.bytes);
@@ -16246,7 +16246,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->SalesTariffDescription.charactersLen >= 2) {
 								exiFrag->SalesTariffDescription.charactersLen = (uint16_t)(exiFrag->SalesTariffDescription.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->SalesTariffDescription.charactersLen, exiFrag->SalesTariffDescription.characters, EXIFragment_SalesTariffDescription_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->SalesTariffDescription.charactersLen, exiFrag->SalesTariffDescription.characters, dinEXIFragment_SalesTariffDescription_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -16286,7 +16286,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->Seed.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->Seed.bytesLen) <= EXIFragment_Seed_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->Seed.bytesLen) <= dinEXIFragment_Seed_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->Seed.bytesLen, exiFrag->Seed.bytes);
@@ -16426,7 +16426,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->ServiceName.charactersLen >= 2) {
 								exiFrag->ServiceName.charactersLen = (uint16_t)(exiFrag->ServiceName.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->ServiceName.charactersLen, exiFrag->ServiceName.characters, EXIFragment_ServiceName_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->ServiceName.charactersLen, exiFrag->ServiceName.characters, dinEXIFragment_ServiceName_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -16464,7 +16464,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->ServiceScope.charactersLen >= 2) {
 								exiFrag->ServiceScope.charactersLen = (uint16_t)(exiFrag->ServiceScope.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->ServiceScope.charactersLen, exiFrag->ServiceScope.characters, EXIFragment_ServiceScope_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->ServiceScope.charactersLen, exiFrag->ServiceScope.characters, dinEXIFragment_ServiceScope_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -16487,7 +16487,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->ServiceScope.charactersLen >= 2) {
 								exiFrag->ServiceScope.charactersLen = (uint16_t)(exiFrag->ServiceScope.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->ServiceScope.charactersLen, exiFrag->ServiceScope.characters, EXIFragment_ServiceScope_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->ServiceScope.charactersLen, exiFrag->ServiceScope.characters, dinEXIFragment_ServiceScope_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -16513,7 +16513,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->SessionID.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->SessionID.bytesLen) <= EXIFragment_SessionID_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->SessionID.bytesLen) <= dinEXIFragment_SessionID_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->SessionID.bytesLen, exiFrag->SessionID.bytes);
@@ -16533,7 +16533,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->SessionID.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->SessionID.bytesLen) <= EXIFragment_SessionID_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->SessionID.bytesLen) <= dinEXIFragment_SessionID_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->SessionID.bytesLen, exiFrag->SessionID.bytes);
@@ -16573,7 +16573,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->SigMeterReading.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->SigMeterReading.bytesLen) <= EXIFragment_SigMeterReading_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->SigMeterReading.bytesLen) <= dinEXIFragment_SigMeterReading_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->SigMeterReading.bytesLen, exiFrag->SigMeterReading.bytes);
@@ -16701,7 +16701,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->X509CRL.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->X509CRL.bytesLen) <= EXIFragment_X509CRL_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->X509CRL.bytesLen) <= dinEXIFragment_X509CRL_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->X509CRL.bytesLen, exiFrag->X509CRL.bytes);
@@ -16721,7 +16721,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->X509Certificate.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->X509Certificate.bytesLen) <= EXIFragment_X509Certificate_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->X509Certificate.bytesLen) <= dinEXIFragment_X509Certificate_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->X509Certificate.bytesLen, exiFrag->X509Certificate.bytes);
@@ -16748,7 +16748,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->X509IssuerName.charactersLen >= 2) {
 								exiFrag->X509IssuerName.charactersLen = (uint16_t)(exiFrag->X509IssuerName.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->X509IssuerName.charactersLen, exiFrag->X509IssuerName.characters, EXIFragment_X509IssuerName_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->X509IssuerName.charactersLen, exiFrag->X509IssuerName.characters, dinEXIFragment_X509IssuerName_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -16774,7 +16774,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->X509SKI.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->X509SKI.bytesLen) <= EXIFragment_X509SKI_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->X509SKI.bytesLen) <= dinEXIFragment_X509SKI_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->X509SKI.bytesLen, exiFrag->X509SKI.bytes);
@@ -16810,7 +16810,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->X509SubjectName.charactersLen >= 2) {
 								exiFrag->X509SubjectName.charactersLen = (uint16_t)(exiFrag->X509SubjectName.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->X509SubjectName.charactersLen, exiFrag->X509SubjectName.characters, EXIFragment_X509SubjectName_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->X509SubjectName.charactersLen, exiFrag->X509SubjectName.characters, dinEXIFragment_X509SubjectName_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -16833,7 +16833,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->XPath.charactersLen >= 2) {
 								exiFrag->XPath.charactersLen = (uint16_t)(exiFrag->XPath.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->XPath.charactersLen, exiFrag->XPath.characters, EXIFragment_XPath_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->XPath.charactersLen, exiFrag->XPath.characters, dinEXIFragment_XPath_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
@@ -16854,7 +16854,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 					if(eventCode == 0) {
 						errn = decodeUnsignedInteger16(stream, &exiFrag->Y.bytesLen);
 						if (errn == 0) {
-							errn =  (exiFrag->Y.bytesLen) <= EXIFragment_Y_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
+							errn =  (exiFrag->Y.bytesLen) <= dinEXIFragment_Y_BYTES_SIZE ? 0 : EXI_ERROR_OUT_OF_BYTE_BUFFER;
 						}
 						if (errn == 0) {
 							errn = decodeBytes(stream, exiFrag->Y.bytesLen, exiFrag->Y.bytes);
@@ -17024,7 +17024,7 @@ int decode_dinExiFragment(bitstream_t* stream, struct dinEXIFragment* exiFrag) {
 						if (errn == 0) {
 							if (exiFrag->stringValue.charactersLen >= 2) {
 								exiFrag->stringValue.charactersLen = (uint16_t)(exiFrag->stringValue.charactersLen - 2); /* string table miss */
-								errn = decodeCharacters(stream, exiFrag->stringValue.charactersLen, exiFrag->stringValue.characters, EXIFragment_stringValue_CHARACTERS_SIZE);
+								errn = decodeCharacters(stream, exiFrag->stringValue.charactersLen, exiFrag->stringValue.characters, dinEXIFragment_stringValue_CHARACTERS_SIZE);
 							} else {
 								/* string table hit */
 								errn = EXI_ERROR_STRINGVALUES_NOT_SUPPORTED;
