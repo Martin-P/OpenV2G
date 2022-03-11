@@ -6,7 +6,7 @@ http://openv2g.sourceforge.net/
 Please report bugs via the SourceForge bug tracking system at http://sourceforge.net/tracker/?group_id=350113.
 Thank you.
 
-Copyright (C) 2007-2012 Siemens AG
+Copyright (C) 2007-2022 Siemens AG
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published
