@@ -72,6 +72,8 @@
 #define BUFFER_SIZE 256
 uint8_t buffer1[BUFFER_SIZE];
 uint8_t buffer2[BUFFER_SIZE];
+bitstream_t global_stream1;
+size_t global_pos1;
 
 #define ERROR_UNEXPECTED_REQUEST_MESSAGE -601
 #define ERROR_UNEXPECTED_SESSION_SETUP_RESP_MESSAGE -602
@@ -89,6 +91,7 @@ uint8_t buffer2[BUFFER_SIZE];
 #define ERROR_UNEXPECTED_PRE_CHARGE_RESP_MESSAGE -612
 #define ERROR_UNEXPECTED_CURRENT_DEMAND_RESP_MESSAGE -613
 #define ERROR_UNEXPECTED_WELDING_DETECTION_RESP_MESSAGE -614
+
 
 
 static int writeStringToEXIString(char* string, exi_string_character_t* exiString) {
@@ -191,6 +194,7 @@ static int appHandshake()
 	struct appHandEXIDocument handshakeResp;
 
 	int errn = 0;
+	int i;
 
 	char* ns0 = "urn:iso:15118:2:2010:MsgDef";
 	char* ns1 = "urn:din:70121:2012:MsgDef";
@@ -228,9 +232,69 @@ static int appHandshake()
 	/* send app handshake request */
 	if( (errn = encode_appHandExiDocument(&stream1, &handshake)) == 0) {
 		if ( write_v2gtpHeader(stream1.data, pos1-V2GTP_HEADER_LENGTH, V2GTP_EXI_TYPE) == 0 ) {
-			printf("EV side: send message to the EVSE\n");
+			printf("EV side: send message to the EVSE. write_v2gtpHeader() was successful.\n");
 		}
 	}
+	
+	printf("size = %d\n", stream1.size);
+	printf("pos  = %d\n", *(stream1.pos));
+	for (i=0; i< *(stream1.pos); i++) {
+		printf("%02x", stream1.data[i]);
+	}
+	printf("\n");
+	
+	i=0;
+	/* 01fe8001000000228000dbab9371d3234b71d1b981899189d191818991d26b9b3a232b30020000040040  from the Ioniq */
+	stream1.data[i++]=0x01;
+	stream1.data[i++]=0xfe;
+	stream1.data[i++]=0x80;
+	stream1.data[i++]=0x01;
+	stream1.data[i++]=0x00;
+	stream1.data[i++]=0x00;
+	stream1.data[i++]=0x00;
+	stream1.data[i++]=0x22;
+	stream1.data[i++]=0x80;
+	stream1.data[i++]=0x00;
+	stream1.data[i++]=0xdb;
+	stream1.data[i++]=0xab;
+	stream1.data[i++]=0x93;
+	stream1.data[i++]=0x71;
+	stream1.data[i++]=0xd3;
+	stream1.data[i++]=0x23;
+	stream1.data[i++]=0x4b;
+	stream1.data[i++]=0x71;
+	stream1.data[i++]=0xd1;
+	stream1.data[i++]=0xb9;
+	stream1.data[i++]=0x81;
+	stream1.data[i++]=0x89;
+	stream1.data[i++]=0x91;
+	stream1.data[i++]=0x89;
+	stream1.data[i++]=0xd1;
+	stream1.data[i++]=0x91;
+	stream1.data[i++]=0x81;
+	stream1.data[i++]=0x89;
+	stream1.data[i++]=0x91;
+	stream1.data[i++]=0xd2;
+	stream1.data[i++]=0x6b;
+	stream1.data[i++]=0x9b;
+	stream1.data[i++]=0x3a;
+	stream1.data[i++]=0x23;
+	stream1.data[i++]=0x2b;
+	stream1.data[i++]=0x30;
+	stream1.data[i++]=0x02;
+	stream1.data[i++]=0x00;
+	stream1.data[i++]=0x00;
+	stream1.data[i++]=0x04;
+	stream1.data[i++]=0x00;
+	stream1.data[i++]=0x40;
+	*(stream1.pos) = i;
+	
+	printf("size = %d\n", stream1.size);
+	printf("pos  = %d\n", *(stream1.pos));
+	for (i=0; i<(*stream1.pos); i++) {
+		printf("%02x ", stream1.data[i]);
+	}
+	printf("\n");
 
 	if (errn == 0) {
 		/* read app handshake request & generate response */
@@ -2507,10 +2571,193 @@ static int xmldsig_test() {
 #endif /* DEPLOY_ISO_CODEC_FRAGMENT */
 #endif /* DEPLOY_XMLDSIG_CODEC == SUPPORT_YES */
 
+#define SCHEMA_APP_HANDSHAKE 0
+#define SCHEMA_DIN 1
+#define SCHEMA_ISO1 2
+#define SCHEMA_ISO2 3
+#define DIR_ENCODING 0
+#define DIR_DECODING 1
+
+
+
+static int testEncodeSessionSetupResponse(void) {
+	struct dinEXIDocument exiOut;
+	int errn;
+	int i;
+
+	exiOut.V2G_Message_isUsed = 1u;
+
+	/* generate an unique sessionID */
+	init_dinMessageHeaderType(&exiOut.V2G_Message.Header);
+	exiOut.V2G_Message.Header.SessionID.bytes[0] = 1;
+	exiOut.V2G_Message.Header.SessionID.bytes[1] = 2;
+	exiOut.V2G_Message.Header.SessionID.bytes[2] = 3;
+	exiOut.V2G_Message.Header.SessionID.bytes[3] = 4;
+	exiOut.V2G_Message.Header.SessionID.bytes[4] = 5;
+	exiOut.V2G_Message.Header.SessionID.bytes[5] = 6;
+	exiOut.V2G_Message.Header.SessionID.bytes[6] = 7;
+	exiOut.V2G_Message.Header.SessionID.bytes[7] = 8;
+	exiOut.V2G_Message.Header.SessionID.bytesLen = 8;
+
+	/* Prepare data for EV */
+	init_dinBodyType(&exiOut.V2G_Message.Body);
+
+	exiOut.V2G_Message.Body.SessionSetupRes_isUsed = 1u;
+	init_dinSessionSetupResType(&exiOut.V2G_Message.Body.SessionSetupRes);
+
+	exiOut.V2G_Message.Body.SessionSetupRes.ResponseCode = dinresponseCodeType_OK;
+	//exiOut.V2G_Message.Body.SessionSetupRes.EVSEID.characters[0] = 0;
+	//exiOut.V2G_Message.Body.SessionSetupRes.EVSEID.characters[1] = 20;
+	//exiOut.V2G_Message.Body.SessionSetupRes.EVSEID.charactersLen = 2;
+	//exiOut.V2G_Message.Body.SessionSetupRes.EVSETimeStamp_isUsed = 0u;
+	//exiOut.V2G_Message.Body.SessionSetupRes.EVSETimeStamp = 123456789;
+
+	global_stream1.size = BUFFER_SIZE;
+	global_stream1.data = buffer1;
+	global_stream1.pos = &global_pos1;	
+	*(global_stream1.pos) = 0; /* start adding data at position 0 */
+	
+	errn = encode_dinExiDocument(&global_stream1, &exiOut);
+	if (errn!=0) {
+		printf("encode_dinExiDocument failed %d\n", errn);
+	} else {
+		printf("encode_dinExiDocument produced "); 
+		for (i=0; i<*global_stream1.pos; i++) {
+			printf("%02x", global_stream1.data[i]);
+		}
+		printf("\n");
+	}	
+	return errn;
+}
+
+
+static int encoderTest(char* parameterStream) {
+  printf("encoderTest\n");
+  /* ED1 for Encode DIN session setup response */
+  /* xxxx */
+  testEncodeSessionSetupResponse();
+  return 0;
+}
+
+/** Decoder test  */
+static int decoderTest(char* parameterStream) {
+	int i;
+	struct appHandEXIDocument exiDocAppHand;
+	struct dinEXIDocument exiDocDin;
+	struct iso1EXIDocument exiDocIso1;
+	struct iso2EXIDocument exiDocIso2;	
+	int errn = 0;
+	int numBytes;
+	char strOneByteHex[3];
+	int direction;
+	int schema;
+
+	if (strlen(parameterStream)<3) {
+		printf("parameter too short\n");
+		return -1;
+	}
+	/* This first two chars of the parameter stream are selecting the decoder. */
+	if (parameterStream[0]=='E') {
+		direction = DIR_ENCODING;
+		return encoderTest(parameterStream);
+	} else if (parameterStream[0]=='D') {
+		direction = DIR_DECODING;
+	} else {
+		printf("The first character of the parameter must be D for decoding or E for encoding.\n");
+	}
+	/* The second character selects the schema. */
+	/* The OpenV2G supports 4 different decoders:
+	    decode_appHandExiDocument
+		decode_iso1ExiDocument
+		decode_iso2ExiDocument
+		decode_dinExiDocument
+		The caller needs to choose, depending on its context-knowledge, the correct decoder.
+		The first step in a session is always to use the decode_appHandExiDocument for finding out, which specification/decoder
+		is used in the next steps. */
+	if (parameterStream[1]=='H') {
+		schema = SCHEMA_APP_HANDSHAKE;
+	} else if (parameterStream[1]=='D') {
+		schema = SCHEMA_DIN;
+	} else if (parameterStream[1]=='1') {
+		schema = SCHEMA_ISO1;
+	} else if (parameterStream[1]=='2') {
+		schema = SCHEMA_ISO2;
+	} else {
+		printf("The second character of the parameter must be H for applicationHandshake, D for DIN, 1 for ISO1 or 2 for ISO2.\n");
+		schema = -1;
+	}
+	global_stream1.size = BUFFER_SIZE;
+	global_stream1.data = buffer1;
+	global_stream1.pos = &global_pos1;
+	printf("decoderTest for %s\n", parameterStream);
+	numBytes=strlen(parameterStream)/2;
+	global_pos1 = 0;
+	printf("numBytes %d\n", numBytes);
+	strOneByteHex[2]=0;
+	/* convert the hex stream into array of bytes: */
+	for (i=1; i<numBytes; i++) { /* starting at 1, means the first two characters (the direction-and-schema-selectors) are jumped-over. */
+		strOneByteHex[0] = parameterStream[2*i];
+		strOneByteHex[1] = parameterStream[2*i+1];
+		buffer1[global_pos1++] = strtol(strOneByteHex, NULL, 16);
+	}
+	/*
+	printf("size = %d\n", global_stream1.size);
+	printf("pos  = %d\n", *(global_stream1.pos));
+	for (i=0; i<(*global_stream1.pos); i++) {
+		printf("%02x ", global_stream1.data[i]);
+	}
+	printf("\n");
+	*/
+	
+	*(global_stream1.pos) = 0; /* the decoder shall start at the byte 0 */
+	errn = 0;
+	switch (schema) {
+		case SCHEMA_APP_HANDSHAKE:
+			errn = decode_appHandExiDocument(&global_stream1, &exiDocAppHand);
+			break;
+		case SCHEMA_DIN:
+			errn = decode_dinExiDocument(&global_stream1, &exiDocDin);
+			break;
+		case SCHEMA_ISO1:
+			errn = decode_iso1ExiDocument(&global_stream1, &exiDocIso1);
+			break;
+		case SCHEMA_ISO2:
+			errn = decode_iso2ExiDocument(&global_stream1, &exiDocIso2);
+			break;
+			
+	}
+	if(errn) {
+			/* an error occured */
+			printf("decoderTest error%d\n", errn);
+			return errn;
+	}		
+
+	if (schema == SCHEMA_APP_HANDSHAKE) {
+		printf("EVSE side: List of application handshake protocols of the EV \n");
+		for(i=0;i<exiDocAppHand.supportedAppProtocolReq.AppProtocol.arrayLen;i++) {
+			printf("\tProtocol entry #=%d\n",(i+1));
+			printf("\t\tProtocolNamespace=");
+			printASCIIString(exiDocAppHand.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters, exiDocAppHand.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.charactersLen);
+			printf("\t\tVersion=%d.%d\n", exiDocAppHand.supportedAppProtocolReq.AppProtocol.array[i].VersionNumberMajor, exiDocAppHand.supportedAppProtocolReq.AppProtocol.array[i].VersionNumberMinor);
+			printf("\t\tSchemaID=%d\n", exiDocAppHand.supportedAppProtocolReq.AppProtocol.array[i].SchemaID);
+			printf("\t\tPriority=%d\n", exiDocAppHand.supportedAppProtocolReq.AppProtocol.array[i].Priority);
+		}
+	} else {
+		printf("Schema not implemented.\n");
+	}
+	return errn;
+}
+
 
 int main_example(int argc, char *argv[]) {
 	int errn = 0;
 
+	if (argc==2) {
+		printf("exi_result=converted(%s)\n", argv[1]);
+		decoderTest(argv[1]);
+		return 0;
+	}
+	
 	printf("+++ Start application handshake protocol example +++\n\n");
 	errn = appHandshake();
 	printf("+++ Terminate application handshake protocol example with errn = %d +++\n\n", errn);
@@ -2520,6 +2767,8 @@ int main_example(int argc, char *argv[]) {
 		return errn;
 	}
 
+    //printf("(for further examples remove the return)\n");
+	//return 0;
 
 #if DEPLOY_ISO1_CODEC == SUPPORT_YES
 	printf("+++ Start V2G client / service example for charging (ISO1) +++\n\n");
