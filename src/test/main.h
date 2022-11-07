@@ -28,8 +28,11 @@
 
 #define CODE_VERSION_EXI 1
 #define CODE_VERSION_SAMPLE 2
-#define CODE_VERSION CODE_VERSION_SAMPLE
+#define CODE_VERSION_COMMANDLINE 3
+
+//#define CODE_VERSION CODE_VERSION_SAMPLE
 //#define CODE_VERSION CODE_VERSION_EXI
+#define CODE_VERSION CODE_VERSION_COMMANDLINE
 
 #ifndef MAIN_H_
 #define MAIN_H_
@@ -38,6 +41,8 @@
 int main_databinder(int argc, char *argv[]);
 #elif CODE_VERSION == CODE_VERSION_SAMPLE
 int main_example(int argc, char *argv[]);
+#elif CODE_VERSION == CODE_VERSION_COMMANDLINE
+int main_commandline(int argc, char *argv[]);
 #endif
 
 #endif

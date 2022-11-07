@@ -41,6 +41,9 @@ int main(int argc, char *argv[]) {
 #elif CODE_VERSION == CODE_VERSION_SAMPLE
 	/* V2G client / service example  */
 	return main_example(argc, argv);
+#elif CODE_VERSION == CODE_VERSION_COMMANDLINE
+    /* Command line interface */
+	return main_commandline(argc, argv);
 #endif
 
 }

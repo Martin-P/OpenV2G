@@ -6,16 +6,19 @@
 C_SRCS += \
 ../src/test/main.c \
 ../src/test/main_databinder.c \
+../src/test/main_commandlineinterface.c \
 ../src/test/main_example.c 
 
 OBJS += \
 ./src/test/main.o \
 ./src/test/main_databinder.o \
+./src/test/main_commandlineinterface.o \
 ./src/test/main_example.o 
 
 C_DEPS += \
 ./src/test/main.d \
 ./src/test/main_databinder.d \
+./src/test/main_commandlineinterface.d \
 ./src/test/main_example.d 
 
 
