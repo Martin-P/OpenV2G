@@ -54,6 +54,10 @@ uint8_t buffer2[BUFFER_SIZE];
 bitstream_t global_stream1;
 size_t global_pos1;
 int g_errn;
+char gResultString[4096];
+char gInfoString[4096];
+char gErrorString[4096];
+
 
 #define ERROR_UNEXPECTED_REQUEST_MESSAGE -601
 #define ERROR_UNEXPECTED_SESSION_SETUP_RESP_MESSAGE -602
@@ -108,6 +112,7 @@ static void copyBytes(uint8_t* from, uint16_t len, uint8_t* to) {
 	}
 }
 
+
 /* prepare an empty stream */
 static void prepareGlobalStream(void) {
 	global_stream1.size = BUFFER_SIZE;
@@ -116,17 +121,19 @@ static void prepareGlobalStream(void) {
 	*(global_stream1.pos) = 0; /* start adding data at position 0 */	
 }
 
-/* print the global stream on the console output */
+/* print the global stream into the result string */
 void printGlobalStream(void) {
 	int i;
+	char strTmp[10];	
 	if (g_errn!=0) {
-		printf("encoding failed %d\n", errn);
+		sprintf(gErrorString, "encoding failed %d\n", g_errn);
 	} else {
-		printf("encoder produced "); 
+		strcpy(gResultString, "");
+		/* byte per byte, write a two-character-hex value into the result string */
 		for (i=0; i<*global_stream1.pos; i++) {
-			printf("%02x", global_stream1.data[i]);
+			sprintf(strTmp, "%02x", global_stream1.data[i]);
+			strcat(gResultString, strTmp);
 		}
-		printf("\n");
 	}	
 }
 
@@ -142,7 +149,7 @@ static void encodeSupportedAppProtocolResponse(void) {
 	/* The :supportedAppProtocolRes contains only two fields:
 	    ResponseCode
 		SchemaID (optional) It is not clear, in which cases the SchemaID can be left empty. Maybe if the list has only one enty. Or
-		maybe always, to just select the first entry. */
+		maybe always, to just select the first entry. */	
   struct appHandEXIDocument applHandshake;		
   init_appHandEXIDocument(&applHandshake);
   applHandshake.supportedAppProtocolRes_isUsed = 1u;
@@ -153,9 +160,10 @@ static void encodeSupportedAppProtocolResponse(void) {
   prepareGlobalStream();
   g_errn = encode_appHandExiDocument(&global_stream1, &applHandshake);
   printGlobalStream();
+  sprintf(gInfoString, "encodeSupportedAppProtocolResponse finished");
 }
 
-static void testEncodeSessionSetupResponse(void) {
+static void encodeSessionSetupResponse(void) {
 	struct dinEXIDocument dinDoc;
 	dinDoc.V2G_Message_isUsed = 1u;
 	/* generate an unique sessionID */
@@ -184,12 +192,101 @@ static void testEncodeSessionSetupResponse(void) {
     printGlobalStream();
 }
 
+void encodeServiceDiscoveryResponse(void) {
+	struct dinEXIDocument dinDoc;
+	dinDoc.V2G_Message_isUsed = 1u;
+	sprintf(gErrorString, "todo encodeServiceDiscoveryResponse");
+}
+void encodePaymentServiceSelectionResponse(void) {
+	sprintf(gErrorString, "todo encodePaymentServiceSelectionResponse");
+}
+void encodeAuthorizationResponse(void) {
+	sprintf(gErrorString, "todo encodeAuthorizationResponse");
+}
+void encodeChargeParameterResponse(void) {
+	sprintf(gErrorString, "todo encodeChargeParameterResponse");
+}
+void encodeCableCheckResponse(void) {
+	sprintf(gErrorString, "todo encodeCableCheckResponse");
+}
+void encodePreChargeResponse(void) {
+	sprintf(gErrorString, "todo encodePreChargeResponse");
+}
+
+
 /* Converting parameters to an EXI stream */
 static int runTheEncoder(char* parameterStream) {
-  printf("encoderTest\n");
-  /* ED1 for Encode DIN session setup response */
-  /* xxxx */
-  testEncodeSessionSetupResponse();
+  //printf("runTheEncoder\n");
+  /* Parameter description: Three letters:
+      - First letter: E=Encode
+	  - Second letter: Schema selection H=Handshake, D=DIN, 1=ISO1, 2=ISO2
+	  - Third letter: A to Z for requests, a to z for responses.
+  */
+  switch (parameterStream[1]) { /* H=HandshakeRequest, h=HandshakeResponse, D=DIN, 1=ISO1, 2=ISO2 */
+	case 'H':
+		//encodeSupportedAppProtocolRequest();
+		sprintf(gErrorString, "encodeSupportedAppProtocolRequest not yet implemented.");
+		break;
+	case 'h':
+		encodeSupportedAppProtocolResponse();
+		break;
+	case 'D':
+		switch (parameterStream[2]) {
+			case 'A':
+				sprintf(gErrorString, "encodeSessionSetupRequest  not yet implemented.");
+				break;
+			case 'a':
+				encodeSessionSetupResponse();
+				break;
+			case 'B':
+				sprintf(gErrorString, "ServiceDiscoveryRequest  not yet implemented.");
+				break;
+			case 'b':
+				encodeServiceDiscoveryResponse();
+				break;
+			case 'C':
+				sprintf(gErrorString, "PaymentServiceSelectionRequest  not yet implemented.");
+				break;
+			case 'c':
+				encodePaymentServiceSelectionResponse();
+				break;
+			case 'D':
+				sprintf(gErrorString, "AuthorizationRequest  not yet implemented.");
+				break;
+			case 'd':
+				encodeAuthorizationResponse();
+				break;
+			case 'E':
+				sprintf(gErrorString, "ChargeParameterRequest  not yet implemented.");
+				break;
+			case 'e':
+				encodeChargeParameterResponse();
+				break;
+			case 'F':
+				sprintf(gErrorString, "CableCheckRequest  not yet implemented.");
+				break;
+			case 'f':
+				encodeCableCheckResponse();
+				break;
+			case 'G':
+				printf("PreChargeRequest  not yet implemented.\n");
+				break;
+			case 'g':
+				encodePreChargeResponse();
+				break;
+			default:
+				sprintf(gErrorString, "invalid message in DIN encoder requested");
+		}
+		break;
+	case '1':
+		sprintf(gErrorString, "ISO1 encoder not yet implemented");
+		break;
+	case '2':
+		sprintf(gErrorString, "ISO2 encoder not yet implemented");
+		break;
+	default:
+		sprintf(gErrorString, "invalid encoder requested");
+  }
   return 0;
 }
 
@@ -206,7 +303,7 @@ static int runTheDecoder(char* parameterStream) {
 	int schema;
 
 	if (strlen(parameterStream)<3) {
-		printf("parameter too short\n");
+		sprintf(gErrorString, "parameter too short");
 		return -1;
 	}
 	/* The second character selects the schema. */
@@ -227,7 +324,7 @@ static int runTheDecoder(char* parameterStream) {
 	} else if (parameterStream[1]=='2') {
 		schema = SCHEMA_ISO2;
 	} else {
-		printf("The second character of the parameter must be H for applicationHandshake, D for DIN, 1 for ISO1 or 2 for ISO2.\n");
+		sprintf(gErrorString, "The second character of the parameter must be H for applicationHandshake, D for DIN, 1 for ISO1 or 2 for ISO2.");
 		schema = -1;
 	}
 	global_stream1.size = BUFFER_SIZE;
@@ -272,7 +369,7 @@ static int runTheDecoder(char* parameterStream) {
 	}
 	if(errn) {
 			/* an error occured */
-			printf("decoderTest error%d\n", errn);
+			sprintf(gErrorString, "decoderTest error%d", errn);
 			return errn;
 	}		
 
@@ -287,29 +384,33 @@ static int runTheDecoder(char* parameterStream) {
 			printf("\t\tPriority=%d\n", exiDocAppHand.supportedAppProtocolReq.AppProtocol.array[i].Priority);
 		}
 	} else {
-		printf("Schema not implemented.\n");
+		sprintf(gErrorString, "Schema not implemented.");
 	}
 	return errn;
 }
 
 /* The entry point */
 int main_commandline(int argc, char *argv[]) {
+	strcpy(gInfoString, "");
+	strcpy(gErrorString, "");
+	strcpy(gResultString, "");
 	if (argc>=2) {
-		printf("OpenV2G will process %s\n", argv[1]);
+		//printf("OpenV2G will process %s\n", argv[1]);
 		/* The first char of the parameter decides over Encoding or Decoding. */
 		if (argv[1][0]=='E') {
 			runTheEncoder(argv[1]);
-			return 0;
 		} else if (argv[1][0]=='D') {
 			runTheDecoder(argv[1]);
-			return 0;
 		} else {
-			printf("The first character of the parameter must be D for decoding or E for encoding.\n");
-			return -1;
+			sprintf(gErrorString, "The first character of the parameter must be D for decoding or E for encoding.");
 		}
+	} else {
+		sprintf(gErrorString, "OpenV2G: Error: To few parameters.");
 	}
-	printf("OpenV2G: Error: To few parameters.\n");
-	return -1;
+	
+	printf("{\n\"info\": \"%s\", \n\"error\": \"%s\",\n\"result\": \"%s\"\n}", gInfoString, gErrorString, gResultString);
+	//printf("%s\n", gResultString);
+	return 0;
 }
 
 
