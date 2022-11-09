@@ -63,6 +63,7 @@ char gResultString[4096];
 char gInfoString[4096];
 char gErrorString[4096];
 char gPropertiesString[4096];
+char gDebugString[20000];
 char s[1000];
 
 
@@ -84,6 +85,12 @@ char s[1000];
 #define ERROR_UNEXPECTED_CURRENT_DEMAND_RESP_MESSAGE -613
 #define ERROR_UNEXPECTED_WELDING_DETECTION_RESP_MESSAGE -614
 
+
+void debugAddStringAndInt(char *s, int i) {
+	char sTmp[1000];
+	sprintf(sTmp, "%s%d", s, i);
+	strcat(gDebugString, sTmp);
+}
 
 /*
 static int writeStringToEXIString(char* string, exi_string_character_t* exiString) {
@@ -216,7 +223,9 @@ void translateDocAppHandToJson(void) {
 
 /* translate the struct dinDoc into JSON, to have it ready to give it over stdout to the caller application. */
 void translateDocDinToJson(void) {
-	char sTmp[20];
+	char sTmp[30];
+	char s2[30];
+	int i,n;
 	initProperties();
 	addProperty("schema", "DIN");
 	sprintf(sTmp, "%d", g_errn);
@@ -228,12 +237,31 @@ void translateDocDinToJson(void) {
 	*/   
 	if (dinDoc.V2G_Message.Body.SessionSetupReq_isUsed) {
 		addProperty("msgName", "SessionSetupReq");
+		n=dinDoc.V2G_Message.Body.SessionSetupReq.EVCCID.bytesLen;
+		sprintf(sTmp, "%d", n); addProperty("EVCCID.bytesLen", sTmp);
+		strcpy(sTmp,"");
+		for (i=0; (i<n)&&(i<20); i++) {
+			/* this is no ASCII, at least not at the Ioniq. Show just Hex. */
+			sprintf(s2, "%02x", dinDoc.V2G_Message.Body.SessionSetupReq.EVCCID.bytes[i]);
+			strcat(sTmp, s2);
+		}
+		addProperty("EVCCID", sTmp);
 	}
 	if (dinDoc.V2G_Message.Body.SessionSetupRes_isUsed) {
 		addProperty("msgName", "SessionSetupRes");
 	}
 	if (dinDoc.V2G_Message.Body.ServiceDiscoveryReq_isUsed) {
 		addProperty("msgName", "ServiceDiscoveryReq");
+		#define m dinDoc.V2G_Message.Body.ServiceDiscoveryReq
+		if (m.ServiceScope_isUsed) {
+			addProperty("ServiceScope_isUsed", "True");
+			n = m.ServiceScope.charactersLen;
+			sprintf(sTmp, "%d", n); addProperty("ServiceScope.charactersLen", sTmp);
+		}
+		if (m.ServiceCategory_isUsed) {
+			addProperty("ServiceCategory_isUsed", "True");
+		}
+		#undef m
 	}
 	if (dinDoc.V2G_Message.Body.ServiceDiscoveryRes_isUsed) {
 		addProperty("msgName", "ServiceDiscoveryRes");
@@ -241,6 +269,18 @@ void translateDocDinToJson(void) {
 
 	if (dinDoc.V2G_Message.Body.ServicePaymentSelectionReq_isUsed) {
 		addProperty("msgName", "ServicePaymentSelectionReq");
+		#define m dinDoc.V2G_Message.Body.ServicePaymentSelectionReq
+		if (m.SelectedPaymentOption==dinpaymentOptionType_Contract) { addProperty("SelectedPaymentOption", "Contract"); }
+		if (m.SelectedPaymentOption==dinpaymentOptionType_ExternalPayment) { addProperty("SelectedPaymentOption", "ExternalPayment"); }
+		
+		n = m.SelectedServiceList.SelectedService.arrayLen;
+		sprintf(sTmp, "%d", n); addProperty("SelectedService.arrayLen", sTmp);
+		for (i=0; i<n; i++) {
+			sprintf(sTmp, "%d:%d", i, m.SelectedServiceList.SelectedService.array[i].ServiceID); addProperty("SelectedService.array", sTmp);
+		}
+		// ParameterSetID_isUsed
+		// ParameterSetID
+		#undef m		
 	}
 	if (dinDoc.V2G_Message.Body.ServicePaymentSelectionRes_isUsed) {
 		addProperty("msgName", "ServicePaymentSelectionRes");
@@ -273,6 +313,64 @@ void translateDocDinToJson(void) {
 	}
 	if (dinDoc.V2G_Message.Body.PreChargeRes_isUsed) {
 		addProperty("msgName", "PreChargeRes");
+	}
+	if (dinDoc.V2G_Message.Body.PowerDeliveryReq_isUsed) {
+		addProperty("msgName", "PowerDeliveryReq");
+		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState); addProperty("ReadyToChargeState", sTmp);
+		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.ChargingProfile_isUsed); addProperty("ChargingProfile_isUsed", sTmp);
+		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.EVPowerDeliveryParameter_isUsed); addProperty("EVPowerDeliveryParameter_isUsed", sTmp);
+		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter_isUsed); addProperty("DC_EVPowerDeliveryParameter_isUsed", sTmp);
+		if (dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter_isUsed) {
+			#define v1 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.DC_EVStatus.EVReady
+			#define v2 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.DC_EVStatus.EVErrorCode
+			#define v3 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.DC_EVStatus.EVRESSSOC
+			#define v4 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.BulkChargingComplete
+			#define v5 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.ChargingComplete
+			
+			sprintf(sTmp, "%d", v1); addProperty("EVReady", sTmp);
+			sprintf(sTmp, "%d", v2); addProperty("EVErrorCode", sTmp);
+			
+			switch (v2) {
+				case dinDC_EVErrorCodeType_FAILED_ChargingSystemIncompatibility:
+					addProperty("EVErrorCodeText", "FAILED_ChargingSystemIncompatibility");
+					break;
+				case dinDC_EVErrorCodeType_FAILED_ChargerConnectorLockFault:
+					addProperty("EVErrorCodeText", "FAILED_ChargerConnectorLockFault");
+					break;
+				default:
+					addProperty("EVErrorCodeText", "otherError");
+					/* todo add more error texts */
+			}
+			
+			sprintf(sTmp, "%d", v3); addProperty("EVRESSSOC", sTmp);
+			sprintf(sTmp, "%d", v4); addProperty("BulkChargingComplete", sTmp);
+			sprintf(sTmp, "%d", v5); addProperty("ChargingComplete", sTmp);
+		}
+
+	}
+	if (dinDoc.V2G_Message.Body.PowerDeliveryRes_isUsed) {
+		addProperty("msgName", "PowerDeliveryRes");
+	}
+
+	if (dinDoc.V2G_Message.Body.CurrentDemandReq_isUsed) {
+		addProperty("msgName", "CurrentDemandReq");
+	}
+	if (dinDoc.V2G_Message.Body.CurrentDemandRes_isUsed) {
+		addProperty("msgName", "CurrentDemandRes");
+	}
+	
+	if (dinDoc.V2G_Message.Body.SessionStopReq_isUsed) {
+		addProperty("msgName", "SessionStopReq");
+	}
+	if (dinDoc.V2G_Message.Body.SessionStopRes_isUsed) {
+		addProperty("msgName", "SessionStopRes");
+	}
+
+	if (dinDoc.V2G_Message.Body.WeldingDetectionReq_isUsed) {
+		addProperty("msgName", "WeldingDetectionReq");
+	}
+	if (dinDoc.V2G_Message.Body.WeldingDetectionRes_isUsed) {
+		addProperty("msgName", "WeldingDetectionRes");
 	}
 }
 
@@ -310,10 +408,16 @@ static void encodeSessionSetupRequest(void) {
     sprintf(gInfoString, "encodeSessionSetupRequest finished");
 }
 
-static void encodeSessionSetupResponse(void) {
+static void init_dinMessageHeaderWithSessionID(void) {
 	dinDoc.V2G_Message_isUsed = 1u;
 	/* generate an unique sessionID */
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
+	/* When receiving the SessionSetupReq with the parameter SessionID equal to zero (0), the 
+	SECC shall generate a new (not stored) SessionID value different from zero (0) and return this 
+	value in the SessionSetupRes message header.
+	We can use the following simplification if we are SECC/EVSE: We set always the same SessionID, with non-zero value. */
+	/* Todo: In PEV, we need to extract the session ID from the SessionSetupResponse, store it and
+	   use it in the headers of all subsequent request messages. */
 	dinDoc.V2G_Message.Header.SessionID.bytes[0] = 1;
 	dinDoc.V2G_Message.Header.SessionID.bytes[1] = 2;
 	dinDoc.V2G_Message.Header.SessionID.bytes[2] = 3;
@@ -323,7 +427,10 @@ static void encodeSessionSetupResponse(void) {
 	dinDoc.V2G_Message.Header.SessionID.bytes[6] = 7;
 	dinDoc.V2G_Message.Header.SessionID.bytes[7] = 8;
 	dinDoc.V2G_Message.Header.SessionID.bytesLen = 8;
-	/* Prepare data for EV */
+}
+
+static void encodeSessionSetupResponse(void) {
+	init_dinMessageHeaderWithSessionID();
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.SessionSetupRes_isUsed = 1u;
 	init_dinSessionSetupResType(&dinDoc.V2G_Message.Body.SessionSetupRes);
@@ -352,8 +459,7 @@ static void encodeServiceDiscoveryRequest(void) {
 }
 
 void encodeServiceDiscoveryResponse(void) {
-	dinDoc.V2G_Message_isUsed = 1u;
-	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
+	init_dinMessageHeaderWithSessionID();
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.ServiceDiscoveryRes_isUsed = 1u;
 	init_dinServiceDiscoveryResType(&dinDoc.V2G_Message.Body.ServiceDiscoveryRes);
@@ -368,11 +474,12 @@ void encodeServiceDiscoveryResponse(void) {
 	dinDoc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceTag.ServiceCategory = dinserviceCategoryType_EVCharging;
 	//dinDoc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceTag.ServiceScope
 	//dinDoc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceTag.ServiceScope_isUsed
-	dinDoc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.FreeService = 1; /* what ever this means. Just from example. */
+	dinDoc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.FreeService = 0; /* what ever this means. Just from example. */
 	/* dinEVSESupportedEnergyTransferType, e.g.
 								dinEVSESupportedEnergyTransferType_DC_combo_core or
+								dinEVSESupportedEnergyTransferType_DC_core or
 								dinEVSESupportedEnergyTransferType_AC_single_phase_core */
-	dinDoc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.EnergyTransferType = dinEVSESupportedEnergyTransferType_DC_combo_core;
+	dinDoc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.EnergyTransferType = dinEVSESupportedEnergyTransferType_DC_core;
 	
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
@@ -388,7 +495,7 @@ static void encodeServicePaymentSelectionRequest(void) {
 	init_dinServicePaymentSelectionReqType(&dinDoc.V2G_Message.Body.ServicePaymentSelectionReq);
 	/* the mandatory fields in ISO are SelectedPaymentOption and SelectedServiceList. Same in DIN. */
 	dinDoc.V2G_Message.Body.ServicePaymentSelectionReq.SelectedPaymentOption = dinpaymentOptionType_ExternalPayment; /* not paying per car */
-	dinDoc.V2G_Message.Body.ServicePaymentSelectionReq.SelectedServiceList.SelectedService.array[0].ServiceID = 1; /* todo: what ever this means */
+	dinDoc.V2G_Message.Body.ServicePaymentSelectionReq.SelectedServiceList.SelectedService.array[0].ServiceID = 1; /* todo: what ever this means. The Ioniq uses 1. */
 	dinDoc.V2G_Message.Body.ServicePaymentSelectionReq.SelectedServiceList.SelectedService.arrayLen = 1; /* just one element in the array */ 
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
@@ -398,13 +505,12 @@ static void encodeServicePaymentSelectionRequest(void) {
 
 
 void encodeServicePaymentSelectionResponse(void) {
-	dinDoc.V2G_Message_isUsed = 1u;
-	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
+	init_dinMessageHeaderWithSessionID();
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.ServicePaymentSelectionRes_isUsed = 1u;
 	init_dinServicePaymentSelectionResType(&dinDoc.V2G_Message.Body.ServicePaymentSelectionRes);
+	dinDoc.V2G_Message.Body.ServicePaymentSelectionRes.ResponseCode = dinresponseCodeType_OK;
 	prepareGlobalStream();
-	/* todo: Encoder fails, error code EXI_ERROR_UNKOWN_EVENT -109. Maybe not supported? Not necessary??? Or just parameters missing... */
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
     sprintf(gInfoString, "encodeServicePaymentSelectionResponse finished");
@@ -458,8 +564,7 @@ static void encodeChargeParameterDiscoveryRequest(void) {
 void encodeChargeParameterDiscoveryResponse(void) {
 	struct dinEVSEChargeParameterType *cp;
 	struct dinDC_EVSEChargeParameterType *cpdc;
-	dinDoc.V2G_Message_isUsed = 1u;
-	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
+	init_dinMessageHeaderWithSessionID();
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes_isUsed = 1u;
 	init_dinChargeParameterDiscoveryResType(&dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes);
@@ -540,8 +645,7 @@ static void encodeCableCheckRequest(void) {
 }
 
 void encodeCableCheckResponse(void) {
-	dinDoc.V2G_Message_isUsed = 1u;
-	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
+	init_dinMessageHeaderWithSessionID();
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.CableCheckRes_isUsed = 1u;
 	init_dinCableCheckResType(&dinDoc.V2G_Message.Body.CableCheckRes);
@@ -564,8 +668,7 @@ static void encodePreChargeRequest(void) {
 }
 
 void encodePreChargeResponse(void) {
-	dinDoc.V2G_Message_isUsed = 1u;
-	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
+	init_dinMessageHeaderWithSessionID();
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.PreChargeRes_isUsed = 1u;
 	init_dinPreChargeResType(&dinDoc.V2G_Message.Body.PreChargeRes);
@@ -575,6 +678,104 @@ void encodePreChargeResponse(void) {
     sprintf(gInfoString, "encodePreChargeResponse finished");
 }
 
+static void encodePowerDeliveryRequest(void) {
+	dinDoc.V2G_Message_isUsed = 1u;
+	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
+	init_dinBodyType(&dinDoc.V2G_Message.Body);
+	dinDoc.V2G_Message.Body.PowerDeliveryReq_isUsed = 1u;
+	init_dinPowerDeliveryReqType(&dinDoc.V2G_Message.Body.PowerDeliveryReq);
+	prepareGlobalStream();
+	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodePowerDeliveryRequest finished");
+}
+
+void encodePowerDeliveryResponse(void) {
+	init_dinMessageHeaderWithSessionID();
+	init_dinBodyType(&dinDoc.V2G_Message.Body);
+	dinDoc.V2G_Message.Body.PowerDeliveryRes_isUsed = 1u;
+	init_dinPowerDeliveryResType(&dinDoc.V2G_Message.Body.PowerDeliveryRes);
+	dinDoc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus_isUsed = 1;
+	dinDoc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSEIsolationStatus = dinisolationLevelType_Valid;
+	dinDoc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
+	dinDoc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSEStatusCode = dinDC_EVSEStatusCodeType_EVSE_Ready;
+	dinDoc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.NotificationMaxDelay = 0; /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
+	dinDoc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSENotification = dinEVSENotificationType_None; /* could also be dinEVSENotificationType_StopCharging */
+	prepareGlobalStream();
+	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodePowerDeliveryResponse finished");
+}
+
+
+static void encodeCurrentDemandRequest(void) {
+	dinDoc.V2G_Message_isUsed = 1u;
+	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
+	init_dinBodyType(&dinDoc.V2G_Message.Body);
+	dinDoc.V2G_Message.Body.CurrentDemandReq_isUsed = 1u;
+	init_dinCurrentDemandReqType(&dinDoc.V2G_Message.Body.CurrentDemandReq);
+	prepareGlobalStream();
+	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeCurrentDemandRequest finished");
+}
+
+void encodeCurrentDemandResponse(void) {
+	init_dinMessageHeaderWithSessionID();
+	init_dinBodyType(&dinDoc.V2G_Message.Body);
+	dinDoc.V2G_Message.Body.CurrentDemandRes_isUsed = 1u;
+	init_dinCurrentDemandResType(&dinDoc.V2G_Message.Body.CurrentDemandRes);
+	prepareGlobalStream();
+	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeCurrentDemandResponse finished");
+}
+
+static void encodeWeldingDetectionRequest(void) {
+	dinDoc.V2G_Message_isUsed = 1u;
+	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
+	init_dinBodyType(&dinDoc.V2G_Message.Body);
+	dinDoc.V2G_Message.Body.WeldingDetectionReq_isUsed = 1u;
+	init_dinWeldingDetectionReqType(&dinDoc.V2G_Message.Body.WeldingDetectionReq);
+	prepareGlobalStream();
+	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeWeldingDetectionRequest finished");
+}
+
+void encodeWeldingDetectionResponse(void) {
+	init_dinMessageHeaderWithSessionID();
+	init_dinBodyType(&dinDoc.V2G_Message.Body);
+	dinDoc.V2G_Message.Body.WeldingDetectionRes_isUsed = 1u;
+	init_dinWeldingDetectionResType(&dinDoc.V2G_Message.Body.WeldingDetectionRes);
+	prepareGlobalStream();
+	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeWeldingDetectionResponse finished");
+}
+				
+static void encodeSessionStopRequest(void) {
+	dinDoc.V2G_Message_isUsed = 1u;
+	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
+	init_dinBodyType(&dinDoc.V2G_Message.Body);
+	dinDoc.V2G_Message.Body.SessionStopReq_isUsed = 1u;
+	init_dinSessionStopType(&dinDoc.V2G_Message.Body.SessionStopReq);
+	prepareGlobalStream();
+	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeSessionStopRequest finished");
+}
+
+void encodeSessionStopResponse(void) {
+	init_dinMessageHeaderWithSessionID();
+	init_dinBodyType(&dinDoc.V2G_Message.Body);
+	dinDoc.V2G_Message.Body.SessionStopRes_isUsed = 1u;
+	init_dinSessionStopResType(&dinDoc.V2G_Message.Body.SessionStopRes);
+	prepareGlobalStream();
+	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeSessionStopResponse finished");
+}
 
 /* Converting parameters to an EXI stream */
 static void runTheEncoder(char* parameterStream) {
@@ -636,6 +837,30 @@ static void runTheEncoder(char* parameterStream) {
 				break;
 			case 'g':
 				encodePreChargeResponse();
+				break;
+			case 'H':
+				encodePowerDeliveryRequest();
+				break;
+			case 'h':
+				encodePowerDeliveryResponse();
+				break;
+			case 'I':
+				encodeCurrentDemandRequest();
+				break;
+			case 'i':
+				encodeCurrentDemandResponse();
+				break;
+			case 'J':
+				encodeWeldingDetectionRequest();
+				break;
+			case 'j':
+				encodeWeldingDetectionResponse();
+				break;
+			case 'K':
+				encodeSessionStopRequest();
+				break;
+			case 'k':
+				encodeSessionStopResponse();
 				break;
 			default:
 				sprintf(gErrorString, "invalid message in DIN encoder requested");
@@ -734,6 +959,7 @@ int main_commandline(int argc, char *argv[]) {
 	strcpy(gErrorString, "");
 	strcpy(gResultString, "");
 	strcpy(gPropertiesString, "");
+	strcpy(gDebugString, "");
 	if (argc>=2) {
 		//printf("OpenV2G will process %s\n", argv[1]);
 		/* The first char of the parameter decides over Encoding or Decoding. */
@@ -747,6 +973,7 @@ int main_commandline(int argc, char *argv[]) {
 	} else {
 		sprintf(gErrorString, "OpenV2G: Error: To few parameters.");
 	}
+	addProperty("debug", gDebugString);
 	printf("{\n\"info\": \"%s\", \n\"error\": \"%s\",\n\"result\": \"%s\"%s\n}", gInfoString, gErrorString, gResultString, gPropertiesString);
 	//printf("%s\n", gResultString);
 	return 0;
