@@ -62,7 +62,7 @@ int g_errn;
 char gResultString[4096];
 char gInfoString[4096];
 char gErrorString[4096];
-char gPropertiesString[4096];
+char gPropertiesString[10000];
 char gDebugString[20000];
 char s[1000];
 
@@ -221,6 +221,53 @@ void translateDocAppHandToJson(void) {
 	}	
 }
 
+void translateDinHeaderToJson(void) {
+	char sTmp[40], s2[30];
+	int i, n;
+	#define h dinDoc.V2G_Message.Header
+	n = h.SessionID.bytesLen;
+	sprintf(sTmp, "%d", n); addProperty("header.SessionID.byteLen", sTmp);
+	strcpy(sTmp,"");
+	for (i=0; (i<n)&&(i<30); i++) {
+			sprintf(s2, "%02x", h.SessionID.bytes[i]);
+			strcat(sTmp, s2);
+	}
+	addProperty("header.SessionID", sTmp);
+	sprintf(sTmp, "%d", h.Notification_isUsed); addProperty("header.Notification_isUsed", sTmp);
+	sprintf(sTmp, "%d", h.Signature_isUsed); addProperty("header.Signature_isUsed", sTmp);	
+}
+
+void translateDinResponseCodeToJson(dinresponseCodeType rc) {
+	char sLoc[30];
+	strcpy(sLoc, "UNKNOWN_ERROR_CODE");
+	switch (rc) {
+		case dinresponseCodeType_OK: strcpy(sLoc, "OK"); break;
+		case dinresponseCodeType_OK_NewSessionEstablished: strcpy(sLoc, "OK_NewSessionEstablished"); break;
+		case dinresponseCodeType_OK_OldSessionJoined: strcpy(sLoc, "OK_OldSessionJoined"); break;
+		case dinresponseCodeType_OK_CertificateExpiresSoon: strcpy(sLoc, "OK_CertificateExpiresSoon"); break;
+		case dinresponseCodeType_FAILED: strcpy(sLoc, "FAILED"); break;
+		case dinresponseCodeType_FAILED_SequenceError: strcpy(sLoc, "FAILED_SequenceError"); break;
+		case dinresponseCodeType_FAILED_ServiceIDInvalid: strcpy(sLoc, "FAILED_ServiceIDInvalid"); break;
+		case dinresponseCodeType_FAILED_UnknownSession: strcpy(sLoc, "FAILED_UnknownSession"); break;
+		case dinresponseCodeType_FAILED_ServiceSelectionInvalid: strcpy(sLoc, "FAILED_ServiceSelectionInvalid"); break;
+		case dinresponseCodeType_FAILED_PaymentSelectionInvalid: strcpy(sLoc, "FAILED_PaymentSelectionInvalid"); break;
+		case dinresponseCodeType_FAILED_CertificateExpired: strcpy(sLoc, "FAILED_CertificateExpired"); break;
+		case dinresponseCodeType_FAILED_SignatureError: strcpy(sLoc, "FAILED_SignatureError"); break;
+		case dinresponseCodeType_FAILED_NoCertificateAvailable: strcpy(sLoc, "FAILED_NoCertificateAvailable"); break;
+		case dinresponseCodeType_FAILED_CertChainError: strcpy(sLoc, "FAILED_CertChainError"); break;
+		case dinresponseCodeType_FAILED_ChallengeInvalid: strcpy(sLoc, "FAILED_ChallengeInvalid"); break;
+		case dinresponseCodeType_FAILED_ContractCanceled: strcpy(sLoc, "FAILED_ContractCanceled"); break;
+		case dinresponseCodeType_FAILED_WrongChargeParameter: strcpy(sLoc, "FAILED_WrongChargeParameter"); break;
+		case dinresponseCodeType_FAILED_PowerDeliveryNotApplied: strcpy(sLoc, "FAILED_PowerDeliveryNotApplied"); break;
+		case dinresponseCodeType_FAILED_TariffSelectionInvalid: strcpy(sLoc, "FAILED_TariffSelectionInvalid"); break;
+		case dinresponseCodeType_FAILED_ChargingProfileInvalid: strcpy(sLoc, "FAILED_ChargingProfileInvalid"); break;
+		case dinresponseCodeType_FAILED_EVSEPresentVoltageToLow: strcpy(sLoc, "FAILED_EVSEPresentVoltageToLow"); break;
+		case dinresponseCodeType_FAILED_MeteringSignatureNotValid: strcpy(sLoc, "FAILED_MeteringSignatureNotValid"); break;
+		case dinresponseCodeType_FAILED_WrongEnergyTransferType: strcpy(sLoc, "FAILED_WrongEnergyTransferType"); break;
+	}
+	addProperty("ResponseCode", sLoc);
+}
+
 /* translate the struct dinDoc into JSON, to have it ready to give it over stdout to the caller application. */
 void translateDocDinToJson(void) {
 	char sTmp[30];
@@ -234,7 +281,8 @@ void translateDocDinToJson(void) {
 	/* unclear, which is the correct flag:
 	   dinDoc.SessionSetupReq_isUsed or
 	   dinDoc.V2G_Message.Body.SessionSetupReq_isUsed. <-- This works with the example EXI 809a0011d00000.
-	*/   
+	*/
+	translateDinHeaderToJson();
 	if (dinDoc.V2G_Message.Body.SessionSetupReq_isUsed) {
 		addProperty("msgName", "SessionSetupReq");
 		n=dinDoc.V2G_Message.Body.SessionSetupReq.EVCCID.bytesLen;
@@ -249,6 +297,16 @@ void translateDocDinToJson(void) {
 	}
 	if (dinDoc.V2G_Message.Body.SessionSetupRes_isUsed) {
 		addProperty("msgName", "SessionSetupRes");
+		n=dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.bytesLen;
+		sprintf(sTmp, "%d", n); addProperty("EVSEID.bytesLen", sTmp);
+		strcpy(sTmp,"");
+		for (i=0; (i<n)&&(i<20); i++) {
+			/* this is no ASCII, at least not at the Ioniq. Show just Hex. */
+			sprintf(s2, "%02x", dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.bytes[i]);
+			strcat(sTmp, s2);
+		}
+		addProperty("EVSEID", sTmp);
+		
 	}
 	if (dinDoc.V2G_Message.Body.ServiceDiscoveryReq_isUsed) {
 		addProperty("msgName", "ServiceDiscoveryReq");
@@ -284,6 +342,8 @@ void translateDocDinToJson(void) {
 	}
 	if (dinDoc.V2G_Message.Body.ServicePaymentSelectionRes_isUsed) {
 		addProperty("msgName", "ServicePaymentSelectionRes");
+		i=dinDoc.V2G_Message.Body.ServicePaymentSelectionRes.ResponseCode;
+		translateDinResponseCodeToJson(i);
 	}
 	/* not supported in DIN 
 	if (dinDoc.V2G_Message.Body.AuthorizationReq_isUsed) {
@@ -434,10 +494,23 @@ static void encodeSessionSetupResponse(void) {
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.SessionSetupRes_isUsed = 1u;
 	init_dinSessionSetupResType(&dinDoc.V2G_Message.Body.SessionSetupRes);
-	dinDoc.V2G_Message.Body.SessionSetupRes.ResponseCode = dinresponseCodeType_OK;
-	//dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.characters[0] = 0;
-	//dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.characters[1] = 20;
-	//dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.charactersLen = 2;
+	/* If the SECC receives a SessionSetupReq including a SessionID value which is not equal to 
+	zero (0) and not equal to the SessionID value stored from the preceding V2G Communication 
+	Session, it shall send a SessionID value in the SessionSetupRes message that is unequal to 
+	"0" and unequal to the SessionID value stored from the preceding V2G Communication 
+	Session and indicate the new V2G Communication Session with the ResponseCode set to 
+	"OK_NewSessionEstablished"
+	*/
+	dinDoc.V2G_Message.Body.SessionSetupRes.ResponseCode = dinresponseCodeType_OK_NewSessionEstablished;
+	/* EVSEID has min length 7, max length 37 for ISO. In DIN decoder we find maxsize 32. */
+	dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.bytes[0] = 'Z';
+	dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.bytes[1] = 'Z';
+	dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.bytes[2] = '0';
+	dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.bytes[3] = '0';
+	dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.bytes[4] = '0';
+	dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.bytes[5] = '0';
+	dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.bytes[6] = '0';
+	dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.bytesLen = 7;
 	//dinDoc.V2G_Message.Body.SessionSetupRes.EVSETimeStamp_isUsed = 0u;
 	//dinDoc.V2G_Message.Body.SessionSetupRes.EVSETimeStamp = 123456789;
 	prepareGlobalStream();
@@ -509,6 +582,7 @@ void encodeServicePaymentSelectionResponse(void) {
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.ServicePaymentSelectionRes_isUsed = 1u;
 	init_dinServicePaymentSelectionResType(&dinDoc.V2G_Message.Body.ServicePaymentSelectionRes);
+	/* The ServicePaymentSelectionRes has only one element: The ResponseCode. */
 	dinDoc.V2G_Message.Body.ServicePaymentSelectionRes.ResponseCode = dinresponseCodeType_OK;
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
