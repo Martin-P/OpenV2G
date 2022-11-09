@@ -59,6 +59,7 @@ uint8_t buffer2[BUFFER_SIZE];
 bitstream_t global_stream1;
 size_t global_pos1;
 int g_errn;
+char gMessageName[200];
 char gResultString[4096];
 char gInfoString[4096];
 char gErrorString[4096];
@@ -173,6 +174,10 @@ void addProperty(char *strPropertyName, char *strPropertyValue) {
 	strcat(gPropertiesString, "\"");	
 }
 
+void addMessageName(char *messagename) {
+	strcpy(gMessageName, messagename);
+}
+
 
 /*********************************************************************************************************
 *  Decoder --> JSON
@@ -189,7 +194,7 @@ void translateDocAppHandToJson(void) {
 	if (aphsDoc.supportedAppProtocolReq_isUsed) {
 			/* it is a request */
 			/* EVSE side: List of application handshake protocols of the EV */
-			addProperty("msgName", "supportedAppProtocolReq");
+			addMessageName("supportedAppProtocolReq");
 			sprintf(s, "Vehicle supports %d protocols. ", aphsDoc.supportedAppProtocolReq.AppProtocol.arrayLen);
 			strcat(gResultString, s);
 
@@ -210,7 +215,7 @@ void translateDocAppHandToJson(void) {
 	}
 	if (aphsDoc.supportedAppProtocolRes_isUsed) {
 			/* it is a response */
-			addProperty("msgName", "supportedAppProtocolRes");
+			addMessageName("supportedAppProtocolRes");
 			sprintf(gResultString, "ResponseCode %d, SchemaID_isUsed %d, SchemaID %d",
 				aphsDoc.supportedAppProtocolRes.ResponseCode,
 				aphsDoc.supportedAppProtocolRes.SchemaID_isUsed,
@@ -226,7 +231,7 @@ void translateDinHeaderToJson(void) {
 	int i, n;
 	#define h dinDoc.V2G_Message.Header
 	n = h.SessionID.bytesLen;
-	sprintf(sTmp, "%d", n); addProperty("header.SessionID.byteLen", sTmp);
+	//sprintf(sTmp, "%d", n); addProperty("header.SessionID.byteLen", sTmp);
 	strcpy(sTmp,"");
 	for (i=0; (i<n)&&(i<30); i++) {
 			sprintf(s2, "%02x", h.SessionID.bytes[i]);
@@ -284,7 +289,7 @@ void translateDocDinToJson(void) {
 	*/
 	translateDinHeaderToJson();
 	if (dinDoc.V2G_Message.Body.SessionSetupReq_isUsed) {
-		addProperty("msgName", "SessionSetupReq");
+		addMessageName("SessionSetupReq");
 		n=dinDoc.V2G_Message.Body.SessionSetupReq.EVCCID.bytesLen;
 		sprintf(sTmp, "%d", n); addProperty("EVCCID.bytesLen", sTmp);
 		strcpy(sTmp,"");
@@ -296,7 +301,8 @@ void translateDocDinToJson(void) {
 		addProperty("EVCCID", sTmp);
 	}
 	if (dinDoc.V2G_Message.Body.SessionSetupRes_isUsed) {
-		addProperty("msgName", "SessionSetupRes");
+		addMessageName("SessionSetupRes");
+		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.SessionSetupRes.ResponseCode);
 		n=dinDoc.V2G_Message.Body.SessionSetupRes.EVSEID.bytesLen;
 		sprintf(sTmp, "%d", n); addProperty("EVSEID.bytesLen", sTmp);
 		strcpy(sTmp,"");
@@ -309,7 +315,7 @@ void translateDocDinToJson(void) {
 		
 	}
 	if (dinDoc.V2G_Message.Body.ServiceDiscoveryReq_isUsed) {
-		addProperty("msgName", "ServiceDiscoveryReq");
+		addMessageName("ServiceDiscoveryReq");
 		#define m dinDoc.V2G_Message.Body.ServiceDiscoveryReq
 		if (m.ServiceScope_isUsed) {
 			addProperty("ServiceScope_isUsed", "True");
@@ -322,11 +328,12 @@ void translateDocDinToJson(void) {
 		#undef m
 	}
 	if (dinDoc.V2G_Message.Body.ServiceDiscoveryRes_isUsed) {
-		addProperty("msgName", "ServiceDiscoveryRes");
+		addMessageName("ServiceDiscoveryRes");
+		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.ServiceDiscoveryRes.ResponseCode);
 	}
 
 	if (dinDoc.V2G_Message.Body.ServicePaymentSelectionReq_isUsed) {
-		addProperty("msgName", "ServicePaymentSelectionReq");
+		addMessageName("ServicePaymentSelectionReq");
 		#define m dinDoc.V2G_Message.Body.ServicePaymentSelectionReq
 		if (m.SelectedPaymentOption==dinpaymentOptionType_Contract) { addProperty("SelectedPaymentOption", "Contract"); }
 		if (m.SelectedPaymentOption==dinpaymentOptionType_ExternalPayment) { addProperty("SelectedPaymentOption", "ExternalPayment"); }
@@ -341,9 +348,8 @@ void translateDocDinToJson(void) {
 		#undef m		
 	}
 	if (dinDoc.V2G_Message.Body.ServicePaymentSelectionRes_isUsed) {
-		addProperty("msgName", "ServicePaymentSelectionRes");
-		i=dinDoc.V2G_Message.Body.ServicePaymentSelectionRes.ResponseCode;
-		translateDinResponseCodeToJson(i);
+		addMessageName("ServicePaymentSelectionRes");
+		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.ServicePaymentSelectionRes.ResponseCode);
 	}
 	/* not supported in DIN 
 	if (dinDoc.V2G_Message.Body.AuthorizationReq_isUsed) {
@@ -355,27 +361,30 @@ void translateDocDinToJson(void) {
 	*/
 
 	if (dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq_isUsed) {
-		addProperty("msgName", "ChargeParameterDiscoveryReq");
+		addMessageName("ChargeParameterDiscoveryReq");
 	}
 	if (dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes_isUsed) {
-		addProperty("msgName", "ChargeParameterDiscoveryRes");
+		addMessageName("ChargeParameterDiscoveryRes");
+		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.ResponseCode);
 	}
 	
 	if (dinDoc.V2G_Message.Body.CableCheckReq_isUsed) {
-		addProperty("msgName", "CableCheckReq");
+		addMessageName("CableCheckReq");
 	}
 	if (dinDoc.V2G_Message.Body.CableCheckRes_isUsed) {
-		addProperty("msgName", "CableCheckRes");
+		addMessageName("CableCheckRes");
+		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.CableCheckRes.ResponseCode);
 	}
 
 	if (dinDoc.V2G_Message.Body.PreChargeReq_isUsed) {
-		addProperty("msgName", "PreChargeReq");
+		addMessageName("PreChargeReq");
 	}
 	if (dinDoc.V2G_Message.Body.PreChargeRes_isUsed) {
-		addProperty("msgName", "PreChargeRes");
+		addMessageName("PreChargeRes");
+		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.PreChargeRes.ResponseCode);
 	}
 	if (dinDoc.V2G_Message.Body.PowerDeliveryReq_isUsed) {
-		addProperty("msgName", "PowerDeliveryReq");
+		addMessageName("PowerDeliveryReq");
 		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState); addProperty("ReadyToChargeState", sTmp);
 		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.ChargingProfile_isUsed); addProperty("ChargingProfile_isUsed", sTmp);
 		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.EVPowerDeliveryParameter_isUsed); addProperty("EVPowerDeliveryParameter_isUsed", sTmp);
@@ -409,28 +418,32 @@ void translateDocDinToJson(void) {
 
 	}
 	if (dinDoc.V2G_Message.Body.PowerDeliveryRes_isUsed) {
-		addProperty("msgName", "PowerDeliveryRes");
+		addMessageName("PowerDeliveryRes");
+		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.PowerDeliveryRes.ResponseCode);
 	}
 
 	if (dinDoc.V2G_Message.Body.CurrentDemandReq_isUsed) {
-		addProperty("msgName", "CurrentDemandReq");
+		addMessageName("CurrentDemandReq");
 	}
 	if (dinDoc.V2G_Message.Body.CurrentDemandRes_isUsed) {
-		addProperty("msgName", "CurrentDemandRes");
+		addMessageName("CurrentDemandRes");
+		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.CurrentDemandRes.ResponseCode);
 	}
 	
 	if (dinDoc.V2G_Message.Body.SessionStopReq_isUsed) {
-		addProperty("msgName", "SessionStopReq");
+		addMessageName("SessionStopReq");
 	}
 	if (dinDoc.V2G_Message.Body.SessionStopRes_isUsed) {
-		addProperty("msgName", "SessionStopRes");
+		addMessageName("SessionStopRes");
+		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.SessionStopRes.ResponseCode);
 	}
 
 	if (dinDoc.V2G_Message.Body.WeldingDetectionReq_isUsed) {
-		addProperty("msgName", "WeldingDetectionReq");
+		addMessageName("WeldingDetectionReq");
 	}
 	if (dinDoc.V2G_Message.Body.WeldingDetectionRes_isUsed) {
-		addProperty("msgName", "WeldingDetectionRes");
+		addMessageName("WeldingDetectionRes");
+		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.WeldingDetectionRes.ResponseCode);
 	}
 }
 
@@ -1034,6 +1047,7 @@ int main_commandline(int argc, char *argv[]) {
 	strcpy(gResultString, "");
 	strcpy(gPropertiesString, "");
 	strcpy(gDebugString, "");
+	strcpy(gMessageName, "");
 	if (argc>=2) {
 		//printf("OpenV2G will process %s\n", argv[1]);
 		/* The first char of the parameter decides over Encoding or Decoding. */
@@ -1048,8 +1062,13 @@ int main_commandline(int argc, char *argv[]) {
 		sprintf(gErrorString, "OpenV2G: Error: To few parameters.");
 	}
 	addProperty("debug", gDebugString);
-	printf("{\n\"info\": \"%s\", \n\"error\": \"%s\",\n\"result\": \"%s\"%s\n}", gInfoString, gErrorString, gResultString, gPropertiesString);
-	//printf("%s\n", gResultString);
+	/* compose a JSON string out of all the elements: */
+	printf("{\n\"msgName\": \"%s\",\n\"info\": \"%s\", \n\"error\": \"%s\",\n\"result\": \"%s\"%s\n}",
+		gMessageName,
+		gInfoString,
+		gErrorString,
+		gResultString,
+		gPropertiesString);
 	return 0;
 }
 
