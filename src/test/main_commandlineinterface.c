@@ -564,8 +564,11 @@ void encodeServiceDiscoveryResponse(void) {
 	/* dinEVSESupportedEnergyTransferType, e.g.
 								dinEVSESupportedEnergyTransferType_DC_combo_core or
 								dinEVSESupportedEnergyTransferType_DC_core or
-								dinEVSESupportedEnergyTransferType_AC_single_phase_core */
-	dinDoc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.EnergyTransferType = dinEVSESupportedEnergyTransferType_DC_core;
+								dinEVSESupportedEnergyTransferType_DC_extended
+								dinEVSESupportedEnergyTransferType_AC_single_phase_core.
+		DC_extended means "extended pins of an IEC 62196-3 Configuration FF connector", which is
+        the normal CCS connector https://en.wikipedia.org/wiki/IEC_62196#FF) */
+	dinDoc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.EnergyTransferType = dinEVSESupportedEnergyTransferType_DC_extended;
 	
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
@@ -617,7 +620,7 @@ static void encodeChargeParameterDiscoveryRequest(void) {
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq_isUsed = 1u;
 	init_dinChargeParameterDiscoveryReqType(&dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq);
-	dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq.EVRequestedEnergyTransferType = dinEVRequestedEnergyTransferType_DC_combo_core;
+	dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq.EVRequestedEnergyTransferType = dinEVRequestedEnergyTransferType_DC_extended;
 	//dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq.EVChargeParameter
 	//dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq.EVChargeParameter_isUsed = 1;
 	cp = &dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter;
