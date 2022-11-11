@@ -359,7 +359,13 @@ void translateDocDinToJson(void) {
 		addProperty("msgName", "AuthorizationRes");
 	}
 	*/
-
+	if (dinDoc.V2G_Message.Body.ContractAuthenticationReq_isUsed) {
+		addProperty("msgName", "ContractAuthenticationReq");
+	}
+	if (dinDoc.V2G_Message.Body.ContractAuthenticationRes_isUsed) {
+		addProperty("msgName", "ContractAuthenticationRes");
+	}
+	
 	if (dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq_isUsed) {
 		addMessageName("ChargeParameterDiscoveryReq");
 	}
@@ -867,6 +873,32 @@ void encodeSessionStopResponse(void) {
     sprintf(gInfoString, "encodeSessionStopResponse finished");
 }
 
+
+static void encodeContractAuthenticationRequest(void) {
+	dinDoc.V2G_Message_isUsed = 1u;
+	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
+	init_dinBodyType(&dinDoc.V2G_Message.Body);
+	dinDoc.V2G_Message.Body.ContractAuthenticationReq_isUsed = 1u;
+	init_dinContractAuthenticationReqType(&dinDoc.V2G_Message.Body.ContractAuthenticationReq);
+	prepareGlobalStream();
+	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeContractAuthenticationRequest finished");
+}
+
+void encodeContractAuthenticationResponse(void) {
+	init_dinMessageHeaderWithSessionID();
+	init_dinBodyType(&dinDoc.V2G_Message.Body);
+	dinDoc.V2G_Message.Body.ContractAuthenticationRes_isUsed = 1u;
+	init_dinContractAuthenticationResType(&dinDoc.V2G_Message.Body.ContractAuthenticationRes);
+	prepareGlobalStream();
+	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeContractAuthenticationResponse finished");
+}
+
+
+
 /* Converting parameters to an EXI stream */
 static void runTheEncoder(char* parameterStream) {
   //printf("runTheEncoder\n");
@@ -951,6 +983,12 @@ static void runTheEncoder(char* parameterStream) {
 				break;
 			case 'k':
 				encodeSessionStopResponse();
+				break;
+			case 'L':
+				encodeContractAuthenticationRequest();
+				break;
+			case 'l':
+				encodeContractAuthenticationResponse();
 				break;
 			default:
 				sprintf(gErrorString, "invalid message in DIN encoder requested");
