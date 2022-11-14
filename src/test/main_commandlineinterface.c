@@ -66,7 +66,10 @@ char gErrorString[4096];
 char gPropertiesString[10000];
 char gDebugString[20000];
 char s[1000];
-
+char gAdditionalParamList[1000];
+#define NUM_OF_ADDITIONAL_PARAMS 5
+char gAdditionalParam[NUM_OF_ADDITIONAL_PARAMS][100];
+uint8_t nNumberOfFoundAdditionalParameters;
 
 
 #define ERROR_UNEXPECTED_REQUEST_MESSAGE -601
@@ -85,6 +88,8 @@ char s[1000];
 #define ERROR_UNEXPECTED_PRE_CHARGE_RESP_MESSAGE -612
 #define ERROR_UNEXPECTED_CURRENT_DEMAND_RESP_MESSAGE -613
 #define ERROR_UNEXPECTED_WELDING_DETECTION_RESP_MESSAGE -614
+
+
 
 
 void debugAddStringAndInt(char *s, int i) {
@@ -176,6 +181,65 @@ void addProperty(char *strPropertyName, char *strPropertyValue) {
 
 void addMessageName(char *messagename) {
 	strcpy(gMessageName, messagename);
+}
+
+/* parsing of command line argument, extracting the single parameters. */
+/* Examples for command lines:
+  (1) OpenV2G.exe EDg_350
+  (2) OpenV2G.exe EDx_380_2_something_
+  Input: The parameter list, in the examples "_350" or "_380_2_something_".
+  The parameter must be separated by underscores.
+  Output: Array of strings containing the paramters, and the number of parameters in nNumberOfFoundAdditionalParameters
+ */
+void parseAdditionalParameters(void) {
+  int i,k, iParamNumber;
+  int a, b;
+  char s[1000];
+  nNumberOfFoundAdditionalParameters = 0;
+  if (gAdditionalParamList[strlen(gAdditionalParamList)-1]!='_') {
+	  strcat(gAdditionalParamList, "_");
+  }
+  for (iParamNumber=0; iParamNumber<NUM_OF_ADDITIONAL_PARAMS; iParamNumber++) {
+	a=-1;
+	b=-1;
+	for (i=0; i<strlen(gAdditionalParamList); i++) {
+		if ((gAdditionalParamList[i]=='_') && (a>=0) && (b==-1)) b=i; /* the index of the second underscore */
+		if ((gAdditionalParamList[i]=='_') && (a==-1)) a=i; /* the index of the first underscore */
+	}
+	//printf("parameter search indexes %d %d\n", a, b);
+	if ((a>=0) && (b>a+1)) {
+		/* we have a valid start index and end index. Means: we have a parameter. */
+		nNumberOfFoundAdditionalParameters++;
+		k=0;
+		for (i=a+1; i<b; i++) { /* copy the parameter from the list to a local string */
+			s[k]=gAdditionalParamList[i];
+			k++;
+		}
+		s[k]=0; /* add terminating zero */
+		gAdditionalParamList[a] = ' '; /* replace the leading underscore of the current parameter by blank, so it will be skipped in the next round. */
+		strcpy(gAdditionalParam[iParamNumber], s);
+		//printf("Parameter is >%s<\n", s);
+	}
+  }
+  //printf("We have %d additional parameters.\n", nNumberOfFoundAdditionalParameters);
+  for (i=0; i<nNumberOfFoundAdditionalParameters; i++) {
+	  sprintf(s, "parameter%d", i);
+	  addProperty(s, gAdditionalParam[i]);
+  }
+}
+
+/* Get the element k of the gAdditionalParam, and convert it into int. */
+/* In case the element is not available, we return value 0 and set the gErrorString. */
+/* In case the element is no number, we return 0. */
+int getIntParam(uint8_t k) {
+	int retval;
+	if (k>=nNumberOfFoundAdditionalParameters) {
+		sprintf(gErrorString, "Too less parameters to handle getIntParam(%d)", k);
+		return 0;
+	}
+	retval = atoi(gAdditionalParam[k]);
+	//printf("getIntParam %d returns %d\n", k, retval);
+	return retval;
 }
 
 
@@ -360,10 +424,10 @@ void translateDocDinToJson(void) {
 	}
 	*/
 	if (dinDoc.V2G_Message.Body.ContractAuthenticationReq_isUsed) {
-		addProperty("msgName", "ContractAuthenticationReq");
+		addMessageName("ContractAuthenticationReq");
 	}
 	if (dinDoc.V2G_Message.Body.ContractAuthenticationRes_isUsed) {
-		addProperty("msgName", "ContractAuthenticationRes");
+		addMessageName("ContractAuthenticationRes");
 	}
 	
 	if (dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq_isUsed) {
@@ -384,10 +448,46 @@ void translateDocDinToJson(void) {
 
 	if (dinDoc.V2G_Message.Body.PreChargeReq_isUsed) {
 		addMessageName("PreChargeReq");
+		#define m dinDoc.V2G_Message.Body.PreChargeReq
+		sprintf(sTmp, "%d", m.DC_EVStatus.EVReady); addProperty("DC_EVStatus.EVReady", sTmp);
+		sprintf(sTmp, "%d", m.DC_EVStatus.EVErrorCode); addProperty("DC_EVStatus.EVErrorCode", sTmp);
+		sprintf(sTmp, "%d", m.DC_EVStatus.EVRESSSOC); addProperty("DC_EVStatus.EVRESSSOC", sTmp);
+
+		sprintf(sTmp, "%d", m.EVTargetVoltage.Multiplier); addProperty("EVTargetVoltage.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVTargetVoltage.Unit); addProperty("EVTargetVoltage.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVTargetVoltage.Value); addProperty("EVTargetVoltage.Value", sTmp);
+				
+		sprintf(sTmp, "%d", m.EVTargetCurrent.Multiplier); addProperty("EVTargetCurrent.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVTargetCurrent.Unit); addProperty("EVTargetCurrent.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVTargetCurrent.Value); addProperty("EVTargetCurrent.Value", sTmp);
+
+		#undef m
 	}
 	if (dinDoc.V2G_Message.Body.PreChargeRes_isUsed) {
 		addMessageName("PreChargeRes");
 		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.PreChargeRes.ResponseCode);
+		#define m dinDoc.V2G_Message.Body.PreChargeRes
+		#define v1 m.DC_EVSEStatus.EVSEIsolationStatus
+		#define v2 m.DC_EVSEStatus.EVSEIsolationStatus_isUsed
+		#define v3 m.DC_EVSEStatus.EVSEStatusCode
+		#define v4 m.DC_EVSEStatus.NotificationMaxDelay /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
+		#define v5 m.DC_EVSEStatus.EVSENotification
+		sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
+		sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
+		sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+		sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
+		sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
+		
+		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Multiplier); addProperty("EVSEPresentVoltage.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Unit); addProperty("EVSEPresentVoltage.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Value); addProperty("EVSEPresentVoltage.Value", sTmp);
+
+		#undef v1
+		#undef v2
+		#undef v3
+		#undef v4
+		#undef v5
+		#undef m
 	}
 	if (dinDoc.V2G_Message.Body.PowerDeliveryReq_isUsed) {
 		addMessageName("PowerDeliveryReq");
@@ -406,6 +506,9 @@ void translateDocDinToJson(void) {
 			sprintf(sTmp, "%d", v2); addProperty("EVErrorCode", sTmp);
 			
 			switch (v2) {
+				case dinDC_EVErrorCodeType_NO_ERROR:
+					addProperty("EVErrorCodeText", "NO_ERROR");
+					break;
 				case dinDC_EVErrorCodeType_FAILED_ChargingSystemIncompatibility:
 					addProperty("EVErrorCodeText", "FAILED_ChargingSystemIncompatibility");
 					break;
@@ -420,12 +523,37 @@ void translateDocDinToJson(void) {
 			sprintf(sTmp, "%d", v3); addProperty("EVRESSSOC", sTmp);
 			sprintf(sTmp, "%d", v4); addProperty("BulkChargingComplete", sTmp);
 			sprintf(sTmp, "%d", v5); addProperty("ChargingComplete", sTmp);
+			#undef v1
+			#undef v2
+			#undef v3
+			#undef v4
+			#undef v5
 		}
 
 	}
 	if (dinDoc.V2G_Message.Body.PowerDeliveryRes_isUsed) {
 		addMessageName("PowerDeliveryRes");
 		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.PowerDeliveryRes.ResponseCode);
+		#define m dinDoc.V2G_Message.Body.PowerDeliveryRes
+		if (m.DC_EVSEStatus_isUsed) {
+			
+			#define v1 m.DC_EVSEStatus.EVSEIsolationStatus
+			#define v2 m.DC_EVSEStatus.EVSEIsolationStatus_isUsed
+			#define v3 m.DC_EVSEStatus.EVSEStatusCode
+			#define v4 m.DC_EVSEStatus.NotificationMaxDelay /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
+			#define v5 m.DC_EVSEStatus.EVSENotification
+			sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
+			sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
+			sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+			sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
+			sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
+			#undef m
+			#undef v1
+			#undef v2
+			#undef v3
+			#undef v4
+			#undef v5
+		}
 	}
 
 	if (dinDoc.V2G_Message.Body.CurrentDemandReq_isUsed) {
@@ -768,6 +896,11 @@ void encodePreChargeResponse(void) {
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.PreChargeRes_isUsed = 1u;
 	init_dinPreChargeResType(&dinDoc.V2G_Message.Body.PreChargeRes);
+	dinDoc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus = 1;
+	dinDoc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
+	dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Multiplier = 0; /* 10 ^ 0 */
+	dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Unit = dinunitSymbolType_V;
+	dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Value = getIntParam(0); /* Take from command line */
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
@@ -821,6 +954,28 @@ void encodeCurrentDemandResponse(void) {
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.CurrentDemandRes_isUsed = 1u;
 	init_dinCurrentDemandResType(&dinDoc.V2G_Message.Body.CurrentDemandRes);
+	#define m dinDoc.V2G_Message.Body.CurrentDemandRes
+	m.DC_EVSEStatus.EVSEIsolationStatus = dinisolationLevelType_Valid;
+	m.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
+	m.DC_EVSEStatus.EVSEStatusCode = dinDC_EVSEStatusCodeType_EVSE_Ready;
+	m.DC_EVSEStatus.NotificationMaxDelay = 0; /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
+	m.DC_EVSEStatus.EVSENotification = dinEVSENotificationType_None; /* could also be dinEVSENotificationType_StopCharging */
+	m.EVSEPresentVoltage.Multiplier = 0;
+	m.EVSEPresentVoltage.Unit = dinunitSymbolType_V;
+	m.EVSEPresentVoltage.Value = getIntParam(0); /* Take from command line */
+	m.EVSEPresentCurrent.Multiplier = 0;
+	m.EVSEPresentCurrent.Unit = dinunitSymbolType_A;
+	m.EVSEPresentCurrent.Value = getIntParam(1); /* Take from command line */
+	m.EVSECurrentLimitAchieved = 0;
+	m.EVSEVoltageLimitAchieved = 0;
+	m.EVSEPowerLimitAchieved = 0;
+	m.EVSEMaximumVoltageLimit_isUsed = 0;
+	//m.EVSEMaximumVoltageLimit
+	m.EVSEMaximumCurrentLimit_isUsed = 0;
+	//m.EVSEMaximumCurrentLimit
+	m.EVSEMaximumPowerLimit_isUsed = 0;
+	//m.EVSEMaximumPowerLimit
+
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
@@ -906,7 +1061,19 @@ static void runTheEncoder(char* parameterStream) {
       - First letter: E=Encode
 	  - Second letter: Schema selection H=Handshake, D=DIN, 1=ISO1, 2=ISO2
 	  - Third letter: A to Z for requests, a to z for responses.
+	  - afterwards: parameter list, without blanks, separated by underlines
   */
+  if (strlen(parameterStream)<2) {
+	  sprintf(gErrorString, "ERROR: runTheEncoder: parameter list too short");
+	  return;
+  }
+  nNumberOfFoundAdditionalParameters = 0;
+  if (strlen(parameterStream)>3) {
+	  /* we found additional parameters. Parse them into an array of strings. */
+	  strcpy(gAdditionalParamList, &parameterStream[3]);
+	  parseAdditionalParameters();
+  }
+  
   switch (parameterStream[1]) { /* H=HandshakeRequest, h=HandshakeResponse, D=DIN, 1=ISO1, 2=ISO2 */
 	case 'H':
 		//encodeSupportedAppProtocolRequest();
