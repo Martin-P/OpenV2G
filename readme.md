@@ -1,8 +1,33 @@
-# Planned Improvements
+# Goal of the fork
 ## Command line interface to decode and encode EXI data
 
 e.g. `$ ./OpenV2G.exe DH8000dbab9371d3234b71d1b981899189d191818991d26b9b3a232b30020000040040` should *D*ecode the Application*H*andshakeRequest.
+e.g. `$ ./OpenV2G.exe  EDi_380_20` should *E*ecode with *D*IN schema the CurrentDemandResponse with 380V and 20A
 
+The result is provided on stdout in JSON format, e.g. 
+```
+	$ ./OpenV2G.exe DD809a001150400000c80006400000
+	{
+	"msgName": "PreChargeReq",
+	"info": "14 bytes to convert",
+	"error": "",
+	"result": "",
+	"schema": "DIN",
+	"g_errn": "0",
+	"header.SessionID": "",
+	"header.Notification_isUsed": "0",
+	"header.Signature_isUsed": "0",
+	"DC_EVStatus.EVReady": "0",
+	"DC_EVStatus.EVErrorCode": "0",
+	"DC_EVStatus.EVRESSSOC": "0",
+	"EVTargetVoltage.Multiplier": "-1",
+	"EVTargetVoltage.Unit": "5",
+	"EVTargetVoltage.Value": "3484",
+	"EVTargetCurrent.Multiplier": "-1",
+	"EVTargetCurrent.Unit": "3",
+	"EVTargetCurrent.Value": "10",
+	}
+```
 
 # Base project
 This fork is based on:
