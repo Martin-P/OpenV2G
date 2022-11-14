@@ -2,7 +2,8 @@
 ## Command line interface to decode and encode EXI data
 
 e.g. `$ ./OpenV2G.exe DH8000dbab9371d3234b71d1b981899189d191818991d26b9b3a232b30020000040040` should *D*ecode the Application*H*andshakeRequest.
-e.g. `$ ./OpenV2G.exe  EDi_380_20` should *E*ecode with *D*IN schema the CurrentDemandResponse with 380V and 20A
+
+e.g. `$ ./OpenV2G.exe  EDi_380_20` should *E*ncode with *D*IN schema the CurrentDemandResponse with 380V and 20A
 
 The result is provided on stdout in JSON format, e.g. 
 ```
@@ -28,6 +29,31 @@ The result is provided on stdout in JSON format, e.g.
 	"EVTargetCurrent.Value": "10",
 	}
 ```
+
+or 
+
+```
+	$ ./OpenV2G.exe EDi_380_20
+	{
+	"msgName": "",
+	"info": "encodeCurrentDemandResponse finished",
+	"error": "",
+	"result": "809a02004080c1014181c210e0004080000193f0080c82800030",
+	"parameter0": "380",
+	"parameter1": "20",
+	"debug": ""
+	}
+```
+
+# Known limitations / ToDos
+- Decoder and encoder for DIN: Some message details are still missing.
+- Only the DIN schema is (partly) supported. ISO schema to be added.
+
+# Features / Progress
+2022-11-11: The minimum functionality for EVSE side works until the precharge response, so that the Ioniq car responds without errors.
+
+# Related projects
+This EXI decoder / encoder is an essential part of the https://github.com/uhi22/pyPlc CCS communication project.
 
 # Base project
 This fork is based on:
