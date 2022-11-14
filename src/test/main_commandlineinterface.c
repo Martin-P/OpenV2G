@@ -558,10 +558,86 @@ void translateDocDinToJson(void) {
 
 	if (dinDoc.V2G_Message.Body.CurrentDemandReq_isUsed) {
 		addMessageName("CurrentDemandReq");
+		#define m dinDoc.V2G_Message.Body.CurrentDemandReq
+		sprintf(sTmp, "%d", m.DC_EVStatus.EVReady); addProperty("DC_EVStatus.EVReady", sTmp);
+		sprintf(sTmp, "%d", m.DC_EVStatus.EVErrorCode); addProperty("DC_EVStatus.EVErrorCode", sTmp);
+		sprintf(sTmp, "%d", m.DC_EVStatus.EVRESSSOC); addProperty("DC_EVStatus.EVRESSSOC", sTmp);
+
+		sprintf(sTmp, "%d", m.EVTargetCurrent.Multiplier); addProperty("EVTargetCurrent.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVTargetCurrent.Unit); addProperty("EVTargetCurrent.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVTargetCurrent.Value); addProperty("EVTargetCurrent.Value", sTmp);
+
+		sprintf(sTmp, "%d", m.EVMaximumVoltageLimit_isUsed); addProperty("EVMaximumVoltageLimit_isUsed", sTmp);
+		sprintf(sTmp, "%d", m.EVMaximumVoltageLimit.Multiplier); addProperty("EVMaximumVoltageLimit.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVMaximumVoltageLimit.Unit); addProperty("EVMaximumVoltageLimit.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVMaximumVoltageLimit.Value); addProperty("EVMaximumVoltageLimit.Value", sTmp);
+
+		sprintf(sTmp, "%d", m.EVMaximumCurrentLimit_isUsed); addProperty("EVMaximumCurrentLimit_isUsed", sTmp);
+		sprintf(sTmp, "%d", m.EVMaximumCurrentLimit.Multiplier); addProperty("EVMaximumCurrentLimit.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVMaximumCurrentLimit.Unit); addProperty("EVMaximumCurrentLimit.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVMaximumCurrentLimit.Value); addProperty("EVMaximumCurrentLimit.Value", sTmp);
+
+		sprintf(sTmp, "%d", m.EVMaximumPowerLimit_isUsed); addProperty("EVMaximumPowerLimit_isUsed", sTmp);
+		sprintf(sTmp, "%d", m.EVMaximumPowerLimit.Multiplier); addProperty("EVMaximumPowerLimit.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVMaximumPowerLimit.Unit); addProperty("EVMaximumPowerLimit.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVMaximumPowerLimit.Value); addProperty("EVMaximumPowerLimit.Value", sTmp);
+
+		//m.BulkChargingComplete_isUsed
+		//m.BulkChargingComplete
+		sprintf(sTmp, "%d", m.ChargingComplete); addProperty("ChargingComplete", sTmp);
+
+		sprintf(sTmp, "%d", m.EVTargetVoltage.Multiplier); addProperty("EVTargetVoltage.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVTargetVoltage.Unit); addProperty("EVTargetVoltage.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVTargetVoltage.Value); addProperty("EVTargetVoltage.Value", sTmp);
+		#undef m
 	}
+	
 	if (dinDoc.V2G_Message.Body.CurrentDemandRes_isUsed) {
 		addMessageName("CurrentDemandRes");
 		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.CurrentDemandRes.ResponseCode);
+		#define m dinDoc.V2G_Message.Body.CurrentDemandRes
+			#define v1 m.DC_EVSEStatus.EVSEIsolationStatus
+			#define v2 m.DC_EVSEStatus.EVSEIsolationStatus_isUsed
+			#define v3 m.DC_EVSEStatus.EVSEStatusCode
+			#define v4 m.DC_EVSEStatus.NotificationMaxDelay /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
+			#define v5 m.DC_EVSEStatus.EVSENotification
+			sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
+			sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
+			sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+			sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
+			sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
+			#undef v1
+			#undef v2
+			#undef v3
+			#undef v4
+			#undef v5
+		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Multiplier); addProperty("EVSEPresentVoltage.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Unit); addProperty("EVSEPresentVoltage.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Value); addProperty("EVSEPresentVoltage.Value", sTmp);
+
+		sprintf(sTmp, "%d", m.EVSEPresentCurrent.Multiplier); addProperty("EVSEPresentCurrent.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVSEPresentCurrent.Unit); addProperty("EVSEPresentCurrent.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVSEPresentCurrent.Value); addProperty("EVSEPresentCurrent.Value", sTmp);
+
+		sprintf(sTmp, "%d", m.EVSECurrentLimitAchieved); addProperty("EVSECurrentLimitAchieved", sTmp);
+		sprintf(sTmp, "%d", m.EVSEVoltageLimitAchieved); addProperty("EVSEVoltageLimitAchieved", sTmp);
+		sprintf(sTmp, "%d", m.EVSEPowerLimitAchieved); addProperty("EVSEPowerLimitAchieved", sTmp);
+
+		sprintf(sTmp, "%d", m.EVSEMaximumVoltageLimit.Multiplier); addProperty("EVSEMaximumVoltageLimit.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVSEMaximumVoltageLimit.Unit); addProperty("EVSEMaximumVoltageLimit.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVSEMaximumVoltageLimit.Value); addProperty("EVSEMaximumVoltageLimit.Value", sTmp);
+
+		if (m.EVSEMaximumCurrentLimit_isUsed) {
+			sprintf(sTmp, "%d", m.EVSEMaximumCurrentLimit.Multiplier); addProperty("EVSEMaximumCurrentLimit.Multiplier", sTmp);
+			sprintf(sTmp, "%d", m.EVSEMaximumCurrentLimit.Unit); addProperty("EVSEMaximumCurrentLimit.Unit", sTmp);
+			sprintf(sTmp, "%d", m.EVSEMaximumCurrentLimit.Value); addProperty("EVSEMaximumCurrentLimit.Value", sTmp);
+		}
+		if (m.EVSEMaximumPowerLimit_isUsed) {
+			sprintf(sTmp, "%d", m.EVSEMaximumPowerLimit.Multiplier); addProperty("EVSEMaximumPowerLimit.Multiplier", sTmp);
+			sprintf(sTmp, "%d", m.EVSEMaximumPowerLimit.Unit); addProperty("EVSEMaximumPowerLimit.Unit", sTmp);
+			sprintf(sTmp, "%d", m.EVSEMaximumPowerLimit.Value); addProperty("EVSEMaximumPowerLimit.Value", sTmp);
+		}
+		#undef m
 	}
 	
 	if (dinDoc.V2G_Message.Body.SessionStopReq_isUsed) {
@@ -574,10 +650,35 @@ void translateDocDinToJson(void) {
 
 	if (dinDoc.V2G_Message.Body.WeldingDetectionReq_isUsed) {
 		addMessageName("WeldingDetectionReq");
+		#define m dinDoc.V2G_Message.Body.WeldingDetectionReq
+		sprintf(sTmp, "%d", m.DC_EVStatus.EVReady); addProperty("DC_EVStatus.EVReady", sTmp);
+		sprintf(sTmp, "%d", m.DC_EVStatus.EVErrorCode); addProperty("DC_EVStatus.EVErrorCode", sTmp);
+		sprintf(sTmp, "%d", m.DC_EVStatus.EVRESSSOC); addProperty("DC_EVStatus.EVRESSSOC", sTmp);	
+		#undef m
 	}
 	if (dinDoc.V2G_Message.Body.WeldingDetectionRes_isUsed) {
 		addMessageName("WeldingDetectionRes");
 		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.WeldingDetectionRes.ResponseCode);
+		#define m dinDoc.V2G_Message.Body.WeldingDetectionRes		
+		#define v1 m.DC_EVSEStatus.EVSEIsolationStatus
+		#define v2 m.DC_EVSEStatus.EVSEIsolationStatus_isUsed
+		#define v3 m.DC_EVSEStatus.EVSEStatusCode
+		#define v4 m.DC_EVSEStatus.NotificationMaxDelay /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
+		#define v5 m.DC_EVSEStatus.EVSENotification
+		sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
+		sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
+		sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+		sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
+		sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
+		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Multiplier); addProperty("EVSEPresentVoltage.Multiplier", sTmp);
+		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Unit); addProperty("EVSEPresentVoltage.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Value); addProperty("EVSEPresentVoltage.Value", sTmp);
+		#undef v1
+		#undef v2
+		#undef v3
+		#undef v4
+		#undef v5
+		#undef m
 	}
 }
 
