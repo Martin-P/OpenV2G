@@ -70,6 +70,8 @@ char gAdditionalParamList[1000];
 #define NUM_OF_ADDITIONAL_PARAMS 5
 char gAdditionalParam[NUM_OF_ADDITIONAL_PARAMS][100];
 uint8_t nNumberOfFoundAdditionalParameters;
+#define LEN_OF_SESSION_ID 8 /* session ID has 8 bytes (may be longer, but the Ioniq uses 8 bytes) */
+uint8_t gSessionID[LEN_OF_SESSION_ID]={1, 2, 3, 4, 5, 6, 7, 8}; /* default value in case we are the charger. May be overwritten by command line. */
 
 
 #define ERROR_UNEXPECTED_REQUEST_MESSAGE -601
@@ -242,6 +244,33 @@ int getIntParam(uint8_t k) {
 	return retval;
 }
 
+/* If we are PEV, we need to use the sessionID which was decided by the charger.
+   This sessionID must be given on command line for each relevant message.
+   Here, we check whether the parameter has the correct format and if yes, we transfer
+   the sessionID to a global variable, which will later be used to fill the encoder input structure. */
+void useSessionIdFromCommandLine(void) {
+	char s3[3];
+	int i;
+	uint8_t x;
+	if (nNumberOfFoundAdditionalParameters>0) {
+		if (strlen(gAdditionalParam[0])==16) { /* for 8 bytes SessionID we expect 16 hex characters */
+			for (i=0; i<8; i++) { /* run through 8 bytes */
+				/* take 2 characters from the parameter, and convert them into a byte */
+				s3[0] = gAdditionalParam[0][2*i];
+				s3[1] = gAdditionalParam[0][2*i+1];
+				s3[2] = 0;
+				x = strtol(s3, NULL, 16); /* convert the two-character hex to a uint8. If this fails, we get 0. Good enough. */
+				//printf("%02x,  ", x);
+				gSessionID[i]=x;
+			}
+		} else {
+			sprintf(gErrorString, "useSessionIdFromCommandLine: wrong length of sessionID in first parameter. Expected 16 hex characters.");
+		}
+	} else {
+		sprintf(gErrorString, "useSessionIdFromCommandLine: too less parameters");
+	}
+
+}
 
 /*********************************************************************************************************
 *  Decoder --> JSON
@@ -710,6 +739,17 @@ static void encodeSessionSetupRequest(void) {
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.SessionSetupReq_isUsed = 1u;
 	init_dinSessionSetupReqType(&dinDoc.V2G_Message.Body.SessionSetupReq);
+	/* In the session setup request, the session ID zero means: create a new session.
+	   The format (len 8, all zero) is taken from the original Ioniq behavior. */
+	dinDoc.V2G_Message.Header.SessionID.bytes[0] = 0;
+	dinDoc.V2G_Message.Header.SessionID.bytes[1] = 0;
+	dinDoc.V2G_Message.Header.SessionID.bytes[2] = 0;
+	dinDoc.V2G_Message.Header.SessionID.bytes[3] = 0;
+	dinDoc.V2G_Message.Header.SessionID.bytes[4] = 0;
+	dinDoc.V2G_Message.Header.SessionID.bytes[5] = 0;
+	dinDoc.V2G_Message.Header.SessionID.bytes[6] = 0;
+	dinDoc.V2G_Message.Header.SessionID.bytes[7] = 0;
+	dinDoc.V2G_Message.Header.SessionID.bytesLen = 8;
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
@@ -717,27 +757,28 @@ static void encodeSessionSetupRequest(void) {
 }
 
 static void init_dinMessageHeaderWithSessionID(void) {
+	int i;
 	dinDoc.V2G_Message_isUsed = 1u;
-	/* generate an unique sessionID */
+	/* generate an "unique" sessionID */
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	/* When receiving the SessionSetupReq with the parameter SessionID equal to zero (0), the 
 	SECC shall generate a new (not stored) SessionID value different from zero (0) and return this 
 	value in the SessionSetupRes message header.
 	We can use the following simplification if we are SECC/EVSE: We set always the same SessionID, with non-zero value. */
-	/* Todo: In PEV, we need to extract the session ID from the SessionSetupResponse, store it and
+	/* Todo: In PEV, we need to extract the session ID from the SessionSetupResponse, store it in the upper layers and
 	   use it in the headers of all subsequent request messages. */
-	dinDoc.V2G_Message.Header.SessionID.bytes[0] = 1;
-	dinDoc.V2G_Message.Header.SessionID.bytes[1] = 2;
-	dinDoc.V2G_Message.Header.SessionID.bytes[2] = 3;
-	dinDoc.V2G_Message.Header.SessionID.bytes[3] = 4;
-	dinDoc.V2G_Message.Header.SessionID.bytes[4] = 5;
-	dinDoc.V2G_Message.Header.SessionID.bytes[5] = 6;
-	dinDoc.V2G_Message.Header.SessionID.bytes[6] = 7;
-	dinDoc.V2G_Message.Header.SessionID.bytes[7] = 8;
-	dinDoc.V2G_Message.Header.SessionID.bytesLen = 8;
+	for (i=0; i<LEN_OF_SESSION_ID; i++) {  
+		dinDoc.V2G_Message.Header.SessionID.bytes[i] = gSessionID[i];
+	}
+	dinDoc.V2G_Message.Header.SessionID.bytesLen = LEN_OF_SESSION_ID;
 }
 
 static void encodeSessionSetupResponse(void) {
+	 /* This is the place, where we, as charger, decide about the new session ID. */
+	 /* As simplification, we always use the same session ID, so we have no need to transfer
+	    the number via command line interface to the upper layers in case we are the charger.
+		On the other hand, if we are the car, then we need to use the sessionID which was decided
+		by the charger, and we need to transfer it to and from the upper layers. */
 	init_dinMessageHeaderWithSessionID();
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.SessionSetupRes_isUsed = 1u;
@@ -768,6 +809,8 @@ static void encodeSessionSetupResponse(void) {
 }
 
 static void encodeServiceDiscoveryRequest(void) {
+	useSessionIdFromCommandLine();
+	init_dinMessageHeaderWithSessionID();
 	dinDoc.V2G_Message_isUsed = 1u;
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
@@ -812,6 +855,8 @@ void encodeServiceDiscoveryResponse(void) {
 }
 
 static void encodeServicePaymentSelectionRequest(void) {
+	useSessionIdFromCommandLine();
+	init_dinMessageHeaderWithSessionID();
 	dinDoc.V2G_Message_isUsed = 1u;
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
@@ -849,7 +894,8 @@ void encodeAuthorizationResponse(void) {
 
 static void encodeChargeParameterDiscoveryRequest(void) {
 	struct dinDC_EVChargeParameterType *cp;
-	
+	useSessionIdFromCommandLine();
+	init_dinMessageHeaderWithSessionID();
 	dinDoc.V2G_Message_isUsed = 1u;
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
@@ -959,6 +1005,8 @@ void encodeChargeParameterDiscoveryResponse(void) {
 
 static void encodeCableCheckRequest(void) {
 	dinDoc.V2G_Message_isUsed = 1u;
+	useSessionIdFromCommandLine();
+	init_dinMessageHeaderWithSessionID();
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.CableCheckReq_isUsed = 1u;
@@ -981,6 +1029,8 @@ void encodeCableCheckResponse(void) {
 }
 
 static void encodePreChargeRequest(void) {
+	useSessionIdFromCommandLine();
+	init_dinMessageHeaderWithSessionID();
 	dinDoc.V2G_Message_isUsed = 1u;
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
@@ -1009,6 +1059,8 @@ void encodePreChargeResponse(void) {
 }
 
 static void encodePowerDeliveryRequest(void) {
+	useSessionIdFromCommandLine();
+	init_dinMessageHeaderWithSessionID();
 	dinDoc.V2G_Message_isUsed = 1u;
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
@@ -1039,6 +1091,8 @@ void encodePowerDeliveryResponse(void) {
 
 
 static void encodeCurrentDemandRequest(void) {
+	useSessionIdFromCommandLine();
+	init_dinMessageHeaderWithSessionID();
 	dinDoc.V2G_Message_isUsed = 1u;
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
@@ -1084,6 +1138,8 @@ void encodeCurrentDemandResponse(void) {
 }
 
 static void encodeWeldingDetectionRequest(void) {
+	useSessionIdFromCommandLine();
+	init_dinMessageHeaderWithSessionID();
 	dinDoc.V2G_Message_isUsed = 1u;
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
@@ -1107,6 +1163,8 @@ void encodeWeldingDetectionResponse(void) {
 }
 				
 static void encodeSessionStopRequest(void) {
+	useSessionIdFromCommandLine();
+	init_dinMessageHeaderWithSessionID();
 	dinDoc.V2G_Message_isUsed = 1u;
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
@@ -1131,6 +1189,8 @@ void encodeSessionStopResponse(void) {
 
 
 static void encodeContractAuthenticationRequest(void) {
+	useSessionIdFromCommandLine();
+	init_dinMessageHeaderWithSessionID();
 	dinDoc.V2G_Message_isUsed = 1u;
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
