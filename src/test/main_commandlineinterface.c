@@ -252,6 +252,17 @@ void useSessionIdFromCommandLine(void) {
 	char s3[3];
 	int i;
 	uint8_t x;
+	
+	/* for the case, that the command line does not provide a valid sessionID, we set here a marker to detect the issue */
+	gSessionID[0] = 0xDE;
+	gSessionID[1] = 0xAD;
+	gSessionID[2] = 0xBE;
+	gSessionID[3] = 0xEF;
+	gSessionID[4] = 0xDE;
+	gSessionID[5] = 0xAD;
+	gSessionID[6] = 0xBE;
+	gSessionID[7] = 0xEF;
+	
 	if (nNumberOfFoundAdditionalParameters>0) {
 		if (strlen(gAdditionalParam[0])==16) { /* for 8 bytes SessionID we expect 16 hex characters */
 			for (i=0; i<8; i++) { /* run through 8 bytes */
@@ -508,7 +519,7 @@ void translateDocDinToJson(void) {
 		sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
 		
 		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Multiplier); addProperty("EVSEPresentVoltage.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Unit); addProperty("EVSEPresentVoltage.Unit", sTmp);
+		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Unit); addProperty("EVSEPresentVoltage.Unit", sTmp); /* todo: why is this shown as 0???? */
 		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Value); addProperty("EVSEPresentVoltage.Value", sTmp);
 
 		#undef v1
@@ -1050,7 +1061,7 @@ void encodePreChargeResponse(void) {
 	dinDoc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus = 1;
 	dinDoc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
 	dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Multiplier = 0; /* 10 ^ 0 */
-	dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Unit = dinunitSymbolType_V;
+	dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Unit = dinunitSymbolType_V; /* todo: Why is EVSEPresentVoltage.Unit decoded as 0??? */
 	dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Value = getIntParam(0); /* Take from command line */
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
