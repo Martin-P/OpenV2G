@@ -484,6 +484,24 @@ void translateDocDinToJson(void) {
 	if (dinDoc.V2G_Message.Body.CableCheckRes_isUsed) {
 		addMessageName("CableCheckRes");
 		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.CableCheckRes.ResponseCode);
+		#define m dinDoc.V2G_Message.Body.CableCheckRes
+		#define v1 m.DC_EVSEStatus.EVSEIsolationStatus
+		#define v2 m.DC_EVSEStatus.EVSEIsolationStatus_isUsed
+		#define v3 m.DC_EVSEStatus.EVSEStatusCode
+		#define v4 m.DC_EVSEStatus.NotificationMaxDelay /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
+		#define v5 m.DC_EVSEStatus.EVSENotification
+		sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
+		sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
+		sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+		sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
+		sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
+		#undef v1
+		#undef v2
+		#undef v3
+		#undef v4
+		#undef v5
+		sprintf(sTmp, "%d", m.EVSEProcessing); addProperty("EVSEProcessing", sTmp);
+		#undef m
 	}
 
 	if (dinDoc.V2G_Message.Body.PreChargeReq_isUsed) {
