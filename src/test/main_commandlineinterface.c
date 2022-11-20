@@ -54,8 +54,7 @@ struct iso1EXIDocument iso1Doc;
 struct iso2EXIDocument iso2Doc;
 
 #define BUFFER_SIZE 256
-uint8_t buffer1[BUFFER_SIZE];
-uint8_t buffer2[BUFFER_SIZE];
+uint8_t mybuffer[BUFFER_SIZE];
 bitstream_t global_stream1;
 size_t global_pos1;
 int g_errn;
@@ -145,7 +144,7 @@ static void copyBytes(uint8_t* from, uint16_t len, uint8_t* to) {
 /* prepare an empty stream */
 static void prepareGlobalStream(void) {
 	global_stream1.size = BUFFER_SIZE;
-	global_stream1.data = buffer1;
+	global_stream1.data = mybuffer;
 	global_stream1.pos = &global_pos1;	
 	*(global_stream1.pos) = 0; /* start adding data at position 0 */	
 }
@@ -347,7 +346,7 @@ void translateDinHeaderToJson(void) {
 }
 
 void translateDinResponseCodeToJson(dinresponseCodeType rc) {
-	char sLoc[30];
+	char sLoc[40];
 	strcpy(sLoc, "UNKNOWN_ERROR_CODE");
 	switch (rc) {
 		case dinresponseCodeType_OK: strcpy(sLoc, "OK"); break;
@@ -1375,7 +1374,7 @@ static void runTheDecoder(char* parameterStream) {
 	}
 	/*** step 1: convert the hex string into an array of bytes ***/
 	global_stream1.size = BUFFER_SIZE;
-	global_stream1.data = buffer1;
+	global_stream1.data = mybuffer;
 	global_stream1.pos = &global_pos1;
 	numBytes=strlen(parameterStream)/2; /* contains one "virtual byte e.g. DH" at the beginning, which does not belong to the payload. */
 	global_pos1 = 0;
@@ -1384,7 +1383,7 @@ static void runTheDecoder(char* parameterStream) {
 	for (i=1; i<numBytes; i++) { /* starting at 1, means the first two characters (the direction-and-schema-selectors) are jumped-over. */
 		strOneByteHex[0] = parameterStream[2*i];
 		strOneByteHex[1] = parameterStream[2*i+1];
-		buffer1[global_pos1++] = strtol(strOneByteHex, NULL, 16); /* convert the hex representation into a byte value */
+		mybuffer[global_pos1++] = strtol(strOneByteHex, NULL, 16); /* convert the hex representation into a byte value */
 	}
 	sprintf(gInfoString, "%d bytes to convert", global_pos1);
 	/*
