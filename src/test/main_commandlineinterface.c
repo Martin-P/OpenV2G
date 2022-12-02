@@ -587,7 +587,12 @@ void translateDocDinToJson(void) {
 		#undef v3
 		#undef v4
 		#undef v5
-		sprintf(sTmp, "%d", m.EVSEProcessing); addProperty("EVSEProcessing", sTmp);
+		if (m.EVSEProcessing==dinEVSEProcessingType_Finished) {
+			addProperty("EVSEProcessing", "Finished");
+		}
+		if (m.EVSEProcessing==dinEVSEProcessingType_Ongoing) {
+			addProperty("EVSEProcessing", "Ongoing");
+		}		
 		#undef m
 	}
 
@@ -599,12 +604,12 @@ void translateDocDinToJson(void) {
 		sprintf(sTmp, "%d", m.DC_EVStatus.EVRESSSOC); addProperty("DC_EVStatus.EVRESSSOC", sTmp);
 
 		sprintf(sTmp, "%d", m.EVTargetVoltage.Multiplier); addProperty("EVTargetVoltage.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVTargetVoltage.Unit); addProperty("EVTargetVoltage.Unit", sTmp);
 		sprintf(sTmp, "%d", m.EVTargetVoltage.Value); addProperty("EVTargetVoltage.Value", sTmp);
-				
+		translateUnitToJson("EVTargetVoltage.Unit", m.EVTargetVoltage.Unit);
+						
 		sprintf(sTmp, "%d", m.EVTargetCurrent.Multiplier); addProperty("EVTargetCurrent.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVTargetCurrent.Unit); addProperty("EVTargetCurrent.Unit", sTmp);
 		sprintf(sTmp, "%d", m.EVTargetCurrent.Value); addProperty("EVTargetCurrent.Value", sTmp);
+		translateUnitToJson("EVTargetCurrent.Unit", m.EVTargetCurrent.Unit);
 
 		#undef m
 	}
@@ -624,8 +629,8 @@ void translateDocDinToJson(void) {
 		sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
 		
 		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Multiplier); addProperty("EVSEPresentVoltage.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Unit); addProperty("EVSEPresentVoltage.Unit", sTmp); /* todo: why is this shown as 0???? */
 		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Value); addProperty("EVSEPresentVoltage.Value", sTmp);
+		translateUnitToJson("EVSEPresentVoltage.Unit", m.EVSEPresentVoltage.Unit); /* todo: why is this shown as 0???? */
 
 		#undef v1
 		#undef v2
@@ -709,31 +714,31 @@ void translateDocDinToJson(void) {
 		sprintf(sTmp, "%d", m.DC_EVStatus.EVRESSSOC); addProperty("DC_EVStatus.EVRESSSOC", sTmp);
 
 		sprintf(sTmp, "%d", m.EVTargetCurrent.Multiplier); addProperty("EVTargetCurrent.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVTargetCurrent.Unit); addProperty("EVTargetCurrent.Unit", sTmp);
 		sprintf(sTmp, "%d", m.EVTargetCurrent.Value); addProperty("EVTargetCurrent.Value", sTmp);
+		translateUnitToJson("EVTargetCurrent.Unit", m.EVTargetCurrent.Unit);
 
 		sprintf(sTmp, "%d", m.EVMaximumVoltageLimit_isUsed); addProperty("EVMaximumVoltageLimit_isUsed", sTmp);
 		sprintf(sTmp, "%d", m.EVMaximumVoltageLimit.Multiplier); addProperty("EVMaximumVoltageLimit.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVMaximumVoltageLimit.Unit); addProperty("EVMaximumVoltageLimit.Unit", sTmp);
 		sprintf(sTmp, "%d", m.EVMaximumVoltageLimit.Value); addProperty("EVMaximumVoltageLimit.Value", sTmp);
+		translateUnitToJson("EVMaximumVoltageLimit.Unit", m.EVMaximumVoltageLimit.Unit);
 
 		sprintf(sTmp, "%d", m.EVMaximumCurrentLimit_isUsed); addProperty("EVMaximumCurrentLimit_isUsed", sTmp);
 		sprintf(sTmp, "%d", m.EVMaximumCurrentLimit.Multiplier); addProperty("EVMaximumCurrentLimit.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVMaximumCurrentLimit.Unit); addProperty("EVMaximumCurrentLimit.Unit", sTmp);
 		sprintf(sTmp, "%d", m.EVMaximumCurrentLimit.Value); addProperty("EVMaximumCurrentLimit.Value", sTmp);
+		translateUnitToJson("EVMaximumCurrentLimit.Unit", m.EVMaximumCurrentLimit.Unit);
 
 		sprintf(sTmp, "%d", m.EVMaximumPowerLimit_isUsed); addProperty("EVMaximumPowerLimit_isUsed", sTmp);
 		sprintf(sTmp, "%d", m.EVMaximumPowerLimit.Multiplier); addProperty("EVMaximumPowerLimit.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVMaximumPowerLimit.Unit); addProperty("EVMaximumPowerLimit.Unit", sTmp);
 		sprintf(sTmp, "%d", m.EVMaximumPowerLimit.Value); addProperty("EVMaximumPowerLimit.Value", sTmp);
+		translateUnitToJson("EVMaximumPowerLimit.Unit", m.EVMaximumPowerLimit.Unit); 
 
 		//m.BulkChargingComplete_isUsed
 		//m.BulkChargingComplete
 		sprintf(sTmp, "%d", m.ChargingComplete); addProperty("ChargingComplete", sTmp);
 
 		sprintf(sTmp, "%d", m.EVTargetVoltage.Multiplier); addProperty("EVTargetVoltage.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVTargetVoltage.Unit); addProperty("EVTargetVoltage.Unit", sTmp);
 		sprintf(sTmp, "%d", m.EVTargetVoltage.Value); addProperty("EVTargetVoltage.Value", sTmp);
+		translateUnitToJson("EVTargetVoltage.Unit", m.EVTargetVoltage.Unit); 
 		#undef m
 	}
 	
@@ -757,30 +762,30 @@ void translateDocDinToJson(void) {
 			#undef v4
 			#undef v5
 		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Multiplier); addProperty("EVSEPresentVoltage.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Unit); addProperty("EVSEPresentVoltage.Unit", sTmp);
 		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Value); addProperty("EVSEPresentVoltage.Value", sTmp);
+		translateUnitToJson("EVSEPresentVoltage.Unit", m.EVSEPresentVoltage.Unit); 
 
 		sprintf(sTmp, "%d", m.EVSEPresentCurrent.Multiplier); addProperty("EVSEPresentCurrent.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVSEPresentCurrent.Unit); addProperty("EVSEPresentCurrent.Unit", sTmp);
 		sprintf(sTmp, "%d", m.EVSEPresentCurrent.Value); addProperty("EVSEPresentCurrent.Value", sTmp);
+		translateUnitToJson("EVSEPresentCurrent.Unit", m.EVSEPresentCurrent.Unit); 
 
 		sprintf(sTmp, "%d", m.EVSECurrentLimitAchieved); addProperty("EVSECurrentLimitAchieved", sTmp);
 		sprintf(sTmp, "%d", m.EVSEVoltageLimitAchieved); addProperty("EVSEVoltageLimitAchieved", sTmp);
 		sprintf(sTmp, "%d", m.EVSEPowerLimitAchieved); addProperty("EVSEPowerLimitAchieved", sTmp);
 
 		sprintf(sTmp, "%d", m.EVSEMaximumVoltageLimit.Multiplier); addProperty("EVSEMaximumVoltageLimit.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVSEMaximumVoltageLimit.Unit); addProperty("EVSEMaximumVoltageLimit.Unit", sTmp);
 		sprintf(sTmp, "%d", m.EVSEMaximumVoltageLimit.Value); addProperty("EVSEMaximumVoltageLimit.Value", sTmp);
+		translateUnitToJson("EVSEMaximumVoltageLimit.Unit", m.EVSEMaximumVoltageLimit.Unit); 
 
 		if (m.EVSEMaximumCurrentLimit_isUsed) {
 			sprintf(sTmp, "%d", m.EVSEMaximumCurrentLimit.Multiplier); addProperty("EVSEMaximumCurrentLimit.Multiplier", sTmp);
-			sprintf(sTmp, "%d", m.EVSEMaximumCurrentLimit.Unit); addProperty("EVSEMaximumCurrentLimit.Unit", sTmp);
 			sprintf(sTmp, "%d", m.EVSEMaximumCurrentLimit.Value); addProperty("EVSEMaximumCurrentLimit.Value", sTmp);
+			translateUnitToJson("EVSEMaximumCurrentLimit.Unit", m.EVSEMaximumCurrentLimit.Unit); 
 		}
 		if (m.EVSEMaximumPowerLimit_isUsed) {
 			sprintf(sTmp, "%d", m.EVSEMaximumPowerLimit.Multiplier); addProperty("EVSEMaximumPowerLimit.Multiplier", sTmp);
-			sprintf(sTmp, "%d", m.EVSEMaximumPowerLimit.Unit); addProperty("EVSEMaximumPowerLimit.Unit", sTmp);
 			sprintf(sTmp, "%d", m.EVSEMaximumPowerLimit.Value); addProperty("EVSEMaximumPowerLimit.Value", sTmp);
+			translateUnitToJson("EVSEMaximumPowerLimit.Unit", m.EVSEMaximumPowerLimit.Unit); 
 		}
 		#undef m
 	}
@@ -816,8 +821,8 @@ void translateDocDinToJson(void) {
 		sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
 		sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
 		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Multiplier); addProperty("EVSEPresentVoltage.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Unit); addProperty("EVSEPresentVoltage.Unit", sTmp);
 		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Value); addProperty("EVSEPresentVoltage.Value", sTmp);
+		translateUnitToJson("EVSEPresentVoltage.Unit", m.EVSEPresentVoltage.Unit); 
 		#undef v1
 		#undef v2
 		#undef v3
