@@ -1132,6 +1132,11 @@ static void encodeCableCheckRequest(void) {
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.CableCheckReq_isUsed = 1u;
 	init_dinCableCheckReqType(&dinDoc.V2G_Message.Body.CableCheckReq);
+	#define st dinDoc.V2G_Message.Body.CableCheckReq.DC_EVStatus
+	  st.EVReady = 1; /* 1 means true. We are ready. */
+	  st.EVErrorCode = dinDC_EVErrorCodeType_NO_ERROR;
+	  st.EVRESSSOC = 33; /* todo: Take the SOC from the command line parameter */
+	#undef st
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
@@ -1157,6 +1162,21 @@ static void encodePreChargeRequest(void) {
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.PreChargeReq_isUsed = 1u;
 	init_dinPreChargeReqType(&dinDoc.V2G_Message.Body.PreChargeReq);
+	#define st dinDoc.V2G_Message.Body.PreChargeReq.DC_EVStatus
+	  st.EVReady = 1; /* 1 means true. We are ready. */
+	  st.EVErrorCode = dinDC_EVErrorCodeType_NO_ERROR;
+	  st.EVRESSSOC = 33; /* todo: Take the SOC from the command line parameter */
+	#undef st
+	#define tvolt dinDoc.V2G_Message.Body.PreChargeReq.EVTargetVoltage
+	  tvolt.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+	  tvolt.Unit = dinunitSymbolType_V;
+	  tvolt.Value = 220; /* Todo: Take the precharge target voltage from the command line. */
+	#undef tvolt
+	#define tcurr dinDoc.V2G_Message.Body.PreChargeReq.EVTargetCurrent
+	  tcurr.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+	  tcurr.Unit = dinunitSymbolType_A;
+	  tcurr.Value = 1; /* 1A for precharging */
+	#undef tcurr
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
@@ -1187,6 +1207,21 @@ static void encodePowerDeliveryRequest(void) {
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.PowerDeliveryReq_isUsed = 1u;
 	init_dinPowerDeliveryReqType(&dinDoc.V2G_Message.Body.PowerDeliveryReq);
+	#define m dinDoc.V2G_Message.Body.PowerDeliveryReq
+	// ReadyToChargeState
+	m.ReadyToChargeState = 0; /* in ISO the name is ChargeProgress, with values 0=Start, 1=Stop, 2=Renegotiate. Not sure, 
+                             whether the meaning is the same. */
+	// todo? ChargingProfile
+	// todo? ChargingProfile_isUsed
+	// DC_EVPowerDeliveryParameter
+	m.DC_EVPowerDeliveryParameter_isUsed = 1;
+	#define st m.DC_EVPowerDeliveryParameter.DC_EVStatus
+	  st.EVReady = 1; /* 1 means true. We are ready. */
+	  st.EVErrorCode = dinDC_EVErrorCodeType_NO_ERROR;
+	  st.EVRESSSOC = 33; /* todo: Take the SOC from the command line parameter */
+	#undef st
+	m.DC_EVPowerDeliveryParameter.ChargingComplete = 0; /* boolean. Charging not finished. */
+	#undef m
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
@@ -1219,6 +1254,25 @@ static void encodeCurrentDemandRequest(void) {
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
 	dinDoc.V2G_Message.Body.CurrentDemandReq_isUsed = 1u;
 	init_dinCurrentDemandReqType(&dinDoc.V2G_Message.Body.CurrentDemandReq);
+	// DC_EVStatus
+	#define st dinDoc.V2G_Message.Body.CurrentDemandReq.DC_EVStatus
+	  st.EVReady = 1; /* 1 means true. We are ready. */
+	  st.EVErrorCode = dinDC_EVErrorCodeType_NO_ERROR;
+	  st.EVRESSSOC = 33; /* todo: Take the SOC from the command line parameter */
+	#undef st	
+	// EVTargetVoltage
+	#define tvolt dinDoc.V2G_Message.Body.CurrentDemandReq.EVTargetVoltage
+	  tvolt.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+	  tvolt.Unit = dinunitSymbolType_V;
+	  tvolt.Value = 220; /* Todo: Take the charging target voltage from the command line. */
+	#undef tvolt
+	// EVTargetCurrent
+	#define tcurr dinDoc.V2G_Message.Body.CurrentDemandReq.EVTargetCurrent
+	  tcurr.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+	  tcurr.Unit = dinunitSymbolType_A;
+	  tcurr.Value = 10; /* 10A as example. Todo: take the charging target current from the command line. */
+	#undef tcurr
+	dinDoc.V2G_Message.Body.CurrentDemandReq.ChargingComplete = 0; /* boolean. Todo: Take from command line. */
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
@@ -1267,6 +1321,11 @@ static void encodeWeldingDetectionRequest(void) {
 	dinDoc.V2G_Message.Body.WeldingDetectionReq_isUsed = 1u;
 	init_dinWeldingDetectionReqType(&dinDoc.V2G_Message.Body.WeldingDetectionReq);
 	prepareGlobalStream();
+	#define st dinDoc.V2G_Message.Body.WeldingDetectionReq.DC_EVStatus
+	  st.EVReady = 1; /* 1 means true. We are ready. */
+	  st.EVErrorCode = dinDC_EVErrorCodeType_NO_ERROR;
+	  st.EVRESSSOC = 33; /* todo: Take the SOC from the command line parameter */
+	#undef st	
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
     sprintf(gInfoString, "encodeWeldingDetectionRequest finished");
