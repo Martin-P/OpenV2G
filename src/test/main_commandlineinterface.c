@@ -467,6 +467,15 @@ void translateDocDinToJson(void) {
 	}
 	if (dinDoc.V2G_Message.Body.ContractAuthenticationRes_isUsed) {
 		addMessageName("ContractAuthenticationRes");
+		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.ContractAuthenticationRes.ResponseCode);
+		#define processing dinDoc.V2G_Message.Body.ContractAuthenticationRes.EVSEProcessing
+		if (processing==dinEVSEProcessingType_Finished) {
+			addProperty("EVSEProcessing", "Finished");
+		}
+		if (processing==dinEVSEProcessingType_Ongoing) {
+			addProperty("EVSEProcessing", "Ongoing");
+		}
+		#undef processing
 	}
 	
 	if (dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq_isUsed) {
