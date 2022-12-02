@@ -345,6 +345,24 @@ void translateDinHeaderToJson(void) {
 	sprintf(sTmp, "%d", h.Signature_isUsed); addProperty("header.Signature_isUsed", sTmp);	
 }
 
+void translateUnitToJson(char *property, int unit) {
+	char sTmp[40];
+	strcpy(sTmp, "UNKNOWN_UNIT");
+	switch (unit) {
+		case dinunitSymbolType_h: strcpy(sTmp, "h"); break;
+		case dinunitSymbolType_m: strcpy(sTmp, "m"); break;
+		case dinunitSymbolType_s: strcpy(sTmp, "s"); break;
+		case dinunitSymbolType_A: strcpy(sTmp, "A"); break;
+		case dinunitSymbolType_Ah: strcpy(sTmp, "Ah"); break;
+		case dinunitSymbolType_V: strcpy(sTmp, "V"); break;
+		case dinunitSymbolType_VA: strcpy(sTmp, "VA"); break;
+		case dinunitSymbolType_W: strcpy(sTmp, "W"); break;
+		case dinunitSymbolType_W_s: strcpy(sTmp, "W_s"); break;
+		case dinunitSymbolType_Wh: strcpy(sTmp, "Wh"); break;
+	}
+	addProperty(property, sTmp);
+}
+
 void translateDinResponseCodeToJson(dinresponseCodeType rc) {
 	char sLoc[40];
 	strcpy(sLoc, "UNKNOWN_ERROR_CODE");
@@ -484,6 +502,67 @@ void translateDocDinToJson(void) {
 	if (dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes_isUsed) {
 		addMessageName("ChargeParameterDiscoveryRes");
 		translateDinResponseCodeToJson(dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.ResponseCode);
+		#define processing dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEProcessing
+		if (processing==dinEVSEProcessingType_Finished) {
+			addProperty("EVSEProcessing", "Finished");
+		}
+		if (processing==dinEVSEProcessingType_Ongoing) {
+			addProperty("EVSEProcessing", "Ongoing");
+		}
+		#undef processing
+		// todo maybe: EVSEChargeParameter_isUsed
+		// todo for AC: AC_EVSEChargeParameter_isUsed
+		if (dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter_isUsed) {
+			//DC_EVSEChargeParameter
+			//  DC_EVSEStatus
+			#define cp dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter
+			#define v1 cp.DC_EVSEStatus.EVSEIsolationStatus
+			#define v2 cp.DC_EVSEStatus.EVSEIsolationStatus_isUsed
+			#define v3 cp.DC_EVSEStatus.EVSEStatusCode
+			#define v4 cp.DC_EVSEStatus.NotificationMaxDelay /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
+			#define v5 cp.DC_EVSEStatus.EVSENotification
+			sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
+			sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
+			sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+			sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
+			sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
+			#undef v1
+			#undef v2
+			#undef v3
+			#undef v4
+			#undef v5
+			//  EVSEMaximumCurrentLimit
+			sprintf(sTmp, "%d", cp.EVSEMaximumCurrentLimit.Multiplier); addProperty("EVSEMaximumCurrentLimit.Multiplier", sTmp);
+			sprintf(sTmp, "%d", cp.EVSEMaximumCurrentLimit.Value); addProperty("EVSEMaximumCurrentLimit.Value", sTmp);			
+			translateUnitToJson("EVSEMaximumCurrentLimit.Unit", cp.EVSEMaximumCurrentLimit.Unit);
+			
+			//  EVSEMaximumPowerLimit
+			//  EVSEMaximumPowerLimit_isUsed
+			sprintf(sTmp, "%d", cp.EVSEMaximumPowerLimit_isUsed); addProperty("EVSEMaximumPowerLimit_isUsed", sTmp);
+			sprintf(sTmp, "%d", cp.EVSEMaximumPowerLimit.Multiplier); addProperty("EVSEMaximumPowerLimit.Multiplier", sTmp);
+			sprintf(sTmp, "%d", cp.EVSEMaximumPowerLimit.Value); addProperty("EVSEMaximumPowerLimit.Value", sTmp);
+			translateUnitToJson("EVSEMaximumPowerLimit.Unit", cp.EVSEMaximumPowerLimit.Unit);
+
+			//  EVSEMaximumVoltageLimit
+			sprintf(sTmp, "%d", cp.EVSEMaximumVoltageLimit.Multiplier); addProperty("EVSEMaximumVoltageLimit.Multiplier", sTmp);
+			sprintf(sTmp, "%d", cp.EVSEMaximumVoltageLimit.Value); addProperty("EVSEMaximumVoltageLimit.Value", sTmp);
+			translateUnitToJson("EVSEMaximumVoltageLimit.Unit", cp.EVSEMaximumVoltageLimit.Unit);
+			//  EVSEMinimumCurrentLimit
+			sprintf(sTmp, "%d", cp.EVSEMinimumCurrentLimit.Multiplier); addProperty("EVSEMinimumCurrentLimit.Multiplier", sTmp);
+			sprintf(sTmp, "%d", cp.EVSEMinimumCurrentLimit.Value); addProperty("EVSEMinimumCurrentLimit.Value", sTmp);
+			translateUnitToJson("EVSEMinimumCurrentLimit.Unit", cp.EVSEMinimumCurrentLimit.Unit);
+			//  EVSEMinimumVoltageLimit
+			sprintf(sTmp, "%d", cp.EVSEMinimumVoltageLimit.Multiplier); addProperty("EVSEMinimumVoltageLimit.Multiplier", sTmp);
+			sprintf(sTmp, "%d", cp.EVSEMinimumVoltageLimit.Value); addProperty("EVSEMinimumVoltageLimit.Value", sTmp);
+			translateUnitToJson("EVSEMinimumVoltageLimit.Unit", cp.EVSEMinimumVoltageLimit.Unit);
+			//  EVSECurrentRegulationTolerance
+			//  EVSECurrentRegulationTolerance_isUsed
+			//  EVSEPeakCurrentRipple
+			//  EVSEEnergyToBeDelivered
+			//  EVSEEnergyToBeDelivered_isUsed
+			//xxx
+			#undef cp
+		}
 	}
 	
 	if (dinDoc.V2G_Message.Body.CableCheckReq_isUsed) {
