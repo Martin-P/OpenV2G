@@ -498,6 +498,15 @@ void translateDocDinToJson(void) {
 	
 	if (dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq_isUsed) {
 		addMessageName("ChargeParameterDiscoveryReq");
+		#define m dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq
+		sprintf(sTmp, "%d", m.EVRequestedEnergyTransferType); addProperty("EVRequestedEnergyTransferType", sTmp);
+		sprintf(sTmp, "%d", m.DC_EVChargeParameter_isUsed); addProperty("DC_EVChargeParameter_isUsed", sTmp);
+		if (m.DC_EVChargeParameter_isUsed) {
+			sprintf(sTmp, "%d", m.DC_EVChargeParameter.DC_EVStatus.EVRESSSOC); addProperty("DC_EVStatus.EVRESSSOC", sTmp);
+			sprintf(sTmp, "%d", m.DC_EVChargeParameter.DC_EVStatus.EVReady); addProperty("DC_EVStatus.EVReady", sTmp);
+			// todo EVMaximumCurrentLimit
+		}
+		#undef m
 	}
 	if (dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes_isUsed) {
 		addMessageName("ChargeParameterDiscoveryRes");
@@ -567,6 +576,10 @@ void translateDocDinToJson(void) {
 	
 	if (dinDoc.V2G_Message.Body.CableCheckReq_isUsed) {
 		addMessageName("CableCheckReq");
+		#define m dinDoc.V2G_Message.Body.CableCheckReq
+		sprintf(sTmp, "%d", m.DC_EVStatus.EVRESSSOC); addProperty("DC_EVStatus.EVRESSSOC", sTmp);
+		sprintf(sTmp, "%d", m.DC_EVStatus.EVReady); addProperty("DC_EVStatus.EVReady", sTmp);
+		#undef m
 	}
 	if (dinDoc.V2G_Message.Body.CableCheckRes_isUsed) {
 		addMessageName("CableCheckRes");
@@ -642,6 +655,11 @@ void translateDocDinToJson(void) {
 	if (dinDoc.V2G_Message.Body.PowerDeliveryReq_isUsed) {
 		addMessageName("PowerDeliveryReq");
 		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState); addProperty("ReadyToChargeState", sTmp);
+
+		if (dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState==0) { addProperty("ReadyToChargeState_Text", "START"); }
+		if (dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState==1) { addProperty("ReadyToChargeState_Text", "STOP"); }
+		if (dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState==2) { addProperty("ReadyToChargeState_Text", "Renegotiate"); }
+		
 		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.ChargingProfile_isUsed); addProperty("ChargingProfile_isUsed", sTmp);
 		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.EVPowerDeliveryParameter_isUsed); addProperty("EVPowerDeliveryParameter_isUsed", sTmp);
 		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter_isUsed); addProperty("DC_EVPowerDeliveryParameter_isUsed", sTmp);
@@ -718,20 +736,26 @@ void translateDocDinToJson(void) {
 		translateUnitToJson("EVTargetCurrent.Unit", m.EVTargetCurrent.Unit);
 
 		sprintf(sTmp, "%d", m.EVMaximumVoltageLimit_isUsed); addProperty("EVMaximumVoltageLimit_isUsed", sTmp);
-		sprintf(sTmp, "%d", m.EVMaximumVoltageLimit.Multiplier); addProperty("EVMaximumVoltageLimit.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVMaximumVoltageLimit.Value); addProperty("EVMaximumVoltageLimit.Value", sTmp);
-		translateUnitToJson("EVMaximumVoltageLimit.Unit", m.EVMaximumVoltageLimit.Unit);
+		if (m.EVMaximumVoltageLimit_isUsed) {
+		  sprintf(sTmp, "%d", m.EVMaximumVoltageLimit.Multiplier); addProperty("EVMaximumVoltageLimit.Multiplier", sTmp);
+		  sprintf(sTmp, "%d", m.EVMaximumVoltageLimit.Value); addProperty("EVMaximumVoltageLimit.Value", sTmp);
+		  translateUnitToJson("EVMaximumVoltageLimit.Unit", m.EVMaximumVoltageLimit.Unit);
+		}
 
 		sprintf(sTmp, "%d", m.EVMaximumCurrentLimit_isUsed); addProperty("EVMaximumCurrentLimit_isUsed", sTmp);
-		sprintf(sTmp, "%d", m.EVMaximumCurrentLimit.Multiplier); addProperty("EVMaximumCurrentLimit.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVMaximumCurrentLimit.Value); addProperty("EVMaximumCurrentLimit.Value", sTmp);
-		translateUnitToJson("EVMaximumCurrentLimit.Unit", m.EVMaximumCurrentLimit.Unit);
-
+		if (m.EVMaximumCurrentLimit_isUsed) {
+		  sprintf(sTmp, "%d", m.EVMaximumCurrentLimit.Multiplier); addProperty("EVMaximumCurrentLimit.Multiplier", sTmp);
+		  sprintf(sTmp, "%d", m.EVMaximumCurrentLimit.Value); addProperty("EVMaximumCurrentLimit.Value", sTmp);
+		  translateUnitToJson("EVMaximumCurrentLimit.Unit", m.EVMaximumCurrentLimit.Unit);
+		}
+		
 		sprintf(sTmp, "%d", m.EVMaximumPowerLimit_isUsed); addProperty("EVMaximumPowerLimit_isUsed", sTmp);
-		sprintf(sTmp, "%d", m.EVMaximumPowerLimit.Multiplier); addProperty("EVMaximumPowerLimit.Multiplier", sTmp);
-		sprintf(sTmp, "%d", m.EVMaximumPowerLimit.Value); addProperty("EVMaximumPowerLimit.Value", sTmp);
-		translateUnitToJson("EVMaximumPowerLimit.Unit", m.EVMaximumPowerLimit.Unit); 
-
+		if (m.EVMaximumPowerLimit_isUsed) {
+		  sprintf(sTmp, "%d", m.EVMaximumPowerLimit.Multiplier); addProperty("EVMaximumPowerLimit.Multiplier", sTmp);
+		  sprintf(sTmp, "%d", m.EVMaximumPowerLimit.Value); addProperty("EVMaximumPowerLimit.Value", sTmp);
+		  translateUnitToJson("EVMaximumPowerLimit.Unit", m.EVMaximumPowerLimit.Unit); 
+		}
+		
 		//m.BulkChargingComplete_isUsed
 		//m.BulkChargingComplete
 		sprintf(sTmp, "%d", m.ChargingComplete); addProperty("ChargingComplete", sTmp);
@@ -1029,7 +1053,7 @@ static void encodeChargeParameterDiscoveryRequest(void) {
 	cp->DC_EVStatus.EVReady = 1; /* todo: what ever this means */
 	//cp->DC_EVStatus.EVCabinConditioning
 	//cp->DC_EVStatus.EVCabinConditioning_isUsed
-	cp->DC_EVStatus.EVRESSSOC = 55; /* state of charge, 0 ... 100 in percent */
+	cp->DC_EVStatus.EVRESSSOC = getIntParam(1); /* Take the SOC from the command line parameter. Scaling is 1%. */
 	cp->EVMaximumCurrentLimit.Multiplier = 0; /* -3 to 3. The exponent for base of 10. */
 	cp->EVMaximumCurrentLimit.Unit = dinunitSymbolType_A;
 	cp->EVMaximumCurrentLimit.Value = 100; 
@@ -1135,7 +1159,7 @@ static void encodeCableCheckRequest(void) {
 	#define st dinDoc.V2G_Message.Body.CableCheckReq.DC_EVStatus
 	  st.EVReady = 1; /* 1 means true. We are ready. */
 	  st.EVErrorCode = dinDC_EVErrorCodeType_NO_ERROR;
-	  st.EVRESSSOC = 33; /* todo: Take the SOC from the command line parameter */
+	  st.EVRESSSOC = getIntParam(1); /* Take the SOC from the command line parameter. Scaling is 1%. */
 	#undef st
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
@@ -1165,12 +1189,12 @@ static void encodePreChargeRequest(void) {
 	#define st dinDoc.V2G_Message.Body.PreChargeReq.DC_EVStatus
 	  st.EVReady = 1; /* 1 means true. We are ready. */
 	  st.EVErrorCode = dinDC_EVErrorCodeType_NO_ERROR;
-	  st.EVRESSSOC = 33; /* todo: Take the SOC from the command line parameter */
+	  st.EVRESSSOC = getIntParam(1); /* Take the SOC from the command line parameter. Scaling is 1%. */
 	#undef st
 	#define tvolt dinDoc.V2G_Message.Body.PreChargeReq.EVTargetVoltage
 	  tvolt.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
 	  tvolt.Unit = dinunitSymbolType_V;
-	  tvolt.Value = 220; /* Todo: Take the precharge target voltage from the command line. */
+	  tvolt.Value = getIntParam(2); /* Take the precharge target voltage from the command line. Scaling is 1V. */
 	#undef tvolt
 	#define tcurr dinDoc.V2G_Message.Body.PreChargeReq.EVTargetCurrent
 	  tcurr.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
@@ -1200,6 +1224,7 @@ void encodePreChargeResponse(void) {
 }
 
 static void encodePowerDeliveryRequest(void) {
+	int x;
 	useSessionIdFromCommandLine();
 	init_dinMessageHeaderWithSessionID();
 	dinDoc.V2G_Message_isUsed = 1u;
@@ -1209,8 +1234,15 @@ static void encodePowerDeliveryRequest(void) {
 	init_dinPowerDeliveryReqType(&dinDoc.V2G_Message.Body.PowerDeliveryReq);
 	#define m dinDoc.V2G_Message.Body.PowerDeliveryReq
 	// ReadyToChargeState
-	m.ReadyToChargeState = 0; /* in ISO the name is ChargeProgress, with values 0=Start, 1=Stop, 2=Renegotiate. Not sure, 
+	x = getIntParam(2); /* on command line, we use 0 for STOP and 1 for START */
+	if (x==1) {
+		/* START */
+		m.ReadyToChargeState = 0; /* in ISO the name is ChargeProgress, with values 0=Start, 1=Stop, 2=Renegotiate. Not sure, 
                              whether the meaning is the same. */
+	} else {
+		/* everything else we interpret at STOP */
+		m.ReadyToChargeState = 1; 		
+	}
 	// todo? ChargingProfile
 	// todo? ChargingProfile_isUsed
 	// DC_EVPowerDeliveryParameter
@@ -1218,7 +1250,7 @@ static void encodePowerDeliveryRequest(void) {
 	#define st m.DC_EVPowerDeliveryParameter.DC_EVStatus
 	  st.EVReady = 1; /* 1 means true. We are ready. */
 	  st.EVErrorCode = dinDC_EVErrorCodeType_NO_ERROR;
-	  st.EVRESSSOC = 33; /* todo: Take the SOC from the command line parameter */
+	  st.EVRESSSOC = getIntParam(1); /* Take the SOC from the command line parameter. Scaling is 1%. */
 	#undef st
 	m.DC_EVPowerDeliveryParameter.ChargingComplete = 0; /* boolean. Charging not finished. */
 	#undef m
@@ -1258,19 +1290,19 @@ static void encodeCurrentDemandRequest(void) {
 	#define st dinDoc.V2G_Message.Body.CurrentDemandReq.DC_EVStatus
 	  st.EVReady = 1; /* 1 means true. We are ready. */
 	  st.EVErrorCode = dinDC_EVErrorCodeType_NO_ERROR;
-	  st.EVRESSSOC = 33; /* todo: Take the SOC from the command line parameter */
+	  st.EVRESSSOC = getIntParam(1); /* Take the SOC from the command line parameter. Scaling is 1%. */
 	#undef st	
 	// EVTargetVoltage
 	#define tvolt dinDoc.V2G_Message.Body.CurrentDemandReq.EVTargetVoltage
 	  tvolt.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
 	  tvolt.Unit = dinunitSymbolType_V;
-	  tvolt.Value = 220; /* Todo: Take the charging target voltage from the command line. */
+	  tvolt.Value = getIntParam(3); /* Take the charging target voltage from the command line. Scaling is 1V. */
 	#undef tvolt
 	// EVTargetCurrent
 	#define tcurr dinDoc.V2G_Message.Body.CurrentDemandReq.EVTargetCurrent
 	  tcurr.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
 	  tcurr.Unit = dinunitSymbolType_A;
-	  tcurr.Value = 10; /* 10A as example. Todo: take the charging target current from the command line. */
+	  tcurr.Value = getIntParam(2); /* Take the charging target current from the command line. Scaling is 1A. */
 	#undef tcurr
 	dinDoc.V2G_Message.Body.CurrentDemandReq.ChargingComplete = 0; /* boolean. Todo: Take from command line. */
 	prepareGlobalStream();
@@ -1324,7 +1356,7 @@ static void encodeWeldingDetectionRequest(void) {
 	#define st dinDoc.V2G_Message.Body.WeldingDetectionReq.DC_EVStatus
 	  st.EVReady = 1; /* 1 means true. We are ready. */
 	  st.EVErrorCode = dinDC_EVErrorCodeType_NO_ERROR;
-	  st.EVRESSSOC = 33; /* todo: Take the SOC from the command line parameter */
+	  st.EVRESSSOC = getIntParam(1); /* Take the SOC from the command line parameter. Scaling is 1%. */
 	#undef st	
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
