@@ -5,7 +5,36 @@
  *
  ********************************************************************/
 
+/* Question1: Where to find information regarding the message structures?
+ 1. Search in the related decoder header files. There is a c structure definition for each message type,
+    which contains all elements.
+ 2. Look into the "official" xsd schema file. This can be found e.g. in
+    https://github.com/FlUxIuS/V2Gdecoder/tree/master/schemas_din
+ */
 
+/* Question2: Are units for physical values optional? 
+ Yes, in DIN they are optional, according to https://github.com/FlUxIuS/V2Gdecoder/blob/master/schemas_din/V2G_CI_MsgDataTypes.xsd
+ the unit has the attribute minOccurs="0":
+ 	<!-- 					   -->
+	<!-- Physical value type   -->
+	<!-- 					   -->
+	<xs:complexType name="PhysicalValueType">
+		<xs:sequence>
+			<xs:element name="Multiplier" type="unitMultiplierType"/>
+			<xs:element name="Unit" type="unitSymbolType" minOccurs="0"/>
+			<xs:element name="Value" type="xs:short"/>
+		</xs:sequence>
+	</xs:complexType>
+  On the other hand, for the ISO schemas, the unit is NOT optional, see https://github.com/FlUxIuS/V2Gdecoder/blob/master/schemas/V2G_CI_MsgDataTypes.xsd
+  <xs:complexType name="PhysicalValueType">
+   <xs:sequence>
+    <xs:element name="Multiplier" type="unitMultiplierType"/>
+    <xs:element name="Unit" type="unitSymbolType"/>
+    <xs:element name="Value" type="xs:short"/>
+   </xs:sequence>
+  </xs:complexType>
+*/
+	
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -346,6 +375,7 @@ void translateDinHeaderToJson(void) {
 }
 
 void translateUnitToJson(char *property, int unit) {
+	/* Hint: Units are optional in DIN schema, see Question2. Means: Not guaranteed, that we get sensful result here. */
 	char sTmp[40];
 	strcpy(sTmp, "UNKNOWN_UNIT");
 	switch (unit) {
@@ -643,7 +673,7 @@ void translateDocDinToJson(void) {
 		
 		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Multiplier); addProperty("EVSEPresentVoltage.Multiplier", sTmp);
 		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Value); addProperty("EVSEPresentVoltage.Value", sTmp);
-		translateUnitToJson("EVSEPresentVoltage.Unit", m.EVSEPresentVoltage.Unit); /* todo: why is this shown as 0???? */
+		translateUnitToJson("EVSEPresentVoltage.Unit", m.EVSEPresentVoltage.Unit); /* why is this shown as 0? Because unit is optional, see question2. */
 
 		#undef v1
 		#undef v2
@@ -910,8 +940,6 @@ static void init_dinMessageHeaderWithSessionID(void) {
 	SECC shall generate a new (not stored) SessionID value different from zero (0) and return this 
 	value in the SessionSetupRes message header.
 	We can use the following simplification if we are SECC/EVSE: We set always the same SessionID, with non-zero value. */
-	/* Todo: In PEV, we need to extract the session ID from the SessionSetupResponse, store it in the upper layers and
-	   use it in the headers of all subsequent request messages. */
 	for (i=0; i<LEN_OF_SESSION_ID; i++) {  
 		dinDoc.V2G_Message.Header.SessionID.bytes[i] = gSessionID[i];
 	}
@@ -1031,11 +1059,6 @@ void encodeServicePaymentSelectionResponse(void) {
     sprintf(gInfoString, "encodeServicePaymentSelectionResponse finished");
 }
 
-/* not in DIN
-void encodeAuthorizationResponse(void) {
-	sprintf(gErrorString, "todo encodeAuthorizationResponse");
-}
-*/
 
 static void encodeChargeParameterDiscoveryRequest(void) {
 	struct dinDC_EVChargeParameterType *cp;
@@ -1142,7 +1165,6 @@ void encodeChargeParameterDiscoveryResponse(void) {
 	//cpdc->EVSEEnergyToBeDelivered_isUsed:1;
 	dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter_isUsed = 1;
 	prepareGlobalStream();
-	/* todo: Encoder fails, error code EXI_ERROR_UNKOWN_EVENT -109. Maybe not supported? Not necessary??? Or just parameters missing... */
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
     sprintf(gInfoString, "encodeChargeParameterDiscoveryResponse finished");
@@ -1215,7 +1237,7 @@ void encodePreChargeResponse(void) {
 	dinDoc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus = 1;
 	dinDoc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
 	dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Multiplier = 0; /* 10 ^ 0 */
-	dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Unit = dinunitSymbolType_V; /* todo: Why is EVSEPresentVoltage.Unit decoded as 0??? */
+	dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Unit = dinunitSymbolType_V; /* why is this shown as 0? Because unit is optional, see question2. */
 	dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Value = getIntParam(0); /* Take from command line */
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
@@ -1304,7 +1326,8 @@ static void encodeCurrentDemandRequest(void) {
 	  tcurr.Unit = dinunitSymbolType_A;
 	  tcurr.Value = getIntParam(2); /* Take the charging target current from the command line. Scaling is 1A. */
 	#undef tcurr
-	dinDoc.V2G_Message.Body.CurrentDemandReq.ChargingComplete = 0; /* boolean. Todo: Take from command line. */
+	dinDoc.V2G_Message.Body.CurrentDemandReq.ChargingComplete = 0; /* boolean. Todo: Do we need to take this from command line? Or is it fine
+    that the PEV just sends a PowerDeliveryReq with STOP, if it decides to stop the charging? */
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
