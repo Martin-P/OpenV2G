@@ -424,6 +424,22 @@ void translateDinResponseCodeToJson(dinresponseCodeType rc) {
 	addProperty("ResponseCode", sLoc);
 }
 
+void translatedinDC_EVSEStatusCodeTypeToJson(dinDC_EVSEStatusCodeType st) {
+	char sLoc[40];
+	strcpy(sLoc, "UNKNOWN_STATUS");
+	switch (st) {
+		case dinDC_EVSEStatusCodeType_EVSE_NotReady: strcpy(sLoc, "EVSE_NotReady"); break;
+		case dinDC_EVSEStatusCodeType_EVSE_Ready: strcpy(sLoc, "EVSE_Ready"); break;
+		case dinDC_EVSEStatusCodeType_EVSE_Shutdown: strcpy(sLoc, "EVSE_Shutdown"); break;
+		case dinDC_EVSEStatusCodeType_EVSE_UtilityInterruptEvent: strcpy(sLoc, "EVSE_UtilityInterruptEvent"); break;
+		case dinDC_EVSEStatusCodeType_EVSE_IsolationMonitoringActive: strcpy(sLoc, "EVSE_IsolationMonitoringActive"); break;
+		case dinDC_EVSEStatusCodeType_EVSE_EmergencyShutdown: strcpy(sLoc, "EVSE_EmergencyShutdown"); break;
+		case dinDC_EVSEStatusCodeType_EVSE_Malfunction: strcpy(sLoc, "EVSE_Malfunction"); break;
+		default: strcpy(sLoc, "UNKNOWN_STATUS");
+	}
+	addProperty("EVSEStatusCode_text", sLoc);
+}
+
 /* translate the struct dinDoc into JSON, to have it ready to give it over stdout to the caller application. */
 void translateDocDinToJson(void) {
 	char sTmp[30];
@@ -563,6 +579,7 @@ void translateDocDinToJson(void) {
 			sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
 			sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
 			sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+			translatedinDC_EVSEStatusCodeTypeToJson(v3);
 			sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
 			sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
 			#undef v1
@@ -623,6 +640,7 @@ void translateDocDinToJson(void) {
 		sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
 		sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
 		sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+		translatedinDC_EVSEStatusCodeTypeToJson(v3);
 		sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
 		sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
 		#undef v1
@@ -668,6 +686,7 @@ void translateDocDinToJson(void) {
 		sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
 		sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
 		sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+		translatedinDC_EVSEStatusCodeTypeToJson(v3);
 		sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
 		sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
 		
@@ -743,6 +762,7 @@ void translateDocDinToJson(void) {
 			sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
 			sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
 			sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+			translatedinDC_EVSEStatusCodeTypeToJson(v3);
 			sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
 			sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
 			#undef m
@@ -808,6 +828,7 @@ void translateDocDinToJson(void) {
 			sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
 			sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
 			sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+			translatedinDC_EVSEStatusCodeTypeToJson(v3);
 			sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
 			sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
 			#undef v1
@@ -872,6 +893,7 @@ void translateDocDinToJson(void) {
 		sprintf(sTmp, "%d", v1); addProperty("DC_EVSEStatus.EVSEIsolationStatus", sTmp);
 		sprintf(sTmp, "%d", v2); addProperty("DC_EVSEStatus.EVSEIsolationStatus_isUsed", sTmp);
 		sprintf(sTmp, "%d", v3); addProperty("DC_EVSEStatus.EVSEStatusCode", sTmp);
+		translatedinDC_EVSEStatusCodeTypeToJson(v3);
 		sprintf(sTmp, "%d", v4); addProperty("DC_EVSEStatus.NotificationMaxDelay", sTmp);
 		sprintf(sTmp, "%d", v5); addProperty("DC_EVSEStatus.EVSENotification", sTmp);
 		sprintf(sTmp, "%d", m.EVSEPresentVoltage.Multiplier); addProperty("EVSEPresentVoltage.Multiplier", sTmp);
