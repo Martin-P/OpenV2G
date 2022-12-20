@@ -1238,11 +1238,13 @@ static void encodePreChargeRequest(void) {
 	#define tvolt dinDoc.V2G_Message.Body.PreChargeReq.EVTargetVoltage
 	  tvolt.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
 	  tvolt.Unit = dinunitSymbolType_V;
+	  tvolt.Unit_isUsed = 1;
 	  tvolt.Value = getIntParam(2); /* Take the precharge target voltage from the command line. Scaling is 1V. */
 	#undef tvolt
 	#define tcurr dinDoc.V2G_Message.Body.PreChargeReq.EVTargetCurrent
 	  tcurr.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
 	  tcurr.Unit = dinunitSymbolType_A;
+	  tcurr.Unit_isUsed = 1;
 	  tcurr.Value = 1; /* 1A for precharging */
 	#undef tcurr
 	prepareGlobalStream();
@@ -1384,9 +1386,11 @@ void encodeCurrentDemandResponse(void) {
 	m.DC_EVSEStatus.EVSENotification = dinEVSENotificationType_None; /* could also be dinEVSENotificationType_StopCharging */
 	m.EVSEPresentVoltage.Multiplier = 0;
 	m.EVSEPresentVoltage.Unit = dinunitSymbolType_V;
+	m.EVSEPresentVoltage.Unit_isUsed = 1;
 	m.EVSEPresentVoltage.Value = getIntParam(0); /* Take from command line */
 	m.EVSEPresentCurrent.Multiplier = 0;
 	m.EVSEPresentCurrent.Unit = dinunitSymbolType_A;
+	m.EVSEPresentCurrent.Unit_isUsed = 1;
 	m.EVSEPresentCurrent.Value = getIntParam(1); /* Take from command line */
 	m.EVSECurrentLimitAchieved = 0;
 	m.EVSEVoltageLimitAchieved = 0;
