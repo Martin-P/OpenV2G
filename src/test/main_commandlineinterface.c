@@ -1340,16 +1340,31 @@ static void encodeCurrentDemandRequest(void) {
 	#define tvolt dinDoc.V2G_Message.Body.CurrentDemandReq.EVTargetVoltage
 	  tvolt.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
 	  tvolt.Unit = dinunitSymbolType_V;
+	  tvolt.Unit_isUsed = 1;
 	  tvolt.Value = getIntParam(3); /* Take the charging target voltage from the command line. Scaling is 1V. */
 	#undef tvolt
 	// EVTargetCurrent
 	#define tcurr dinDoc.V2G_Message.Body.CurrentDemandReq.EVTargetCurrent
 	  tcurr.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
 	  tcurr.Unit = dinunitSymbolType_A;
+	  tcurr.Unit_isUsed = 1;
 	  tcurr.Value = getIntParam(2); /* Take the charging target current from the command line. Scaling is 1A. */
 	#undef tcurr
 	dinDoc.V2G_Message.Body.CurrentDemandReq.ChargingComplete = 0; /* boolean. Todo: Do we need to take this from command line? Or is it fine
     that the PEV just sends a PowerDeliveryReq with STOP, if it decides to stop the charging? */
+	dinDoc.V2G_Message.Body.CurrentDemandReq.BulkChargingComplete_isUsed = 1u;
+	dinDoc.V2G_Message.Body.CurrentDemandReq.BulkChargingComplete = 0u; /* not complete */
+	dinDoc.V2G_Message.Body.CurrentDemandReq.RemainingTimeToFullSoC_isUsed = 1u;
+	dinDoc.V2G_Message.Body.CurrentDemandReq.RemainingTimeToFullSoC.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+	dinDoc.V2G_Message.Body.CurrentDemandReq.RemainingTimeToFullSoC.Unit = dinunitSymbolType_s;
+	dinDoc.V2G_Message.Body.CurrentDemandReq.RemainingTimeToFullSoC.Unit_isUsed = 1;
+	dinDoc.V2G_Message.Body.CurrentDemandReq.RemainingTimeToFullSoC.Value = 1200; /* seconds */
+	
+	dinDoc.V2G_Message.Body.CurrentDemandReq.RemainingTimeToBulkSoC_isUsed = 1u;
+	dinDoc.V2G_Message.Body.CurrentDemandReq.RemainingTimeToBulkSoC.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+	dinDoc.V2G_Message.Body.CurrentDemandReq.RemainingTimeToBulkSoC.Unit = dinunitSymbolType_s;
+	dinDoc.V2G_Message.Body.CurrentDemandReq.RemainingTimeToBulkSoC.Unit_isUsed = 1;
+	dinDoc.V2G_Message.Body.CurrentDemandReq.RemainingTimeToBulkSoC.Value = 600; /* seconds */
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
