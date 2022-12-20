@@ -705,9 +705,9 @@ void translateDocDinToJson(void) {
 		addMessageName("PowerDeliveryReq");
 		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState); addProperty("ReadyToChargeState", sTmp);
 
-		if (dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState==0) { addProperty("ReadyToChargeState_Text", "START"); }
-		if (dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState==1) { addProperty("ReadyToChargeState_Text", "STOP"); }
-		if (dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState==2) { addProperty("ReadyToChargeState_Text", "Renegotiate"); }
+		if (dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState==0) { addProperty("ReadyToChargeState_Text", "false"); }
+		if (dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState==1) { addProperty("ReadyToChargeState_Text", "true"); }
+		/*if (dinDoc.V2G_Message.Body.PowerDeliveryReq.ReadyToChargeState==2) { addProperty("ReadyToChargeState_Text", "Renegotiate"); } */
 		
 		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.ChargingProfile_isUsed); addProperty("ChargingProfile_isUsed", sTmp);
 		sprintf(sTmp, "%d", dinDoc.V2G_Message.Body.PowerDeliveryReq.EVPowerDeliveryParameter_isUsed); addProperty("EVPowerDeliveryParameter_isUsed", sTmp);
@@ -1283,11 +1283,12 @@ static void encodePowerDeliveryRequest(void) {
 	x = getIntParam(2); /* on command line, we use 0 for STOP and 1 for START */
 	if (x==1) {
 		/* START */
-		m.ReadyToChargeState = 0; /* in ISO the name is ChargeProgress, with values 0=Start, 1=Stop, 2=Renegotiate. Not sure, 
-                             whether the meaning is the same. */
+		m.ReadyToChargeState = 1; /* in ISO the name is ChargeProgress, with values 0=Start, 1=Stop, 2=Renegotiate. Not sure, 
+                             whether the meaning is the same.
+							Todo: There are hints, that the meaning of this value in the DIN is different: boolean, maybe true==START. */
 	} else {
 		/* everything else we interpret at STOP */
-		m.ReadyToChargeState = 1; 		
+		m.ReadyToChargeState = 0; 		
 	}
 	// todo? ChargingProfile
 	// todo? ChargingProfile_isUsed
