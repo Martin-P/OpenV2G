@@ -98,8 +98,9 @@ char gAdditionalParamList[1000];
 #define NUM_OF_ADDITIONAL_PARAMS 5
 char gAdditionalParam[NUM_OF_ADDITIONAL_PARAMS][100];
 uint8_t nNumberOfFoundAdditionalParameters;
-#define LEN_OF_SESSION_ID 8 /* session ID has 8 bytes (may be longer, but the Ioniq uses 8 bytes) */
-uint8_t gSessionID[LEN_OF_SESSION_ID]={1, 2, 3, 4, 5, 6, 7, 8}; /* default value in case we are the charger. May be overwritten by command line. */
+#define MAX_LEN_OF_SESSION_ID 8 /* session ID has 8 bytes (may be longer, but the Ioniq uses 8 bytes) */
+uint8_t gLenOfSessionId=8; /* The dynamic length of the session ID. E.g. superChargerV3 use 4 bytes (8 hex characters), other chargers use 8 bytes (16 hex characters) */
+uint8_t gSessionID[MAX_LEN_OF_SESSION_ID]={1, 2, 3, 4, 5, 6, 7, 8}; /* default value in case we are the charger. May be overwritten by command line. */
 
 
 #define ERROR_UNEXPECTED_REQUEST_MESSAGE -601
@@ -290,10 +291,12 @@ void useSessionIdFromCommandLine(void) {
 	gSessionID[5] = 0xAD;
 	gSessionID[6] = 0xBE;
 	gSessionID[7] = 0xEF;
+	gLenOfSessionId = 8; /* just as default value to show deadbeefdeadbeef */
 	
 	if (nNumberOfFoundAdditionalParameters>0) {
-		if (strlen(gAdditionalParam[0])==16) { /* for 8 bytes SessionID we expect 16 hex characters */
-			for (i=0; i<8; i++) { /* run through 8 bytes */
+		gLenOfSessionId = strlen(gAdditionalParam[0]) / 2; /* two hex chars are forming one byte */
+		if ((gLenOfSessionId>0) && (gLenOfSessionId<=MAX_LEN_OF_SESSION_ID)) { /* normal chargers use 8 bytes SessionID. SuperCharger use 4 bytes. */
+			for (i=0; i<gLenOfSessionId; i++) { /* run through 8 bytes */
 				/* take 2 characters from the parameter, and convert them into a byte */
 				s3[0] = gAdditionalParam[0][2*i];
 				s3[1] = gAdditionalParam[0][2*i+1];
@@ -303,7 +306,8 @@ void useSessionIdFromCommandLine(void) {
 				gSessionID[i]=x;
 			}
 		} else {
-			sprintf(gErrorString, "useSessionIdFromCommandLine: wrong length of sessionID in first parameter. Expected 16 hex characters.");
+			sprintf(gErrorString, "useSessionIdFromCommandLine: wrong length of sessionID in first parameter. Expected 16 or 8 hex characters.");
+			gLenOfSessionId = 8; /* just as default value to show deadbeefdeadbeef */
 		}
 	} else {
 		sprintf(gErrorString, "useSessionIdFromCommandLine: too less parameters");
@@ -962,10 +966,10 @@ static void init_dinMessageHeaderWithSessionID(void) {
 	SECC shall generate a new (not stored) SessionID value different from zero (0) and return this 
 	value in the SessionSetupRes message header.
 	We can use the following simplification if we are SECC/EVSE: We set always the same SessionID, with non-zero value. */
-	for (i=0; i<LEN_OF_SESSION_ID; i++) {  
+	for (i=0; i<gLenOfSessionId; i++) {  
 		dinDoc.V2G_Message.Header.SessionID.bytes[i] = gSessionID[i];
 	}
-	dinDoc.V2G_Message.Header.SessionID.bytesLen = LEN_OF_SESSION_ID;
+	dinDoc.V2G_Message.Header.SessionID.bytesLen = gLenOfSessionId;
 }
 
 static void encodeSessionSetupResponse(void) {
