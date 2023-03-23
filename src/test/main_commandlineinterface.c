@@ -102,6 +102,8 @@ uint8_t nNumberOfFoundAdditionalParameters;
 uint8_t gLenOfSessionId=8; /* The dynamic length of the session ID. E.g. superChargerV3 use 4 bytes (8 hex characters), other chargers use 8 bytes (16 hex characters) */
 uint8_t gSessionID[MAX_LEN_OF_SESSION_ID]={1, 2, 3, 4, 5, 6, 7, 8}; /* default value in case we are the charger. May be overwritten by command line. */
 
+#define LEN_OF_EVCCID 6 /* The EVCCID is the MAC according to spec. Ioniq uses exactly these 6 byte. */
+uint8_t EVCCID[LEN_OF_EVCCID];
 
 #define ERROR_UNEXPECTED_REQUEST_MESSAGE -601
 #define ERROR_UNEXPECTED_SESSION_SETUP_RESP_MESSAGE -602
@@ -314,6 +316,45 @@ void useSessionIdFromCommandLine(void) {
 	}
 
 }
+
+/* If we are PEV, we need to use the EVCCID.
+   This EVCCID must be given on command line for the SessionSetupReq.
+   Here, we check whether the parameter has the correct format and if yes, we transfer
+   the EVCCID to a global variable, which will later be used to fill the encoder input structure. */
+void useEVCCIDFromCommandLine(void) {
+	char s3[3];
+	int i;
+	uint8_t x, evccIdStringLen;
+	
+	/* for the case, that the command line does not provide a valid sessionID, we set here a marker to detect the issue */
+	EVCCID[0] = 0xDE;
+	EVCCID[1] = 0xAD;
+	EVCCID[2] = 0xBE;
+	EVCCID[3] = 0xEF;
+	EVCCID[4] = 0xDE;
+	EVCCID[5] = 0xAD;
+	
+	if (nNumberOfFoundAdditionalParameters>0) {
+		evccIdStringLen = strlen(gAdditionalParam[0]); /* two hex chars are forming one byte */
+		if (evccIdStringLen==12) { /* The MAC must be 12 characters, means 6 bytes. The EVCCID needs to be filled with the MAC. */
+			for (i=0; i<6; i++) { /* run through 6 bytes */
+				/* take 2 characters from the parameter, and convert them into a byte */
+				s3[0] = gAdditionalParam[0][2*i];
+				s3[1] = gAdditionalParam[0][2*i+1];
+				s3[2] = 0;
+				x = strtol(s3, NULL, 16); /* convert the two-character hex to a uint8. If this fails, we get 0. Good enough. */
+				//printf("%02x,  ", x);
+				EVCCID[i]=x;
+			}
+		} else {
+			sprintf(gErrorString, "useEVSEIDFromCommandLine: wrong length of EVCCID in first parameter. Expected 12 hex characters.");
+		}
+	} else {
+		sprintf(gErrorString, "useEVSEIDFromCommandLine: too less parameters");
+	}
+
+}
+
 
 /*********************************************************************************************************
 *  Decoder --> JSON
@@ -935,6 +976,7 @@ static void encodeSupportedAppProtocolResponse(void) {
 }
 
 static void encodeSessionSetupRequest(void) {
+    uint8_t i;
 	dinDoc.V2G_Message_isUsed = 1u;
 	init_dinMessageHeaderType(&dinDoc.V2G_Message.Header);
 	init_dinBodyType(&dinDoc.V2G_Message.Body);
@@ -951,6 +993,15 @@ static void encodeSessionSetupRequest(void) {
 	dinDoc.V2G_Message.Header.SessionID.bytes[6] = 0;
 	dinDoc.V2G_Message.Header.SessionID.bytes[7] = 0;
 	dinDoc.V2G_Message.Header.SessionID.bytesLen = 8;
+    /* The EVCCID. In the ISO they write, that this shall be the EVCC MAC. But the DIN
+    reserves 8 bytes (dinSessionSetupReqType_EVCCID_BYTES_SIZE is 8). This does not match.
+    The Ioniq (DIN) sets the bytesLen=6 and fills the 6 bytes with its own MAC. Let's assume this
+    is the best way. */
+    useEVCCIDFromCommandLine();
+    for (i=0; i<LEN_OF_EVCCID; i++) {
+        dinDoc.V2G_Message.Body.SessionSetupReq.EVCCID.bytes[i] = EVCCID[i];
+    }
+    dinDoc.V2G_Message.Body.SessionSetupReq.EVCCID.bytesLen = LEN_OF_EVCCID; 
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
