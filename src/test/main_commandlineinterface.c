@@ -591,11 +591,53 @@ void translateDocDinToJson(void) {
 		addMessageName("ChargeParameterDiscoveryReq");
 		#define m dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq
 		sprintf(sTmp, "%d", m.EVRequestedEnergyTransferType); addProperty("EVRequestedEnergyTransferType", sTmp);
+        
+		sprintf(sTmp, "%d", m.EVChargeParameter_isUsed); addProperty("EVChargeParameter_isUsed", sTmp);
+        if (m.EVChargeParameter_isUsed) {
+            /* no content */
+        }
 		sprintf(sTmp, "%d", m.DC_EVChargeParameter_isUsed); addProperty("DC_EVChargeParameter_isUsed", sTmp);
 		if (m.DC_EVChargeParameter_isUsed) {
 			sprintf(sTmp, "%d", m.DC_EVChargeParameter.DC_EVStatus.EVRESSSOC); addProperty("DC_EVStatus.EVRESSSOC", sTmp);
 			sprintf(sTmp, "%d", m.DC_EVChargeParameter.DC_EVStatus.EVReady); addProperty("DC_EVStatus.EVReady", sTmp);
-			// todo EVMaximumCurrentLimit
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.DC_EVStatus.EVCabinConditioning_isUsed); addProperty("EVCabinConditioning_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.DC_EVStatus.EVRESSConditioning_isUsed); addProperty("EVRESSConditioning_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.DC_EVStatus.EVErrorCode); addProperty("EVErrorCode", sTmp);
+
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumCurrentLimit.Value); addProperty("EVMaximumCurrentLimit.Value", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumCurrentLimit.Multiplier); addProperty("EVMaximumCurrentLimit.Multiplier", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumCurrentLimit.Unit_isUsed); addProperty("EVMaximumCurrentLimit.Unit_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumCurrentLimit.Unit); addProperty("EVMaximumCurrentLimit.Unit", sTmp);
+            
+            
+            
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumPowerLimit_isUsed); addProperty("EVMaximumPowerLimit_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumPowerLimit.Value); addProperty("EVMaximumPowerLimit.Value", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumPowerLimit.Multiplier); addProperty("EVMaximumPowerLimit.Multiplier", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumPowerLimit.Unit_isUsed); addProperty("EVMaximumPowerLimit.Unit_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumPowerLimit.Unit); addProperty("EVMaximumPowerLimit.Unit", sTmp);
+            
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumVoltageLimit.Value); addProperty("EVMaximumVoltageLimit.Value", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumVoltageLimit.Multiplier); addProperty("EVMaximumVoltageLimit.Multiplier", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumVoltageLimit.Unit_isUsed); addProperty("EVMaximumVoltageLimit.Unit_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumVoltageLimit.Unit); addProperty("EVMaximumVoltageLimit.Unit", sTmp);
+            
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyCapacity_isUsed); addProperty("EVEnergyCapacity_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyCapacity.Value); addProperty("EVEnergyCapacity.Value", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyCapacity.Multiplier); addProperty("EVEnergyCapacity.Multiplier", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyCapacity.Unit_isUsed); addProperty("EVEnergyCapacity.Unit_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyCapacity.Unit); addProperty("EVEnergyCapacity.Unit", sTmp);
+            
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyRequest_isUsed); addProperty("EVEnergyRequest_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyRequest.Value); addProperty("EVEnergyRequest.Value", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyRequest.Multiplier); addProperty("EVEnergyRequest.Multiplier", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyRequest.Unit_isUsed); addProperty("EVEnergyRequest.Unit_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyRequest.Unit); addProperty("EVEnergyRequest.Unit", sTmp);
+
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.FullSOC_isUsed); addProperty("FullSOC_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.FullSOC); addProperty("FullSOC", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.BulkSOC_isUsed); addProperty("BulkSOC_isUsed", sTmp);
+            sprintf(sTmp, "%d", m.DC_EVChargeParameter.BulkSOC); addProperty("BulkSOC", sTmp);
 		}
 		#undef m
 	}
@@ -1150,26 +1192,43 @@ static void encodeChargeParameterDiscoveryRequest(void) {
 	//dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq.EVChargeParameter
 	//dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq.EVChargeParameter_isUsed = 1;
 	cp = &dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter;
-	cp->DC_EVStatus.EVReady = 1; /* todo: what ever this means */
+	cp->DC_EVStatus.EVReady = 0; /* What ever this means. The Ioniq sends 0 here in the ChargeParameterDiscoveryReq message. */
 	//cp->DC_EVStatus.EVCabinConditioning
-	//cp->DC_EVStatus.EVCabinConditioning_isUsed
+	//cp->DC_EVStatus.EVCabinConditioning_isUsed /* The Ioniq sends this with 1, but let's assume it is not mandatory. */
+	//cp->DC_EVStatus.RESSConditioning_isUsed /* The Ioniq sends this with 1, but let's assume it is not mandatory. */
 	cp->DC_EVStatus.EVRESSSOC = getIntParam(1); /* Take the SOC from the command line parameter. Scaling is 1%. */
-	cp->EVMaximumCurrentLimit.Multiplier = 0; /* -3 to 3. The exponent for base of 10. */
-	cp->EVMaximumCurrentLimit.Unit = dinunitSymbolType_A;
 	cp->EVMaximumCurrentLimit.Value = 100; 
-	//cp->EVMaximumPowerLimit ;
-	//cp->EVMaximumPowerLimit_isUsed:1;
-	cp->EVMaximumVoltageLimit.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
-	cp->EVMaximumVoltageLimit.Unit = dinunitSymbolType_V;
+	cp->EVMaximumCurrentLimit.Multiplier = 0; /* -3 to 3. The exponent for base of 10. */
+	cp->EVMaximumCurrentLimit.Unit_isUsed = 1;
+	cp->EVMaximumCurrentLimit.Unit = dinunitSymbolType_A;
+	cp->EVMaximumPowerLimit_isUsed = 1; /* The Ioniq sends 1 here. */
+	cp->EVMaximumPowerLimit.Value = 9800; /* Ioniq: 9800 */
+	cp->EVMaximumPowerLimit.Multiplier = 1; /* 10^1 */
+	cp->EVMaximumPowerLimit.Unit_isUsed = 1; 
+	cp->EVMaximumPowerLimit.Unit = dinunitSymbolType_W; /* Watt */
+    
 	cp->EVMaximumVoltageLimit.Value = 398;
-	//cp->EVEnergyCapacity
-	//cp->EVEnergyCapacity_isUsed
-	//cp->EVEnergyRequest
-	//cp->EVEnergyRequest_isUsed
-	//cp->FullSOC
-	//cp->FullSOC_isUsed
-	//cp->BulkSOC
-	//cp->BulkSOC_isUsed
+	cp->EVMaximumVoltageLimit.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+	cp->EVMaximumVoltageLimit.Unit_isUsed = 1;
+	cp->EVMaximumVoltageLimit.Unit = dinunitSymbolType_V;
+    
+	cp->EVEnergyCapacity_isUsed = 1;
+	cp->EVEnergyCapacity.Value = 28000; /* 28kWh from Ioniq */
+	cp->EVEnergyCapacity.Multiplier = 0;
+	cp->EVEnergyCapacity.Unit_isUsed = 1;
+	cp->EVEnergyCapacity.Unit = 9; /* from Ioniq */
+
+	cp->EVEnergyRequest_isUsed = 1;
+	cp->EVEnergyRequest.Value = 20000; /* just invented 20kWh */
+	cp->EVEnergyRequest.Multiplier = 0;
+	cp->EVEnergyRequest.Unit_isUsed = 1;
+	cp->EVEnergyRequest.Unit = 9; /* from Ioniq */
+    
+    
+	cp->FullSOC_isUsed = 1;
+	cp->FullSOC = 100;
+	cp->BulkSOC_isUsed = 1;
+	cp->BulkSOC = 80;
 	dinDoc.V2G_Message.Body.ChargeParameterDiscoveryReq.DC_EVChargeParameter_isUsed = 1;
 	prepareGlobalStream();
 	g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
