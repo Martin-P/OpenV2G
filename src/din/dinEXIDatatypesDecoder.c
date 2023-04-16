@@ -3028,6 +3028,7 @@ static int decode_dinDC_EVPowerDeliveryParameterType(bitstream_t* stream, struct
 			if (errn == 0) {
 				switch(eventCode) {
 				case 0:
+                    debugAddStringAndInt("Line", __LINE__);
 					errn = decode_dinDC_EVStatusType(stream, &dinDC_EVPowerDeliveryParameterType->DC_EVStatus);
 					grammarID = 62;
 					break;
@@ -3047,6 +3048,7 @@ static int decode_dinDC_EVPowerDeliveryParameterType(bitstream_t* stream, struct
 					errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 					if(errn == 0) {
 						if(eventCode == 0) {
+                            debugAddStringAndInt("Line", __LINE__);
 							errn = decodeBoolean(stream, &dinDC_EVPowerDeliveryParameterType->BulkChargingComplete);
 							dinDC_EVPowerDeliveryParameterType->BulkChargingComplete_isUsed = 1u;
 						} else {
@@ -3069,6 +3071,7 @@ static int decode_dinDC_EVPowerDeliveryParameterType(bitstream_t* stream, struct
 					errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 					if(errn == 0) {
 						if(eventCode == 0) {
+                            debugAddStringAndInt("Line", __LINE__);
 							errn = decodeBoolean(stream, &dinDC_EVPowerDeliveryParameterType->ChargingComplete);
 						} else {
 							/* Second level event (e.g., xsi:type, xsi:nil, ...) */
@@ -5599,6 +5602,7 @@ static int decode_dinPowerDeliveryReqType(bitstream_t* stream, struct dinPowerDe
 		switch(grammarID) {
 		case 118:
 			/* FirstStartTag[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ReadyToChargeState)] */
+            debugAddStringAndInt("Gram", 118);
 			errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 			if (errn == 0) {
 				switch(eventCode) {
@@ -5607,6 +5611,7 @@ static int decode_dinPowerDeliveryReqType(bitstream_t* stream, struct dinPowerDe
 					errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 					if(errn == 0) {
 						if(eventCode == 0) {
+                            debugAddStringAndInt("Line", __LINE__);
 							errn = decodeBoolean(stream, &dinPowerDeliveryReqType->ReadyToChargeState);
 						} else {
 							/* Second level event (e.g., xsi:type, xsi:nil, ...) */
@@ -5631,25 +5636,30 @@ static int decode_dinPowerDeliveryReqType(bitstream_t* stream, struct dinPowerDe
 			break;
 		case 119:
 			/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgBody}ChargingProfile), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}DC_EVPowerDeliveryParameter), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EVPowerDeliveryParameter), END_ELEMENT] */
+            debugAddStringAndInt("Gram", 119);
 			errn = decodeNBitUnsignedInteger(stream, 3, &eventCode);
 			if (errn == 0) {
 				switch(eventCode) {
 				case 0:
+                    debugAddStringAndInt("Line", __LINE__);
 					errn = decode_dinChargingProfileType(stream, &dinPowerDeliveryReqType->ChargingProfile);
 					dinPowerDeliveryReqType->ChargingProfile_isUsed = 1u;
 					grammarID = 120;
 					break;
 				case 1:
+                    debugAddStringAndInt("Line", __LINE__);
 					errn = decode_dinDC_EVPowerDeliveryParameterType(stream, &dinPowerDeliveryReqType->DC_EVPowerDeliveryParameter);
 					dinPowerDeliveryReqType->DC_EVPowerDeliveryParameter_isUsed = 1u;
 					grammarID = 4;
 					break;
 				case 2:
+                    debugAddStringAndInt("Line", __LINE__);
 					errn = decode_dinEVPowerDeliveryParameterType(stream, &dinPowerDeliveryReqType->EVPowerDeliveryParameter);
 					dinPowerDeliveryReqType->EVPowerDeliveryParameter_isUsed = 1u;
 					grammarID = 4;
 					break;
 				case 3:
+                    debugAddStringAndInt("Line", __LINE__);
 					done = 1;
 					grammarID = 5;
 					break;
@@ -5661,20 +5671,24 @@ static int decode_dinPowerDeliveryReqType(bitstream_t* stream, struct dinPowerDe
 			break;
 		case 120:
 			/* Element[START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}DC_EVPowerDeliveryParameter), START_ELEMENT({urn:iso:15118:2:2010:MsgDataTypes}EVPowerDeliveryParameter), END_ELEMENT] */
+            debugAddStringAndInt("Gram", 120);
 			errn = decodeNBitUnsignedInteger(stream, 2, &eventCode);
 			if (errn == 0) {
 				switch(eventCode) {
 				case 0:
+                    debugAddStringAndInt("Line", __LINE__);
 					errn = decode_dinDC_EVPowerDeliveryParameterType(stream, &dinPowerDeliveryReqType->DC_EVPowerDeliveryParameter);
 					dinPowerDeliveryReqType->DC_EVPowerDeliveryParameter_isUsed = 1u;
 					grammarID = 4;
 					break;
 				case 1:
+                    debugAddStringAndInt("Line", __LINE__);
 					errn = decode_dinEVPowerDeliveryParameterType(stream, &dinPowerDeliveryReqType->EVPowerDeliveryParameter);
 					dinPowerDeliveryReqType->EVPowerDeliveryParameter_isUsed = 1u;
 					grammarID = 4;
 					break;
 				case 2:
+                    debugAddStringAndInt("Line", __LINE__);
 					done = 1;
 					grammarID = 5;
 					break;
@@ -5686,6 +5700,7 @@ static int decode_dinPowerDeliveryReqType(bitstream_t* stream, struct dinPowerDe
 			break;
 		case 4:
 			/* Element[END_ELEMENT] */
+            debugAddStringAndInt("Gram", 4);
 			errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 			if (errn == 0) {
 				switch(eventCode) {
@@ -9038,6 +9053,7 @@ static int decode_dinDC_EVStatusType(bitstream_t* stream, struct dinDC_EVStatusT
 					errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 					if(errn == 0) {
 						if(eventCode == 0) {
+                            debugAddStringAndInt("Line", __LINE__);
 							errn = decodeBoolean(stream, &dinDC_EVStatusType->EVReady);
 						} else {
 							/* Second level event (e.g., xsi:type, xsi:nil, ...) */
@@ -9070,6 +9086,7 @@ static int decode_dinDC_EVStatusType(bitstream_t* stream, struct dinDC_EVStatusT
 					errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 					if(errn == 0) {
 						if(eventCode == 0) {
+                            debugAddStringAndInt("Line", __LINE__);
 							errn = decodeBoolean(stream, &dinDC_EVStatusType->EVCabinConditioning);
 							dinDC_EVStatusType->EVCabinConditioning_isUsed = 1u;
 						} else {
@@ -9092,6 +9109,7 @@ static int decode_dinDC_EVStatusType(bitstream_t* stream, struct dinDC_EVStatusT
 					errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 					if(errn == 0) {
 						if(eventCode == 0) {
+                            debugAddStringAndInt("Line", __LINE__);
 							errn = decodeBoolean(stream, &dinDC_EVStatusType->EVRESSConditioning);
 							dinDC_EVStatusType->EVRESSConditioning_isUsed = 1u;
 						} else {
@@ -9147,6 +9165,7 @@ static int decode_dinDC_EVStatusType(bitstream_t* stream, struct dinDC_EVStatusT
 					errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 					if(errn == 0) {
 						if(eventCode == 0) {
+                            debugAddStringAndInt("Line", __LINE__);
 							errn = decodeBoolean(stream, &dinDC_EVStatusType->EVRESSConditioning);
 							dinDC_EVStatusType->EVRESSConditioning_isUsed = 1u;
 						} else {
@@ -9169,6 +9188,7 @@ static int decode_dinDC_EVStatusType(bitstream_t* stream, struct dinDC_EVStatusT
 					errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 					if(errn == 0) {
 						if(eventCode == 0) {
+                            debugAddStringAndInt("Line", __LINE__);
 							errn = decodeNBitUnsignedInteger(stream, 4, &uint32);
 							dinDC_EVStatusType->EVErrorCode = (dinDC_EVErrorCodeType) uint32;
 						} else {
@@ -9202,6 +9222,7 @@ static int decode_dinDC_EVStatusType(bitstream_t* stream, struct dinDC_EVStatusT
 					errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 					if(errn == 0) {
 						if(eventCode == 0) {
+                            debugAddStringAndInt("Line", __LINE__);
 							errn = decodeNBitUnsignedInteger(stream, 4, &uint32);
 							dinDC_EVStatusType->EVErrorCode = (dinDC_EVErrorCodeType) uint32;
 						} else {
@@ -9235,6 +9256,7 @@ static int decode_dinDC_EVStatusType(bitstream_t* stream, struct dinDC_EVStatusT
 					errn = decodeNBitUnsignedInteger(stream, 1, &eventCode);
 					if(errn == 0) {
 						if(eventCode == 0) {
+                            debugAddStringAndInt("Line", __LINE__);
 							errn = decodeNBitUnsignedInteger(stream, 7, &(uint32));
 							dinDC_EVStatusType->EVRESSSOC = (int8_t)(uint32 + 0);
 						} else {

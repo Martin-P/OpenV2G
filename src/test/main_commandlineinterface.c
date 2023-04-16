@@ -804,8 +804,9 @@ void translateDocDinToJson(void) {
 			#define v2 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.DC_EVStatus.EVErrorCode
 			#define v3 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.DC_EVStatus.EVRESSSOC
 			#define v4 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.BulkChargingComplete
+            #define v4used dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.BulkChargingComplete_isUsed
 			#define v5 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.ChargingComplete
-			
+
 			sprintf(sTmp, "%d", v1); addProperty("EVReady", sTmp);
 			sprintf(sTmp, "%d", v2); addProperty("EVErrorCode", sTmp);
 			
@@ -825,13 +826,35 @@ void translateDocDinToJson(void) {
 			}
 			
 			sprintf(sTmp, "%d", v3); addProperty("EVRESSSOC", sTmp);
-			sprintf(sTmp, "%d", v4); addProperty("BulkChargingComplete", sTmp);
+			sprintf(sTmp, "%d", v4used); addProperty("BulkChargingComplete_isUsed", sTmp);
+            if (v4used) {
+			  sprintf(sTmp, "%d", v4); addProperty("BulkChargingComplete", sTmp);
+            }
 			sprintf(sTmp, "%d", v5); addProperty("ChargingComplete", sTmp);
+
+			#define v6 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.DC_EVStatus.EVCabinConditioning_isUsed
+			#define v7 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.DC_EVStatus.EVCabinConditioning
+			#define v8 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.DC_EVStatus.EVRESSConditioning_isUsed
+			#define v9 dinDoc.V2G_Message.Body.PowerDeliveryReq.DC_EVPowerDeliveryParameter.DC_EVStatus.EVRESSConditioning
+			sprintf(sTmp, "%d", v6); addProperty("EVCabinConditioning_isUsed", sTmp);
+            if (v6) {
+                sprintf(sTmp, "%d", v7); addProperty("EVCabinConditioning", sTmp);
+            }
+			sprintf(sTmp, "%d", v8); addProperty("EVRESSConditioning_isUsed", sTmp);
+            if (v8) {
+                sprintf(sTmp, "%d", v9); addProperty("EVRESSConditioning", sTmp);
+            }
+            
 			#undef v1
 			#undef v2
 			#undef v3
 			#undef v4
+            #undef v4used
 			#undef v5
+			#undef v6
+			#undef v7
+			#undef v8
+			#undef v9
 		}
 
 	}
@@ -1412,7 +1435,16 @@ static void encodePowerDeliveryRequest(void) {
 	  st.EVReady = 1; /* 1 means true. We are ready. */
 	  st.EVErrorCode = dinDC_EVErrorCodeType_NO_ERROR;
 	  st.EVRESSSOC = getIntParam(1); /* Take the SOC from the command line parameter. Scaling is 1%. */
+      /* The Ioniq also sets dinDC_EVStatusType->EVCabinConditioning_isUsed = 1u */
+      st.EVCabinConditioning_isUsed = 1u;
+      st.EVCabinConditioning = 0; /* boolean */
+      /* The Ioniq also sets dinDC_EVStatusType->EVRESSConditioning_isUsed = 1u */
+      st.EVRESSConditioning_isUsed = 1u;
+      st.EVRESSConditioning = 0; /* boolean */
 	#undef st
+    /* The Ioniq also sets BulkChargingComplete_isUsed = 1 */
+    m.DC_EVPowerDeliveryParameter.BulkChargingComplete_isUsed = 1;
+    m.DC_EVPowerDeliveryParameter.BulkChargingComplete = 0;
 	m.DC_EVPowerDeliveryParameter.ChargingComplete = 0; /* boolean. Charging not finished. */
 	#undef m
 	prepareGlobalStream();
