@@ -485,6 +485,29 @@ void translatedinDC_EVSEStatusCodeTypeToJson(dinDC_EVSEStatusCodeType st) {
 	addProperty("EVSEStatusCode_text", sLoc);
 }
 
+void translatedinDC_EVErrorCodeTypeToJson(dinDC_EVErrorCodeType e) {
+	char sLoc[40];
+	strcpy(sLoc, "UNKNOWN_ERROR");
+	switch (e) {
+        case dinDC_EVErrorCodeType_NO_ERROR: strcpy(sLoc, "NO_ERROR"); break;
+        
+        case dinDC_EVErrorCodeType_FAILED_RESSTemperatureInhibit: strcpy(sLoc, "FAILED_RESSTemperatureInhibit"); break;
+        case dinDC_EVErrorCodeType_FAILED_EVShiftPosition: strcpy(sLoc, "FAILED_EVShiftPosition"); break;
+        case dinDC_EVErrorCodeType_FAILED_ChargerConnectorLockFault: strcpy(sLoc, "FAILED_ChargerConnectorLockFault"); break;
+        case dinDC_EVErrorCodeType_FAILED_EVRESSMalfunction: strcpy(sLoc, "FAILED_EVRESSMalfunction"); break;
+        case dinDC_EVErrorCodeType_FAILED_ChargingCurrentdifferential: strcpy(sLoc, "FAILED_ChargingCurrentdifferential"); break;
+        case dinDC_EVErrorCodeType_FAILED_ChargingVoltageOutOfRange: strcpy(sLoc, "FAILED_ChargingVoltageOutOfRange"); break;
+        case dinDC_EVErrorCodeType_Reserved_A: strcpy(sLoc, "Reserved_A"); break;
+        case dinDC_EVErrorCodeType_Reserved_B: strcpy(sLoc, "Reserved_B"); break;
+        case dinDC_EVErrorCodeType_Reserved_C: strcpy(sLoc, "Reserved_C"); break;
+        case dinDC_EVErrorCodeType_FAILED_ChargingSystemIncompatibility: strcpy(sLoc, "FAILED_ChargingSystemIncompatibility"); break;
+        case dinDC_EVErrorCodeType_NoData: strcpy(sLoc, "NoData"); break;
+        default: strcpy(sLoc, "UNKNOWN_ERROR");
+	}
+	addProperty("DC_EVErrorCodeText", sLoc);
+}
+
+
 /* translate the struct dinDoc into JSON, to have it ready to give it over stdout to the caller application. */
 void translateDocDinToJson(void) {
 	char sTmp[30];
@@ -603,6 +626,7 @@ void translateDocDinToJson(void) {
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.DC_EVStatus.EVCabinConditioning_isUsed); addProperty("EVCabinConditioning_isUsed", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.DC_EVStatus.EVRESSConditioning_isUsed); addProperty("EVRESSConditioning_isUsed", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.DC_EVStatus.EVErrorCode); addProperty("EVErrorCode", sTmp);
+            translatedinDC_EVErrorCodeTypeToJson(m.DC_EVChargeParameter.DC_EVStatus.EVErrorCode);
 
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumCurrentLimit.Value); addProperty("EVMaximumCurrentLimit.Value", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumCurrentLimit.Multiplier); addProperty("EVMaximumCurrentLimit.Multiplier", sTmp);
@@ -749,6 +773,7 @@ void translateDocDinToJson(void) {
 		#define m dinDoc.V2G_Message.Body.PreChargeReq
 		sprintf(sTmp, "%d", m.DC_EVStatus.EVReady); addProperty("DC_EVStatus.EVReady", sTmp);
 		sprintf(sTmp, "%d", m.DC_EVStatus.EVErrorCode); addProperty("DC_EVStatus.EVErrorCode", sTmp);
+        translatedinDC_EVErrorCodeTypeToJson(m.DC_EVStatus.EVErrorCode);
 		sprintf(sTmp, "%d", m.DC_EVStatus.EVRESSSOC); addProperty("DC_EVStatus.EVRESSSOC", sTmp);
 
 		sprintf(sTmp, "%d", m.EVTargetVoltage.Multiplier); addProperty("EVTargetVoltage.Multiplier", sTmp);
@@ -809,21 +834,7 @@ void translateDocDinToJson(void) {
 
 			sprintf(sTmp, "%d", v1); addProperty("EVReady", sTmp);
 			sprintf(sTmp, "%d", v2); addProperty("EVErrorCode", sTmp);
-			
-			switch (v2) {
-				case dinDC_EVErrorCodeType_NO_ERROR:
-					addProperty("EVErrorCodeText", "NO_ERROR");
-					break;
-				case dinDC_EVErrorCodeType_FAILED_ChargingSystemIncompatibility:
-					addProperty("EVErrorCodeText", "FAILED_ChargingSystemIncompatibility");
-					break;
-				case dinDC_EVErrorCodeType_FAILED_ChargerConnectorLockFault:
-					addProperty("EVErrorCodeText", "FAILED_ChargerConnectorLockFault");
-					break;
-				default:
-					addProperty("EVErrorCodeText", "otherError");
-					/* todo add more error texts */
-			}
+            translatedinDC_EVErrorCodeTypeToJson(v2);
 			
 			sprintf(sTmp, "%d", v3); addProperty("EVRESSSOC", sTmp);
 			sprintf(sTmp, "%d", v4used); addProperty("BulkChargingComplete_isUsed", sTmp);
@@ -889,6 +900,7 @@ void translateDocDinToJson(void) {
 		#define m dinDoc.V2G_Message.Body.CurrentDemandReq
 		sprintf(sTmp, "%d", m.DC_EVStatus.EVReady); addProperty("DC_EVStatus.EVReady", sTmp);
 		sprintf(sTmp, "%d", m.DC_EVStatus.EVErrorCode); addProperty("DC_EVStatus.EVErrorCode", sTmp);
+        translatedinDC_EVErrorCodeTypeToJson(m.DC_EVStatus.EVErrorCode);
 		sprintf(sTmp, "%d", m.DC_EVStatus.EVRESSSOC); addProperty("DC_EVStatus.EVRESSSOC", sTmp);
 
 		sprintf(sTmp, "%d", m.EVTargetCurrent.Multiplier); addProperty("EVTargetCurrent.Multiplier", sTmp);
@@ -988,6 +1000,7 @@ void translateDocDinToJson(void) {
 		#define m dinDoc.V2G_Message.Body.WeldingDetectionReq
 		sprintf(sTmp, "%d", m.DC_EVStatus.EVReady); addProperty("DC_EVStatus.EVReady", sTmp);
 		sprintf(sTmp, "%d", m.DC_EVStatus.EVErrorCode); addProperty("DC_EVStatus.EVErrorCode", sTmp);
+        translatedinDC_EVErrorCodeTypeToJson(m.DC_EVStatus.EVErrorCode);
 		sprintf(sTmp, "%d", m.DC_EVStatus.EVRESSSOC); addProperty("DC_EVStatus.EVRESSSOC", sTmp);	
 		#undef m
 	}
