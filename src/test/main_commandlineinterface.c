@@ -1552,7 +1552,7 @@ void encodeCurrentDemandResponse(void) {
 	m.EVSEPresentCurrent.Unit = dinunitSymbolType_A;
 	m.EVSEPresentCurrent.Unit_isUsed = 1;
 	m.EVSEPresentCurrent.Value = getIntParam(1); /* Take from command line */
-	m.EVSECurrentLimitAchieved = 0;
+	m.EVSECurrentLimitAchieved = 1;
 	m.EVSEVoltageLimitAchieved = 0;
 	m.EVSEPowerLimitAchieved = 0;
 	m.EVSEMaximumVoltageLimit_isUsed = 0;
