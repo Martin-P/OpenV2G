@@ -1326,7 +1326,11 @@ void encodeChargeParameterDiscoveryResponse(void) {
     //dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter
     //dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.AC_EVSEChargeParameter_isUsed
     cpdc = &dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter;
-    cpdc->DC_EVSEStatus.EVSEIsolationStatus = dinisolationLevelType_Valid;
+    
+    /* https://github.com/SmartEVSE/SmartEVSE-3/issues/25#issuecomment-1666231234
+       Public chargers are reporting "invalid", which means, the isolation check has not
+       yet performed. Reporting "valid" at this step may confuse the car. */
+    cpdc->DC_EVSEStatus.EVSEIsolationStatus = dinisolationLevelType_Invalid;
     cpdc->DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
     cpdc->DC_EVSEStatus.EVSEStatusCode = dinDC_EVSEStatusCodeType_EVSE_Ready;
     cpdc->DC_EVSEStatus.NotificationMaxDelay = 0; /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
