@@ -1582,7 +1582,7 @@ void encodeCurrentDemandResponse(void) {
     #define m dinDoc.V2G_Message.Body.CurrentDemandRes
     m.DC_EVSEStatus.EVSEIsolationStatus = dinisolationLevelType_Valid;
     m.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
-    m.DC_EVSEStatus.EVSEStatusCode = dinDC_EVSEStatusCodeType_EVSE_Ready;
+    m.DC_EVSEStatus.EVSEStatusCode = getIntParam(2); /* Take from command line */; /* 1=EVSE_Ready, 2=EVSE_Shutdown, means the user stopped the session on the charger. */
     m.DC_EVSEStatus.NotificationMaxDelay = 0; /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
     m.DC_EVSEStatus.EVSENotification = dinEVSENotificationType_None; /* could also be dinEVSENotificationType_StopCharging */
     m.EVSEPresentVoltage.Multiplier = 0;
