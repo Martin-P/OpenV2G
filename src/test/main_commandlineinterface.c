@@ -1602,7 +1602,7 @@ void encodeCurrentDemandResponse(void) {
     //m.EVSEMaximumCurrentLimit
     m.EVSEMaximumPowerLimit_isUsed = 0;
     //m.EVSEMaximumPowerLimit
-
+    #undef m
     prepareGlobalStream();
     g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
@@ -1633,6 +1633,12 @@ void encodeWeldingDetectionResponse(void) {
     init_dinBodyType(&dinDoc.V2G_Message.Body);
     dinDoc.V2G_Message.Body.WeldingDetectionRes_isUsed = 1u;
     init_dinWeldingDetectionResType(&dinDoc.V2G_Message.Body.WeldingDetectionRes);
+    #define m dinDoc.V2G_Message.Body.WeldingDetectionRes
+    m.EVSEPresentVoltage.Multiplier = 0;
+    m.EVSEPresentVoltage.Unit = dinunitSymbolType_V;
+    m.EVSEPresentVoltage.Unit_isUsed = 1;
+    m.EVSEPresentVoltage.Value = getIntParam(0); /* Take from command line */
+    #undef m
     prepareGlobalStream();
     g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
