@@ -1407,6 +1407,11 @@ void encodeCableCheckResponse(void) {
     init_dinBodyType(&dinDoc.V2G_Message.Body);
     dinDoc.V2G_Message.Body.CableCheckRes_isUsed = 1u;
     init_dinCableCheckResType(&dinDoc.V2G_Message.Body.CableCheckRes);
+    if (getIntParam(0)) { /* command line argument decides whether we report "Ongoing" or "Finished" */
+      dinDoc.V2G_Message.Body.CableCheckRes.EVSEProcessing=dinEVSEProcessingType_Ongoing;
+    } else {
+      dinDoc.V2G_Message.Body.CableCheckRes.EVSEProcessing=dinEVSEProcessingType_Finished;
+    }
     prepareGlobalStream();
     g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();
