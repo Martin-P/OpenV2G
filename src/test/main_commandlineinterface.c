@@ -701,6 +701,30 @@ void translateDocDinToJson(void) {
         #undef processing
         // todo maybe: EVSEChargeParameter_isUsed
         // todo for AC: AC_EVSEChargeParameter_isUsed
+        #define res dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes
+        sprintf(sTmp, "%d", res.SAScheduleList_isUsed); addProperty("SAScheduleList_isUsed", sTmp);
+        if (res.SAScheduleList_isUsed) {
+            sprintf(sTmp, "%d", res.SAScheduleList.SAScheduleTuple.arrayLen); addProperty("SAScheduleList.SAScheduleTuple.arrayLen", sTmp);
+            if (res.SAScheduleList.SAScheduleTuple.arrayLen>0) {
+                #define SchedTuple0 res.SAScheduleList.SAScheduleTuple.array[0]
+                sprintf(sTmp, "%d", SchedTuple0.PMaxSchedule.PMaxScheduleEntry.arrayLen); addProperty("SchedTuple0.PMaxSchedule.PMaxScheduleEntry.arrayLen", sTmp);
+                if (SchedTuple0.PMaxSchedule.PMaxScheduleEntry.arrayLen>0) {
+                    sprintf(sTmp, "%d", SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].TimeInterval_isUsed); addProperty("SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].TimeInterval_isUsed", sTmp);
+                    sprintf(sTmp, "%d", SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval_isUsed); addProperty("SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval_isUsed", sTmp);
+                    if (SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval_isUsed) {
+                        sprintf(sTmp, "%d", SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.start); addProperty("SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.start", sTmp);
+                        sprintf(sTmp, "%d", SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.duration_isUsed); addProperty("SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.duration_isUsed", sTmp);
+                        if (SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.duration_isUsed) {
+                            sprintf(sTmp, "%d", SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.duration); addProperty("SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.duration", sTmp);
+                        }
+                    }
+                    sprintf(sTmp, "%d", SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].PMax); addProperty("SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].PMax", sTmp);
+                    /* todo: show the complete content of the schedule */
+                }
+                #undef SchedTuple0
+            }
+        }
+        #undef res
         if (dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter_isUsed) {
             //DC_EVSEChargeParameter
             //  DC_EVSEStatus
@@ -1314,11 +1338,24 @@ void encodeChargeParameterDiscoveryResponse(void) {
         dinEVSEProcessingType_Ongoing = 1
     */
     dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEProcessing = dinEVSEProcessingType_Finished;
-    /* The encoder wants either SASchedules or SAScheduleList. If both are missing, it fails. (around line 3993 in dinEXIDatatypesEncoder.c).
-       The content is not used at all, but we just set it, to satisfy the encoder. */
-    dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.SASchedules.noContent = 0;
-    dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.SASchedules_isUsed = 1;
-    
+    /* The encoder wants either SASchedules or SAScheduleList. If both are missing, it fails. (around line 3993 in dinEXIDatatypesEncoder.c). */
+    /* https://github.com/uhi22/pyPLC/issues/14#issuecomment-1895620509
+       https://github.com/uhi22/pyPLC/issues/14#issuecomment-1895572137
+       The SAScheduleList is optional, but it is mandatory if the EVSEProcessing is Finished (at least in ISO).
+       So we set it here. */
+    dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList_isUsed = 1u;
+    dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.arrayLen = 1;
+    #define SchedTuple0 dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0]
+    SchedTuple0.SAScheduleTupleID = 0;
+    SchedTuple0.PMaxSchedule.PMaxScheduleID = 0;
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.arrayLen = 1;
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].TimeInterval_isUsed = 0;
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval_isUsed = 1; /* at least one of TimeInterval and RelativeTimeInterval is
+                                                                                            necessary, otherwise the encoder gives an error. */
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.start = 0; /* "now" */
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.duration_isUsed = 0; /* no duration, so "endless" */
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].PMax = 50; /* what is the scaling of the int16? Assuming kW. */
+    #undef SchedTuple0
     cp = &dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEChargeParameter;
     cp->noContent = 0;
     dinDoc.V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEChargeParameter_isUsed=0;
