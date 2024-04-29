@@ -1493,6 +1493,9 @@ void encodePreChargeResponse(void) {
     init_dinPreChargeResType(&dinDoc.V2G_Message.Body.PreChargeRes);
     dinDoc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus = 1;
     dinDoc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
+    dinDoc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEStatusCode = 1; /* EVSE_Ready. This is reported by
+                                                                              Alpitronic, Numbat and Supercharger in all
+                                                                              PreChargeResponses */
     dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Multiplier = 0; /* 10 ^ 0 */
     dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Unit = dinunitSymbolType_V; /* why is this shown as 0? Because unit is optional, see question2. */
     dinDoc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Value = getIntParam(0); /* Take from command line */
