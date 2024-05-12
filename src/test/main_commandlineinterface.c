@@ -151,7 +151,18 @@ static void printASCIIString(exi_string_character_t* string, uint16_t len) {
         sprintf(strShort, "%c",(char)string[i]);
         strcat(s, strShort);
     }
+    //printf(s);
     //printf("\n");
+}
+
+static void copyStringToExi(exi_string_character_t* existring, char *input) {
+    /* The exi_string_character is not a char, so we cannot use memcpy or strcpy, so
+       just copy each character separately. */
+    /* assumption: existring has at least same space as the input string. */
+    int i;
+    for (i=0; i<strlen(input); i++) {
+        existring[i] = (exi_string_character_t)input[i]; 
+    }
 }
 
 /*
@@ -1083,6 +1094,86 @@ void translateDocDinToJson(void) {
 *  Encoder
 **********************************************************************************************************
 *********************************************************************************************************/
+static void encodeSupportedAppProtocolRequest(void) {
+    /* The :supportedAppProtocolReq contains:
+    ....
+    */
+  /* Command line to set the SchemaID 1:
+    $ ./OpenV2G.exe EH__1
+  */
+  int selection;
+  int i;
+  char *strISO2013 = "urn:iso:15118:2:2013:MsgDef";
+  char *strDIN = "urn:din:70121:2012:MsgDef";
+  
+  init_appHandEXIDocument(&aphsDoc);
+  aphsDoc.supportedAppProtocolReq_isUsed = 1u;
+  selection = getIntParam(0); /* take the selection from the command line */
+  if (selection == 0) {
+      /* we want to anounce DIN only */
+      /* "urn:din:70121:2012:MsgDef" */
+      aphsDoc.supportedAppProtocolReq.AppProtocol.arrayLen = 1; /* one element in the list of protocols */
+      i=0; /* the first entry in the list */
+      /* The maximum size appHandAppProtocolType_ProtocolNamespace_CHARACTERS_SIZE is 100 byte. The string is shorter, no check necessary. */
+      copyStringToExi(aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters, strDIN);
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.charactersLen = strlen(strDIN);
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].VersionNumberMajor = 2;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].VersionNumberMinor = 0;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].SchemaID = 0;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].Priority = 1;
+  } else if (selection == 1) {
+      /* we want to announce ISO 2013 only */
+      /* "urn:iso:15118:2:2013:MsgDef" */
+      aphsDoc.supportedAppProtocolReq.AppProtocol.arrayLen = 1; /* one element in the list of protocols */
+      i=0; /* the first entry in the list */
+      /* The maximum size appHandAppProtocolType_ProtocolNamespace_CHARACTERS_SIZE is 100 byte. The string is shorter, no check necessary. */
+      copyStringToExi(aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters, strISO2013);
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.charactersLen = strlen(strISO2013);
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].VersionNumberMajor = 2;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].VersionNumberMinor = 0;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].SchemaID = 0;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].Priority = 1;
+      /* xxxx */
+  } else {
+      /* we want to announce DIN and ISO 2013 */
+      aphsDoc.supportedAppProtocolReq.AppProtocol.arrayLen = 2; /* two elements in the list of protocols */
+      i=0; /* the first entry in the list */
+      /* The maximum size appHandAppProtocolType_ProtocolNamespace_CHARACTERS_SIZE is 100 byte. The string is shorter, no check necessary. */
+      copyStringToExi(aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters, strDIN);
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.charactersLen = strlen(strDIN);
+      //printf("len is %d\n", aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.charactersLen);
+      //printf("Inhalt %c\n", (char)aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters[0]);
+      //printf("Inhalt %c\n", (char)aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters[1]);
+      //printf("Inhalt %c\n", (char)aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters[2]);
+      //printf("Inhalt %c\n", (char)aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters[3]);
+      //printf("Inhalt %c\n", (char)aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters[4]);
+      //printf("Inhalt %c\n", (char)aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters[5]);
+      //printASCIIString(
+      //  aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters,
+      //  aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.charactersLen
+      //);
+      //printf("end\n");
+      
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].VersionNumberMajor = 2;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].VersionNumberMinor = 0;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].SchemaID = 0;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].Priority = 2; /* 2 means lower priority than 1 */
+      i=1; /* the second entry in the list */
+      /* The maximum size appHandAppProtocolType_ProtocolNamespace_CHARACTERS_SIZE is 100 byte. The string is shorter, no check necessary. */
+      copyStringToExi(aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.characters, strISO2013);
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].ProtocolNamespace.charactersLen = strlen(strISO2013);
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].VersionNumberMajor = 2;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].VersionNumberMinor = 0;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].SchemaID = 1;
+      aphsDoc.supportedAppProtocolReq.AppProtocol.array[i].Priority = 1; /* 1 means highest priority */
+  }
+  prepareGlobalStream();
+  g_errn = encode_appHandExiDocument(&global_stream1, &aphsDoc);
+  printGlobalStream();
+  sprintf(gInfoString, "encodeSupportedAppProtocolRequest finished");
+}
+
+
 static void encodeSupportedAppProtocolResponse(void) {
     /* The :supportedAppProtocolRes contains only two fields:
         ResponseCode
@@ -1765,8 +1856,7 @@ static void runTheEncoder(char* parameterStream) {
   
   switch (parameterStream[1]) { /* H=HandshakeRequest, h=HandshakeResponse, D=DIN, 1=ISO1, 2=ISO2 */
     case 'H':
-        //encodeSupportedAppProtocolRequest();
-        sprintf(gErrorString, "encodeSupportedAppProtocolRequest not yet implemented.");
+        encodeSupportedAppProtocolRequest();
         break;
     case 'h':
         encodeSupportedAppProtocolResponse();
