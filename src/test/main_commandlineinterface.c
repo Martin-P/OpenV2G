@@ -437,6 +437,8 @@ void translateDocAppHandToJson(void) {
     }    
 }
 
+#include "iso1_commandlineinterface.c" /* including a c-file is bad style, but due the lot of dependencies it saves a lot of interface definitions. */
+
 void translateDinHeaderToJson(void) {
     char sTmp[40], s2[30];
     int i, n;
@@ -1941,7 +1943,83 @@ static void runTheEncoder(char* parameterStream) {
         }
         break;
     case '1':
-        sprintf(gErrorString, "ISO1 encoder not yet implemented");
+        switch (parameterStream[2]) {
+            case 'A':
+                encodeIso1SessionSetupRequest();
+                break;
+            case 'a':
+                encodeIso1SessionSetupResponse();
+                break;
+            case 'B':
+                encodeIso1ServiceDiscoveryRequest();
+                break;
+            case 'b':
+                encodeIso1ServiceDiscoveryResponse();
+                break;
+            case 'C':
+                encodeIso1ServicePaymentSelectionRequest(); /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
+                break;
+            case 'c':
+                encodeIso1ServicePaymentSelectionResponse(); /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
+                break;
+            case 'D':
+                sprintf(gErrorString, "AuthorizationRequest todo.");
+                break;
+            case 'd':
+                sprintf(gErrorString, "AuthorizationResponse todo.");
+                //encodeAuthorizationResponse();
+                break;
+            case 'E':
+                encodeIso1ChargeParameterDiscoveryRequest();
+                break;
+            case 'e':
+                encodeIso1ChargeParameterDiscoveryResponse();
+                break;
+            case 'F':
+                encodeIso1CableCheckRequest();
+                break;
+            case 'f':
+                encodeIso1CableCheckResponse();
+                break;
+            case 'G':
+                encodeIso1PreChargeRequest();
+                break;
+            case 'g':
+                encodeIso1PreChargeResponse();
+                break;
+            case 'H':
+                encodeIso1PowerDeliveryRequest();
+                break;
+            case 'h':
+                encodeIso1PowerDeliveryResponse();
+                break;
+            case 'I':
+                encodeIso1CurrentDemandRequest();
+                break;
+            case 'i':
+                encodeIso1CurrentDemandResponse();
+                break;
+            case 'J':
+                encodeIso1WeldingDetectionRequest();
+                break;
+            case 'j':
+                encodeIso1WeldingDetectionResponse();
+                break;
+            case 'K':
+                encodeIso1SessionStopRequest();
+                break;
+            case 'k':
+                encodeIso1SessionStopResponse();
+                break;
+            case 'L':
+                encodeIso1ContractAuthenticationRequest();
+                break;
+            case 'l':
+                encodeIso1ContractAuthenticationResponse();
+                break;
+            default:
+                sprintf(gErrorString, "invalid message in DIN encoder requested");
+        }
         break;
     case '2':
         sprintf(gErrorString, "ISO2 encoder not yet implemented");
@@ -2010,7 +2088,7 @@ static void runTheDecoder(char* parameterStream) {
             break;
         case '1': /* The ISO1 schema decoder */
             g_errn = decode_iso1ExiDocument(&global_stream1, &iso1Doc);
-            //translateDocIso1ToJson();
+            translateDocIso1ToJson();
             break;
         case '2': /* The ISO2 schema decoder */
             g_errn = decode_iso2ExiDocument(&global_stream1, &iso2Doc);
