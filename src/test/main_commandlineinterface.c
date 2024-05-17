@@ -437,7 +437,7 @@ void translateDocAppHandToJson(void) {
     }    
 }
 
-#include "iso1_commandlineinterface.c" /* including a c-file is bad style, but due the lot of dependencies it saves a lot of interface definitions. */
+#include "iso1_commandlineinterface.h" /* including a code file is bad style, but due the lot of dependencies it saves a lot of interface definitions. */
 
 void translateDinHeaderToJson(void) {
     char sTmp[40], s2[30];

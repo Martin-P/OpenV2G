@@ -630,16 +630,91 @@ void translateDocIso1ToJson(void) {
 **********************************************************************************************************
 *********************************************************************************************************/
 
+void init_iso1MessageHeaderWithSessionID(void) {
+    int i;
+    iso1Doc.V2G_Message_isUsed = 1u;
+    /* generate an "unique" sessionID */
+    init_iso1MessageHeaderType(&iso1Doc.V2G_Message.Header);
+    /* When receiving the SessionSetupReq with the parameter SessionID equal to zero (0), the 
+    SECC shall generate a new (not stored) SessionID value different from zero (0) and return this 
+    value in the SessionSetupRes message header.
+    We can use the following simplification if we are SECC/EVSE: We set always the same SessionID, with non-zero value. */
+    for (i=0; i<gLenOfSessionId; i++) {  
+        iso1Doc.V2G_Message.Header.SessionID.bytes[i] = gSessionID[i];
+    }
+    iso1Doc.V2G_Message.Header.SessionID.bytesLen = gLenOfSessionId;
+}
+
+
 void encodeIso1SessionSetupRequest(void) {
+    /* todo */
 }
 
 void encodeIso1SessionSetupResponse(void) {
+     /* This is the place, where we, as charger, decide about the new session ID. */
+     /* As simplification, we always use the same session ID, so we have no need to transfer
+        the number via command line interface to the upper layers in case we are the charger.
+        On the other hand, if we are the car, then we need to use the sessionID which was decided
+        by the charger, and we need to transfer it to and from the upper layers. */
+    init_iso1MessageHeaderWithSessionID();
+    init_iso1BodyType(&iso1Doc.V2G_Message.Body);
+    iso1Doc.V2G_Message.Body.SessionSetupRes_isUsed = 1u;
+    init_iso1SessionSetupResType(&iso1Doc.V2G_Message.Body.SessionSetupRes);
+    /* If the SECC receives a SessionSetupReq including a SessionID value which is not equal to 
+    zero (0) and not equal to the SessionID value stored from the preceding V2G Communication 
+    Session, it shall send a SessionID value in the SessionSetupRes message that is unequal to 
+    "0" and unequal to the SessionID value stored from the preceding V2G Communication 
+    Session and indicate the new V2G Communication Session with the ResponseCode set to 
+    "OK_NewSessionEstablished"
+    */
+    iso1Doc.V2G_Message.Body.SessionSetupRes.ResponseCode = dinresponseCodeType_OK_NewSessionEstablished;
+    /* EVSEID has min length 7, max length 37 for ISO. In DIN decoder we find maxsize 32. */
+    iso1Doc.V2G_Message.Body.SessionSetupRes.EVSEID.characters[0] = 'Z';
+    iso1Doc.V2G_Message.Body.SessionSetupRes.EVSEID.characters[1] = 'Z';
+    iso1Doc.V2G_Message.Body.SessionSetupRes.EVSEID.characters[2] = '0';
+    iso1Doc.V2G_Message.Body.SessionSetupRes.EVSEID.characters[3] = '0';
+    iso1Doc.V2G_Message.Body.SessionSetupRes.EVSEID.characters[4] = '0';
+    iso1Doc.V2G_Message.Body.SessionSetupRes.EVSEID.characters[5] = '0';
+    iso1Doc.V2G_Message.Body.SessionSetupRes.EVSEID.characters[6] = '0';
+    iso1Doc.V2G_Message.Body.SessionSetupRes.EVSEID.charactersLen = 7;
+    //iso1Doc.V2G_Message.Body.SessionSetupRes.EVSETimeStamp_isUsed = 0u;
+    //iso1Doc.V2G_Message.Body.SessionSetupRes.EVSETimeStamp = 123456789;
+    prepareGlobalStream();
+    g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeSessionSetupResponse finished");
 }
 
 void encodeIso1ServiceDiscoveryRequest(void) {
+    /* todo */
 }
 
 void encodeIso1ServiceDiscoveryResponse(void) {
+    init_iso1MessageHeaderWithSessionID();
+    init_iso1BodyType(&iso1Doc.V2G_Message.Body);
+    iso1Doc.V2G_Message.Body.ServiceDiscoveryRes_isUsed = 1u;
+    init_iso1ServiceDiscoveryResType(&iso1Doc.V2G_Message.Body.ServiceDiscoveryRes);
+    iso1Doc.V2G_Message.Body.ServiceDiscoveryRes.ResponseCode = iso1responseCodeType_OK;
+    /* the mandatory fields in the ISO are PaymentOptionList and ChargeService. */
+    iso1Doc.V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.array[0] = iso1paymentOptionType_ExternalPayment; /* EVSE handles the payment */
+    iso1Doc.V2G_Message.Body.ServiceDiscoveryRes.PaymentOptionList.PaymentOption.arrayLen = 1; /* just one single payment option in the table */
+    //iso1Doc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceName ...  /* todo: not clear what this means  */
+    //iso1Doc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceScope ...  /* todo: not clear what this means  */
+    //iso1Doc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceScope_isUsed ...  /* todo: not clear what this means  */
+    //iso1Doc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.ServiceTag.ServiceCategory = dinserviceCategoryType_EVCharging;
+    /*   iso1ServiceDiscoveryResType / iso1ServiceListType / iso1ServiceType / iso1serviceCategoryType */
+    //ServiceList ..... = iso1serviceCategoryType_EVCharging; ???
+    iso1Doc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.FreeService = 0; /* what ever this means. Just from example. */
+    /*  DC_extended means "extended pins of an IEC 62196-3 Configuration FF connector", which is
+        the normal CCS connector https://en.wikipedia.org/wiki/IEC_62196#FF) */
+    #define TFM iso1Doc.V2G_Message.Body.ServiceDiscoveryRes.ChargeService.SupportedEnergyTransferMode
+    TFM.EnergyTransferMode.arrayLen = 1;
+    TFM.EnergyTransferMode.array[0] = iso1EnergyTransferModeType_DC_extended;
+    #undef TFM
+    prepareGlobalStream();
+    g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeServiceDiscoveryResponse finished");
 }
 
 void encodeIso1ServicePaymentSelectionRequest(void) { } /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
@@ -647,49 +722,65 @@ void encodeIso1ServicePaymentSelectionRequest(void) { } /* DIN name is ServicePa
 void encodeIso1ServicePaymentSelectionResponse(void) { } /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
 
 void encodeIso1ChargeParameterDiscoveryRequest(void) {
+    /* todo */
 }
 
 void encodeIso1ChargeParameterDiscoveryResponse(void) {
+    /* todo */
 }
 
 void encodeIso1CableCheckRequest(void) {
+    /* todo */
 }
 
 void encodeIso1CableCheckResponse(void) {
+    /* todo */
 }
 
 void encodeIso1PreChargeRequest(void) {
+    /* todo */
 }
 
 void encodeIso1PreChargeResponse(void) {
+    /* todo */
 }
 
 void encodeIso1PowerDeliveryRequest(void) {
+    /* todo */
 }
 
 void encodeIso1PowerDeliveryResponse(void) {
+    /* todo */
 }
 
 void encodeIso1CurrentDemandRequest(void) {
+    /* todo */
 }
 
 void encodeIso1CurrentDemandResponse(void) {
+    /* todo */
 }
 
 void encodeIso1WeldingDetectionRequest(void) {
+    /* todo */
 }
 
 void encodeIso1WeldingDetectionResponse(void) {
+    /* todo */
 }
 
 void encodeIso1SessionStopRequest(void) {
+    /* todo */
 }
 
 void encodeIso1SessionStopResponse(void) {
+    /* todo */
 }
 
 void encodeIso1ContractAuthenticationRequest(void) {
+    /* todo */
 }
 
 void encodeIso1ContractAuthenticationResponse(void) {
+    /* todo */
 }
