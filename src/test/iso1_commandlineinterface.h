@@ -218,7 +218,6 @@ void translateDocIso1ToJson(void) {
 
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumCurrentLimit.Value); addProperty("EVMaximumCurrentLimit.Value", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumCurrentLimit.Multiplier); addProperty("EVMaximumCurrentLimit.Multiplier", sTmp);
-            //sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumCurrentLimit.Unit_isUsed); addProperty("EVMaximumCurrentLimit.Unit_isUsed", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumCurrentLimit.Unit); addProperty("EVMaximumCurrentLimit.Unit", sTmp);
             
             
@@ -226,24 +225,20 @@ void translateDocIso1ToJson(void) {
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumPowerLimit_isUsed); addProperty("EVMaximumPowerLimit_isUsed", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumPowerLimit.Value); addProperty("EVMaximumPowerLimit.Value", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumPowerLimit.Multiplier); addProperty("EVMaximumPowerLimit.Multiplier", sTmp);
-            //sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumPowerLimit.Unit_isUsed); addProperty("EVMaximumPowerLimit.Unit_isUsed", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumPowerLimit.Unit); addProperty("EVMaximumPowerLimit.Unit", sTmp);
             
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumVoltageLimit.Value); addProperty("EVMaximumVoltageLimit.Value", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumVoltageLimit.Multiplier); addProperty("EVMaximumVoltageLimit.Multiplier", sTmp);
-            //sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumVoltageLimit.Unit_isUsed); addProperty("EVMaximumVoltageLimit.Unit_isUsed", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVMaximumVoltageLimit.Unit); addProperty("EVMaximumVoltageLimit.Unit", sTmp);
             
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyCapacity_isUsed); addProperty("EVEnergyCapacity_isUsed", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyCapacity.Value); addProperty("EVEnergyCapacity.Value", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyCapacity.Multiplier); addProperty("EVEnergyCapacity.Multiplier", sTmp);
-            //sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyCapacity.Unit_isUsed); addProperty("EVEnergyCapacity.Unit_isUsed", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyCapacity.Unit); addProperty("EVEnergyCapacity.Unit", sTmp);
             
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyRequest_isUsed); addProperty("EVEnergyRequest_isUsed", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyRequest.Value); addProperty("EVEnergyRequest.Value", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyRequest.Multiplier); addProperty("EVEnergyRequest.Multiplier", sTmp);
-            //sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyRequest.Unit_isUsed); addProperty("EVEnergyRequest.Unit_isUsed", sTmp);
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.EVEnergyRequest.Unit); addProperty("EVEnergyRequest.Unit", sTmp);
 
             sprintf(sTmp, "%d", m.DC_EVChargeParameter.FullSOC_isUsed); addProperty("FullSOC_isUsed", sTmp);
@@ -717,16 +712,112 @@ void encodeIso1ServiceDiscoveryResponse(void) {
     sprintf(gInfoString, "encodeServiceDiscoveryResponse finished");
 }
 
-void encodeIso1ServicePaymentSelectionRequest(void) { } /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
+void encodeIso1PaymentServiceSelectionRequest(void) { /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
 
-void encodeIso1ServicePaymentSelectionResponse(void) { } /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
+}
+
+void encodeIso1PaymentServiceSelectionResponse(void) { /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
+    init_iso1MessageHeaderWithSessionID();
+    init_iso1BodyType(&iso1Doc.V2G_Message.Body);
+    iso1Doc.V2G_Message.Body.PaymentServiceSelectionRes_isUsed = 1u;
+    init_iso1PaymentServiceSelectionResType(&iso1Doc.V2G_Message.Body.PaymentServiceSelectionRes);
+    iso1Doc.V2G_Message.Body.PaymentServiceSelectionRes.ResponseCode = iso1responseCodeType_OK;
+    prepareGlobalStream();
+    g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodePaymentServiceSelectionResponse finished");
+
+}
+
 
 void encodeIso1ChargeParameterDiscoveryRequest(void) {
     /* todo */
 }
 
 void encodeIso1ChargeParameterDiscoveryResponse(void) {
-    /* todo */
+    struct iso1EVSEChargeParameterType *cp;
+    struct iso1DC_EVSEChargeParameterType *cpdc;
+    init_iso1MessageHeaderWithSessionID();
+    init_iso1BodyType(&iso1Doc.V2G_Message.Body);
+    iso1Doc.V2G_Message.Body.ChargeParameterDiscoveryRes_isUsed = 1u;
+    init_iso1ChargeParameterDiscoveryResType(&iso1Doc.V2G_Message.Body.ChargeParameterDiscoveryRes);
+    iso1Doc.V2G_Message.Body.ChargeParameterDiscoveryRes.ResponseCode = iso1responseCodeType_OK;
+    /*
+        iso1EVSEProcessingType_Finished = 0,
+        iso1EVSEProcessingType_Ongoing = 1
+    */
+    iso1Doc.V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEProcessing = iso1EVSEProcessingType_Finished;
+    /* The encoder wants either SASchedules or SAScheduleList. If both are missing, it fails. (around line 3993 in dinEXIDatatypesEncoder.c). */
+    /* https://github.com/uhi22/pyPLC/issues/14#issuecomment-1895620509
+       https://github.com/uhi22/pyPLC/issues/14#issuecomment-1895572137
+       The SAScheduleList is optional, but it is mandatory if the EVSEProcessing is Finished (at least in ISO).
+       So we set it here. */
+    iso1Doc.V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList_isUsed = 1u;
+    iso1Doc.V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.arrayLen = 1;
+    #define SchedTuple0 iso1Doc.V2G_Message.Body.ChargeParameterDiscoveryRes.SAScheduleList.SAScheduleTuple.array[0]
+    SchedTuple0.SAScheduleTupleID = 0;
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.arrayLen = 1;
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].TimeInterval_isUsed = 0;
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval_isUsed = 1; /* at least one of TimeInterval and RelativeTimeInterval is
+                                                                                            necessary, otherwise the encoder gives an error. */
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.start = 0; /* "now" */
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].RelativeTimeInterval.duration_isUsed = 0; /* no duration, so "endless" */
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Value = 50; /* 50 kW */
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Multiplier = 3;
+    SchedTuple0.PMaxSchedule.PMaxScheduleEntry.array[0].PMax.Unit = iso1unitSymbolType_W;
+    #undef SchedTuple0
+    cp = &iso1Doc.V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEChargeParameter;
+    cp->noContent = 0;
+    iso1Doc.V2G_Message.Body.ChargeParameterDiscoveryRes.EVSEChargeParameter_isUsed=0;
+    
+    cpdc = &iso1Doc.V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter;
+    
+    /* https://github.com/SmartEVSE/SmartEVSE-3/issues/25#issuecomment-1666231234
+       Public chargers are reporting "invalid", which means, the isolation check has not
+       yet performed. Reporting "valid" at this step may confuse the car. */
+    cpdc->DC_EVSEStatus.EVSEIsolationStatus = iso1isolationLevelType_Invalid;
+    cpdc->DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
+    cpdc->DC_EVSEStatus.EVSEStatusCode = iso1DC_EVSEStatusCodeType_EVSE_Ready;
+    cpdc->DC_EVSEStatus.NotificationMaxDelay = 0; /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
+    cpdc->DC_EVSEStatus.EVSENotification = iso1EVSENotificationType_None; /* could also be dinEVSENotificationType_StopCharging */
+
+
+    cpdc->EVSEMaximumCurrentLimit.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+    cpdc->EVSEMaximumCurrentLimit.Unit = iso1unitSymbolType_A;
+    cpdc->EVSEMaximumCurrentLimit.Value = 200;
+    
+    
+    cpdc->EVSEMaximumPowerLimit.Multiplier = 3;  /* -3 to 3. The exponent for base of 10. */
+    cpdc->EVSEMaximumPowerLimit.Unit = dinunitSymbolType_W;
+    cpdc->EVSEMaximumPowerLimit.Value = 10;
+    
+    cpdc->EVSEMaximumVoltageLimit.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+    cpdc->EVSEMaximumVoltageLimit.Unit = dinunitSymbolType_V;
+    cpdc->EVSEMaximumVoltageLimit.Value = 450;
+    
+    cpdc->EVSEMinimumCurrentLimit.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+    cpdc->EVSEMinimumCurrentLimit.Unit = dinunitSymbolType_A;
+    cpdc->EVSEMinimumCurrentLimit.Value = 1;
+    
+    cpdc->EVSEMinimumVoltageLimit.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+    cpdc->EVSEMinimumVoltageLimit.Unit = dinunitSymbolType_V;
+    cpdc->EVSEMinimumVoltageLimit.Value = 200;
+    
+    cpdc->EVSECurrentRegulationTolerance.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+    cpdc->EVSECurrentRegulationTolerance.Unit = dinunitSymbolType_A;
+    cpdc->EVSECurrentRegulationTolerance.Value = 5;
+    cpdc->EVSECurrentRegulationTolerance_isUsed=1;
+    
+    cpdc->EVSEPeakCurrentRipple.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
+    cpdc->EVSEPeakCurrentRipple.Unit = dinunitSymbolType_A;
+    cpdc->EVSEPeakCurrentRipple.Value = 5;    
+    //cpdc->EVSEEnergyToBeDelivered ;
+    //cpdc->EVSEEnergyToBeDelivered_isUsed:1;
+    iso1Doc.V2G_Message.Body.ChargeParameterDiscoveryRes.DC_EVSEChargeParameter_isUsed = 1;
+    prepareGlobalStream();
+    g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeChargeParameterDiscoveryResponse finished");
 }
 
 void encodeIso1CableCheckRequest(void) {
@@ -734,7 +825,19 @@ void encodeIso1CableCheckRequest(void) {
 }
 
 void encodeIso1CableCheckResponse(void) {
-    /* todo */
+    init_iso1MessageHeaderWithSessionID();
+    init_iso1BodyType(&iso1Doc.V2G_Message.Body);
+    iso1Doc.V2G_Message.Body.CableCheckRes_isUsed = 1u;
+    init_iso1CableCheckResType(&iso1Doc.V2G_Message.Body.CableCheckRes);
+    if (getIntParam(0)) { /* command line argument decides whether we report "Ongoing" or "Finished" */
+      iso1Doc.V2G_Message.Body.CableCheckRes.EVSEProcessing=iso1EVSEProcessingType_Ongoing;
+    } else {
+      iso1Doc.V2G_Message.Body.CableCheckRes.EVSEProcessing=iso1EVSEProcessingType_Finished;
+    }
+    prepareGlobalStream();
+    g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeCableCheckResponse finished");
 }
 
 void encodeIso1PreChargeRequest(void) {
@@ -742,7 +845,22 @@ void encodeIso1PreChargeRequest(void) {
 }
 
 void encodeIso1PreChargeResponse(void) {
-    /* todo */
+    init_iso1MessageHeaderWithSessionID();
+    init_iso1BodyType(&iso1Doc.V2G_Message.Body);
+    iso1Doc.V2G_Message.Body.PreChargeRes_isUsed = 1u;
+    init_iso1PreChargeResType(&iso1Doc.V2G_Message.Body.PreChargeRes);
+    iso1Doc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus = 1;
+    iso1Doc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
+    iso1Doc.V2G_Message.Body.PreChargeRes.DC_EVSEStatus.EVSEStatusCode = 1; /* EVSE_Ready. This is reported by
+                                                                              Alpitronic, Numbat and Supercharger in all
+                                                                              PreChargeResponses */
+    iso1Doc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Multiplier = 0; /* 10 ^ 0 */
+    iso1Doc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Unit = iso1unitSymbolType_V;
+    iso1Doc.V2G_Message.Body.PreChargeRes.EVSEPresentVoltage.Value = getIntParam(0); /* Take from command line */
+    prepareGlobalStream();
+    g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodePreChargeResponse finished");
 }
 
 void encodeIso1PowerDeliveryRequest(void) {
@@ -750,7 +868,20 @@ void encodeIso1PowerDeliveryRequest(void) {
 }
 
 void encodeIso1PowerDeliveryResponse(void) {
-    /* todo */
+    init_iso1MessageHeaderWithSessionID();
+    init_iso1BodyType(&iso1Doc.V2G_Message.Body);
+    iso1Doc.V2G_Message.Body.PowerDeliveryRes_isUsed = 1u;
+    init_iso1PowerDeliveryResType(&iso1Doc.V2G_Message.Body.PowerDeliveryRes);
+    iso1Doc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus_isUsed = 1;
+    iso1Doc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSEIsolationStatus = iso1isolationLevelType_Valid;
+    iso1Doc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
+    iso1Doc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSEStatusCode = iso1DC_EVSEStatusCodeType_EVSE_Ready;
+    iso1Doc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.NotificationMaxDelay = 0; /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
+    iso1Doc.V2G_Message.Body.PowerDeliveryRes.DC_EVSEStatus.EVSENotification = iso1EVSENotificationType_None; /* could also be dinEVSENotificationType_StopCharging */
+    prepareGlobalStream();
+    g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodePowerDeliveryResponse finished");
 }
 
 void encodeIso1CurrentDemandRequest(void) {
@@ -758,7 +889,36 @@ void encodeIso1CurrentDemandRequest(void) {
 }
 
 void encodeIso1CurrentDemandResponse(void) {
-    /* todo */
+    init_iso1MessageHeaderWithSessionID();
+    init_iso1BodyType(&iso1Doc.V2G_Message.Body);
+    iso1Doc.V2G_Message.Body.CurrentDemandRes_isUsed = 1u;
+    init_iso1CurrentDemandResType(&iso1Doc.V2G_Message.Body.CurrentDemandRes);
+    #define m iso1Doc.V2G_Message.Body.CurrentDemandRes
+    m.DC_EVSEStatus.EVSEIsolationStatus = iso1isolationLevelType_Valid;
+    m.DC_EVSEStatus.EVSEIsolationStatus_isUsed = 1;
+    m.DC_EVSEStatus.EVSEStatusCode = getIntParam(2); /* Take from command line */; /* 1=EVSE_Ready, 2=EVSE_Shutdown, means the user stopped the session on the charger. */
+    m.DC_EVSEStatus.NotificationMaxDelay = 0; /* expected time until the PEV reacts on the below mentioned notification. Not relevant. */
+    m.DC_EVSEStatus.EVSENotification = iso1EVSENotificationType_None; /* could also be dinEVSENotificationType_StopCharging */
+    m.EVSEPresentVoltage.Multiplier = 0;
+    m.EVSEPresentVoltage.Unit = iso1unitSymbolType_V;
+    m.EVSEPresentVoltage.Value = getIntParam(0); /* Take from command line */
+    m.EVSEPresentCurrent.Multiplier = 0;
+    m.EVSEPresentCurrent.Unit = iso1unitSymbolType_A;
+    m.EVSEPresentCurrent.Value = getIntParam(1); /* Take from command line */
+    m.EVSECurrentLimitAchieved = 1;
+    m.EVSEVoltageLimitAchieved = 0;
+    m.EVSEPowerLimitAchieved = 0;
+    m.EVSEMaximumVoltageLimit_isUsed = 0;
+    //m.EVSEMaximumVoltageLimit
+    m.EVSEMaximumCurrentLimit_isUsed = 0;
+    //m.EVSEMaximumCurrentLimit
+    m.EVSEMaximumPowerLimit_isUsed = 0;
+    //m.EVSEMaximumPowerLimit
+    #undef m
+    prepareGlobalStream();
+    g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeCurrentDemandResponse finished");
 }
 
 void encodeIso1WeldingDetectionRequest(void) {
@@ -766,7 +926,19 @@ void encodeIso1WeldingDetectionRequest(void) {
 }
 
 void encodeIso1WeldingDetectionResponse(void) {
-    /* todo */
+    init_iso1MessageHeaderWithSessionID();
+    init_iso1BodyType(&iso1Doc.V2G_Message.Body);
+    iso1Doc.V2G_Message.Body.WeldingDetectionRes_isUsed = 1u;
+    init_iso1WeldingDetectionResType(&iso1Doc.V2G_Message.Body.WeldingDetectionRes);
+    #define m iso1Doc.V2G_Message.Body.WeldingDetectionRes
+    m.EVSEPresentVoltage.Multiplier = 0;
+    m.EVSEPresentVoltage.Unit = iso1unitSymbolType_V;
+    m.EVSEPresentVoltage.Value = getIntParam(0); /* Take from command line */
+    #undef m
+    prepareGlobalStream();
+    g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeWeldingDetectionResponse finished");
 }
 
 void encodeIso1SessionStopRequest(void) {
@@ -774,13 +946,27 @@ void encodeIso1SessionStopRequest(void) {
 }
 
 void encodeIso1SessionStopResponse(void) {
+    init_iso1MessageHeaderWithSessionID();
+    init_iso1BodyType(&iso1Doc.V2G_Message.Body);
+    iso1Doc.V2G_Message.Body.SessionStopRes_isUsed = 1u;
+    init_iso1SessionStopResType(&iso1Doc.V2G_Message.Body.SessionStopRes);
+    prepareGlobalStream();
+    g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeSessionStopResponse finished");
+}
+
+void encodeIso1AuthorizationRequest(void) {
     /* todo */
 }
 
-void encodeIso1ContractAuthenticationRequest(void) {
-    /* todo */
-}
-
-void encodeIso1ContractAuthenticationResponse(void) {
-    /* todo */
+void encodeIso1AuthorizationResponse(void) {
+    init_iso1MessageHeaderWithSessionID();
+    init_iso1BodyType(&iso1Doc.V2G_Message.Body);
+    iso1Doc.V2G_Message.Body.AuthorizationRes_isUsed = 1u;
+    init_iso1AuthorizationResType(&iso1Doc.V2G_Message.Body.AuthorizationRes);
+    prepareGlobalStream();
+    g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
+    printGlobalStream();
+    sprintf(gInfoString, "encodeContractAuthenticationResponse finished");
 }

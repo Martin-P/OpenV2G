@@ -1957,10 +1957,10 @@ static void runTheEncoder(char* parameterStream) {
                 encodeIso1ServiceDiscoveryResponse();
                 break;
             case 'C':
-                encodeIso1ServicePaymentSelectionRequest(); /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
+                encodeIso1PaymentServiceSelectionRequest(); /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
                 break;
             case 'c':
-                encodeIso1ServicePaymentSelectionResponse(); /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
+                encodeIso1PaymentServiceSelectionResponse(); /* DIN name is ServicePaymentSelection, but ISO name is PaymentServiceSelection */
                 break;
             case 'D':
                 sprintf(gErrorString, "AuthorizationRequest todo.");
@@ -2012,10 +2012,10 @@ static void runTheEncoder(char* parameterStream) {
                 encodeIso1SessionStopResponse();
                 break;
             case 'L':
-                encodeIso1ContractAuthenticationRequest();
+                encodeIso1AuthorizationRequest();
                 break;
             case 'l':
-                encodeIso1ContractAuthenticationResponse();
+                encodeIso1AuthorizationResponse();
                 break;
             default:
                 sprintf(gErrorString, "invalid message in DIN encoder requested");
