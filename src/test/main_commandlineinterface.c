@@ -1828,6 +1828,15 @@ void encodeContractAuthenticationResponse(void) {
     init_dinBodyType(&dinDoc.V2G_Message.Body);
     dinDoc.V2G_Message.Body.ContractAuthenticationRes_isUsed = 1u;
     init_dinContractAuthenticationResType(&dinDoc.V2G_Message.Body.ContractAuthenticationRes);
+    int isAuthenticationFinished = getIntParam(0);
+    /* The ContractAuthenticationResponse has two possible results:
+    - Either the authorization is not necessary or successfully finished, means that e.g. the user presented a valid RFID
+    - Or the charger is still waiting for the users authentication. */
+    if(isAuthenticationFinished){
+        dinDoc.V2G_Message.Body.ContractAuthenticationRes.EVSEProcessing=dinEVSEProcessingType_Finished;
+    } else {
+        dinDoc.V2G_Message.Body.ContractAuthenticationRes.EVSEProcessing=dinEVSEProcessingType_Ongoing;
+    }
     prepareGlobalStream();
     g_errn = encode_dinExiDocument(&global_stream1, &dinDoc);
     printGlobalStream();

@@ -965,6 +965,16 @@ void encodeIso1AuthorizationResponse(void) {
     init_iso1BodyType(&iso1Doc.V2G_Message.Body);
     iso1Doc.V2G_Message.Body.AuthorizationRes_isUsed = 1u;
     init_iso1AuthorizationResType(&iso1Doc.V2G_Message.Body.AuthorizationRes);
+    int isAuthenticationFinished = getIntParam(0);
+    /* The Iso1AuthorizationResponse has two possible results:
+    - Either the authorization is not necessary or successfully finished, means that e.g. the user presented a valid RFID
+    - Or the charger is still waiting for the users authentication. */
+    if(isAuthenticationFinished){
+        iso1Doc.V2G_Message.Body.AuthorizationRes.EVSEProcessing=iso1EVSEProcessingType_Finished;
+    } else {
+        iso1Doc.V2G_Message.Body.AuthorizationRes.EVSEProcessing=iso1EVSEProcessingType_Ongoing;
+        /* unclear: could be also iso1EVSEProcessingType_Ongoing_WaitingForCustomerInteraction */
+    }
     prepareGlobalStream();
     g_errn = encode_iso1ExiDocument(&global_stream1, &iso1Doc);
     printGlobalStream();
