@@ -328,9 +328,14 @@ static int sessionSetup2(struct iso2EXIDocument* exiIn, struct iso2EXIDocument* 
 	init_iso2SessionSetupResType(&exiOut->V2G_Message.Body.SessionSetupRes);
 
 	exiOut->V2G_Message.Body.SessionSetupRes.ResponseCode = iso2responseCodeType_OK;
-	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[0] = 0;
-	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[1] = 20;
-	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.charactersLen = 2;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[0] = 65;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[1] = 85;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[2] = 86;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[3] = 87;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[4] = 88;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[5] = 89;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[6] = 90;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.charactersLen = 7;
 	exiOut->V2G_Message.Body.SessionSetupRes.EVSETimeStamp_isUsed = 1u;
 	exiOut->V2G_Message.Body.SessionSetupRes.EVSETimeStamp = 123456789;
 
@@ -1504,9 +1509,14 @@ static int sessionSetup1(struct iso1EXIDocument* exiIn, struct iso1EXIDocument* 
 	init_iso1SessionSetupResType(&exiOut->V2G_Message.Body.SessionSetupRes);
 
 	exiOut->V2G_Message.Body.SessionSetupRes.ResponseCode = iso1responseCodeType_OK;
-	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[0] = 0;
-	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[1] = 20;
-	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.charactersLen = 2;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[0] = 65;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[1] = 85;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[2] = 86;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[3] = 87;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[4] = 88;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[5] = 89;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.characters[6] = 90;
+	exiOut->V2G_Message.Body.SessionSetupRes.EVSEID.charactersLen = 7;
 	exiOut->V2G_Message.Body.SessionSetupRes.EVSETimeStamp_isUsed = 1u;
 	exiOut->V2G_Message.Body.SessionSetupRes.EVSETimeStamp = 123456789;
 

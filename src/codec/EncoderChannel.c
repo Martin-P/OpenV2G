@@ -208,7 +208,8 @@ int encodeUnsignedInteger64(bitstream_t* stream, uint64_t n) {
 void _shiftRight7(uint8_t* buf, int len) {
 	const int shift = 7;
     unsigned char tmp = 0x00, tmp2 = 0x00;
-    for (int k = 0; k <= len; k++) {
+    int k;
+    for (k = 0; k <= len; k++) {
         if (k == 0) {
             tmp = buf[k];
             buf[k] >>= shift;
@@ -236,7 +237,7 @@ int encodeUnsignedIntegerBig(bitstream_t* stream, size_t size, uint8_t* data, si
 	int lenM1 = len - 1;
 	const int MAX_BIGINT_ARRAY = 25;
 	uint8_t lastEncode = 0;
-	uint8_t bytesToShift[MAX_BIGINT_ARRAY]; // MAXIMUM
+	uint8_t bytesToShift[MAX_BIGINT_ARRAY]; /* MAXIMUM */
 	size_t bitsToEncode = len * 8;
 
 	if(MAX_BIGINT_ARRAY <= len) {
