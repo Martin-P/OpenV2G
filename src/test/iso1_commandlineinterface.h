@@ -788,28 +788,28 @@ void encodeIso1ChargeParameterDiscoveryResponse(void) {
     
     
     cpdc->EVSEMaximumPowerLimit.Multiplier = 3;  /* -3 to 3. The exponent for base of 10. */
-    cpdc->EVSEMaximumPowerLimit.Unit = dinunitSymbolType_W;
+    cpdc->EVSEMaximumPowerLimit.Unit = iso1unitSymbolType_W;
     cpdc->EVSEMaximumPowerLimit.Value = 10;
     
     cpdc->EVSEMaximumVoltageLimit.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
-    cpdc->EVSEMaximumVoltageLimit.Unit = dinunitSymbolType_V;
+    cpdc->EVSEMaximumVoltageLimit.Unit = iso1unitSymbolType_V;
     cpdc->EVSEMaximumVoltageLimit.Value = 450;
     
     cpdc->EVSEMinimumCurrentLimit.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
-    cpdc->EVSEMinimumCurrentLimit.Unit = dinunitSymbolType_A;
+    cpdc->EVSEMinimumCurrentLimit.Unit = iso1unitSymbolType_A;
     cpdc->EVSEMinimumCurrentLimit.Value = 1;
     
     cpdc->EVSEMinimumVoltageLimit.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
-    cpdc->EVSEMinimumVoltageLimit.Unit = dinunitSymbolType_V;
+    cpdc->EVSEMinimumVoltageLimit.Unit = iso1unitSymbolType_V;
     cpdc->EVSEMinimumVoltageLimit.Value = 200;
     
     cpdc->EVSECurrentRegulationTolerance.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
-    cpdc->EVSECurrentRegulationTolerance.Unit = dinunitSymbolType_A;
+    cpdc->EVSECurrentRegulationTolerance.Unit = iso1unitSymbolType_A;
     cpdc->EVSECurrentRegulationTolerance.Value = 5;
     cpdc->EVSECurrentRegulationTolerance_isUsed=1;
     
     cpdc->EVSEPeakCurrentRipple.Multiplier = 0;  /* -3 to 3. The exponent for base of 10. */
-    cpdc->EVSEPeakCurrentRipple.Unit = dinunitSymbolType_A;
+    cpdc->EVSEPeakCurrentRipple.Unit = iso1unitSymbolType_A;
     cpdc->EVSEPeakCurrentRipple.Value = 5;    
     //cpdc->EVSEEnergyToBeDelivered ;
     //cpdc->EVSEEnergyToBeDelivered_isUsed:1;
